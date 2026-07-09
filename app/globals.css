@@ -5,12 +5,10 @@
     --font-serif: 'Noto Serif KR', ui-serif, serif;
     --font-title: 'Cafe24Classictype', ui-serif, serif;
 
-    --color-cream: #f5f1ea;
-    --color-sand: #eae3d7;
-    --color-latte: #d8cbba;
-    --color-cocoa: #6d5a4b;
-    --color-ink: #3b2f26;
-    --color-berry: #9c4a3f;
+    --color-cocoa: #45362d;
+    --color-latte: #705e51;
+    --color-cream: #fffffc;
+    --color-sand: #cdc5b6;
 }
 
 html {
@@ -19,7 +17,7 @@ html {
 
 body {
     background: var(--color-cream);
-    color: var(--color-ink);
+    color: var(--color-cocoa);
     font-family: var(--font-sans);
     letter-spacing: -0.01em;
 }
