@@ -20,3 +20,57 @@ export const site = {
         { label: '토요일', value: '09:00 - 15:30' },
     ],
 };
+
+export const nav = [
+    {
+        label: '리베리의원',
+        en: 'ABOUT',
+        href: '/about',
+        children: [
+            { label: 'WE ARE RE:BERRY', en: 'WE ARE RE:BERRY', href: '/about' },
+            { label: '의료진 소개', en: 'Doctors', href: '/doctors' },
+        ],
+    },
+    {
+        label: '시그니처시술',
+        en: 'SIGNATURE',
+        href: '/treatments/signature/pigment',
+        children: [
+            { label: '색소', en: 'Pigmentation', href: '/treatments/signature/pigment' },
+            { label: '리프팅', en: 'Lifting', href: '/treatments/signature/lifting' },
+            { label: '여드름', en: 'Acne', href: '/treatments/signature/acne' },
+            { label: '홍조', en: 'Redness', href: '/treatments/signature/redness' },
+        ],
+    },
+    {
+        label: '피부교정',
+        en: 'SKIN CARE',
+        href: '/treatments/skin/pigment',
+        children: [
+            { label: '색소', en: 'Pigmentation', href: '/treatments/skin/pigment' },
+            { label: '여드름', en: 'Acne', href: '/treatments/skin/acne' },
+            { label: '홍조', en: 'Redness', href: '/treatments/skin/redness' },
+            { label: '스킨부스터', en: 'Skin Booster', href: '/treatments/skin/skinbooster' },
+            { label: '문신제거', en: 'Tattoo Removal', href: '/treatments/skin/tattoo-removal' },
+            { label: '흉터·모공·피부결', en: 'Scar · Pore', href: '/treatments/skin/scar-pore' },
+            { label: '제모', en: 'Hair Removal', href: '/treatments/skin/hair-removal' },
+            { label: '관리', en: 'Medical Care', href: '/treatments/skin/care' },
+        ],
+    },
+    {
+        label: '안티에이징',
+        en: 'ANTI-AGING',
+        href: '/treatments/aging/laser-lifting',
+        children: [
+            { label: '레이저리프팅', en: 'Laser Lifting', href: '/treatments/aging/laser-lifting' },
+            { label: '실리프팅', en: 'Thread Lifting', href: '/treatments/aging/thread-lifting' },
+            { label: '필러', en: 'Filler', href: '/treatments/aging/filler' },
+            { label: '보톡스', en: 'Botox', href: '/treatments/aging/botox' },
+            { label: '얼굴 체형 관리', en: 'Face Contouring', href: '/treatments/aging/face-contour' },
+            { label: '수액·주사', en: 'IV Therapy', href: '/treatments/aging/iv-therapy' },
+        ],
+    },
+    { label: '시술결과', en: 'RESULTS', href: '/reviews' },
+    { label: '이벤트', en: 'EVENT', href: '/events' },
+    { label: '피부칼럼', en: 'COLUMN', href: '/column' },
+];
