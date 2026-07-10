@@ -3,6 +3,7 @@ export const site = {
     branch: '리베리의원 마포점',
     nameEn: 'RE:BERRY',
     director: '유선민',
+    tel: '02-2039-3777',
     phone: '02 . 2039 . 3777',
     phoneLink: 'tel:0220393777',
     bizNo: '876-48-01029',

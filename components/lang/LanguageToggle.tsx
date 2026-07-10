@@ -26,7 +26,7 @@ export default function LanguageToggle({ solid }: { solid: boolean }) {
                 aria-label="언어 선택"
                 className={cn(
                     'flex items-center gap-1.25 rounded-full border border-white px-3 py-1 text-caption-sm transition-colors duration-300 font-bold',
-                    solid ? '!border-cocoa/60 text-cocoa hover:bg-cocoa hover:text-cream' : '',
+                    solid ? '!border-cocoa/60 text-cocoa hover:bg-cocoa hover:text-cream' : 'text-cream hover:bg-cream',
                 )}
             >
                 <Image
