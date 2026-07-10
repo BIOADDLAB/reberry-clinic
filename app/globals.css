@@ -1,10 +1,11 @@
 @import 'tailwindcss';
 
 @theme {
-    --font-sans: ui-sans-serif, system-ui, sans-serif;
-    --font-serif: 'Noto Serif KR', ui-serif, serif;
-    --font-title: 'Cafe24Classictype', ui-serif, serif;
+    /* 한글 본문: 42dot Sans (layout.tsx에서 CDN 로드) */
+    --font-sans: '42dot Sans', 'AstaSans', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Cafe24Classictype', 'Noto Serif KR', ui-serif, serif;
 
+    /* Design Guide 팔레트 */
     --color-cocoa: #45362d;
     --color-latte: #705e51;
     --color-cream: #fffffc;
@@ -20,8 +21,46 @@ body {
     color: var(--color-cocoa);
     font-family: var(--font-sans);
     letter-spacing: -0.01em;
+    /* #STYLE: Design Guide: 기본 본문 18px, 모바일 하한 16px */
+    font-size: clamp(16px, 1.05vw, 18px);
+    line-height: 1.75;
 }
 
+/* ───────── Design Guide 타입 스케일 (48/36/24/20/18/16/14) ───────── */
+.text-h1 {
+    font-size: clamp(34px, 3.6vw, 48px);
+    line-height: 1.3;
+}
+.text-h2 {
+    font-size: clamp(26px, 2.7vw, 36px);
+    line-height: 1.45;
+}
+.text-h3 {
+    font-size: clamp(20px, 1.8vw, 24px);
+    line-height: 1.5;
+}
+.text-lead {
+    font-size: clamp(17px, 1.5vw, 20px);
+    line-height: 1.75;
+}
+.text-small {
+    font-size: clamp(15px, 1.15vw, 16px);
+}
+.text-caption {
+    font-size: 14px;
+}
+.text-caption-xs {
+    font-size: 10px;
+}
+
+/* 영문 디스플레이 */
+.font-display {
+    font-family: var(--font-title);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+}
+
+/* ───────── 레이아웃: 시안 1920 캔버스 / 1366 콘텐츠 ───────── */
 .container-site {
     width: 100%;
     max-width: calc(1366px + 3rem);
@@ -29,23 +68,109 @@ body {
     padding-inline: 1.5rem;
 }
 
-.font-display {
-    font-family: var(--font-serif);
-    font-weight: 500;
-    letter-spacing: -0.02em;
+/* 강조 하이라이트 (텍스트 뒤 사각 박스) */
+.hl {
+    background: color-mix(in srgb, var(--color-sand) 45%, transparent);
+    padding: 0.05em 0.3em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
 }
 
-.arch {
-    border-radius: 999px 999px 0 0;
+/* 슬라이더 스크롤바 숨김 */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    scrollbar-width: none;
+}
+
+/* ───────── Google Translate 위젯 UI 숨김 ─────────
+   구글이 주입하는 상단 배너/툴팁을 제거하고 body 밀림 방지 */
+body {
+    top: 0 !important;
+}
+.skiptranslate,
+#goog-gt-tt,
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+#google_translate_element {
+    display: none !important;
+}
+.goog-text-highlight {
+    background: none !important;
+    box-shadow: none !important;
+}
+
+/* 흰색 SVG(로고/아이콘) → 코코아(#45362D) 변환 필터 */
+.to-cocoa {
+    filter: brightness(0) saturate(100%) invert(19%) sepia(14%) saturate(1010%) hue-rotate(342deg) brightness(95%)
+        contrast(87%);
+}
+
+/* 말줄임 */
+.clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
     overflow: hidden;
 }
-.arch-full {
-    border-radius: 999px 999px 999px 999px;
+.clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────
+   언어별 스타일 제어
+   LangAttribute가 <html data-lang="ko|en|ja|zh-CN|ar">를 심어줌.
+   → 특정 언어에서만 다르게 보이고 싶으면 아래처럼 선택자를 추가하면 됨.
+   예) 일본어에서 특정 컴포넌트 숨기기:
+       html[data-lang='ja'] .my-class { display: none; }
+   ───────────────────────────────────────────── */
+
+/* 영문: 자간을 살짝 벌려 세리프 디스플레이 무드 유지 */
+html[data-lang='en'] body {
+    letter-spacing: 0;
+}
+html[data-lang='en'] .font-display {
+    letter-spacing: 0.06em;
+}
+
+/* 일본어·중국어: 한글용 음수 자간 제거 + 행간 확보 (CJK는 붙으면 답답해 보임) */
+html[data-lang='ja'] body,
+html[data-lang='zh-CN'] body {
+    letter-spacing: 0;
+    line-height: 1.85;
+    word-break: break-all;
+}
+
+/* 아랍어: 자간 제거 + 행간 넉넉히 + 아랍 스크립트 폴백 폰트 */
+html[data-lang='ar'] body {
+    letter-spacing: 0;
+    line-height: 2;
+    font-family: 'Noto Sans Arabic', 'Segoe UI', Tahoma, var(--font-sans);
+}
+
+/* 아랍어에서 영문 디스플레이 자간이 아랍 글자를 찢어놓는 것 방지 */
+html[data-lang='ar'] .font-display {
+    letter-spacing: 0;
+}
+/* #STYLE: 완전한 RTL(우→좌 레이아웃 반전)은 슬라이더 스크롤 방향까지 뒤집혀
+   별도 작업이 필요하므로, 현재는 텍스트만 번역하고 레이아웃은 LTR 유지.
+   특정 블록만 우측 정렬하고 싶으면:
+   html[data-lang='ar'] .rtl-text { direction: rtl; text-align: right; } */
+
+/* 번역된 상태 공통(어떤 외국어든): 구글이 감싸는 font 태그의 배경 제거 */
+html:not([data-lang='ko']) font {
+    background: transparent !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
+    }
+    .scroll-mouse::after {
+        animation: none;
     }
 }
