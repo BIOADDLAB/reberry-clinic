@@ -1,11 +1,26 @@
 @import 'tailwindcss';
 
-@theme {
-    /* 한글 본문: 42dot Sans (layout.tsx에서 CDN 로드) */
-    --font-sans: '42dot Sans', 'AstaSans', ui-sans-serif, system-ui, sans-serif;
-    --font-serif: 'Cafe24Classictype', 'Noto Serif KR', ui-serif, serif;
+/* ───────── 로컬 폰트 (public/fonts) ─────────
+   Design Guide 확정: 한글 본문 = 42dot Sans(CDN, layout.tsx) / 영문 디스플레이 = Cafe24 Classictype */
+@font-face {
+    font-family: 'Cafe24Classictype';
+    src:
+        url('/fonts/Cafe24Classictype-v1.1.woff2') format('woff2'),
+        url('/fonts/Cafe24Classictype-v1.1.woff') format('woff');
+    font-weight: 400;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'AstaSans';
+    src: url('/fonts/AstaSans[wght].ttf') format('truetype-variations');
+    font-weight: 300 800;
+    font-display: swap;
+}
 
-    /* Design Guide 팔레트 */
+@theme {
+    --font-sans: '42dot Sans', 'AstaSans', ui-sans-serif, system-ui, sans-serif;
+    --font-title: 'Cafe24Classictype', 'Noto Serif KR', ui-serif, serif;
+
     --color-cocoa: #45362d;
     --color-latte: #705e51;
     --color-cream: #fffffc;
@@ -21,7 +36,6 @@ body {
     color: var(--color-cocoa);
     font-family: var(--font-sans);
     letter-spacing: -0.01em;
-    /* #STYLE: Design Guide: 기본 본문 18px, 모바일 하한 16px */
     font-size: clamp(16px, 1.05vw, 18px);
     line-height: 1.75;
 }
@@ -49,23 +63,28 @@ body {
 .text-caption {
     font-size: 14px;
 }
-.text-caption-xs {
-    font-size: 10px;
-}
 
-/* 영문 디스플레이 */
 .font-display {
     font-family: var(--font-title);
     font-weight: 400;
     letter-spacing: 0.04em;
 }
 
-/* ───────── 레이아웃: 시안 1920 캔버스 / 1366 콘텐츠 ───────── */
 .container-site {
     width: 100%;
     max-width: calc(1366px + 3rem);
     margin-inline: auto;
     padding-inline: 1.5rem;
+}
+
+/* ───────── 시안 공통 모티프 ───────── */
+.arch {
+    border-radius: 999px 999px 0 0;
+    overflow: hidden;
+}
+.arch-full {
+    border-radius: 999px;
+    overflow: hidden;
 }
 
 /* 강조 하이라이트 (텍스트 뒤 사각 박스) */
@@ -74,6 +93,53 @@ body {
     padding: 0.05em 0.3em;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
+}
+
+/* 종이 질감 배경 (시안 텍스처 근사치) */
+.texture-paper {
+    background-color: #f6f3ec;
+    background-image: radial-gradient(rgba(69, 54, 45, 0.035) 1px, transparent 1px);
+    background-size: 5px 5px;
+}
+.texture-dark {
+    background-color: var(--color-deep);
+    background-image: radial-gradient(rgba(255, 255, 252, 0.045) 1px, transparent 1px);
+    background-size: 5px 5px;
+}
+
+/* 서브 히어로 스크롤 인디케이터 (마우스) */
+.scroll-mouse {
+    width: 22px;
+    height: 36px;
+    border: 1.5px solid rgba(255, 255, 252, 0.85);
+    border-radius: 999px;
+    position: relative;
+}
+.scroll-mouse::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 7px;
+    width: 3px;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 252, 0.9);
+    transform: translateX(-50%);
+    animation: scroll-dot 1.8s ease-in-out infinite;
+}
+@keyframes scroll-dot {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+    70% {
+        opacity: 0;
+        transform: translate(-50%, 12px);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, 0);
+    }
 }
 
 /* 슬라이더 스크롤바 숨김 */
@@ -101,7 +167,17 @@ body {
     box-shadow: none !important;
 }
 
-/* 흰색 SVG(로고/아이콘) → 코코아(#45362D) 변환 필터 */
+/* GNB 언어별 타이포 제어 — Header의 메뉴 링크에 .gnb-item 이 붙어 있음
+   한국어가 아닐 때(영문 라벨 표시) 서체/굵기/자간을 여기서 제어 */
+html:not([data-lang='ko']) .gnb-item {
+    font-family: var(--font-title);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+}
+
+/* 특정 언어만 따로 만지고 싶으면:
+   html[data-lang='en'] .gnb-item { font-weight: 500; } */
+
 .to-cocoa {
     filter: brightness(0) saturate(100%) invert(19%) sepia(14%) saturate(1010%) hue-rotate(342deg) brightness(95%)
         contrast(87%);
@@ -156,7 +232,7 @@ html[data-lang='ar'] body {
 html[data-lang='ar'] .font-display {
     letter-spacing: 0;
 }
-/* #STYLE: 완전한 RTL(우→좌 레이아웃 반전)은 슬라이더 스크롤 방향까지 뒤집혀
+/* 참고: 완전한 RTL(우→좌 레이아웃 반전)은 슬라이더 스크롤 방향까지 뒤집혀
    별도 작업이 필요하므로, 현재는 텍스트만 번역하고 레이아웃은 LTR 유지.
    특정 블록만 우측 정렬하고 싶으면:
    html[data-lang='ar'] .rtl-text { direction: rtl; text-align: right; } */
