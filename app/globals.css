@@ -1,22 +1,5 @@
 @import 'tailwindcss';
 
-/* ───────── 로컬 폰트 (public/fonts) ─────────
-   확정: 한글 본문 = 42dot Sans(CDN, layout.tsx) / 영문·한글 디스플레이 = Cafe24 Classictype */
-@font-face {
-    font-family: 'Cafe24Classictype';
-    src:
-        url('/fonts/Cafe24Classictype-v1.1.woff2') format('woff2'),
-        url('/fonts/Cafe24Classictype-v1.1.woff') format('woff');
-    font-weight: 400;
-    font-display: swap;
-}
-@font-face {
-    font-family: 'AstaSans';
-    src: url('/fonts/AstaSans[wght].ttf') format('truetype-variations');
-    font-weight: 300 800;
-    font-display: swap;
-}
-
 @theme {
     /* 한글 본문: 42dot Sans (layout.tsx에서 CDN 로드) */
     --font-sans: '42dot Sans', 'AstaSans', ui-sans-serif, system-ui, sans-serif;
