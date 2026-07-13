@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react'; // #ISSUE: 외부 클릭 액션 감지를 위해 useEffect, useRef 추가
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/components/lib/cn';
 import { LANGS, useLang, setLangCookie, type Lang } from '@/components/lib/useLang';
@@ -16,6 +16,8 @@ export default function LanguageToggle({ solid }: { solid: boolean }) {
     const lang = useLang();
     const [open, setOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    // #ISSUE: 토글 컨테이너 바깥 영역 감지를 위한 레프 바인딩
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const current = LANGS.find((l) => l.code === lang) ?? LANGS[0];
 
     const select = (code: Lang) => {
@@ -23,13 +25,27 @@ export default function LanguageToggle({ solid }: { solid: boolean }) {
         location.reload();
     };
 
+    // #ISSUE: 드롭다운 외부 영역 및 헤더 컴포넌트 클릭 시 메뉴가 자동으로 닫히도록 글로벌 이벤트 처리
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     // #STYLE: 호버 중이거나 드롭다운이 열려 있는 활성화 상태 정의
     const isActive = isHovered || open;
     // 버튼 배경이 크림색이 되는 타이밍 계산
     const isCreamBg = solid ? !isActive : isActive;
 
     return (
-        <div className="notranslate relative">
+        /* #STYLE: 최외각 영역 계산을 위해 ref 속성 연결 */
+        <div ref={dropdownRef} className="notranslate relative">
             <button
                 onClick={() => setOpen(!open)}
                 onMouseEnter={() => setIsHovered(true)}
