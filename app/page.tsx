@@ -1,13 +1,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Reveal from '@/components/motion/Reveal';
+import Eyebrow from '@/components/ui/Eyebrow';
+import BASlider from '@/components/ui/BASlider';
+import MoreView from '@/components/ui/MoreView';
 
 const HERO_IMG = '/images/bg-main-hiro.jpg';
 
 export default function Home() {
     return (
         <main>
-            {/* #STYLE: 이미지 세로 해상도 한계를 고려해 h-[100svh]를 제거하고 반응형 높이 및 max-h 설정 */}
             <section className="relative flex h-[70vh] min-h-[600px] max-h-[850px] w-full items-center justify-center overflow-hidden text-center text-cream">
                 {/* #TODO: 이미지 최적화 개선 */}
                 <Image
@@ -37,6 +39,37 @@ export default function Home() {
                 </Reveal>
                 <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
                     <div className="scroll-mouse" aria-hidden />
+                </div>
+            </section>
+
+            <section className="relative py-20 lg:py-28 bg-[url('/images/bg-texture-06.jpg')] bg-repeat">
+                {/* <Image src="/images/bg-texture-06.jpg" alt="" fill quality={80} sizes="100vw" className="" /> */}
+                <div className="container-site relative">
+                    <Reveal className="text-center">
+                        <Eyebrow>RE:BERRY</Eyebrow>
+                        <div className="flex items-center justify-center mt-7">
+                            <span className="font-display leading-[10px] text-[90px] mr-2 text-latte" aria-hidden>
+                                “
+                            </span>
+                            <h2 className=" text-h2  font-medium  tracking-tighter">
+                                한사람, 한 사람의 <strong className="hl-down font-bold">고민에 집중한 결과</strong>
+                            </h2>
+                            <span className="font-display leading-[10px] ml-2 text-[90px] text-latte" aria-hidden>
+                                ”
+                            </span>
+                        </div>
+                        <p className="mt-9 text-lead font-medium tracking-tight">
+                            상업적이지 않은, 진심 어린 치료로
+                            <br />
+                            여러분의 아름다움을 설계하겠습니다.
+                        </p>
+                        <div className="mt-7">
+                            <MoreView href="/reviews" dark />
+                        </div>
+                    </Reveal>
+                    <Reveal className="mx-auto mt-14 max-w-4xl lg:mt-16">
+                        <BASlider label="피부" tags={['색소', '리프팅', '주사/홍조', '색소']} light />
+                    </Reveal>
                 </div>
             </section>
         </main>

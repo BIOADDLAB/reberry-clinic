@@ -81,6 +81,14 @@ body {
     -webkit-box-decoration-break: clone;
 }
 
+.hl-down {
+    padding-bottom: 0.25em;
+    padding-inline: 0.2em;
+    background: linear-gradient(180deg, transparent 40%, var(--hl-color, #e3e0dc) 40%);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
 /* 슬라이더 스크롤바 숨김 */
 .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -183,4 +191,20 @@ html:not([data-lang='ko']) font {
     .scroll-mouse::after {
         animation: none;
     }
+}
+
+/* #STYLE: MoreView 컴포넌트 호버 시 무한 반복되는 느린 확대/축소 애니메이션 */
+@keyframes loop-scale {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.4);
+    }
+}
+
+/* 부모(.group)에 호버했을 때만 내부 동그라미에 1.8초 주기로 부드럽게 무한 반복 주입 */
+.group:hover .animate-pulse-slow {
+    animation: loop-scale 1.8s ease-in-out infinite;
 }

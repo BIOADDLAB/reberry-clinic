@@ -1,0 +1,145 @@
+'use client';
+
+import Image from 'next/image';
+import { useState } from 'react';
+import { useDragScroll } from '@/components/lib/useDragScroll';
+import { cn } from '@/components/lib/cn';
+
+interface Props {
+    label: string;
+    tags?: string[];
+    light?: boolean;
+}
+
+const pairs = [1, 2, 3, 4].map((n) => ({
+    before: `/images/img-be-0${n}.jpg`,
+    after: `/images/img-af-0${n}.jpg`,
+}));
+
+export default function BASlider({ label, tags, light }: Props) {
+    const { ref, dragProps, dragClass } = useDragScroll<HTMLDivElement>();
+    const [page, setPage] = useState(0);
+
+    const move = (dir: -1 | 1) => {
+        if (!ref.current) return;
+        ref.current.scrollBy({ left: dir * ref.current.clientWidth * 0.8, behavior: 'smooth' });
+    };
+
+    const onScroll = () => {
+        const el = ref.current;
+        if (!el) return;
+        setPage(Math.round((el.scrollLeft / (el.scrollWidth - el.clientWidth || 1)) * 1));
+    };
+
+    return (
+        /* #STYLE: 카드 3개 규격 고정 컨테이너 (버튼 위치 -left-28 원복) */
+        <div className="relative w-full md:max-w-[772px] mx-auto px-0">
+            <button
+                onClick={() => move(-1)}
+                aria-label="이전"
+                className={cn(
+                    'absolute -left-28 top-1/2 z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border transition-all duration-500 hover:scale-105 min-[1040px]:flex',
+                    light ? 'border-cocoa bg-cream' : 'border-cream/20 bg-deep/40 backdrop-blur-sm',
+                )}
+            >
+                {/* #STYLE: 왼쪽 화살표 아이콘을 동그라미 중심부(오른쪽)로 1.5px 미세 이동 */}
+                <Image
+                    src="/images/i-arr-left-01.svg"
+                    alt="이전"
+                    width={14}
+                    height={28}
+                    className={cn('relative left-[-1px]', light ? 'brightness-0' : 'filter-none')}
+                />
+            </button>
+
+            <div
+                ref={ref}
+                {...dragProps}
+                onScroll={onScroll}
+                className={`no-scrollbar flex snap-x gap-4 overflow-x-auto scroll-smooth md:gap-5 ${dragClass}`}
+            >
+                {pairs.map((p, i) => (
+                    <article
+                        key={i}
+                        className="w-[240px] rounded-[10px] shrink-0 snap-start bg-deep text-center text-cream md:w-[244px]"
+                    >
+                        <p className="py-2.5 text-lead font-bold lg:pt-[26px] lg:pb-[23px]">
+                            {tags?.[i] ?? label} 전후 사진
+                        </p>
+                        <div className="relative">
+                            <div className="relative aspect-[8/5]">
+                                <Image
+                                    src={p.before}
+                                    alt="시술 전"
+                                    fill
+                                    quality={85}
+                                    sizes="(max-width: 768px) 240px, 244px"
+                                    className="pointer-events-none object-cover"
+                                />
+                            </div>
+                            <div className="relative aspect-[8/5] overflow-hidden">
+                                <Image
+                                    src={p.after}
+                                    alt="시술 후 (로그인 후 공개)"
+                                    fill
+                                    quality={85}
+                                    sizes="(max-width: 768px) 240px, 244px"
+                                    className="scale-110 object-cover blur-[6px]"
+                                />
+                                <span className="absolute inset-0 flex items-center justify-center">
+                                    <span className="rounded-full border border-cream/70 bg-deep/40 px-3 py-1 text-[11px] backdrop-blur-sm">
+                                        로그인
+                                    </span>
+                                </span>
+                            </div>
+                            <Image
+                                src="/images/i-arr-down-01.svg"
+                                alt=""
+                                width={30}
+                                height={30}
+                                className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
+                                aria-hidden
+                            />
+                        </div>
+                        <p className="mt-4.25 inline-block rounded-full border border-cream leading-6.75! bg-cream w-[100px] px-1 text-cocoa font-bold text-lead">
+                            {tags?.[i] ?? label}
+                        </p>
+                        <p className="font-display text-caption-sm mb-[15px] mt-1 text-[11px] tracking-[0.2em] text-cream">
+                            RE:BERRY
+                        </p>
+                    </article>
+                ))}
+            </div>
+
+            <button
+                onClick={() => move(1)}
+                aria-label="다음"
+                className={cn(
+                    'absolute -right-28 top-1/2 z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border transition-all duration-500 hover:scale-105 min-[1040px]:flex',
+                    light ? 'border-cocoa bg-cream' : 'border-cream bg-deep/40 backdrop-blur-sm',
+                )}
+            >
+                {/* #STYLE: 오른쪽 화살표 아이콘을 동그라미 중심부(왼쪽)로 1.5px 미세 이동 */}
+                <Image
+                    src="/images/i-arr-left-01.svg"
+                    alt="다음"
+                    width={14}
+                    height={28}
+                    className={cn('-scale-x-100 relative right-[-1px]', light ? 'brightness-0' : 'filter-none')}
+                />
+            </button>
+
+            <div className="mt-6 flex justify-center gap-2">
+                {[0, 1].map((d) => (
+                    <span
+                        key={d}
+                        className={cn(
+                            'h-1.5 w-1.5 rounded-full transition-colors',
+                            page === d ? (light ? 'bg-cocoa' : 'bg-cream') : light ? 'bg-cocoa/25' : 'bg-cream/30',
+                        )}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+}
