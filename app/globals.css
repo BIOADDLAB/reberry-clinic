@@ -1,9 +1,8 @@
 @import 'tailwindcss';
 
 @theme {
-    /* 한글 본문: 42dot Sans (layout.tsx에서 CDN 로드) */
-    --font-sans: '42dot Sans', 'AstaSans', ui-sans-serif, system-ui, sans-serif;
-    --font-serif: 'Cafe24Classictype', 'Noto Serif KR', ui-serif, serif;
+    --font-ui: '42dot Sans', 'AstaSans', ui-sans-serif, system-ui, sans-serif;
+    --font-title: 'Cafe24Classictype', 'Noto Serif KR', ui-serif, serif;
 
     /* Design Guide 팔레트 */
     --color-cocoa: #45362d;
@@ -20,9 +19,8 @@ html {
 body {
     background: var(--color-cream);
     color: var(--color-cocoa);
-    font-family: var(--font-sans);
+    font-family: var(--font-ui);
     letter-spacing: -0.01em;
-    /* #STYLE: Design Guide: 기본 본문 18px, 모바일 하한 16px */
     font-size: clamp(16px, 1.05vw, 18px);
     line-height: 1.75;
 }
@@ -57,7 +55,6 @@ body {
     font-size: 10px;
 }
 
-/* 영문 디스플레이 */
 .font-display {
     font-family: var(--font-title);
     font-weight: 400;

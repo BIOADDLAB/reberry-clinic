@@ -1,34 +1,63 @@
 import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import GoogleTranslate from '@/components/lang/GoogleTranslate';
+import LangAttribute from '@/components/lang/LangAttribute';
+
+const cafe24 = localFont({
+    src: '../public/fonts/Cafe24Classictype-v1.1.woff2',
+    weight: '400',
+    display: 'swap',
+    variable: '--font-title',
+});
+
+const asta = localFont({
+    src: '../public/fonts/AstaSans[wght].ttf',
+    weight: '300 800',
+    display: 'swap',
+    variable: '--font-ui',
+});
 
 export const metadata: Metadata = {
+    // TODO: 실제 배포 도메인으로 교체
+    metadataBase: new URL('https://reberry-clinic.vercel.app'),
     title: {
         default: '리베리의원 | RE:BERRY',
         template: '%s | 리베리의원',
     },
-    description: '피부 본연의 아름다움을 깨우는 리베리의원. 색소, 리프팅, 여드름, 홍조 시그니처 시술.',
+    description:
+        '당신의 뷰티 주치의 RE:BERRY. 상업적이지 않은, 진심 어린 치료로 여러분의 아름다움을 설계하겠습니다. 마포구청역 피부과 리베리의원.',
     openGraph: {
         title: '리베리의원 | RE:BERRY',
-        description: '피부 본연의 아름다움을 깨우는 리베리의원. 색소, 리프팅, 여드름, 홍조 시그니처 시술.',
-        images: ['/images/og-img.jpg'],
+        description: '당신의 뷰티 주치의 RE:BERRY. 마포구청역 피부과 리베리의원.',
+        images: ['/images/og-img.png'],
         locale: 'ko_KR',
         type: 'website',
     },
     twitter: {
         card: 'summary_large_image',
         title: '리베리의원 | RE:BERRY',
-        description: '피부 본연의 아름다움을 깨우는 리베리의원. 색소, 리프팅, 여드름, 홍조 시그니술.',
-        images: ['/images/og-img.jpg'],
+        description: '당신의 뷰티 주치의 RE:BERRY. 마포구청역 피부과 리베리의원.',
+        images: ['/images/og-img.png'],
     },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="ko">
-            <head></head>
+        <html lang="ko" data-lang="ko" className={`${cafe24.variable} ${asta.variable}`}>
+            <head>
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+                <link
+                    rel="stylesheet"
+                    href="https://fonts.googleapis.com/css2?family=42dot+Sans:wght@300..800&display=swap"
+                />
+            </head>
             <body className="antialiased">
+                <GoogleTranslate />
+                <LangAttribute />
                 <Header />
                 <main>{children}</main>
                 <Footer />

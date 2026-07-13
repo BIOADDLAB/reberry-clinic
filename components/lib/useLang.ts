@@ -3,14 +3,13 @@
 import { useSyncExternalStore } from 'react';
 
 // 지원 언어 (구글 번역 코드 기준)
-export type Lang = 'ko' | 'en' | 'ja' | 'zh-CN' | 'ar';
+export type Lang = 'ko' | 'en' | 'ja' | 'zh-CN';
 
 export const LANGS: { code: Lang; label: string; short: string }[] = [
     { code: 'ko', label: '한국어', short: 'KO' },
     { code: 'en', label: 'English', short: 'EN' },
     { code: 'ja', label: '日本語', short: 'JA' },
     { code: 'zh-CN', label: '中文(简体)', short: 'ZH' },
-    { code: 'ar', label: 'العربية', short: 'AR' },
 ];
 
 export function getCurrentLang(): Lang {
