@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import FloatingButtons from '@/components/layout/FloatingButtons';
 import GoogleTranslate from '@/components/lang/GoogleTranslate';
 import LangAttribute from '@/components/lang/LangAttribute';
 
