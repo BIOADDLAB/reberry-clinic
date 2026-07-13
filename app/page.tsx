@@ -43,7 +43,6 @@ export default function Home() {
                     <div className="scroll-mouse" aria-hidden />
                 </div>
             </section>
-
             <section className="relative py-20 lg:py-28 bg-[url('/images/bg-texture-06.jpg')] bg-repeat">
                 <div className="container-site relative">
                     <Reveal className="text-center">
@@ -53,7 +52,8 @@ export default function Home() {
                                 “
                             </span>
                             <h2 className=" text-h2  font-medium  tracking-tighter">
-                                한사람, 한 사람의 <strong className="hl-down font-bold">고민에 집중한 결과</strong>
+                                한사람, 한 사람의 <br className="block md:hidden" />
+                                <strong className="hl-down font-bold">고민에 집중한 결과</strong>
                             </h2>
                             <span className="font-display leading-[10px] ml-2 text-[90px] text-latte" aria-hidden>
                                 ”
@@ -75,10 +75,15 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="texture-paper py-20 lg:py-28 bg-[url('/images/bg-texture-07.jpg')] bg-repeat">
-                <div className="container-site grid items-center gap-12 lg:grid-cols-[2fr_3fr] lg:gap-20">
-                    <Reveal variants={zoom} className="mx-auto w-full max-w-xs lg:max-w-sm">
-                        <div className="arch-full relative  aspect-[3/4]">
+            <section className="texture-paper py-16 lg:py-28 bg-[url('/images/bg-texture-07.jpg')] bg-cover bg-center lg:bg-repeat bg-cream">
+                {/* #STYLE: PC에서 사진 영역이 과하게 넓어 보이지 않도록 그리드 비율 최적화 (2fr_3fr -> 1fr_1.3fr) */}
+                <div className="container-site grid items-center gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-20">
+                    {/* #STYLE: PC 해상도 진입 시 사진을 오른쪽(lg:ml-auto lg:mr-0)으로 밀어 텍스트와의 중앙 균형을 맞춤 */}
+                    <Reveal
+                        variants={zoom}
+                        className="mx-auto w-full max-w-[260px] sm:max-w-xs lg:max-w-sm lg:ml-auto lg:mr-0"
+                    >
+                        <div className="arch-full relative aspect-[3/4]">
                             <Image
                                 src="/images/img-doc-02.jpg"
                                 alt="유선민 대표원장"
@@ -89,21 +94,32 @@ export default function Home() {
                             />
                         </div>
                     </Reveal>
-                    <Reveal delay={0.1}>
-                        <p className="font-display text-h2">RE:BERRY</p>
-                        <p className="mt-8 text-medium font-medium leading-loose">
-                            한 분 한 분의 이야기를 듣고,
-                            <br className="hidden lg:block" /> 그분의 아름다움을 빛나게 하는 시술을 제안하는 공간이 될
-                            것입니다.
-                            <br className="hidden lg:block" /> 상담부터 시술, 사후관리까지 모든 과정을 제 손을 거쳐
-                            직접, 세심하게 책임지는 곳.
-                            <br className="hidden lg:block" /> 상업적이지 않은, 진심 어린 치료로 여러분의 아름다움을
-                            설계하겠습니다.
-                        </p>
-                        <p className="mt-9 text-[24px]  font-extrabold lg:text-[30px]">
+
+                    <Reveal delay={0.1} className="flex flex-col text-center lg:text-left">
+                        <p className="font-display text-h2 order-1">RE:BERRY</p>
+
+                        <p className="order-2 mt-2 text-[22px] font-extrabold lg:order-3 lg:mt-9 lg:!text-[30px]">
                             {site.director} <span className="ml-1 text-lead font-normal">대표원장</span>
                         </p>
-                        <div className="mt-6">
+
+                        <p className="order-3 mt-6 text-small font-medium leading-relaxed break-keep px-2 sm:px-0 lg:order-2 lg:mt-8 lg:text-medium lg:leading-loose">
+                            한 분 한 분의 이야기를 듣고,
+                            <br className="hidden lg:block" />
+                            그분의 아름다움을
+                            <br className="block lg:hidden max-[340px]:hidden" />
+                            빛나게 하는 시술을 제안하는 공간이 될 것입니다.
+                            <br className="hidden lg:block" />
+                            <br className="block lg:hidden max-[340px]:hidden" />
+                            상담부터 시술, 사후관리까지 모든 과정을 제 손을 거쳐
+                            <br className="block lg:hidden max-[340px]:hidden" />
+                            직접, 세심하게 책임지는 곳.
+                            <br className="hidden lg:block" />
+                            상업적이지 않은, 진심
+                            <br className="block lg:hidden max-[340px]:hidden" />
+                            어린 치료로 여러분의 아름다움을 설계하겠습니다.
+                        </p>
+
+                        <div className="order-4 mt-6 flex justify-center lg:justify-start">
                             <MoreView href="/doctors" dark />
                         </div>
                     </Reveal>
