@@ -67,30 +67,37 @@ export default function BASlider({ label, tags, light }: Props) {
                             {tags?.[i] ?? label} 전후 사진
                         </p>
                         <div className="relative">
-                            <div className="relative aspect-[8/5]">
+                            {/* #ISSUE: 의료법 대응 - 가림 처리를 After에서 Before(시술 전) 영역으로 이동 */}
+                            <div className="relative aspect-[8/5] overflow-hidden">
                                 <Image
                                     src={p.before}
                                     alt="시술 전"
                                     fill
                                     quality={85}
                                     sizes="(max-width: 768px) 240px, 244px"
-                                    className="pointer-events-none object-cover"
-                                />
-                            </div>
-                            <div className="relative aspect-[8/5] overflow-hidden">
-                                <Image
-                                    src={p.after}
-                                    alt="시술 후 (로그인 후 공개)"
-                                    fill
-                                    quality={85}
-                                    sizes="(max-width: 768px) 240px, 244px"
+                                    /* TODO: 로그인 후 - 아래 클래스로 교체 */
+                                    // className="pointer-events-none object-cover"
+                                    /* TODO: 로그인 전 - 비포 블러 처리 필요할 때 아래 클래스로 교체 */
                                     className="scale-110 object-cover blur-[6px]"
                                 />
+                                {/* TODO: 로그인 전 - 비포 블러 처리 필요할 때 아래 로그인 배지 주석 해제하여 사용  */}
                                 <span className="absolute inset-0 flex items-center justify-center">
-                                    <span className="rounded-full border border-cream/70 bg-deep/40 px-3 py-1 text-[11px] backdrop-blur-sm">
+                                    <span className="rounded-full border border-cream/70 bg-deep/40 px-3 py-1 text-[11px] backdrop-blur-sm text-caption">
                                         로그인
                                     </span>
                                 </span>
+                            </div>
+
+                            {/* After(시술 후) 영역은 가림막 없이 항상 선명하게 노출 */}
+                            <div className="relative aspect-[8/5]">
+                                <Image
+                                    src={p.after}
+                                    alt="시술 후"
+                                    fill
+                                    quality={85}
+                                    sizes="(max-width: 768px) 240px, 244px"
+                                    className="pointer-events-none object-cover"
+                                />
                             </div>
                             <Image
                                 src="/images/i-arr-down-01.svg"
