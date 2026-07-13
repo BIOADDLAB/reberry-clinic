@@ -62,6 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Header />
                 <main>{children}</main>
                 <Footer />
+                <FloatingButtons />
             </body>
         </html>
     );
