@@ -2,7 +2,7 @@
 
 @theme {
     --font-ui: '42dot Sans', 'AstaSans', ui-sans-serif, system-ui, sans-serif;
-    --font-title: 'Cafe24Classictype', 'Noto Serif KR', ui-serif, serif;
+    --font-title: 'Belleza', 'Noto Serif KR', ui-serif, serif;
 
     /* Design Guide 팔레트 */
     --color-cocoa: #45362d;
@@ -62,7 +62,7 @@ body {
 .font-display {
     font-family: var(--font-title);
     font-weight: 400;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.01em;
 }
 
 /* ───────── 레이아웃: 시안 1920 캔버스 / 1366 콘텐츠 ───────── */

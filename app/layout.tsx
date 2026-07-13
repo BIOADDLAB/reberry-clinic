@@ -7,8 +7,8 @@ import FloatingButtons from '@/components/layout/FloatingButtons';
 import GoogleTranslate from '@/components/lang/GoogleTranslate';
 import LangAttribute from '@/components/lang/LangAttribute';
 
-const cafe24 = localFont({
-    src: '../public/fonts/Cafe24Classictype-v1.1.woff2',
+const belleza = localFont({
+    src: '../public/fonts/Belleza-Regular.ttf',
     weight: '400',
     display: 'swap',
     variable: '--font-title',
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="ko" data-lang="ko" className={`${cafe24.variable} ${asta.variable}`}>
+        <html lang="ko" data-lang="ko" className={`${belleza.variable} ${asta.variable}`}>
             <head>
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />

@@ -22,8 +22,10 @@ export default function Home() {
                 />
                 <Reveal className="relative px-6">
                     <p className="text-h1-sm">당신의 뷰티 주치의</p>
-                    {/* #TODO: 카페24클래식타입 폰트 굵기 지원이 한가지만 가능해서 변경할듯 */}
-                    <h1 className="font-title font-normal text-h1-sm notranslate mt-1 text-h1 ">RE:BERRY</h1>
+                    {/* #ISSUE: 카페24클래식타입 폰트 -> Belleza 벨자 폰트로 변경함 */}
+                    <h1 className="font-display font-normal text-h1-sm notranslate mt-1 text-h1 tracking-[-2%] ">
+                        RE:BERRY
+                    </h1>
                     <div className="mt-11 flex justify-center">
                         <Link
                             href="/treatments/signature/pigment"
