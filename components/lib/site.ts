@@ -11,10 +11,11 @@ export const site = {
     addressDetail: '1101, 1102호 (성산동, SJ라벨라 상암)',
     subway: '6호선 마포구청역 1번 출구 도보 5분 이내',
     parking: ['건물 뒷편 주차장 · 주차권 수령 후', '지하 주차, 전기차 주차 제한'],
-    kakao: 'https://pf.kakao.com/',
-    youtube: 'https://www.youtube.com/',
-    blog: 'https://blog.naver.com/',
-    naver: 'https://booking.naver.com/',
+    // #LINK: 플로팅 버튼 상담예약 전용 안심번호 전화 연결 주소 추가
+    reservationPhone: 'tel:050713643777',
+    kakao: 'https://pf.kakao.com/_khIcn',
+    youtube: 'https://www.youtube.com/@%EB%A7%88%ED%8F%AC%ED%94%BC%EB%B6%80%EC%99%95',
+    blog: 'https://blog.naver.com/drpyton',
     hours: [
         { label: '평 일', value: '10:30 - 20:30' },
         { label: '토요일', value: '09:00 - 15:30' },
