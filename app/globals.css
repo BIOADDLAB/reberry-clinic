@@ -46,6 +46,9 @@ body {
     font-size: clamp(17px, 1.5vw, 20px);
     line-height: 1.75;
 }
+.text-medium {
+    font-size: clamp(16px, 1.35vw, 18px);
+}
 .text-small {
     font-size: clamp(15px, 1.15vw, 16px);
 }
