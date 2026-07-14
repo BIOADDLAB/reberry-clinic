@@ -31,7 +31,7 @@ export default function WhySection() {
     });
 
     return (
-        <section ref={ref} className="relative bg-sand h-[200vh]">
+        <section ref={ref} className="relative bg-sand h-[200svh]">
             <div className="sticky top-[80px] container-site flex flex-col h-[calc(100svh-80px)] lg:grid lg:grid-cols-[1fr_1.6fr]">
                 {/* 타이틀 영역 */}
                 <div className="flex shrink-0 items-center justify-center py-8 lg:py-0">
