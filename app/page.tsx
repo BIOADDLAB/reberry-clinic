@@ -133,10 +133,12 @@ export default function Home() {
 
             <section className="flex justify-center bg-cocoa text-cream">
                 <div className="flex w-full max-w-[1366px] flex-col lg:flex-row min-[1580px]:w-[1366px]">
+                    {/* 왼쪽 영역 */}
                     <div className="relative hidden shrink-0 lg:block lg:aspect-auto lg:w-[36%] min-[1580px]:w-[497px]">
                         <Image src="/images/bg-texture-01.jpg" alt="" fill quality={88} className="object-cover" />
                     </div>
 
+                    {/* 오른쪽 영역 */}
                     <div className="flex w-full flex-col lg:w-[64%] lg:border-r lg:border-cream min-[1580px]:w-[869px]">
                         <div className="flex flex-1 flex-col justify-center border-b border-cream px-6 text-center lg:px-16 lg:pl-[160px] lg:text-left [padding-top:clamp(48px,_4px_+_11.7vw,_189px)] [padding-bottom:clamp(32px,_19px_+_3.49vw,_74px)]">
                             <h2 className="font-display text-h2 leading-11.5">
@@ -166,7 +168,7 @@ export default function Home() {
                         {/* 하단 버튼 영역 */}
                         <div className="flex items-center justify-center px-6 lg:justify-start lg:px-16 lg:pl-[160px] [padding-top:clamp(32px,_21px_+_2.99vw,_68px)] [padding-bottom:clamp(40px,_14px_+_6.97vw,_124px)]">
                             <Link
-                                href="/AboutPage"
+                                href="/about"
                                 className="text-small flex h-[46px] w-[147px] items-center justify-center border border-cream tracking-wide transition-colors hover:bg-cream hover:text-cocoa"
                             >
                                 VISIT RE:BERRY
