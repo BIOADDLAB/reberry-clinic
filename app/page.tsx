@@ -8,6 +8,7 @@ import { zoom } from '@/components/lib/motion';
 import { site } from '@/components/lib/site';
 import LocationSection from '@/components/ui/LocationSection';
 import WhySection from '../components/home/WhySection';
+import AboutPage from './about/page';
 
 const HERO_IMG = '/images/bg-main-hiro.jpg';
 
@@ -129,6 +130,51 @@ export default function Home() {
             </section>
 
             <WhySection />
+
+            <section className="flex justify-center bg-cocoa text-cream">
+                <div className="flex w-full max-w-[1366px] flex-col lg:flex-row min-[1580px]:w-[1366px]">
+                    <div className="relative hidden shrink-0 lg:block lg:aspect-auto lg:w-[36%] min-[1580px]:w-[497px]">
+                        <Image src="/images/bg-texture-01.jpg" alt="" fill quality={88} className="object-cover" />
+                    </div>
+
+                    <div className="flex w-full flex-col lg:w-[64%] lg:border-r lg:border-cream min-[1580px]:w-[869px]">
+                        <div className="flex flex-1 flex-col justify-center border-b border-cream px-6 text-center lg:px-16 lg:pl-[160px] lg:text-left [padding-top:clamp(48px,_4px_+_11.7vw,_189px)] [padding-bottom:clamp(32px,_19px_+_3.49vw,_74px)]">
+                            <h2 className="font-display text-h2 leading-11.5">
+                                Attentive Care,
+                                <br />
+                                Responsible Results
+                            </h2>
+
+                            <div className="relative mx-auto mt-8 aspect-[3/4] w-[55%] max-w-[220px] overflow-hidden rounded-tr-full lg:hidden ">
+                                <Image
+                                    src="/images/bg-texture-01.jpg"
+                                    alt=""
+                                    fill
+                                    quality={88}
+                                    className="object-cover"
+                                />
+                            </div>
+
+                            <p className="text-small mt-8 leading-6.5 lg:mt-10">
+                                리베리의원은 한 사람 한 사람의 피부에 맞춘 진료. <br />
+                                유행하는 시술보다 필요한 치료를, <br />
+                                과잉 진료보다 진심 어린 상담을, <br />
+                                일시적인 변화보다 오래 지속되는 만족을 추구합니다.
+                            </p>
+                        </div>
+
+                        {/* 하단 버튼 영역 */}
+                        <div className="flex items-center justify-center px-6 lg:justify-start lg:px-16 lg:pl-[160px] [padding-top:clamp(32px,_21px_+_2.99vw,_68px)] [padding-bottom:clamp(40px,_14px_+_6.97vw,_124px)]">
+                            <Link
+                                href="/AboutPage"
+                                className="text-small flex h-[46px] w-[147px] items-center justify-center border border-cream tracking-wide transition-colors hover:bg-cream hover:text-cocoa"
+                            >
+                                VISIT RE:BERRY
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <LocationSection />
         </main>
