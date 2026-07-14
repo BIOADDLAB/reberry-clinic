@@ -6,12 +6,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/components/lib/cn';
 import { LANGS, useLang, setLangCookie, type Lang } from '@/components/lib/useLang';
 
-/* 헤더 우측 언어 드롭다운
-   상태 4가지가 전부 일관되게 바뀌도록 정리:
-   - 투명 헤더(기본): 크림 보더/글자, 흰 아이콘
-   - 투명 + hover/열림: 크림 배경 → 글자·아이콘 코코아
-   - solid 헤더(스크롤): 코코아 보더/글자, 아이콘 to-cocoa
-   - solid + hover/열림: 코코아 배경 → 글자 크림, 아이콘 다시 흰색(필터 해제) */
 export default function LanguageToggle({ solid }: { solid: boolean }) {
     const lang = useLang();
     const [open, setOpen] = useState(false);
