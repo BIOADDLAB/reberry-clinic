@@ -7,6 +7,7 @@ import MoreView from '@/components/ui/MoreView';
 import { zoom } from '@/components/lib/motion';
 import { site } from '@/components/lib/site';
 import LocationSection from '@/components/ui/LocationSection';
+import WhySection from '../components/home/WhySection';
 
 const HERO_IMG = '/images/bg-main-hiro.jpg';
 
@@ -126,6 +127,8 @@ export default function Home() {
                     </Reveal>
                 </div>
             </section>
+
+            <WhySection />
 
             <LocationSection />
         </main>
