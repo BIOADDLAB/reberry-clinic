@@ -6,6 +6,7 @@ import BASlider from '@/components/ui/BASlider';
 import MoreView from '@/components/ui/MoreView';
 import { zoom } from '@/components/lib/motion';
 import { site } from '@/components/lib/site';
+import LocationSection from '@/components/ui/LocationSection';
 
 const HERO_IMG = '/images/bg-main-hiro.jpg';
 
@@ -125,6 +126,8 @@ export default function Home() {
                     </Reveal>
                 </div>
             </section>
+
+            <LocationSection />
         </main>
     );
 }
