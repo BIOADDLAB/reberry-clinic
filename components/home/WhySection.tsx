@@ -28,14 +28,14 @@ export default function WhySection() {
 
     useMotionValueEvent(scrollYProgress, 'change', (v) => {
         setSlide((prev) => {
-            if (prev === 0 && v > 0.55) return 1;
-            if (prev === 1 && v < 0.45) return 0;
+            if (prev === 0 && v > 0.5) return 1;
+            if (prev === 1 && v < 0.42) return 0;
             return prev;
         });
     });
 
     return (
-        <section ref={ref} className="relative bg-sand lg:h-[200dvh]">
+        <section ref={ref} className="relative bg-sand lg:h-[300dvh]">
             {/* 모바일 영역 */}
             <div className="container-site pb-28 pt-24 lg:hidden">
                 <span className="mb-6 block text-center font-display text-[11px] uppercase tracking-[0.4em] text-deep/40">

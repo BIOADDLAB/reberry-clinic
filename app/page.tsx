@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import Reveal from '@/components/motion/Reveal';
 import Eyebrow from '@/components/ui/Eyebrow';
 import BASlider from '@/components/ui/BASlider';
 import MoreView from '@/components/ui/MoreView';
@@ -8,13 +7,14 @@ import { zoom } from '@/components/lib/motion';
 import { site } from '@/components/lib/site';
 import LocationSection from '@/components/ui/LocationSection';
 import WhySection from '../components/home/WhySection';
-import AboutPage from './about/page';
+import Reveal from '../components/motion/Reveal';
 
 const HERO_IMG = '/images/bg-main-hiro.jpg';
 
 export default function Home() {
     return (
-        <main>
+        <>
+            {/* 메인 히어로 영역 */}
             <section className="relative flex h-[70vh] min-h-[600px] max-h-[850px] w-full items-center justify-center overflow-hidden text-center text-cream">
                 {/* #TODO: 이미지 최적화 개선 */}
                 <Image
@@ -46,6 +46,8 @@ export default function Home() {
                     <div className="scroll-mouse" aria-hidden />
                 </div>
             </section>
+
+            {/* 전 후 사진 영역 */}
             <section className="relative py-20 lg:py-28 bg-[url('/images/bg-texture-06.jpg')] bg-repeat">
                 <div className="container-site relative">
                     <Reveal className="text-center">
@@ -78,6 +80,7 @@ export default function Home() {
                 </div>
             </section>
 
+            {/* 의사소개 영역 */}
             <section className="texture-paper py-16 lg:py-28 bg-[url('/images/bg-texture-07.jpg')] bg-cover bg-center lg:bg-repeat bg-cream">
                 {/* #STYLE: PC에서 사진 영역이 과하게 넓어 보이지 않도록 그리드 비율 최적화 (2fr_3fr -> 1fr_1.3fr) */}
                 <div className="container-site grid items-center gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-20">
@@ -129,25 +132,34 @@ export default function Home() {
                 </div>
             </section>
 
+            {/* 이유 영역 */}
             <WhySection />
 
+            {/* 케어 영역 */}
             <section className="flex justify-center bg-cocoa text-cream">
                 <div className="flex w-full max-w-[1366px] flex-col lg:flex-row min-[1580px]:w-[1366px]">
                     {/* 왼쪽 영역 */}
                     <div className="relative hidden shrink-0 lg:block lg:aspect-auto lg:w-[36%] min-[1580px]:w-[497px]">
-                        <Image src="/images/bg-texture-01.jpg" alt="" fill quality={88} className="object-cover" />
+                        <Reveal variants={zoom} className="absolute inset-0">
+                            <Image src="/images/bg-texture-01.jpg" alt="" fill quality={88} className="object-cover" />
+                        </Reveal>
                     </div>
 
                     {/* 오른쪽 영역 */}
                     <div className="flex w-full flex-col lg:w-[64%] lg:border-r lg:border-cream min-[1580px]:w-[869px]">
-                        <div className="flex flex-1 flex-col justify-center border-b border-cream px-6 text-center lg:px-16 lg:pl-[160px] lg:text-left [padding-top:clamp(48px,_4px_+_11.7vw,_189px)] [padding-bottom:clamp(32px,_19px_+_3.49vw,_74px)]">
-                            <h2 className="font-display text-h2 leading-11.5">
-                                Attentive Care,
-                                <br />
-                                Responsible Results
-                            </h2>
+                        <div className="flex flex-1 flex-col justify-center lg:border-b lg:border-cream px-6 text-center lg:px-16 lg:pl-[160px] lg:text-left [padding-top:clamp(48px,_4px_+_11.7vw,_189px)] [padding-bottom:clamp(32px,_19px_+_3.49vw,_74px)]">
+                            <Reveal>
+                                <h2 className="font-display text-h2 leading-11.5">
+                                    Attentive Care,
+                                    <br />
+                                    Responsible Results
+                                </h2>
+                            </Reveal>
 
-                            <div className="relative mx-auto mt-8 aspect-[3/4] w-[55%] max-w-[220px] overflow-hidden rounded-tr-full lg:hidden ">
+                            <Reveal
+                                variants={zoom}
+                                className="relative mx-auto mt-8 aspect-[3/4] w-[50%] max-w-[220px] overflow-hidden rounded-full lg:hidden"
+                            >
                                 <Image
                                     src="/images/bg-texture-01.jpg"
                                     alt=""
@@ -155,30 +167,41 @@ export default function Home() {
                                     quality={88}
                                     className="object-cover"
                                 />
-                            </div>
+                            </Reveal>
 
-                            <p className="text-small mt-8 leading-6.5 lg:mt-10">
-                                리베리의원은 한 사람 한 사람의 피부에 맞춘 진료. <br />
-                                유행하는 시술보다 필요한 치료를, <br />
-                                과잉 진료보다 진심 어린 상담을, <br />
-                                일시적인 변화보다 오래 지속되는 만족을 추구합니다.
-                            </p>
+                            <Reveal delay={0.07}>
+                                <span className="block mx-auto w-px h-8.5 bg-cream/80 mt-8 lg:hidden"></span>
+                            </Reveal>
+
+                            <Reveal delay={0.1}>
+                                <p className="text-small mt-8 leading-6.5 lg:mt-10">
+                                    리베리의원은 한 사람 한 사람의 피부에 맞춘 진료. <br />
+                                    유행하는 시술보다 필요한 치료를, <br />
+                                    과잉 진료보다 진심 어린 상담을, <br />
+                                    일시적인 변화보다 오래 지속되는 만족을 추구합니다.
+                                </p>
+                            </Reveal>
                         </div>
 
                         {/* 하단 버튼 영역 */}
-                        <div className="flex items-center justify-center px-6 lg:justify-start lg:px-16 lg:pl-[160px] [padding-top:clamp(32px,_21px_+_2.99vw,_68px)] [padding-bottom:clamp(40px,_14px_+_6.97vw,_124px)]">
-                            <Link
-                                href="/about"
-                                className="text-small flex h-[46px] w-[147px] items-center justify-center border border-cream tracking-wide transition-colors hover:bg-cream hover:text-cocoa"
-                            >
-                                VISIT RE:BERRY
-                            </Link>
+                        <div className="flex items-center justify-center px-6 pt-2.5 pb-14 lg:justify-start lg:px-16 lg:pl-[160px] lg:[padding-top:clamp(32px,_21px_+_2.99vw,_68px)] lg:[padding-bottom:clamp(40px,_14px_+_6.97vw,_124px)]">
+                            {/* #LINK /about */}
+                            {/* #STYLE flex, border, transition */}
+                            {/* #ISSUE 모바일 padding-top: 40px(pt-10), padding-bottom: 56px(pb-[14px]) 적용 */}
+                            <Reveal delay={0.15}>
+                                <Link
+                                    href="/about"
+                                    className="text-small flex h-[46px] w-[147px] items-center justify-center border border-cream tracking-wide transition-colors hover:bg-cream hover:text-cocoa"
+                                >
+                                    VISIT RE:BERRY
+                                </Link>
+                            </Reveal>
                         </div>
                     </div>
                 </div>
             </section>
 
             <LocationSection />
-        </main>
+        </>
     );
 }
