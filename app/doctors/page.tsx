@@ -29,12 +29,19 @@ export default function DoctorsPage() {
 
                         <p className="mt-8 text-medium leading-[30px]">
                             한 분 한 분의 이야기를 듣고,
+                            <br className="" />
+                            그분의 아름다움을 빛나게 하는 시술을 <br className="block lg:hidden" />
+                            제안하는 공간이 될 것입니다.
                             <br />
-                            그분의 아름다움을 빛나게 하는 시술을 제안하는 공간이 될 것입니다.
+                            <br className="block lg:hidden" />
+                            상담부터 시술, 사후관리까지 모든 과정을
+                            <br className="block lg:hidden" />
+                            제 손을 거쳐 직접, 세심하게 책임지는 곳.
                             <br />
-                            상담부터 시술, 사후관리까지 모든 과정을 제 손을 거쳐 직접, 세심하게 책임지는 곳.
-                            <br />
-                            상업적이지 않은, 진심 어린 치료로 여러분의 아름다움을 설계하겠습니다.
+                            <br className="block lg:hidden" />
+                            상업적이지 않은, 진심 어린 치료로
+                            <br className="block lg:hidden" />
+                            여러분의 아름다움을 설계하겠습니다.
                         </p>
                     </Reveal>
                 </div>
@@ -105,7 +112,9 @@ export default function DoctorsPage() {
                             RE:BERRY PROMISE
                         </h2>
                         <p className="mt-2.25 text-h2 leading-[51px] font-light ">
-                            경험을 넘어 <strong className="font-bold">근거를 이야기합니다</strong>
+                            경험을 넘어
+                            <br className="block lg:hidden" />
+                            <strong className="font-bold">근거를 이야기합니다</strong>
                         </p>
                     </Reveal>
                     <div className="relative pt-4 mt-12 lg:pt-12">
