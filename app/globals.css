@@ -9,7 +9,23 @@
     --color-latte: #705e51;
     --color-cream: #fffffc;
     --color-sand: #cdc5b6;
-    --color-deep: #382b22; /* 다크 섹션·푸터 — texture-dark 가 사용. 지우면 다크 섹션 깨짐 */
+    --color-deep: #382b22;
+}
+
+@theme {
+    --animate-wheel: wheel 1.5s ease-in-out infinite;
+
+    @keyframes wheel {
+        0%,
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        50% {
+            transform: translateY(6px);
+            opacity: 0.3;
+        }
+    }
 }
 
 html {

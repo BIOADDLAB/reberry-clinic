@@ -1,7 +1,8 @@
+import SubHero from '../../components/ui/SubHero';
 export default function AboutPage() {
     return (
-        <main>
-            <h1>어바웃</h1>
-        </main>
+        <>
+            <SubHero en="WE ARE RE:BERRY" image="/images/bg-sub-01.jpg" />
+        </>
     );
 }

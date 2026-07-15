@@ -1,0 +1,31 @@
+import Image from 'next/image';
+import Reveal from '@/components/motion/Reveal';
+import Eyebrow from '@/components/ui/Eyebrow';
+
+interface Props {
+    en: string;
+    title?: string;
+    image: string;
+}
+
+// 서브 페이지 공통 히어로
+export default function SubHero({ en, title, image }: Props) {
+    return (
+        <section className="relative flex h-[366px] items-center justify-center overflow-hidden text-center text-cream md:h-[566px]">
+            <Image src={image} alt="" fill priority quality={85} sizes="100vw" className="object-cover" />
+            <div className="absolute inset-0 bg-deep/35" />
+            <Reveal className="relative px-6">
+                <Eyebrow light hero className="text-h1-sm tracking-normal ">
+                    {en}
+                </Eyebrow>
+                {title && <h1 className="mt-3.5 text-h1-sm font-medium ">{title}</h1>}
+            </Reveal>
+            <div className="absolute bottom-6 md:bottom-13 left-1/2 -translate-x-1/2 z-3 flex flex-col items-center gap-1.5 md:gap-2 lg:bottom-15">
+                <div className="flex h-8 w-5 md:h-10 md:w-6 items-start justify-center rounded-full border-2 border-white p-1">
+                    <div className="h-1.5 w-0.5 md:h-2 md:w-0.5 rounded-full bg-white animate-wheel" />
+                </div>
+                <img src="/images/i-arr-down-03.svg" alt="scroll down" className="w-3 md:w-auto" />
+            </div>
+        </section>
+    );
+}
