@@ -85,7 +85,7 @@ export default function AboutPage() {
                     <RevealGroup className="mx-auto mt-12 grid max-w-[957px] gap-6 md:grid-cols-2 lg:gap-[37px] lg:mt-18.75">
                         {promises.map((p) => (
                             <RevealItem key={p.no} className="bg-sand/90 text-cocoa rounded-[10px] overflow-hidden">
-                                <p className="font-display py-2 text-center text-base tracking-[0.2em] lg:text-lead">
+                                <p className="font-display py-2 text-center  tracking-[0.2em] text-lead">
                                     PROMISE {p.no}
                                 </p>
                                 <div className="relative aspect-[5/4] w-full h-[240px] lg:h-[318px]">
@@ -97,7 +97,7 @@ export default function AboutPage() {
                                         className="object-cover object-right"
                                     />
                                 </div>
-                                <p className="whitespace-pre-line flex h-auto items-center justify-center px-6 py-8 text-sm tracking-tighter text-center lg:text-left lg:h-[228px] lg:py-2 lg:text-text-medium">
+                                <p className="whitespace-pre-line flex h-auto items-center  text-center px-6 py-8 text-medium leading-[30px] tracking-tighter lg:text-left lg:h-[228px] lg:py-2 break-keep">
                                     {p.text}
                                 </p>
                             </RevealItem>

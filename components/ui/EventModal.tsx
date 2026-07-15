@@ -11,6 +11,7 @@ interface EventItem {
     title: string;
 }
 
+// #TODO: 모달 뒤에 스크롤 이벤트 막기
 export default function EventModal({ events }: { events: EventItem[] }) {
     const [active, setActive] = useState<EventItem | null>(null);
 
