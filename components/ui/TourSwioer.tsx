@@ -7,8 +7,15 @@ import { useRef, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 
-// #TODO: 맞는 인테리어 사진들로 변경 & 보내주는 사진 보고 배열 변경
-const images = [1, 2, 3, 4, 5, 6].map((n) => `/images/bg-tour-${String(n).padStart(2, '0')}.jpg`);
+// #TODO: 추후 인테리어 사진 전달받으면 배열정리 + alt 맞게 넣어야함
+const tourImages = [
+    { src: '/images/bg-tour-01.jpg', alt: '리베리의원 마포점 메인 로비와 리셉션 데스크' },
+    { src: '/images/bg-tour-02.jpg', alt: '리베리의원 마포점 프라이빗한 1인 맞춤형 시술실 내부' },
+    { src: '/images/bg-tour-03.jpg', alt: '리베리의원 마포점 따뜻한 분위기의 고객 대기 공간 및 휴게 라운지' },
+    { src: '/images/bg-tour-04.jpg', alt: '리베리의원 마포점 최신 레이저 장비가 구비된 피부 관리실' },
+    { src: '/images/bg-tour-05.jpg', alt: '리베리의원 마포점 고급스러운 인테리어의 파우더룸' },
+    { src: '/images/bg-tour-06.jpg', alt: '리베리의원 마포점 편안한 1:1 맞춤형 상담실 공간' },
+];
 
 export default function TourSwiper() {
     const swiperRef = useRef<SwiperType | null>(null);
@@ -23,12 +30,12 @@ export default function TourSwiper() {
                 onSlideChange={(s) => setI(s.realIndex)}
                 className="h-[60vh] min-h-[400px] w-full md:min-h-0 md:h-[43.125vw]"
             >
-                {images.map((src, k) => (
-                    <SwiperSlide key={src} className="h-full">
+                {tourImages.map((image, k) => (
+                    <SwiperSlide key={image.src} className="h-full">
                         <div className="relative h-full w-full">
                             <Image
-                                src={src}
-                                alt={`리베리의원 공간 ${k + 1}`}
+                                src={image.src}
+                                alt={image.alt}
                                 fill
                                 quality={85}
                                 sizes="100vw"
@@ -40,7 +47,6 @@ export default function TourSwiper() {
                 ))}
             </Swiper>
 
-            {/* 모바일 텍스트 가독성을 위해 모바일에서만 그라데이션 농도를 살짝 높임 */}
             <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-deep/40 via-transparent to-transparent md:from-deep/15" />
 
             <div className="absolute inset-x-0 bottom-6 z-10 border-y border-cream/50 text-cream md:bottom-18">
@@ -72,7 +78,7 @@ export default function TourSwiper() {
                             </button>
                         </div>
                         <span className="font-display text-sm md:text-lead tracking-[0.3em]">
-                            {i + 1} / {images.length}
+                            {i + 1} / {tourImages.length}
                         </span>
                     </div>
                 </div>
