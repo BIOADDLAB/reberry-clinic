@@ -8,6 +8,7 @@ import { site } from '@/components/lib/site';
 import LocationSection from '@/components/ui/LocationSection';
 import WhySection from '../components/home/WhySection';
 import Reveal from '../components/motion/Reveal';
+import TourSwiper from '../components/ui/TourSwioer';
 
 const HERO_IMG = '/images/bg-main-hiro.jpg';
 
@@ -200,6 +201,8 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+
+            <TourSwiper />
 
             <LocationSection />
         </>
