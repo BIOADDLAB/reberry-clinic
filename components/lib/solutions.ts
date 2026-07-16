@@ -1,3 +1,4 @@
+// #ISSUE: 장비(equipment)+제품(products) 단일 진실 공급원(SSOT) 통합 — 카드와 상세 페이지가 이 파일 하나만 봄
 // #MEMO: 상세 내용 채우는 곳: 각 항목의 subTitle / introDescription / principles (빈 값이면 상세 페이지가 기본 구성으로 렌더링 함)
 
 export interface SolutionPrinciple {
