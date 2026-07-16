@@ -9,6 +9,7 @@ import LocationSection from '@/components/ui/LocationSection';
 import WhySection from '../components/home/WhySection';
 import Reveal from '../components/motion/Reveal';
 import TourSwiper from '../components/ui/TourSwioer';
+import SolutionTabs from '@/components/home/SolutionTabs';
 
 const HERO_IMG = '/images/bg-main-hiro.jpg';
 
@@ -80,6 +81,9 @@ export default function Home() {
                     </Reveal>
                 </div>
             </section>
+
+            {/* 솔루션 장비, 제품 영역 */}
+            <SolutionTabs />
 
             {/* 의사소개 영역 */}
             <section className="texture-paper py-16 lg:py-28 bg-[url('/images/bg-texture-07.jpg')] bg-cover bg-center lg:bg-repeat bg-cream">
