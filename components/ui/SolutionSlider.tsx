@@ -90,7 +90,7 @@ export default function SolutionSlider({ slugs, baseHref, className }: Props) {
                                 >
                                     More View{' '}
                                     <span className="relative flex h-1.75 w-1.75 items-center justify-center rounded-full bg-white/25 animate-pulse-slow">
-                                        <span className="relative block h-0.5 w-0.5 mb-0.5 rounded-full bg-white"></span>
+                                        <span className="relative block h-0.75 w-0.75 rounded-full bg-white"></span>
                                     </span>
                                 </Link>
                                 <h3 className="ml-2 mt-6 font-bold text-lead">{item.name}</h3>
