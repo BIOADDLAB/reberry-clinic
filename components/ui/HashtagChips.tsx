@@ -9,7 +9,7 @@ export default function HashtagChips({ items }: { items: Chip[] }) {
                 <RevealItem key={c.text}>
                     <span
                         className={cn(
-                            'inline-block rounded-full px-5 py-2.5 text-small shadow-sm',
+                            'inline-block rounded-full px-5 py-2.5 text-lead font-semibold',
                             c.strong ? 'bg-cocoa text-cream' : 'bg-cream text-cocoa ring-1 ring-cocoa/10',
                         )}
                     >
