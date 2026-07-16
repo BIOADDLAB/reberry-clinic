@@ -47,7 +47,7 @@ export default async function SolutionDetailPage({ params }: Params) {
                     fill
                     quality={80}
                     sizes="100vw"
-                    className="object-cover"
+                    className="object-cover "
                 />
                 <div className="container-site relative">
                     <div className="grid items-start gap-10 lg:grid-cols-[1fr_430px] lg:gap-20">
@@ -69,7 +69,7 @@ export default async function SolutionDetailPage({ params }: Params) {
                         </Reveal>
                         <Reveal
                             variants={zoom}
-                            className="relative order-first self-start aspect-[430/414] w-full overflow-hidden lg:order-none lg:w-[430px] rounded-[14px]"
+                            className="relative order-first self-start aspect-430/414 w-full overflow-hidden lg:order-0 lg:w-107.5 rounded-[14px]"
                         >
                             <Image
                                 src={s.detailImage}
@@ -77,7 +77,7 @@ export default async function SolutionDetailPage({ params }: Params) {
                                 fill
                                 quality={90}
                                 sizes="(max-width: 1024px) 100vw, 430px"
-                                className="object-contain p-8 rounded-[14px]"
+                                className="object-contain p-8 rounded-[14px] lg:p-0"
                             />
                         </Reveal>
                     </div>
