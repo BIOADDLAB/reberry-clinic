@@ -69,7 +69,7 @@ export default async function SolutionDetailPage({ params }: Params) {
                         </Reveal>
                         <Reveal
                             variants={zoom}
-                            className="relative order-first self-start aspect-430/414 w-full overflow-hidden lg:order-0 lg:w-107.5 rounded-[14px]"
+                            className="relative order-first self-start mx-auto aspect-430/414 w-full max-w-107.5 overflow-hidden lg:order-0 lg:mx-0 lg:w-107.5 rounded-[14px]"
                         >
                             <Image
                                 src={s.detailImage}
