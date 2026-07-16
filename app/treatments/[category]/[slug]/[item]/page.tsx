@@ -77,7 +77,7 @@ export default async function SolutionDetailPage({ params }: Params) {
                                 fill
                                 quality={90}
                                 sizes="(max-width: 1024px) 100vw, 430px"
-                                className="object-contain p-8 rounded-[14px] lg:p-0"
+                                className="object-contain p-0 "
                             />
                         </Reveal>
                     </div>
