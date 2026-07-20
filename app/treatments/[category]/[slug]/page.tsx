@@ -5,10 +5,15 @@ import { treatments, findTreatment, categoryLabel } from '@/components/lib/treat
 import Image from 'next/image';
 import Reveal from '@/components/motion/Reveal';
 import { zoom } from '@/components/lib/motion';
+import { cn } from '@/components/lib/cn';
 import BACardSlider from '@/components/ui/BACardSlider';
 import { SpinEmblem, FloatingCream } from '@/components/ui/DecoItem';
 import SectionDivider from '@/components/ui/SectionDivider';
 import { getBAPhotosBySlug } from '@/components/lib/ba';
+import Eyebrow from '@/components/ui/Eyebrow';
+import HashtagChips from '@/components/ui/HashtagChips';
+import SolutionSlider from '@/components/ui/SolutionSlider';
+import { TwoDots } from '@/components/ui/DecoItem';
 
 interface Params {
     params: Promise<{ category: string; slug: string }>;
@@ -193,7 +198,9 @@ export default async function TreatmentPage({ params }: Params) {
                 </section>
             )}
 
-            {getBAPhotosBySlug(t.slug).length > 0 && (
+            {/* 전 후 슬라이더 */}
+            {/* 전 후 슬라이더 — 시그니처 전용 */}
+            {sig && (
                 <section className="texture-dark py-20 bg-cocoa! text-cream lg:py-30">
                     <div className="container-site">
                         <Reveal className="text-center">
@@ -205,6 +212,65 @@ export default async function TreatmentPage({ params }: Params) {
                     </div>
                 </section>
             )}
+
+            {/* 솔루션 영역 - 시그니처, 안티에이징, 피부교정 공통 */}
+            <section
+                className={cn(
+                    'relative py-20 lg:pt-[180px] lg:pb-[170px]',
+                    t.category === 'skin' && 'bg-sand',
+                    t.category === 'aging' && 'bg-cocoa text-cream',
+                )}
+            >
+                {t.category === 'signature' && (
+                    <Image
+                        src="/images/bg-texture-06.jpg"
+                        alt=""
+                        fill
+                        quality={80}
+                        sizes="100vw"
+                        className="object-cover"
+                    />
+                )}
+                <div className="container-site relative">
+                    {sig && (
+                        <Reveal className="text-center">
+                            <Eyebrow light={t.category === 'aging'}>RE:BERRY</Eyebrow>
+                            <h2 className="mt-5 text-h2">
+                                같은 고민이라도 <strong className="font-bold">원인은 모두 다릅니다</strong>
+                            </h2>
+                        </Reveal>
+                    )}
+                    <div className="mt-10 lg:mt-12">
+                        <HashtagChips
+                            items={t.hashtags}
+                            tone={t.category === 'signature' ? 'sig' : t.category}
+                            rows={t.hashtagRows}
+                        />
+                    </div>
+                    <div className="mt-[50px] flex justify-center">
+                        <TwoDots light={t.category === 'aging'} />
+                    </div>
+                    <Reveal className="mt-[100px] text-center">
+                        <h2 className="font-display text-h2 tracking-[0.08em]">RE:BERRY SOLUTION</h2>
+                        <p className="mt-4 text-h2 font-light">
+                            {t.solution.light} <strong className="font-bold">{t.solution.strong}</strong>
+                        </p>
+                    </Reveal>
+                    <div className="mt-12 lg:mt-16">
+                        <SolutionSlider
+                            slugs={t.items}
+                            baseHref={`/treatments/${t.category}/${t.slug}`}
+                            pointClass={
+                                t.category === 'aging'
+                                    ? 'bg-cream text-cocoa'
+                                    : t.category === 'skin'
+                                      ? 'bg-cocoa text-cream'
+                                      : 'bg-latte text-cream'
+                            }
+                        />
+                    </div>
+                </div>
+            </section>
 
             <LocationSection />
         </>

@@ -4,6 +4,7 @@ export type Category = 'signature' | 'skin' | 'aging';
 export interface Chip {
     text: string;
     strong?: boolean;
+    wrap?: number; // 지정 시 이 px 폭에서 강제 줄바꿈 (모바일 BoxChip 전용). 없으면 text-balance 자동
 }
 
 export interface Treatment {
@@ -15,6 +16,7 @@ export interface Treatment {
     definition: { title: string; text: string };
     hashtags: Chip[];
     solution: { light: string; strong: string };
+    hashtagRows?: [number, number];
     items: string[]; // 장비 + 제품 혼합 슬러그
     visual: number; // 배경/인물 세트 번호
     visualW: number; // 시술 소개 그룹(카드+인물)
@@ -76,6 +78,7 @@ export const treatments: Treatment[] = [
             { text: '토닝을 아무리 받아도 효과가 없어요', strong: true },
             { text: '어릴때부터 있었던 색소가 신경쓰여요' },
         ],
+        hashtagRows: [3, 2],
         solution: { light: '색소치료의 핵심은', strong: '피부층에 맞는 정밀한 타겟팅 입니다' },
         items: ['lipot', 'excelv', 'spectra', 'pico'],
         signature: {
@@ -118,6 +121,7 @@ export const treatments: Treatment[] = [
             { text: '이중턱이랑 턱선을 개선하고 싶어요', strong: true },
             { text: '눈꺼풀이 점점 처져요' },
         ],
+        hashtagRows: [3, 3],
         solution: { light: '리프팅의 핵심은 ', strong: '얼굴형에 맞는 디자인 입니다' },
         items: ['ulthera', 'onda', 'vro', 'juvelook-volume'],
         signature: {
@@ -161,6 +165,8 @@ export const treatments: Treatment[] = [
             { text: '이중턱이랑 턱선을 개선하고 싶어요', strong: true },
             { text: '눈꺼풀이 점점 쳐져요' },
         ],
+        hashtagRows: [3, 3],
+
         solution: { light: '볼륨의 핵심은', strong: '처짐과 꺼짐에 맞는 디자인 시술입니다' },
         items: ['ulthera', 'onda', 'vro', 'juvelook-volume'],
         signature: {
@@ -200,6 +206,7 @@ export const treatments: Treatment[] = [
             { text: '여드름이 무서워요', strong: true },
             { text: '여드름 자국이 사라지지 않아요' },
         ],
+        hashtagRows: [3, 3],
         solution: { light: '여드름치료의 핵심은 ', strong: '재발을 막는 근본적인 원인 차단입니다' },
         items: ['gold-ptt', 'potenza'],
         signature: {
@@ -240,6 +247,7 @@ export const treatments: Treatment[] = [
             { text: '피부에 실핏줄이 보여요', strong: true },
             { text: '화장으로도 붉은기가 안 가려져요' },
         ],
+        hashtagRows: [3, 2],
         solution: { light: '홍조치료의 핵심은', strong: '원인에 맞는 혈관 맞춤 케어입니다' },
         items: ['excelv', 'gold-ptt', 'potenza'],
         signature: {
@@ -283,6 +291,7 @@ export const treatments: Treatment[] = [
             { text: '이중턱이랑 턱선을 개선하고 싶어요', strong: true },
             { text: '눈꺼풀이 점점 처져요' },
         ],
+        hashtagRows: [3, 3],
         solution: { light: '색소치료의 핵심은', strong: '피부층에 맞는 정밀한 타겟팅입니다' },
         items: ['lipot', 'excelv', 'spectra', 'pico', 'clarity'],
     },
@@ -307,6 +316,7 @@ export const treatments: Treatment[] = [
             { text: '여드름이 무서워요', strong: true },
             { text: '여드름 자국이 사라지지 않아요' },
         ],
+        hashtagRows: [3, 3],
         solution: { light: '여드름치료의 핵심은', strong: '재발을 막는 근본적인 원인 차단입니다' },
         items: ['gold-ptt', 'potenza', 'exosome'],
     },
@@ -329,6 +339,7 @@ export const treatments: Treatment[] = [
             { text: '긴장할 때마다 얼굴이 붉어져요', strong: true },
             { text: '피부에 실핏줄이 많아요' },
         ],
+        hashtagRows: [2, 2],
         solution: { light: '홍조치료의 핵심은', strong: '원인에 맞는 혈관 맞춤 케어입니다' },
         items: ['excelv', 'gold-ptt', 'potenza'],
     },
@@ -352,6 +363,7 @@ export const treatments: Treatment[] = [
             { text: '푸석하고 생기가 없어요', strong: true },
             { text: '자연스러운 물광을 원해요', strong: true },
         ],
+        hashtagRows: [3, 2],
         solution: { light: '스킨부스터의 핵심은', strong: '피부 속 장벽부터 다지는 깊은 영양 공급입니다' },
         items: ['juvelook', 'rejuran-healer', 'lillide', 'newarti', 'lituo'],
     },
@@ -374,6 +386,7 @@ export const treatments: Treatment[] = [
             { text: '반영구 눈썹 잔흔이 심해요', strong: true },
             { text: '깨끗했던 피부로 돌아가고 싶어요' },
         ],
+        hashtagRows: [2, 2],
         solution: { light: '문신제거의 핵심은', strong: '주변 피부 손상을 줄인 정밀한 색소 파괴입니다' },
         items: ['pico'],
     },
@@ -397,6 +410,7 @@ export const treatments: Treatment[] = [
             { text: '화장해도 모공이 도드라져요', strong: true },
             { text: '매끄러운 피부결을 원해요', strong: true },
         ],
+        hashtagRows: [3, 2],
         solution: { light: '흉터·모공·피부결 개선의 핵심은', strong: '촘촘하게 새살을 채우는 피부 재생입니다' },
         items: ['juvelook', 'pico2', 'potenza', 'synerjet'],
     },
@@ -420,6 +434,7 @@ export const treatments: Treatment[] = [
             { text: '깔끔한 인상을 만들고 싶어요', strong: true },
             { text: '자극 없는 제모를 원해요', strong: true },
         ],
+        hashtagRows: [3, 2],
         solution: { light: '레이저 제모의 핵심은', strong: '모근 성장을 억제하는 주기별 타겟 시술입니다' },
         items: ['clarity2'],
     },
@@ -443,6 +458,7 @@ export const treatments: Treatment[] = [
             { text: '전문적인 진정이 필요해요', strong: true },
             { text: '시술 효과를 오래 유지하고 싶어요', strong: true },
         ],
+        hashtagRows: [3, 2],
         solution: { light: '피부 관리의 핵심은', strong: '무너진 밸런스를 되찾는 맞춤형 진정 및 재생입니다' },
         items: ['aqua', 'aha-bha', 'peeling', 'scrubber', 'cryocell'],
     },
@@ -469,6 +485,7 @@ export const treatments: Treatment[] = [
             { text: '이중턱이랑 턱선을 개선하고 싶어요', strong: true },
             { text: '눈꺼풀이 점점 처져요' },
         ],
+        hashtagRows: [3, 3],
         solution: { light: '리프팅의 핵심은', strong: '얼굴형에 맞는 디자인 입니다' },
         items: ['ulthera', 'onda', 'vro', 'revinas', 'shrink'],
     },
@@ -493,6 +510,7 @@ export const treatments: Treatment[] = [
             { text: '갸름하고 탄탄한 \nV라인을 만들고 싶어요', strong: true },
             { text: '얼굴 살이 처져 \n입가 주름이 고민이에요' },
         ],
+        hashtagRows: [3, 3],
         solution: { light: '리프팅의 핵심은', strong: '즉각적인 라인 정리와 근본적인 피부 탄력 강화입니다' },
         items: ['deuce'],
     },
@@ -517,6 +535,7 @@ export const treatments: Treatment[] = [
             { text: '갸름하고 입체적인 \n얼굴형을 원해요', strong: true },
             { text: '입가 주름과 \n마리오네트 라인이 신경 쓰여요' },
         ],
+        hashtagRows: [3, 3],
         solution: {
             light: '필러의 핵심은',
             // #FIX: 입니다. light로 가야함
@@ -543,9 +562,9 @@ export const treatments: Treatment[] = [
             { text: '웃을 때 눈가 주름이 신경 쓰여요', strong: true },
             { text: '승모근이 솟아 목이 짧아 보여요', strong: true },
             { text: '종아리 알이 \n도드라져 고민이예요', strong: true },
-            { text: '표정 주름이 생기기 시작했어요' },
             { text: '콧등에 표정 주름이 \n시작했어요' },
         ],
+        hashtagRows: [3, 3],
         // #FIX: 입니다. light로 가야함
         solution: { light: '보톡스의 핵심은 정교한 근육 조절을 통한 ', strong: '매끄러운 라인 완성입니다' },
         items: ['xeomin', 'coretox', 'hitox'],
@@ -571,6 +590,7 @@ export const treatments: Treatment[] = [
             { text: '이중턱이 고민이고 \n턱선이 둔해요', strong: true },
             { text: '전체적인 얼굴 윤곽을 정리하고 싶어요' },
         ],
+        hashtagRows: [3, 3],
         // #FIX: 입니다. light로 가야함
         solution: { light: '체형 관리의 핵심은', strong: '균형 잡힌 윤곽 설계와 조화로운 라인 정립입니다' },
         items: ['mounjaro', 'wegovy', 'contour-inj', 'dca'],
@@ -589,14 +609,15 @@ export const treatments: Treatment[] = [
             text: '피지선에 선택적으로 작용하여 \n여드름의 근본적인 원인을 \n제거하고 깨끗한 피부 환경을 \n만드는 시술입니다.',
         },
         hashtags: [
-            { text: '만성 피로 때문에 몸이 항상 무거워요' },
-            { text: '피부가 칙칙하고 생기가 없어요' },
-            { text: '환절기마다 면역력이 떨어지는 것 같아요', strong: true },
-            { text: '스트레스로 인한 두통과 무기력함이 있어요', strong: true },
-            { text: '스트레스로 인한 두통과 무기력함이 있어요', strong: true },
-            { text: '피부 톤 개선과 활력을 되찾고 싶어요' },
-            { text: '충분히 쉬어도 회복이 안 돼요' },
+            { text: '만성 피로 때문에 \n몸이 항상 무거워요' },
+            { text: '피부가 칙칙하고 \n생기가 없어요' },
+            { text: '환절기마다 면역력이 \n떨어지는 것 같아요', strong: true },
+            { text: '충분히 쉬어도 회복이 안 돼요', strong: true },
+            { text: '스트레스로 인한 두통과 \n무기력함이 있어요', strong: true },
+            { text: '피부 톤 개선과 활력을 \n되찾고 싶어요' },
         ],
+        hashtagRows: [3, 3],
+
         solution: {
             light: '수액주사의 핵심은 체내 필요한 영양을 즉각적으로 보충하여 ',
             // #FIX: 하는 것입니다 light로 가야함

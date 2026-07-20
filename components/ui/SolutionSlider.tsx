@@ -15,10 +15,10 @@ interface Props {
     slugs: string[];
     baseHref: string;
     className?: string;
+    pointClass?: string; // POINT 배지 색 — 카테고리별 시안: sig=라떼, skin=코코아, aging=크림
 }
 
-// #COMP: 솔루션섹션에서 쓰는 슬라이더
-export default function SolutionSlider({ slugs, baseHref, className }: Props) {
+export default function SolutionSlider({ slugs, baseHref, className, pointClass = 'bg-latte text-cream' }: Props) {
     const list = getSolutionsBySlugs(slugs);
     const isSlider = list.length > 5;
 
