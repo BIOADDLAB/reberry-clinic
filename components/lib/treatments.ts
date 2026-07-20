@@ -1,4 +1,3 @@
-// #COMPONENTS: 시술 데이터 — 시안 OCR 전수 대조본 (장비·제품 혼합은 items 배열)
 // items 의 슬러그는 equipment.ts(장비) 또는 products.ts(제품) 어느 쪽이든 가능 — lib/solution.ts 가 통합 검색
 export type Category = 'signature' | 'skin' | 'aging';
 
@@ -12,11 +11,14 @@ export interface Treatment {
     category: Category;
     name: string;
     en: string;
-    headline?: { light: string; strong: string }; // 시그니처 전용 캐치프레이즈 (표준 시안에는 없음)
+    headline?: { light: string; strong: string }; // 캐치프레이즈
     definition: { title: string; text: string };
     hashtags: Chip[];
     solution: { light: string; strong: string };
     items: string[]; // 장비 + 제품 혼합 슬러그
+    visual: number; // 배경/인물 세트 번호
+    visualW: number; // 시술 소개 그룹(카드+인물)
+    visualH: number; // 시술 소개 그룹 시안 실측 높이
     signature?: {
         story: { hook: [string, string, string]; body: string };
         faq: { q: string; a: string }[];
@@ -52,10 +54,13 @@ const commonFaq = [
 ];
 
 export const treatments: Treatment[] = [
-    /* ─────────── 시그니처 시술 (시안 원문) ─────────── */
+    /* ─────────── 시그니처 ─────────── */
     {
         slug: 'pigment',
         category: 'signature',
+        visual: 1,
+        visualW: 895,
+        visualH: 584,
         name: '색소',
         en: 'Pigmentation',
         headline: { light: '결점 없이 빛나는', strong: '미백의 정점에 서다' },
@@ -93,9 +98,11 @@ export const treatments: Treatment[] = [
     {
         slug: 'lifting',
         category: 'signature',
+        visual: 9,
+        visualW: 770,
+        visualH: 579,
         name: '리프팅',
         en: 'Volume Lifting',
-        // 시안: strong 원문 확인 완료, light 는 판독 불가 구간 — 원문 확인되면 교체
         headline: { light: '무너진 볼륨까지 세우는', strong: '리프팅의 정점에 서다' },
         definition: {
             title: '꺼진 얼굴 볼륨 리프팅이란?',
@@ -132,6 +139,9 @@ export const treatments: Treatment[] = [
     {
         slug: 'acne',
         category: 'signature',
+        visual: 2,
+        visualW: 949,
+        visualH: 592,
         name: '여드름',
         en: 'Acne',
         headline: { light: '매끈하게 정돈된', strong: '무결점의 정점에 서다' },
@@ -170,6 +180,9 @@ export const treatments: Treatment[] = [
     {
         slug: 'redness',
         category: 'signature',
+        visual: 3,
+        visualW: 808,
+        visualH: 591,
         name: '홍조',
         en: 'Redness',
         headline: { light: '어떤 순간에도 평온한', strong: '투명함의 정점에 서다' },
@@ -205,17 +218,20 @@ export const treatments: Treatment[] = [
         },
     },
 
-    /* ─────────── 피부교정 (정의·칩·솔루션 = 시안 원문) ─────────── */
+    /* ─────────── 피부교정 ─────────── */
     {
         slug: 'pigment',
         category: 'skin',
+        visual: 1,
+        visualW: 895,
+        visualH: 584,
         name: '색소',
         en: 'Pigmentation',
+        headline: { light: '결점 없이 빛나는', strong: '미백의 정점에 서다' },
         definition: {
             title: '색소(잡티) 치료란?',
             text: '레이저 에너지로 멜라닌 색소를 선택적으로 제거해 피부 톤을 개선하는 시술입니다.',
         },
-        // 주의: 시안의 이 페이지 칩은 리프팅 문구(오배치)로 판단되어 색소 고민 칩 유지
         hashtags: [
             { text: '얼굴톤이 어두워요' },
             { text: '기미가 점점 진해져요' },
@@ -229,8 +245,12 @@ export const treatments: Treatment[] = [
     {
         slug: 'acne',
         category: 'skin',
+        visual: 2,
+        visualW: 949,
+        visualH: 592,
         name: '여드름',
         en: 'Acne',
+        headline: { light: '매끈하게 정돈된', strong: '무결점의 정점에 서다' },
         definition: {
             title: '여드름 치료란?',
             text: '피지선에 선택적으로 작용하여 여드름의 근본적인 원인을 제거하고 깨끗한 피부 환경을 만드는 시술입니다.',
@@ -249,8 +269,12 @@ export const treatments: Treatment[] = [
     {
         slug: 'redness',
         category: 'skin',
+        visual: 3,
+        visualW: 808,
+        visualH: 591,
         name: '홍조',
         en: 'Redness',
+        headline: { light: '어떤 순간에도 평온한', strong: '투명함의 정점에 서다' },
         definition: {
             title: '홍조 치료란?',
             text: '늘어난 이상 혈관만을 선택적으로 치료하여 붉고 얼룩덜룩한 피부톤을 맑고 균일하게 개선하는 시술입니다.',
@@ -268,8 +292,12 @@ export const treatments: Treatment[] = [
     {
         slug: 'skinbooster',
         category: 'skin',
+        visual: 4,
+        visualW: 843,
+        visualH: 591,
         name: '스킨부스터',
         en: 'Skin Boosters',
+        headline: { light: '깊은 곳부터 채워낸', strong: '광채의 정점에 서다' },
         definition: {
             title: '스킨부스터란?',
             text: '피부 진피층에 유효 성분을 직접 전달하여 깊은 속보습을 채우고 무너진 장벽을 강화합니다.',
@@ -287,8 +315,12 @@ export const treatments: Treatment[] = [
     {
         slug: 'tattoo-removal',
         category: 'skin',
+        visual: 5,
+        visualW: 842,
+        visualH: 581,
         name: '문신제거',
         en: 'Tattoo Removal',
+        headline: { light: '흔적 없이 지워낸', strong: '깨끗함의 정점에 서다' },
         definition: {
             title: '문신제거란?',
             text: '주변 피부 손상 없이 색소 입자만 잘게 부수어 다양한 컬러와 깊은 흔적까지 정교하게 제거합니다.',
@@ -305,8 +337,12 @@ export const treatments: Treatment[] = [
     {
         slug: 'scar-pore',
         category: 'skin',
+        visual: 6,
+        visualW: 794,
+        visualH: 584,
         name: '흉터·모공·피부결',
         en: 'Scar · Pore',
+        headline: { light: '매끄럽게 메워진', strong: '피부결의 정점에 서다' },
         definition: {
             title: '흉터·모공·피부결',
             text: '피부 자체의 콜라겐 재생을 유도하여 패인 요철을 복원하고 매끄러운 피부결을 완성합니다.',
@@ -324,8 +360,12 @@ export const treatments: Treatment[] = [
     {
         slug: 'hair-removal',
         category: 'skin',
+        visual: 7,
+        visualW: 811,
+        visualH: 592,
         name: '제모',
         en: 'Hair Removal',
+        headline: { light: '군더더기 없이 깔끔한', strong: '매끈함의 정점에 서다' },
         definition: {
             title: '제모',
             text: '모근과 모낭만을 선택적으로 파괴하여 피부 자극을 최소화하고 깔끔함을 오래 유지합니다.',
@@ -342,8 +382,12 @@ export const treatments: Treatment[] = [
     {
         slug: 'care',
         category: 'skin',
+        visual: 8,
+        visualW: 853,
+        visualH: 592,
         name: '관리',
         en: 'Medical Care',
+        headline: { light: '흔들림 없이 유지되는', strong: '컨디션의 정점에 서다' },
         definition: {
             title: '관리',
             text: '시술 후 자극받은 피부를 빠르게 진정시키고 집중적인 재생을 도와 시술 효과를 극대화합니다.',
@@ -358,12 +402,17 @@ export const treatments: Treatment[] = [
         items: ['aqua', 'aha-bha', 'peeling', 'scrubber', 'cryocell'],
     },
 
-    /* ─────────── 안티에이징 (칩·솔루션 = 시안 원문 / 정의는 시안이 여드름 더미 문구라 자체 작성) ─────────── */
+    /* ─────────── 안티에이징  ─────────── */
     {
         slug: 'laser-lifting',
         category: 'aging',
+        visual: 9,
+        visualW: 770,
+        visualH: 579,
         name: '레이저리프팅',
         en: 'Laser Lifting',
+        // 시안 캐치프레이즈 — 색소·여드름·홍조는 원문, 나머지는 판독 불가로 동일 패턴 자체 작성(확인 요청)
+        headline: { light: '무너짐 없이 탄탄한', strong: '리프팅의 정점에 서다' },
         definition: {
             title: '레이저 리프팅이란?',
             text: '고강도 초음파와 고주파 에너지로 피부 깊은 층을 수축시켜, 자연스러운 턱선과 탄력을 되살리는 시술입니다.',
@@ -382,8 +431,13 @@ export const treatments: Treatment[] = [
     {
         slug: 'thread-lifting',
         category: 'aging',
+        visual: 10,
+        visualW: 800,
+        visualH: 577,
         name: '실리프팅',
         en: 'Thread Lifting',
+        // 시안 캐치프레이즈 — 색소·여드름·홍조는 원문, 나머지는 판독 불가로 동일 패턴 자체 작성(확인 요청)
+        headline: { light: '즉각적으로 당겨 올린', strong: '라인의 정점에 서다' },
         definition: {
             title: '실리프팅이란?',
             text: '녹는 실을 이용해 처진 라인을 즉각적으로 끌어올리고, 콜라겐 재생까지 유도하는 시술입니다.',
@@ -402,8 +456,13 @@ export const treatments: Treatment[] = [
     {
         slug: 'filler',
         category: 'aging',
+        visual: 11,
+        visualW: 799,
+        visualH: 596,
         name: '필러',
         en: 'Filler',
+        // 시안 캐치프레이즈 — 색소·여드름·홍조는 원문, 나머지는 판독 불가로 동일 패턴 자체 작성(확인 요청)
+        headline: { light: '조화롭게 채워낸', strong: '입체감의 정점에 서다' },
         definition: {
             title: '필러란?',
             text: '히알루론산을 꺼진 부위에 채워 볼륨과 윤곽을 자연스럽게 살리는 시술입니다.',
@@ -425,8 +484,13 @@ export const treatments: Treatment[] = [
     {
         slug: 'botox',
         category: 'aging',
+        visual: 12,
+        visualW: 770,
+        visualH: 579,
         name: '보톡스',
         en: 'Botox',
+        // 시안 캐치프레이즈 — 색소·여드름·홍조는 원문, 나머지는 판독 불가로 동일 패턴 자체 작성(확인 요청)
+        headline: { light: '부드럽게 정돈된', strong: '매끄러움의 정점에 서다' },
         definition: {
             title: '보톡스란?',
             text: '과활성 근육을 이완시켜 주름과 라인을 부드럽게 정리하는 시술입니다.',
@@ -445,8 +509,13 @@ export const treatments: Treatment[] = [
     {
         slug: 'face-contour',
         category: 'aging',
+        visual: 13,
+        visualW: 814,
+        visualH: 595,
         name: '얼굴 체형 관리',
         en: 'Face Contouring',
+        // 시안 캐치프레이즈 — 색소·여드름·홍조는 원문, 나머지는 판독 불가로 동일 패턴 자체 작성(확인 요청)
+        headline: { light: '가볍게 정리된', strong: '윤곽의 정점에 서다' },
         definition: {
             title: '얼굴 체형 관리란?',
             text: '지방 분해와 대사 관리로 얼굴 라인을 가볍고 또렷하게 정리하는 시술입니다.',
@@ -465,8 +534,13 @@ export const treatments: Treatment[] = [
     {
         slug: 'iv-therapy',
         category: 'aging',
+        visual: 14,
+        visualW: 755,
+        visualH: 582,
         name: '수액주사',
         en: 'IV Therapy',
+        // 시안 캐치프레이즈 — 색소·여드름·홍조는 원문, 나머지는 판독 불가로 동일 패턴 자체 작성(확인 요청)
+        headline: { light: '속부터 차오르는', strong: '활력의 정점에 서다' },
         definition: {
             title: '수액주사란?',
             text: '컨디션에 맞춘 영양 성분을 정맥으로 공급해 활력과 피부 생기를 회복하는 시술입니다.',
