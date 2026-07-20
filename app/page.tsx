@@ -77,7 +77,7 @@ export default function Home() {
                         </div>
                     </Reveal>
                     <Reveal className="mx-auto mt-14 max-w-4xl lg:mt-16">
-                        <BASlider label="피부" tags={['색소', '리프팅', '주사/홍조', '색소']} light />
+                        <BASlider light />
                     </Reveal>
                 </div>
             </section>

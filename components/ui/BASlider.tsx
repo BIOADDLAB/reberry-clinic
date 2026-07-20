@@ -4,21 +4,19 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useDragScroll } from '@/components/lib/useDragScroll';
 import { cn } from '@/components/lib/cn';
+import { getMainBAPhotos } from '@/components/lib/ba';
 
 interface Props {
-    label: string;
-    tags?: string[];
     light?: boolean;
 }
 
-const pairs = [1, 2, 3, 4].map((n) => ({
-    before: `/images/img-be-0${n}.jpg`,
-    after: `/images/img-af-0${n}.jpg`,
-}));
-
-export default function BASlider({ label, tags, light }: Props) {
+// #PAGE: 메인페이지 - 전,후 슬라이더
+export default function BASlider({ light }: Props) {
     const { ref, dragProps, dragClass } = useDragScroll<HTMLDivElement>();
     const [page, setPage] = useState(0);
+
+    // #ISSUE: slugs prop 방식 제거 → ba.ts의 main 숫자 필드 기준으로 정렬된 목록 사용
+    const photos = getMainBAPhotos();
 
     const move = (dir: -1 | 1) => {
         if (!ref.current) return;
@@ -31,8 +29,9 @@ export default function BASlider({ label, tags, light }: Props) {
         setPage(Math.round((el.scrollLeft / (el.scrollWidth - el.clientWidth || 1)) * 1));
     };
 
+    if (photos.length === 0) return null;
+
     return (
-        /* #STYLE: 카드 3개 규격 고정 컨테이너 (버튼 위치 -left-28 원복) */
         <div className="relative w-full md:max-w-[772px] mx-auto px-0">
             <button
                 onClick={() => move(-1)}
@@ -42,7 +41,6 @@ export default function BASlider({ label, tags, light }: Props) {
                     light ? 'border-cocoa bg-cream' : 'border-cream/20 bg-deep/40 backdrop-blur-sm',
                 )}
             >
-                {/* #STYLE: 왼쪽 화살표 아이콘을 동그라미 중심부(오른쪽)로 1.5px 미세 이동 */}
                 <Image
                     src="/images/i-arr-left-01.svg"
                     alt="이전"
@@ -58,14 +56,12 @@ export default function BASlider({ label, tags, light }: Props) {
                 onScroll={onScroll}
                 className={`no-scrollbar flex snap-x gap-4 overflow-x-auto scroll-smooth md:gap-5 ${dragClass}`}
             >
-                {pairs.map((p, i) => (
+                {photos.map((p) => (
                     <article
-                        key={i}
+                        key={p.id}
                         className="w-[240px] rounded-[10px] shrink-0 snap-start bg-deep text-center text-cream md:w-[244px]"
                     >
-                        <p className="py-2.5 text-lead font-bold lg:pt-[26px] lg:pb-[23px]">
-                            {tags?.[i] ?? label} 전후 사진
-                        </p>
+                        <p className="py-2.5 text-lead font-bold lg:pt-[26px] lg:pb-[23px]">{p.label} 전후 사진</p>
                         <div className="relative">
                             {/* #ISSUE: 의료법 대응 - 가림 처리를 After에서 Before(시술 전) 영역으로 이동 */}
                             <div className="relative aspect-[8/5] overflow-hidden">
@@ -75,12 +71,8 @@ export default function BASlider({ label, tags, light }: Props) {
                                     fill
                                     quality={85}
                                     sizes="(max-width: 768px) 240px, 244px"
-                                    /* TODO: 로그인 후 - 아래 클래스로 교체 */
-                                    // className="pointer-events-none object-cover"
-                                    /* TODO: 로그인 전 - 비포 블러 처리 필요할 때 아래 클래스로 교체 */
                                     className="scale-110 object-cover blur-[6px]"
                                 />
-                                {/* TODO: 로그인 전 - 비포 블러 처리 필요할 때 아래 로그인 배지 주석 해제하여 사용  */}
                                 <span className="absolute inset-0 flex items-center justify-center">
                                     <span className="rounded-full border border-cream/70 bg-deep/40 px-3 py-1 text-[11px] backdrop-blur-sm text-caption">
                                         로그인
@@ -88,7 +80,6 @@ export default function BASlider({ label, tags, light }: Props) {
                                 </span>
                             </div>
 
-                            {/* After(시술 후) 영역은 가림막 없이 항상 선명하게 노출 */}
                             <div className="relative aspect-[8/5]">
                                 <Image
                                     src={p.after}
@@ -109,7 +100,7 @@ export default function BASlider({ label, tags, light }: Props) {
                             />
                         </div>
                         <p className="mt-4.25 inline-block rounded-full border border-cream leading-6.75! bg-cream w-[100px] px-1 text-cocoa font-bold text-lead">
-                            {tags?.[i] ?? label}
+                            {p.label}
                         </p>
                         <p className="font-display text-caption-sm mb-[15px] mt-1 text-[11px] tracking-[0.2em] text-cream">
                             RE:BERRY
@@ -126,7 +117,6 @@ export default function BASlider({ label, tags, light }: Props) {
                     light ? 'border-cocoa bg-cream' : 'border-cream bg-deep/40 backdrop-blur-sm',
                 )}
             >
-                {/* #STYLE: 오른쪽 화살표 아이콘을 동그라미 중심부(왼쪽)로 1.5px 미세 이동 */}
                 <Image
                     src="/images/i-arr-left-01.svg"
                     alt="다음"

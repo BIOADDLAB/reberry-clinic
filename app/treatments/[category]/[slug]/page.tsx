@@ -5,6 +5,10 @@ import { treatments, findTreatment, categoryLabel } from '@/components/lib/treat
 import Image from 'next/image';
 import Reveal from '@/components/motion/Reveal';
 import { zoom } from '@/components/lib/motion';
+import BACardSlider from '@/components/ui/BACardSlider';
+import { SpinEmblem, FloatingCream } from '@/components/ui/DecoItem';
+import SectionDivider from '@/components/ui/SectionDivider';
+import { getBAPhotosBySlug } from '@/components/lib/ba';
 
 interface Params {
     params: Promise<{ category: string; slug: string }>;
@@ -37,6 +41,14 @@ const pad = (n: number) => String(n).padStart(2, '0');
 const modelImage = (t: { visual: number }) => `/images/img-ex-${pad(t.visual)}.png`;
 const modelBg = (t: { visual: number }) => `/images/bg-ex-${pad(t.visual)}.jpg`;
 
+const sigCard: Record<string, string> = {
+    lifting: '01',
+    pigment: '02',
+    redness: '03',
+    acne: '04',
+    booster: '05',
+};
+
 export default async function TreatmentPage({ params }: Params) {
     const { category, slug } = await params;
     const t = findTreatment(category, slug);
@@ -67,7 +79,7 @@ export default async function TreatmentPage({ params }: Params) {
                             )}
                         </Reveal>
 
-                        {/* 모바일 인물 — 시안: 인물이 배경 위 상단, 카드가 아래에서 겹침 */}
+                        {/* 모바일 인물 조정 */}
                         <div className="relative -mx-6 mt-8 h-80 min-[1100px]:hidden">
                             <Image
                                 src={modelImage(t)}
@@ -119,6 +131,77 @@ export default async function TreatmentPage({ params }: Params) {
                                 />
                             </Reveal>
                         </div>
+                    </div>
+                </section>
+            )}
+
+            {/* 시그니처 — 스토리 카드 */}
+            {/* #TODO: 반응형 작업 조금 더 들어가야함 크림이 어색하게 떠있는 부분들이 있음 */}
+            {sig && (
+                <section className="relative texture-paper py-20 lg:pt-35 lg:pb-42.5">
+                    <Image
+                        src="/images/bg-texture-06.jpg"
+                        alt=""
+                        fill
+                        quality={85}
+                        sizes="100vw"
+                        className="object-cover"
+                    />
+                    <div className="container-site relative">
+                        <Reveal className="text-center">
+                            <p className="font-display text-h2 tracking-tight">{t.en}</p>
+                            {t.headline && (
+                                <h2 className="text-h2 font-light">
+                                    {t.headline.light}
+                                    <br className="bolck md:hidden" />
+                                    <strong className="font-bold">{t.headline.strong}</strong>
+                                </h2>
+                            )}
+                        </Reveal>
+
+                        <Reveal className="relative mx-auto mt-12 max-w-257 lg:mt-16">
+                            <div className="grid min-[1100px]:grid-cols-2">
+                                <div className="texture-dark flex flex-col items-center justify-center px-8 py-12 lg:py-[120px] bg-cocoa text-center text-cream md:px-12">
+                                    <p className="text-h3 leading-[35px] tracking-tighter">
+                                        {sig.story.hook[0]}
+                                        <br />
+                                        <strong className="mt-1 inline-block bg-cream px-2 py-0.5 font-bold text-cocoa">
+                                            {sig.story.hook[1]}
+                                        </strong>
+                                        <br />
+                                        {sig.story.hook[2]}
+                                    </p>
+                                    {/* 라인 + 점 하강 커넥터 */}
+                                    <SectionDivider light className="my-4" />
+                                    <p className="whitespace-pre-line text-lead  text-cream">{sig.story.body}</p>
+                                </div>
+                                <div className="relative order-first aspect-[4/3] w-full min-[1100px]:order-none min-[1100px]:aspect-auto min-[1100px]:min-h-[340px]">
+                                    <Image
+                                        src={`/images/img-card-${sigCard[t.slug]}.jpg`}
+                                        alt=""
+                                        fill
+                                        quality={88}
+                                        sizes="(max-width: 768px) 100vw, 480px"
+                                        className="object-cover"
+                                    />
+                                </div>
+                            </div>
+                            <SpinEmblem />
+                            <FloatingCream />
+                        </Reveal>
+                    </div>
+                </section>
+            )}
+
+            {getBAPhotosBySlug(t.slug).length > 0 && (
+                <section className="texture-dark py-20 bg-cocoa! text-cream lg:py-30">
+                    <div className="container-site">
+                        <Reveal className="text-center">
+                            <h2 className="font-display text-h2 tracking-[0.06em]">Your Beauty Physician</h2>
+                        </Reveal>
+                        <Reveal className="mt-12">
+                            <BACardSlider photos={getBAPhotosBySlug(t.slug)} />
+                        </Reveal>
                     </div>
                 </section>
             )}

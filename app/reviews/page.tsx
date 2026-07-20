@@ -6,15 +6,9 @@ import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup';
 import Reveal from '@/components/motion/Reveal';
+import { baPhotos } from '@/components/lib/ba';
 
-const results = [1, 2, 3, 4, 1, 2, 3, 4].map((n, i) => ({
-    id: i,
-    before: `/images/img-be-0${n}.jpg`,
-    after: `/images/img-af-0${n}.jpg`,
-}));
-
-
-// #TODO: 메타데이터 넣기 + 모바일 반응형 작업
+// #TODO: 메타데이터 넣기 + 모바일 반응형 작업 + 실제 페이지네이션 로직 연결
 export default function ReviewsPage() {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
@@ -37,8 +31,9 @@ export default function ReviewsPage() {
                         <h2 className="font-display text-h2 tracking-[0.06em]">Before &amp; After</h2>
                     </Reveal>
 
+                    {/* #ISSUE: 하드코딩된 img-be/af 8회 반복 제거 → ba.ts 공용 데이터(baPhotos) 전체 노출 */}
                     <RevealGroup className="mt-12 grid grid-cols-2 gap-4 md:gap-6 lg:mt-21 lg:grid-cols-4">
-                        {results.map((r) => (
+                        {baPhotos.map((r) => (
                             <RevealItem key={r.id} className="bg-sand p-2.5 rounded-[4px] shadow-sm">
                                 <div className="grid grid-cols-2 gap-1">
                                     <div className="relative aspect-[4/3]">
@@ -78,6 +73,7 @@ export default function ReviewsPage() {
                         ))}
                     </RevealGroup>
 
+                    {/* #TODO: baPhotos 개수 기준 실제 페이지 분할 로직 연결 필요 (지금은 정적 1/1 표시) */}
                     <Reveal className="mt-21 flex items-center justify-center gap-6">
                         <button
                             className="text-cocoa/60 mt-1 hover:text-cocoa transition-colors"
@@ -92,7 +88,7 @@ export default function ReviewsPage() {
                                 />
                             </svg>
                         </button>
-                        <span className="font-display text-lead tracking-[0.15em] text-cocoa">1 / 15</span>
+                        <span className="font-display text-lead tracking-[0.15em] text-cocoa">1 / 1</span>
                         <button
                             className="text-cocoa/60 mt-1 hover:text-cocoa transition-colors"
                             aria-label="다음 페이지"

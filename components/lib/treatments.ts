@@ -64,6 +64,7 @@ export const treatments: Treatment[] = [
         name: '색소',
         en: 'Pigmentation',
         headline: { light: '결점 없이 빛나는', strong: '미백의 정점에 서다' },
+        // definition 제거
         definition: {
             title: '색소(잡티) 치료란?',
             text: '레이저 에너지로 멜라닌 색소를 선택적으로 제거해 피부 톤을 개선하는 시술입니다.',
@@ -75,12 +76,12 @@ export const treatments: Treatment[] = [
             { text: '토닝을 아무리 받아도 효과가 없어요', strong: true },
             { text: '어릴때부터 있었던 색소가 신경쓰여요' },
         ],
-        solution: { light: '색소치료의 핵심은', strong: '피부층에 맞는 정밀한 타겟팅입니다' },
+        solution: { light: '색소치료의 핵심은', strong: '피부층에 맞는 정밀한 타겟팅 입니다' },
         items: ['lipot', 'excelv', 'spectra', 'pico'],
         signature: {
             story: {
                 hook: ['당신의 얼굴은', '왜 점점 칙칙하고 어두워질까요?', '자외선 탓만은 아닙니다'],
-                body: '작은 잡티 하나가 생겨도\n피부 전체의 맑은 빛이 무너지고, 그림자가 지며,\n인상이 지치고 나이 들어 보이기 시작합니다.\n맑고 투명한 피부의 시작은 겉을 가리는 것이 아니라\n속 깊이 숨은 색소를 깨끗하게 잠재우는 것부터입니다.',
+                body: '작은 잡티 하나가 생겨도 \n피부 전체의 맑은 빛이 무너지고, 그림자가 지며, \n인상이 지치고 나이 들어 보이기 시작합니다. \n맑고 투명한 피부의 시작은 겉을 가리는 것이 아니라 \n속 깊이 숨은 색소를 깨끗하게 잠재우는 것부터입니다.',
             },
             faq: [
                 {
@@ -101,9 +102,10 @@ export const treatments: Treatment[] = [
         visual: 9,
         visualW: 770,
         visualH: 579,
-        name: '리프팅',
+        name: '볼륨 리프팅',
         en: 'Volume Lifting',
-        headline: { light: '무너진 볼륨까지 세우는', strong: '리프팅의 정점에 서다' },
+        headline: { light: '리프팅의', strong: '정점에 서다' },
+        // definition 안씀 제거
         definition: {
             title: '꺼진 얼굴 볼륨 리프팅이란?',
             text: '처진 라인은 끌어올리고 꺼진 볼륨은 채워, 얼굴의 축을 다시 세우는 리베리만의 복합 리프팅 시술입니다.',
@@ -113,16 +115,17 @@ export const treatments: Treatment[] = [
             { text: '심술보가 신경쓰여요' },
             { text: '피부탄력이 떨어져요', strong: true },
             { text: '목주름이 신경쓰여요', strong: true },
-            { text: '이중턱이랑 턱선을 개선하고 싶어요' },
+            { text: '이중턱이랑 턱선을 개선하고 싶어요', strong: true },
             { text: '눈꺼풀이 점점 처져요' },
         ],
-        solution: { light: '리프팅의 핵심은', strong: '얼굴형에 맞는 디자인 입니다' },
+        solution: { light: '리프팅의 핵심은 ', strong: '얼굴형에 맞는 디자인 입니다' },
         items: ['ulthera', 'onda', 'vro', 'juvelook-volume'],
         signature: {
             story: {
                 hook: ['당신의 얼굴은', '왜 점점 아래로 내려올까요?', '나이가 들어서만은 아닙니다'],
-                body: '어느 한 층만 약해져도\n턱선은 흐려지고, 팔자주름은 깊어지며,\n얼굴은 실제보다 더 넓고 무거워 보이기 시작합니다.\n리프팅의 시작은 ‘당기는 것’이 아니라\n무너진 원인을 찾는 것부터입니다.',
+                body: '어느 한 층만 약해져도 \n턱선은 흐려지고, 팔자주름은 깊어지며, \n얼굴은 실제보다 더 넓고 무거워 보이기 시작합니다. \n리프팅의 시작은 ‘당기는 것’이 아니라 \n무너진 원인을 찾는 것부터입니다.',
             },
+            // faq 공통일듯 제거
             faq: [
                 {
                     q: '울쎄라와 써마지는 어떻게 다른가요?',
@@ -137,6 +140,45 @@ export const treatments: Treatment[] = [
         },
     },
     {
+        slug: 'booster',
+        category: 'signature',
+        visual: 15,
+        visualW: 843,
+        visualH: 591,
+        name: '볼륨 부스터',
+        en: 'Volume Booster',
+        headline: { light: '볼륨의', strong: '정점에 서다' },
+        // definition 안씀 제거
+        definition: {
+            title: '부스터란?',
+            text: '피부 진피층에 유효 성분을 직접 전달하여 깊은 속보습을 채우고 무너진 장벽을 강화하는 시술입니다.',
+        },
+        hashtags: [
+            { text: '팔자가 깊어요' },
+            { text: '심술보가 신경쓰여요' },
+            { text: '피부탄력이 떨어져요', strong: true },
+            { text: '목주름이 신경쓰여요', strong: true },
+            { text: '이중턱이랑 턱선을 개선하고 싶어요', strong: true },
+            { text: '눈꺼풀이 점점 쳐져요' },
+        ],
+        solution: { light: '볼륨의 핵심은', strong: '처짐과 꺼짐에 맞는 디자인 시술입니다' },
+        items: ['ulthera', 'onda', 'vro', 'juvelook-volume'],
+        signature: {
+            story: {
+                hook: ['당신의 얼굴은', '왜 점점 생기를 잃고 꺼져갈까요?', '나이가 들어서만은 아닙니다'],
+                body: '어느 한 층만 탄력을 잃어도 \n볼륨은 꺼지고, 라인은 무너지며, \n얼굴은 실제보다 더 퀭하고 나이 들어 보이기 시작합니다. \n진정한 안티에이징의 시작은 채우는것이 아니라, \n꺼진 볼륨의 근본적인 원인을 찾아 \n탄탄하게 세우는 것부터입니다 ',
+            },
+            // faq 제거
+            faq: [
+                {
+                    q: '효과가 얼마나 유지되나요?',
+                    a: '시술과 개인차에 따라 다르지만 보통 3~6개월 유지되며, 주기적인 관리로 효과를 이어갈 수 있습니다.',
+                },
+                ...commonFaq,
+            ],
+        },
+    },
+    {
         slug: 'acne',
         category: 'signature',
         visual: 2,
@@ -145,24 +187,25 @@ export const treatments: Treatment[] = [
         name: '여드름',
         en: 'Acne',
         headline: { light: '매끈하게 정돈된', strong: '무결점의 정점에 서다' },
+        // definition 제거
         definition: {
             title: '여드름 치료란?',
             text: '피지선에 선택적으로 작용하여 여드름의 근본적인 원인을 제거하고 깨끗한 피부 환경을 만드는 시술입니다.',
         },
         hashtags: [
-            { text: '턱선에 염증성 여드름이 생겨요' },
-            { text: '좁쌀 여드름이 갑자기 늘었어요' },
+            { text: '턱선에 염증성 여드름이 올라와요' },
+            { text: '좁쌀 여드름이 갑자기 생겨요' },
             { text: '여드름 때문에 앞머리를 못 올려요', strong: true },
             { text: '볼에 여드름 흉터가 너무 많아요', strong: true },
-            { text: '여드름이 무서워요' },
+            { text: '여드름이 무서워요', strong: true },
             { text: '여드름 자국이 사라지지 않아요' },
         ],
-        solution: { light: '여드름치료의 핵심은', strong: '재발을 막는 근본적인 원인 차단입니다' },
-        items: ['gold-ptt', 'potenza', 'exosome'],
+        solution: { light: '여드름치료의 핵심은 ', strong: '재발을 막는 근본적인 원인 차단입니다' },
+        items: ['gold-ptt', 'potenza'],
         signature: {
             story: {
                 hook: ['당신의 피부는', '왜 반복해서 트러블이 올라올까요?', '잘못된 세안 탓만은 아닙니다'],
-                body: '작은 뽀루지 하나만 생겨도\n피부 전체의 매끄러움이 무너지고, 자국이 남으며,\n인상이 어수선하고 나이 들어 보이기 시작합니다.\n깨끗한 피부의 시작은 억지로 짜내는 것이 아니라\n속에서 차오르는 유수분 밸런스를 바로잡는 것부터입니다.',
+                body: '작은 뽀루지 하나만 생겨도 \n피부 전체의 매끄러움이 무너지고, \n자국이 남으며, 인상이 어수선하고 \n나이 들어 보이기 시작합니다.\n깨끗한 피부의 시작은 억지로 짜내는 것이 아니라 \n속에서 차오르는 유수분 밸런스를 \n바로잡는 것부터입니다.',
             },
             faq: [
                 {
@@ -202,7 +245,7 @@ export const treatments: Treatment[] = [
         signature: {
             story: {
                 hook: ['당신의 얼굴은', '왜 수시로 붉고 예민해질까요?', '감정 기복 탓만은 아닙니다'],
-                body: '작은 자극 하나에도 홍조가 생기면\n피부 전체의 균형이 무너지고, 얼룩이 지며,\n인상이 불안하고 나이 들어 보이기 시작합니다.\n평온한 피부의 시작은 붉기를 가리는 것이 아니라\n자극에 흔들리는 피부 장벽을 튼튼하게 세우는 것부터입니다.',
+                body: '작은 자극 하나에도 홍조가 생기면 \n피부 전체의 균형이 무너지고, 얼룩이 지며, \n인상이 불안하고 나이 들어 보이기 시작합니다. \n평온한 피부의 시작은 붉기를 가리는 것이 아니라 \n자극에 흔들리는 피부 장벽을 튼튼하게 세우는 것부터입니다.',
             },
             faq: [
                 {

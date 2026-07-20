@@ -11,7 +11,6 @@ export const site = {
     addressDetail: '1101, 1102호 (성산동, SJ라벨라 상암)',
     subway: '6호선 마포구청역 1번 출구 도보 5분 이내',
     parking: ['건물 뒷편 주차장 · 주차권 수령 후', '지하 주차, 전기차 주차 제한'],
-    // #LINK: 플로팅 버튼 상담예약 전용 안심번호 전화 연결 주소 추가
     reservationPhone: 'tel:050713643777',
     kakao: 'https://pf.kakao.com/_khIcn',
     youtube: 'https://www.youtube.com/@%EB%A7%88%ED%8F%AC%ED%94%BC%EB%B6%80%EC%99%95',
@@ -39,6 +38,7 @@ export const nav = [
         children: [
             { label: '색소', en: 'Pigmentation', href: '/treatments/signature/pigment' },
             { label: '리프팅', en: 'Lifting', href: '/treatments/signature/lifting' },
+            { label: '부스터', en: 'Booster', href: '/treatments/signature/booster' },
             { label: '여드름', en: 'Acne', href: '/treatments/signature/acne' },
             { label: '홍조', en: 'Redness', href: '/treatments/signature/redness' },
         ],

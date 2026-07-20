@@ -1,7 +1,3 @@
-// #LINK: /components/ui/SolutionSlider.tsx
-// #STYLE: 카드 호버 시 이미지 확대 효과(group-hover:scale-105) 및 트랜지션 추가
-// #ISSUE: 카드 hover 시 비주얼 피드백이 심심하던 부분을 트렌디한 줌인 모션으로 개선
-
 'use client';
 
 import Image from 'next/image';
@@ -21,6 +17,7 @@ interface Props {
     className?: string;
 }
 
+// #COMP: 솔루션섹션에서 쓰는 슬라이더
 export default function SolutionSlider({ slugs, baseHref, className }: Props) {
     const list = getSolutionsBySlugs(slugs);
     const isSlider = list.length > 5;
