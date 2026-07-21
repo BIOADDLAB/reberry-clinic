@@ -15,6 +15,8 @@ import HashtagChips from '@/components/ui/HashtagChips';
 import SolutionSlider from '@/components/ui/SolutionSlider';
 import { TwoDots } from '@/components/ui/DecoItem';
 import StepPlan from '@/components/ui/StepPlan';
+import { getColumnsBySlug } from '@/components/lib/columns';
+import ColumnSlider from '@/components/ui/ColumnSlider';
 
 interface Params {
     params: Promise<{ category: string; slug: string }>;
@@ -274,6 +276,32 @@ export default async function TreatmentPage({ params }: Params) {
             </section>
 
             {!sig && <StepPlan />}
+
+            {/* 시그니처 전용 — Column */}
+            {sig && getColumnsBySlug(t.slug).length > 0 && (
+                <section className="bg-cream relative py-20 lg:pt-32.5 lg:pb-37.5 overflow-x-clip">
+                    <Image
+                        src="/images/bg-texture-08.jpg"
+                        alt=""
+                        fill
+                        quality={80}
+                        sizes="100vw"
+                        className="object-cover"
+                    />
+                    <div className="relative container-site">
+                        <Reveal className="text-center">
+                            <h2 className="font-display text-h2">Column</h2>
+                            <p className="mt-10 text-h2 tracking-tighter leading-9">
+                                논문으로 검증하고,{' '}
+                                <strong className="font-bold">임상으로 증명한 {t.name}치료 이야기</strong>
+                            </p>
+                        </Reveal>
+                        <Reveal className="mt-19.5">
+                            <ColumnSlider items={getColumnsBySlug(t.slug)} />
+                        </Reveal>
+                    </div>
+                </section>
+            )}
 
             <LocationSection />
         </>
