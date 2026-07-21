@@ -1,16 +1,61 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef, useSyncExternalStore } from 'react';
 import Image from 'next/image';
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
+import BAPhotoModal from '@/components/ui/BAPhotoModal';
 import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup';
 import Reveal from '@/components/motion/Reveal';
-import { baPhotos } from '@/components/lib/ba';
+import { baPhotos, type BAPhoto } from '@/components/lib/ba';
 
-// #TODO: 메타데이터 넣기 + 모바일 반응형 작업 + 실제 페이지네이션 로직 연결
+const PER_PAGE = 8;
+const MOBILE_QUERY = '(max-width: 767px)';
+
+const shuffle = (arr: BAPhoto[]) => {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+};
+
+const subscribeMobile = (callback: () => void) => {
+    const mql = window.matchMedia(MOBILE_QUERY);
+    mql.addEventListener('change', callback);
+    return () => mql.removeEventListener('change', callback);
+};
+const getMobileSnapshot = () => window.matchMedia(MOBILE_QUERY).matches;
+const getMobileServerSnapshot = () => false;
+
 export default function ReviewsPage() {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [page, setPage] = useState(1);
+    const [shuffled, setShuffled] = useState<BAPhoto[]>(baPhotos);
+    const [selectedPhoto, setSelectedPhoto] = useState<BAPhoto | null>(null);
+    const topRef = useRef<HTMLDivElement>(null);
+
+    const isMobile = useSyncExternalStore(subscribeMobile, getMobileSnapshot, getMobileServerSnapshot);
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- 서버/클라 결과가 달라야 하는 랜덤 셔플
+        setShuffled(shuffle(baPhotos));
+    }, []);
+
+    useEffect(() => {
+        topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, [page]);
+
+    const totalPages = Math.ceil(shuffled.length / PER_PAGE);
+    const start = (page - 1) * PER_PAGE;
+    const currentPhotos = shuffled.slice(start, start + PER_PAGE);
+
+    const goPrev = () => setPage((p) => Math.max(1, p - 1));
+    const goNext = () => setPage((p) => Math.min(totalPages, p + 1));
+
+    const Group = isMobile ? 'div' : RevealGroup;
+    const Item = isMobile ? 'div' : RevealItem;
 
     return (
         <>
@@ -27,56 +72,71 @@ export default function ReviewsPage() {
                     className="object-cover"
                 />
                 <div className="container-site relative">
+                    <div ref={topRef} />
+
                     <Reveal className="text-center">
                         <h2 className="font-display text-h2 tracking-[0.06em]">Before &amp; After</h2>
                     </Reveal>
 
-                    {/* #ISSUE: 하드코딩된 img-be/af 8회 반복 제거 → ba.ts 공용 데이터(baPhotos) 전체 노출 */}
-                    <RevealGroup className="mt-12 grid grid-cols-2 gap-4 md:gap-6 lg:mt-21 lg:grid-cols-4">
-                        {baPhotos.map((r) => (
-                            <RevealItem key={r.id} className="bg-sand p-2.5 rounded-[4px] shadow-sm">
-                                <div className="grid grid-cols-2 gap-1">
-                                    <div className="relative aspect-[4/3]">
-                                        <Image
-                                            src={r.before}
-                                            alt="시술 전"
-                                            fill
-                                            quality={85}
-                                            sizes="(max-width: 768px) 160px, 220px"
-                                            className="object-cover"
-                                        />
+                    <Group
+                        key={isMobile ? 'mobile' : `desktop-${page}`}
+                        className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:mt-21 lg:grid-cols-4"
+                    >
+                        {currentPhotos.map((r) => (
+                            <Item key={r.id} className="bg-sand p-2.5 rounded-[4px] shadow-sm">
+                                <div
+                                    onClick={() => setSelectedPhoto(r)}
+                                    className="cursor-pointer transition-transform hover:scale-[1.02]"
+                                >
+                                    <div className="grid grid-cols-2 gap-1">
+                                        <div className="relative aspect-[4/3] overflow-hidden">
+                                            <Image
+                                                src={r.before}
+                                                alt="시술 전 (로그인 후 공개)"
+                                                fill
+                                                quality={85}
+                                                sizes="(max-width: 768px) 160px, 220px"
+                                                className="scale-110 object-cover blur-[7px]"
+                                            />
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setIsLoginModalOpen(true);
+                                                }}
+                                                className="absolute inset-0 flex items-center justify-center bg-deep/5 transition-colors hover:bg-deep/15"
+                                            >
+                                                <span className="rounded-[2px] border border-cream/90 rounded-full px-3 py-1 text-[11px] font-bold text-cream/90 shadow-sm transition-transform hover:scale-105">
+                                                    로그인
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div className="relative aspect-[4/3]">
+                                            <Image
+                                                src={r.after}
+                                                alt="시술 후"
+                                                fill
+                                                quality={85}
+                                                sizes="(max-width: 768px) 160px, 220px"
+                                                className="object-cover"
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="relative aspect-[4/3] overflow-hidden">
-                                        <Image
-                                            src={r.after}
-                                            alt="시술 후 (로그인 후 공개)"
-                                            fill
-                                            quality={85}
-                                            sizes="(max-width: 768px) 160px, 220px"
-                                            className="scale-110 object-cover blur-[7px]"
-                                        />
-                                        {/* #TODO: 로그인 버튼 클릭시 모달 열리게 연결 해야함 */}
-                                        <button className="absolute inset-0 flex items-center justify-center bg-deep/5 transition-colors hover:bg-deep/15">
-                                            <span className="rounded-[2px] bg-cream px-3 py-1 text-[11px] font-bold text-cocoa shadow-sm transition-transform hover:scale-105">
-                                                로그인
-                                            </span>
-                                        </button>
-                                    </div>
+                                    <p className="font-display flex items-center justify-center gap-6 pt-3 text-lead text-cream/90">
+                                        Before <span aria-hidden>→</span> After
+                                    </p>
+                                    <p className="font-display text-center text-small tracking-[0.2em] text-cream/40">
+                                        RE:BERRY
+                                    </p>
                                 </div>
-                                <p className="font-display flex items-center justify-center gap-6 pt-3 text-lead text-cream/90">
-                                    Before <span aria-hidden>→</span> After
-                                </p>
-                                <p className="font-display text-center text-small tracking-[0.2em] text-cream/40">
-                                    RE:BERRY
-                                </p>
-                            </RevealItem>
+                            </Item>
                         ))}
-                    </RevealGroup>
+                    </Group>
 
-                    {/* #TODO: baPhotos 개수 기준 실제 페이지 분할 로직 연결 필요 (지금은 정적 1/1 표시) */}
                     <Reveal className="mt-21 flex items-center justify-center gap-6">
                         <button
-                            className="text-cocoa/60 mt-1 hover:text-cocoa transition-colors"
+                            onClick={goPrev}
+                            disabled={page === 1}
+                            className="text-cocoa/60 mt-1 hover:text-cocoa transition-colors disabled:opacity-30"
                             aria-label="이전 페이지"
                         >
                             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,9 +148,13 @@ export default function ReviewsPage() {
                                 />
                             </svg>
                         </button>
-                        <span className="font-display text-lead tracking-[0.15em] text-cocoa">1 / 1</span>
+                        <span className="font-display text-lead tracking-[0.15em] text-cocoa">
+                            {page} / {totalPages}
+                        </span>
                         <button
-                            className="text-cocoa/60 mt-1 hover:text-cocoa transition-colors"
+                            onClick={goNext}
+                            disabled={page === totalPages}
+                            className="text-cocoa/60 mt-1 hover:text-cocoa transition-colors disabled:opacity-30"
                             aria-label="다음 페이지"
                         >
                             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -101,6 +165,11 @@ export default function ReviewsPage() {
                 </div>
             </section>
 
+            <BAPhotoModal
+                photo={selectedPhoto}
+                onClose={() => setSelectedPhoto(null)}
+                onLoginRequired={() => setIsLoginModalOpen(true)}
+            />
             <LocationSection />
         </>
     );

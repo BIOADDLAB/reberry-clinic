@@ -90,7 +90,7 @@ export default function BACardSlider({ photos = baPhotos }: Props) {
 
                                 <div className="relative z-10 flex h-0 justify-center">
                                     <Image
-                                        src="/images/i-arr-down-01.png"
+                                        src="/images/i-arr-down-01.svg"
                                         alt=""
                                         width={34}
                                         height={34}
