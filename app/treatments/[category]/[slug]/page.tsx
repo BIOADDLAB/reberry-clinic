@@ -14,6 +14,7 @@ import Eyebrow from '@/components/ui/Eyebrow';
 import HashtagChips from '@/components/ui/HashtagChips';
 import SolutionSlider from '@/components/ui/SolutionSlider';
 import { TwoDots } from '@/components/ui/DecoItem';
+import StepPlan from '@/components/ui/StepPlan';
 
 interface Params {
     params: Promise<{ category: string; slug: string }>;
@@ -198,7 +199,6 @@ export default async function TreatmentPage({ params }: Params) {
                 </section>
             )}
 
-            {/* 전 후 슬라이더 */}
             {/* 전 후 슬라이더 — 시그니처 전용 */}
             {sig && (
                 <section className="texture-dark py-20 bg-cocoa! text-cream lg:py-30">
@@ -214,6 +214,7 @@ export default async function TreatmentPage({ params }: Params) {
             )}
 
             {/* 솔루션 영역 - 시그니처, 안티에이징, 피부교정 공통 */}
+            {/* #FIX: 반응형 좀 더 다듬기 */}
             <section
                 className={cn(
                     'relative py-20 lg:pt-[180px] lg:pb-[170px]',
@@ -231,7 +232,7 @@ export default async function TreatmentPage({ params }: Params) {
                         className="object-cover"
                     />
                 )}
-                <div className="container-site relative">
+                <div className="container-site relative overflow-hidden">
                     {sig && (
                         <Reveal className="text-center">
                             <Eyebrow light={t.category === 'aging'}>RE:BERRY</Eyebrow>
@@ -271,6 +272,8 @@ export default async function TreatmentPage({ params }: Params) {
                     </div>
                 </div>
             </section>
+
+            {!sig && <StepPlan />}
 
             <LocationSection />
         </>
