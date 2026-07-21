@@ -17,6 +17,7 @@ import { TwoDots } from '@/components/ui/DecoItem';
 import StepPlan from '@/components/ui/StepPlan';
 import { getColumnsBySlug } from '@/components/lib/columns';
 import ColumnSlider from '@/components/ui/ColumnSlider';
+import FAQAccordion from '@/components/ui/FAQAccordion';
 
 interface Params {
     params: Promise<{ category: string; slug: string }>;
@@ -169,7 +170,7 @@ export default async function TreatmentPage({ params }: Params) {
 
                         <Reveal className="relative mx-auto mt-12 max-w-257 lg:mt-16">
                             <div className="grid min-[1100px]:grid-cols-2">
-                                <div className="texture-dark flex flex-col items-center justify-center px-8 py-12 lg:py-[120px] bg-cocoa text-center text-cream md:px-12">
+                                <div className="-tracking-[5%] texture-dark flex flex-col items-center justify-center px-8 py-12 lg:py-[120px] bg-cocoa text-center text-cream md:px-2">
                                     <p className="text-h3 leading-[35px] tracking-tighter">
                                         {sig.story.hook[0]}
                                         <br />
@@ -298,6 +299,31 @@ export default async function TreatmentPage({ params }: Params) {
                         </Reveal>
                         <Reveal className="mt-19.5">
                             <ColumnSlider items={getColumnsBySlug(t.slug)} />
+                        </Reveal>
+                    </div>
+                </section>
+            )}
+
+            {/* 시그니처 전용 — FAQ */}
+            {sig && (
+                <section className="texture-dark relative py-20 text-cream lg:pt-30 lg:pb-25">
+                    <Image
+                        src="/images/bg-texture-09.jpg"
+                        alt=""
+                        fill
+                        quality={80}
+                        sizes="100vw"
+                        className="object-cover"
+                    />
+                    <div className="container-site relative">
+                        <Reveal className="text-center">
+                            <h2 className="font-display text-h2 tracking-[0.7em] leading-12 md:text-h2">
+                                RE:BERRY FAQ
+                            </h2>
+                            <p className="text-h2  font-bold leading-12.5">자주하는 질문</p>
+                        </Reveal>
+                        <Reveal className="mt-17">
+                            <FAQAccordion items={sig.faq} />
                         </Reveal>
                     </div>
                 </section>

@@ -80,7 +80,7 @@ export default function SolutionSlider({ slugs, baseHref, className, pointClass 
                                     className="pointer-events-none object-cover transition-transform duration-500 group-hover:scale-105"
                                 />
                             </div>
-                            <div className="flex flex-1 flex-col bg-sand px-4 pb-8 pt-6.5">
+                            <div className="flex flex-1 flex-col bg-sand px-4 pb-8 pt-6.5 shadow-sm">
                                 <Link
                                     href={`${baseHref}/${item.slug}`}
                                     className="flex w-fit items-center gap-2.75 rounded-full bg-cocoa px-5 pr-4 py-1.25 text-[15px] tracking-wide text-cream transition-colors hover:bg-deep"
