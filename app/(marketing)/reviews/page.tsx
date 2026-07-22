@@ -7,7 +7,8 @@ import LocationSection from '@/components/ui/LocationSection';
 import BAPhotoModal from '@/components/ui/BAPhotoModal';
 import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup';
 import Reveal from '@/components/motion/Reveal';
-import { baPhotos, type BAPhoto } from '@/components/lib/ba';
+import type { BAPhoto } from '@/components/lib/ba';
+import { useBAPhotos } from '@/components/lib/useBAPhotos';
 
 const PER_PAGE = 8;
 const MOBILE_QUERY = '(max-width: 767px)';
@@ -32,7 +33,8 @@ const getMobileServerSnapshot = () => false;
 export default function ReviewsPage() {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [page, setPage] = useState(1);
-    const [shuffled, setShuffled] = useState<BAPhoto[]>(baPhotos);
+    const photos = useBAPhotos(); // 정적 폴백으로 시작 → Firestore 도착하면 자동 교체
+    const [shuffled, setShuffled] = useState<BAPhoto[]>(photos);
     const [selectedPhoto, setSelectedPhoto] = useState<BAPhoto | null>(null);
     const topRef = useRef<HTMLDivElement>(null);
 
@@ -40,8 +42,8 @@ export default function ReviewsPage() {
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect -- 서버/클라 결과가 달라야 하는 랜덤 셔플
-        setShuffled(shuffle(baPhotos));
-    }, []);
+        setShuffled(shuffle(photos));
+    }, [photos]);
 
     useEffect(() => {
         topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });

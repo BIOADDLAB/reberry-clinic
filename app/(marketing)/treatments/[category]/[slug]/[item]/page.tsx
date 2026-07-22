@@ -87,7 +87,7 @@ export default async function SolutionDetailPage({ params }: Params) {
 
                     {itemColumns.length > 0 && (
                         <Reveal className="mt-10 lg:mt-11.25">
-                            <DeviceColumnSlider items={itemColumns} />
+                            <DeviceColumnSlider items={itemColumns} slug={item} />
                         </Reveal>
                     )}
                 </div>

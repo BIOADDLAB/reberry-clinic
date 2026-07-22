@@ -9,7 +9,6 @@ import { cn } from '@/components/lib/cn';
 import BACardSlider from '@/components/ui/BACardSlider';
 import { SpinEmblem, FloatingCream } from '@/components/ui/DecoItem';
 import SectionDivider from '@/components/ui/SectionDivider';
-import { getBAPhotosBySlug } from '@/components/lib/ba';
 import Eyebrow from '@/components/ui/Eyebrow';
 import HashtagChips from '@/components/ui/HashtagChips';
 import SolutionSlider from '@/components/ui/SolutionSlider';
@@ -210,7 +209,7 @@ export default async function TreatmentPage({ params }: Params) {
                             <h2 className="font-display text-h2 tracking-[0.06em]">Your Beauty Physician</h2>
                         </Reveal>
                         <Reveal className="mt-12">
-                            <BACardSlider photos={getBAPhotosBySlug(t.slug)} />
+                            <BACardSlider slug={t.slug} />
                         </Reveal>
                     </div>
                 </section>
@@ -294,7 +293,7 @@ export default async function TreatmentPage({ params }: Params) {
                             </p>
                         </Reveal>
                         <Reveal className="mt-19.5">
-                            <ColumnSlider items={getColumnsBySlug(t.slug)} />
+                            <ColumnSlider items={getColumnsBySlug(t.slug)} slug={t.slug} />
                         </Reveal>
                     </div>
                 </section>
