@@ -31,7 +31,7 @@ export const columns: Col[] = [
         en: 'Ulthera',
         text: '울쎄라와 써마지,\n내게 맞는 리프팅은?',
         link: 'https://blog.naver.com/drpyton',
-        slugs: ['lifting'],
+        slugs: ['lifting', 'ulthera'],
     },
 
     // ── 부스터 (booster) — 3개
@@ -122,6 +122,110 @@ export const columns: Col[] = [
         text: '시술 후 붉은기,\n빨리 가라앉히는 법',
         link: 'https://blog.naver.com/drpyton',
         slugs: ['redness'],
+    },
+
+    // ── 기기상세 데모용 가라 데이터 (메인 4장비) — 발행 시 교체 ──
+    // 리팟 3개
+    {
+        title: '리팟 재생',
+        en: 'Lipot',
+        text: '피부 재생,\n리팟이 답일까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['lipot'],
+    },
+    {
+        title: '리팟 vs 토닝',
+        en: 'Lipot',
+        text: '색소 잡는 데\n뭐가 더 나을까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['lipot'],
+    },
+    {
+        title: '리팟 주기',
+        en: 'Lipot',
+        text: '몇 주 간격이\n가장 효과적일까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['lipot'],
+    },
+    // 엑셀V 2개
+    {
+        title: '엑셀V 홍조',
+        en: 'Excel V',
+        text: '붉은기,\n레이저로 잡힐까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['excelv'],
+    },
+    {
+        title: '엑셀V 혈관',
+        en: 'Excel V',
+        text: '실핏줄 치료,\n아프지 않을까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['excelv'],
+    },
+    // 헐리우드 스펙트라 4개
+    {
+        title: '스펙트라 토닝',
+        en: 'Spectra',
+        text: '기미 토닝,\n몇 번이면 될까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['spectra'],
+    },
+    {
+        title: '스펙트라 모공',
+        en: 'Spectra',
+        text: '모공도 같이\n좋아질까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['spectra'],
+    },
+    {
+        title: '스펙트라 톤업',
+        en: 'Spectra',
+        text: '피부톤 개선,\n얼마나 걸릴까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['spectra'],
+    },
+    {
+        title: '스펙트라 다운타임',
+        en: 'Spectra',
+        text: '시술 후 바로\n일상 가능할까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['spectra'],
+    },
+    // 피코 플러스 5개
+    {
+        title: '피코 색소',
+        en: 'Pico',
+        text: '난치성 색소,\n피코가 답일까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['pico'],
+    },
+    {
+        title: '피코 문신',
+        en: 'Pico',
+        text: '문신 제거,\n몇 회 필요할까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['pico'],
+    },
+    {
+        title: '피코 흉터',
+        en: 'Pico',
+        text: '패인 흉터도\n좋아질까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['pico'],
+    },
+    {
+        title: '피코 vs 토닝',
+        en: 'Pico',
+        text: '뭐가 내 피부에\n더 맞을까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['pico'],
+    },
+    {
+        title: '피코 통증',
+        en: 'Pico',
+        text: '시술 아플까?\n마취 필요할까?',
+        link: 'https://blog.naver.com/drpyton',
+        slugs: ['pico'],
     },
 ];
 

@@ -2,6 +2,8 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
+import DeviceColumnSlider from '@/components/ui/DeviceColumnSlider';
+import { columns } from '@/components/lib/columns';
 import Reveal from '@/components/motion/Reveal';
 import { zoom } from '@/components/lib/motion';
 import { treatments, findTreatment } from '@/components/lib/treatments';
@@ -33,6 +35,7 @@ export default async function SolutionDetailPage({ params }: Params) {
     const { category, slug, item } = await params;
     const t = findTreatment(category, slug);
     const s = getSolutionBySlug(item);
+    const itemColumns = columns.filter((c) => c.slugs.includes(item));
     if (!t || !s) notFound();
 
     return (
@@ -82,11 +85,12 @@ export default async function SolutionDetailPage({ params }: Params) {
                         </Reveal>
                     </div>
 
-                    {/* #TODO: 칼럼 영역 추가해야함 */}
-                    {/* 닥터 파이톤 칼럼 */}
-                    <Reveal className="mt-10 lg:mt-11.25">
-                        <span>칼럼</span>
-                    </Reveal>
+                    {/* 닥터 파이톤 칼럼 — 이 기기(item)에 연결된 칼럼만. 최소1/최대3 중앙, 넘치면 슬라이더(ColumnSlider 내부 처리) */}
+                    {itemColumns.length > 0 && (
+                        <Reveal className="mt-10 lg:mt-11.25">
+                            <DeviceColumnSlider items={itemColumns} />
+                        </Reveal>
+                    )}
                 </div>
             </section>
 

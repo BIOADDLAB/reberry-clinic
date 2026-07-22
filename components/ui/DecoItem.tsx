@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 export function SpinEmblem() {
     return (
         <motion.span
-            className="absolute left-1/2 top-1/2 hidden h-20 w-20 -translate-x-1/2 -translate-y-1/2 md:block"
+            className="absolute left-1/2 top-1/2 hidden h-20 w-20 -translate-x-1/2 -translate-y-1/2 min-[1100px]:block"
             animate={{ rotate: [0, 180, 0] }}
             transition={{ duration: 9, ease: 'easeInOut', repeat: Infinity, repeatDelay: 2.5 }}
         >
@@ -20,7 +20,7 @@ export function SpinEmblem() {
 export function FloatingCream() {
     return (
         <motion.span
-            className="absolute hidden origin-bottom-right transition-transform md:-bottom-4 md:right-0 md:block md:scale-[0.65] xl:-bottom-9 xl:-right-10 xl:scale-100"
+            className="absolute hidden origin-bottom-right transition-transform min-[1100px]:-bottom-9 min-[1100px]:-right-10 min-[1100px]:block"
             animate={{ y: [0, -10, 0], rotate: [0, -4, 0] }}
             transition={{ duration: 6.5, ease: 'easeInOut', repeat: Infinity }}
         >

@@ -25,7 +25,7 @@ export default function AboutPage() {
         <>
             <SubHero en="WE ARE RE:BERRY" image="/images/bg-sub-01.jpg" />
 
-            <section className="bg-cream py-20 lg:py-33 bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-center lg:bg-repeat">
+            <section className="bg-cream py-20 lg:py-33 bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-center bg-fixed">
                 <div className="container-site">
                     <Reveal className="mx-auto max-w-249.5 flex flex-col justify-between items-start gap-10 mb-10 lg:flex-row lg:items-end lg:gap-0 lg:mb-[26px]">
                         <div>

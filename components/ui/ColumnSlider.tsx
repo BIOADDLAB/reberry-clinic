@@ -111,12 +111,11 @@ export default function ColumnSlider({ items }: { items: Col[] }) {
                         className="object-cover object-top"
                     />
                 </div>
-
-                <p className="mt-0 text-small font-bold text-cocoa lg:mt-3 lg:text-medium lg:font-normal">
-                    닥터 파이톤 <span className="font-display">Pytone</span>
-                    <span className="ml-1.5 inline-block align-middle text-[0.7em]">▼</span>
+                <p className="mt-0 flex items-center text-small font-bold text-cocoa lg:mt-3 lg:font-normal lg:text-medium">
+                    닥터 파이톤 <span className="font-display mb-px ml-2">Pytone</span>
+                    <span className="ml-1.5 hidden align-middle text-[0.7em] lg:inline-block">▶</span>
+                    <span className="ml-1.5 inline-block align-middle text-[0.7em] lg:hidden">▼</span>
                 </p>
-
                 {showSliderDesktop && (
                     <div className="mt-4 hidden items-center gap-3 text-small text-latte lg:flex">
                         <button

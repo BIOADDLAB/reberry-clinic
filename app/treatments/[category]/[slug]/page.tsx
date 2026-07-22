@@ -220,7 +220,8 @@ export default async function TreatmentPage({ params }: Params) {
             {/* #FIX: 반응형 좀 더 다듬기 */}
             <section
                 className={cn(
-                    'relative py-20 lg:pt-[180px] lg:pb-[170px]',
+                    'relative overflow-x-clip py-20 lg:pt-[180px] lg:pb-[170px]',
+                    t.category === 'signature' && 'bg-[#e8e2d6]',
                     t.category === 'skin' && 'bg-sand',
                     t.category === 'aging' && 'bg-cocoa text-cream',
                 )}
@@ -232,10 +233,10 @@ export default async function TreatmentPage({ params }: Params) {
                         fill
                         quality={80}
                         sizes="100vw"
-                        className="object-cover"
+                        className="scale-[1.02] object-cover"
                     />
                 )}
-                <div className="container-site relative overflow-hidden">
+                <div className="container-site relative">
                     {sig && (
                         <Reveal className="text-center">
                             <Eyebrow light={t.category === 'aging'}>RE:BERRY</Eyebrow>
@@ -264,6 +265,7 @@ export default async function TreatmentPage({ params }: Params) {
                         <SolutionSlider
                             slugs={t.items}
                             baseHref={`/treatments/${t.category}/${t.slug}`}
+                            panelClass={t.category === 'skin' ? 'bg-cream' : 'bg-sand'}
                             pointClass={
                                 t.category === 'aging'
                                     ? 'bg-cream text-cocoa'

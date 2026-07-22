@@ -1,4 +1,3 @@
-// app/events/page.tsx
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import Reveal from '@/components/motion/Reveal';
@@ -20,7 +19,7 @@ export default function EventsPage() {
         <>
             <SubHero en="RE:BERRY EVENT" image="/images/bg-sub-06.jpg" />
 
-            <section className="texture-paper py-20 lg:py-33 bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-center lg:bg-repeat bg-cream">
+            <section className="texture-paper py-20 lg:py-33 bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-center bg-fixed bg-cream">
                 <div className="container-site">
                     <Reveal className="text-center">
                         <h2 className="font-display text-h2 tracking-[0.06em]">RE:BERRY Event</h2>

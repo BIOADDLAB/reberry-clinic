@@ -47,7 +47,7 @@ export default function DoctorsPage() {
                 </div>
             </section>
 
-            <section className="texture-paper py-33 lg:py-28 bg-[url('/images/bg-texture-07.jpg')] bg-cover bg-center lg:bg-repeat bg-cream">
+            <section className="texture-paper py-33 lg:py-28 bg-[url('/images/bg-texture-07.jpg')] bg-cover bg-center bg-fixed bg-cream">
                 <div className="container-site grid items-start gap-12 lg:grid-cols-[356px_575px] lg:justify-center lg:gap-[100px]">
                     <Reveal className="mx-auto w-full max-w-xs lg:max-w-full">
                         <div className="relative aspect-[356/576] w-full overflow-hidden rounded-full">

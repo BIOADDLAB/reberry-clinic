@@ -86,7 +86,7 @@ export default function Home() {
             <SolutionTabs />
 
             {/* 의사소개 영역 */}
-            <section className="texture-paper py-16 lg:py-28 bg-[url('/images/bg-texture-07.jpg')] bg-cover bg-center lg:bg-repeat bg-cream">
+            <section className="texture-paper py-16 lg:py-28 bg-[url('/images/bg-texture-07.jpg')] bg-cover bg-center bg-fixed bg-cream">
                 {/* #STYLE: PC에서 사진 영역이 과하게 넓어 보이지 않도록 그리드 비율 최적화 (2fr_3fr -> 1fr_1.3fr) */}
                 <div className="container-site grid items-center gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-20">
                     {/* #STYLE: PC 해상도 진입 시 사진을 오른쪽(lg:ml-auto lg:mr-0)으로 밀어 텍스트와의 중앙 균형을 맞춤 */}
