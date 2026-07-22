@@ -30,10 +30,9 @@ function PillChip({ c, tone }: { c: Chip; tone: ChipTone }) {
 
 function BoxChip({ c, i, tone }: { c: Chip; i: number; tone: ChipTone }) {
     return (
-        // [1안 채택] 좌/우 번갈아 말풍선 — 꼬리쪽 모서리만 각진 pill
         <RevealItem
             className={cn(
-                'w-fit max-w-[78%] rounded-[20px] px-5 py-2.5 text-medium font-medium leading-snug sm:px-6 sm:py-3 sm:text-lead',
+                'w-fit max-w-[78%] rounded-[20px] px-4 py-2.5 text-medium font-medium leading-snug sm:px-6 sm:py-3 sm:text-lead',
                 c.strong ? tones[tone].strong : tones[tone].base,
                 i % 2 === 0 ? 'self-start rounded-bl-[5px]' : 'self-end rounded-br-[5px]',
             )}
@@ -47,25 +46,31 @@ function BoxChip({ c, i, tone }: { c: Chip; i: number; tone: ChipTone }) {
             </span>
         </RevealItem>
 
-        /* [2안 후보] 가운데 정렬 + 완전 둥근 pill — 쓰려면 위 블록 대신 사용
-        <RevealItem
-            className={cn(
-                'w-fit max-w-full rounded-full px-5 py-2.5 text-center text-medium font-medium leading-snug',
-                c.strong ? tones[tone].strong : tones[tone].base,
-            )}>
-            <span className="whitespace-pre-line"><span className="opacity-50"># </span>{c.text}</span>
-        </RevealItem>
-        */
+        // [2안 후보] 가운데 정렬 + 완전 둥근 pill — 쓰려면 위 블록 대신 사용
+        // <RevealItem
+        //     className={cn(
+        //         'w-fit max-w-full rounded-full px-5 py-2.5 text-center text-medium font-medium leading-snug',
+        //         c.strong ? tones[tone].strong : tones[tone].base,
+        //     )}
+        // >
+        //     <span className="whitespace-pre-line">
+        //         <span className="opacity-50"># </span>
+        //         {c.text}
+        //     </span>
+        // </RevealItem>
 
-        /* [기존안] 2열 그리드 박스형 — 밋밋한 버전, 되돌리려면 컨테이너를 grid grid-cols-2 로
-        <RevealItem
-            className={cn(
-                'flex items-center justify-center overflow-hidden rounded-2xl px-4 py-2 text-center text-medium font-medium leading-snug break-all',
-                c.strong ? tones[tone].strong : tones[tone].base,
-            )}>
-            <span><span className="opacity-50"># </span>{c.text}</span>
-        </RevealItem>
-        */
+        /* [기존안] 2열 그리드 박스형 — 밋밋한 버전, 되돌리려면 컨테이너를 grid grid-cols-2 로*/
+        // <RevealItem
+        //     className={cn(
+        //         'flex items-center justify-center overflow-hidden rounded-2xl px-4 py-2 text-center text-medium font-medium leading-snug break-all',
+        //         c.strong ? tones[tone].strong : tones[tone].base,
+        //     )}
+        // >
+        //     <span>
+        //         <span className="opacity-50"># </span>
+        //         {c.text}
+        //     </span>
+        // </RevealItem>
     );
 }
 

@@ -1,7 +1,3 @@
-// #LINK: /components/ui/SolutionSlider.tsx
-// #STYLE: 컬럼 슬라이더와 동일 방식(useDragScroll) 으로 통일 — Swiper 제거
-// #ISSUE: 갯수×카드폭 실계산으로 "넘치면 우측 풀블리드 슬라이더 / 안 넘치면 중앙 정렬" (전 디바이스, 잘림 없음)
-
 'use client';
 
 import Image from 'next/image';
@@ -14,11 +10,11 @@ interface Props {
     slugs: string[];
     baseHref: string;
     className?: string;
-    pointClass?: string; // POINT 배지 — 카테고리별
-    panelClass?: string; // 카드 하단 패널 배경 — skin 섹션(샌드)과 겹치지 않게 조절
+    pointClass?: string;
+    panelClass?: string;
 }
 
-const CARD_W = 262; // md 기준 카드폭 — 넘침 계산용
+const CARD_W = 262;
 const GAP = 24;
 
 export default function SolutionSlider({
@@ -30,17 +26,12 @@ export default function SolutionSlider({
 }: Props) {
     const list = getSolutionsBySlugs(slugs);
     const { ref, dragProps, dragClass, over, wide, canPrev, canNext, move, onScroll } =
-        useOverflowSlider<HTMLDivElement>(
-            list.length,
-            CARD_W,
-            GAP,
-            true, // 솔루션은 화면이 허용하면 컨테이너를 넘겨 전부 노출
-        );
+        useOverflowSlider<HTMLDivElement>(list.length, CARD_W, GAP, true);
 
     if (list.length === 0) return null;
 
     const Card = ({ item }: { item: (typeof list)[number] }) => (
-        <article className="group flex h-full w-[240px] shrink-0 snap-start flex-col overflow-hidden rounded-[15px] bg-cream text-cocoa md:w-[262px]">
+        <article className="group flex w-[240px] shrink-0 snap-start flex-col overflow-hidden rounded-[15px] bg-cream text-cocoa md:w-[262px]">
             <div className="relative w-full aspect-[262/253] overflow-hidden">
                 <Image
                     src={item.image}
@@ -106,13 +97,12 @@ export default function SolutionSlider({
             )}
 
             {over ? (
-                /* 넘침 — 컬럼과 동일: 좌측은 컨테이너 라인, 우측은 뷰포트 끝까지 풀블리드 */
                 <div
                     ref={ref}
                     {...dragProps}
                     onScroll={onScroll}
                     className={cn(
-                        'no-scrollbar flex snap-x gap-6 overflow-x-auto scroll-smooth pb-1',
+                        'no-scrollbar flex items-stretch snap-x gap-6 overflow-x-auto scroll-smooth pb-1',
                         'mr-[calc(50%-50vw-2px)] pr-[calc(50vw-50%+40px)]',
                         dragClass,
                     )}
@@ -122,8 +112,10 @@ export default function SolutionSlider({
                     ))}
                 </div>
             ) : (
-                /* 여유 — 스크롤 없이 중앙 정렬. wide = 컨테이너보다 넓지만 화면엔 들어감 → 화면 폭으로 펼쳐 전부 노출 */
-                <div ref={ref} className={cn('flex justify-center gap-6', wide && 'mx-[calc(50%-50vw)] px-6')}>
+                <div
+                    ref={ref}
+                    className={cn('flex items-stretch justify-center gap-6', wide && 'mx-[calc(50%-50vw)] px-6')}
+                >
                     {list.map((item) => (
                         <Card key={item.slug} item={item} />
                     ))}

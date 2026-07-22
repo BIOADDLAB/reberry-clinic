@@ -85,7 +85,6 @@ export default async function SolutionDetailPage({ params }: Params) {
                         </Reveal>
                     </div>
 
-                    {/* 닥터 파이톤 칼럼 — 이 기기(item)에 연결된 칼럼만. 최소1/최대3 중앙, 넘치면 슬라이더(ColumnSlider 내부 처리) */}
                     {itemColumns.length > 0 && (
                         <Reveal className="mt-10 lg:mt-11.25">
                             <DeviceColumnSlider items={itemColumns} />
