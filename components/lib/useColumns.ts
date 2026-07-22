@@ -32,8 +32,8 @@ export function useColumnsBySlug(slug: string, staticFallback: Col[]): Col[] {
                 });
 
                 setItems(fromFirestore);
-            } catch {
-                // 에러 시 정적 폴백(초기값) 유지
+            } catch (err) {
+                console.error('[useColumnsBySlug] Firestore 조회 실패, 정적 데이터로 폴백:', err);
             }
         })();
 

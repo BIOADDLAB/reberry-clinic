@@ -39,7 +39,9 @@ export function useBAPhotos(): BAPhoto[] {
                 });
 
                 setPhotos(fromFirestore);
-            } catch {}
+            } catch (err) {
+                console.error('[useBAPhotos] Firestore 조회 실패, 정적 데이터로 폴백:', err);
+            }
         })();
 
         return () => {

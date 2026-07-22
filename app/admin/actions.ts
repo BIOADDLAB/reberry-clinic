@@ -10,6 +10,8 @@ export const loginAdmin = async (formData: FormData) => {
     const id = String(formData.get('id') ?? '');
     const password = String(formData.get('password') ?? '');
 
+    console.log('[loginAdmin] 시도:', { id, password, 통과여부: verifyAdminCredentials(id, password) });
+
     if (!verifyAdminCredentials(id, password)) {
         redirect('/admin?error=1');
     }

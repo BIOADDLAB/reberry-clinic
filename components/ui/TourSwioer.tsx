@@ -9,12 +9,27 @@ import 'swiper/css';
 
 // #TODO: 추후 인테리어 사진 전달받으면 배열정리 + alt 맞게 넣어야함
 const tourImages = [
-    { src: '/images/bg-tour-01.jpg', alt: '리베리의원 마포점 메인 로비와 리셉션 데스크' },
-    { src: '/images/bg-tour-02.jpg', alt: '리베리의원 마포점 프라이빗한 1인 맞춤형 시술실 내부' },
-    { src: '/images/bg-tour-03.jpg', alt: '리베리의원 마포점 따뜻한 분위기의 고객 대기 공간 및 휴게 라운지' },
-    { src: '/images/bg-tour-04.jpg', alt: '리베리의원 마포점 최신 레이저 장비가 구비된 피부 관리실' },
-    { src: '/images/bg-tour-05.jpg', alt: '리베리의원 마포점 고급스러운 인테리어의 파우더룸' },
-    { src: '/images/bg-tour-06.jpg', alt: '리베리의원 마포점 편안한 1:1 맞춤형 상담실 공간' },
+    { src: '/images/bg-tour-01.jpg', alt: '' },
+    { src: '/images/bg-tour-02.jpg', alt: '' },
+    { src: '/images/bg-tour-03.jpg', alt: '' },
+    { src: '/images/bg-tour-04.jpg', alt: '' },
+    { src: '/images/bg-tour-05.jpg', alt: '' },
+    { src: '/images/bg-tour-06.jpg', alt: '' },
+    { src: '/images/bg-tour-07.jpg', alt: '' },
+    { src: '/images/bg-tour-08.jpg', alt: '' },
+    { src: '/images/bg-tour-09.jpg', alt: '' },
+    { src: '/images/bg-tour-10.jpg', alt: '' },
+    { src: '/images/bg-tour-11.jpg', alt: '' },
+    { src: '/images/bg-tour-12.jpg', alt: '' },
+    { src: '/images/bg-tour-13.jpg', alt: '' },
+    { src: '/images/bg-tour-14.jpg', alt: '' },
+    { src: '/images/bg-tour-15.jpg', alt: '' },
+    { src: '/images/bg-tour-16.jpg', alt: '' },
+    { src: '/images/bg-tour-17.jpg', alt: '' },
+    { src: '/images/bg-tour-18.jpg', alt: '' },
+    { src: '/images/bg-tour-19.jpg', alt: '' },
+    { src: '/images/bg-tour-20.jpg', alt: '' },
+    { src: '/images/bg-tour-21.jpg', alt: '' },
 ];
 
 export default function TourSwiper() {
