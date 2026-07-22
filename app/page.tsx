@@ -50,7 +50,7 @@ export default function Home() {
             </section>
 
             {/* 전 후 사진 영역 */}
-            <section className="relative py-20 lg:py-28 bg-[url('/images/bg-texture-06.jpg')] bg-repeat">
+            <section className="relative py-20 lg:py-28 bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-center bg-fixed">
                 <div className="container-site relative">
                     <Reveal className="text-center">
                         <Eyebrow>RE:BERRY</Eyebrow>

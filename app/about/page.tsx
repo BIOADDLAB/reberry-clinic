@@ -77,7 +77,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="py-20 text-cream bg-[url('/images/bg-about-card.jpg')] bg-cover bg-center lg:py-28 lg:bg-repeat lg:py-50">
+            <section className="py-20 text-cream bg-[url('/images/bg-about-card.jpg')] bg-cover bg-center bg-fixed lg:py-28 lg:py-50">
                 <div className="container-site">
                     <Reveal className="text-center">
                         <h2 className="font-display text-h2 tracking-[0.08em] ">RE:BERRY PROMISE</h2>

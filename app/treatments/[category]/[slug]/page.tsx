@@ -282,7 +282,7 @@ export default async function TreatmentPage({ params }: Params) {
 
             {/* 시그니처 전용 — Column */}
             {sig && getColumnsBySlug(t.slug).length > 0 && (
-                <section className="bg-cream relative py-20 lg:pt-32.5 lg:pb-37.5 overflow-x-clip">
+                <section className="bg-cream relative py-20 lg:pt-32.5 lg:pb-37.5 ">
                     <Image
                         src="/images/bg-texture-08.jpg"
                         alt=""
