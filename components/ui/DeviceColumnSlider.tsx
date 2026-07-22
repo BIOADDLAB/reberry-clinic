@@ -9,12 +9,15 @@ import { site } from '@/components/lib/site';
 import { useOverflowSlider } from '@/components/lib/useOverflowSlider';
 import { cn } from '@/components/lib/cn';
 import type { Col } from '@/components/lib/columns';
+import { useColumnsBySlug } from '@/components/lib/useColumns';
 
-export default function DeviceColumnSlider({ items }: { items: Col[] }) {
+export default function DeviceColumnSlider({ items, slug }: { items: Col[]; slug: string }) {
+    const resolvedItems = useColumnsBySlug(slug, items);
+
     const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
-        useOverflowSlider<HTMLDivElement>(items.length, 344, 24);
+        useOverflowSlider<HTMLDivElement>(resolvedItems.length, 344, 24);
 
-    if (items.length === 0) return null;
+    if (resolvedItems.length === 0) return null;
 
     return (
         <div>
@@ -34,7 +37,7 @@ export default function DeviceColumnSlider({ items }: { items: Col[] }) {
                     dragClass,
                 )}
             >
-                {items.map((c, i) => (
+                {resolvedItems.map((c, i) => (
                     <article
                         key={`${c.title}-${i}`}
                         className="flex h-[239px] w-[344px] shrink-0 snap-start flex-col border border-cocoa bg-transparent"

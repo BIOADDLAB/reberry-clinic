@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useOverflowSlider } from '@/components/lib/useOverflowSlider';
 import { cn } from '@/components/lib/cn';
-import { getMainBAPhotos } from '@/components/lib/ba';
+import { useBAPhotos, filterMainBAPhotos } from '@/components/lib/useBAPhotos';
 
 interface Props {
     light?: boolean;
@@ -11,12 +11,12 @@ interface Props {
 
 // #PAGE: 메인페이지 - 전,후 슬라이더
 export default function BASlider({ light }: Props) {
-    // 넘침 계산 + 화살표 활성 상태 + 진행 도트 — 공통 훅
-    const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
-        useOverflowSlider<HTMLDivElement>(getMainBAPhotos().length, 244, 20);
+    // Firestore 에 등록된 전후사진이 있으면 그걸, 없으면 정적 데이터를 자동으로 반환
+    const allPhotos = useBAPhotos();
+    const photos = filterMainBAPhotos(allPhotos); // main 숫자 있는 것만, 순서대로
 
-    // #ISSUE: slugs prop 방식 제거 → ba.ts의 main 숫자 필드 기준으로 정렬된 목록 사용
-    const photos = getMainBAPhotos();
+    const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
+        useOverflowSlider<HTMLDivElement>(photos.length, 244, 20);
 
     if (photos.length === 0) return null;
 

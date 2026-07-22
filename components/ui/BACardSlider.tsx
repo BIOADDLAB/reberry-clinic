@@ -5,14 +5,18 @@
 'use client';
 
 import Image from 'next/image';
-import type { BAPhoto } from '@/components/lib/ba';
+import { useBAPhotos, filterBAPhotosBySlug } from '@/components/lib/useBAPhotos';
 import { useOverflowSlider } from '@/components/lib/useOverflowSlider';
 import { cn } from '@/components/lib/cn';
 
 const CARD_W = 244;
 const GAP = 23;
 
-export default function BACardSlider({ photos }: { photos: BAPhoto[] }) {
+// slug 를 받아서 컴포넌트가 직접 Firestore 를 확인 — 서버 페이지(page.tsx)는 slug 문자열만 넘기면 됨
+export default function BACardSlider({ slug }: { slug: string }) {
+    const allPhotos = useBAPhotos();
+    const photos = filterBAPhotosBySlug(allPhotos, slug);
+
     const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
         useOverflowSlider<HTMLDivElement>(photos.length, CARD_W, GAP);
 

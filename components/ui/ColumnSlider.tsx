@@ -5,11 +5,14 @@ import { site } from '@/components/lib/site';
 import { cn } from '@/components/lib/cn';
 import { useOverflowSlider } from '@/components/lib/useOverflowSlider';
 import type { Col } from '@/components/lib/columns';
+import { useColumnsBySlug } from '@/components/lib/useColumns';
 
-export default function ColumnSlider({ items }: { items: Col[] }) {
+export default function ColumnSlider({ items, slug }: { items: Col[]; slug: string }) {
+    const resolvedItems = useColumnsBySlug(slug, items);
+
     // 카드 344 + 간격 24 기준으로 "안 들어가면 슬라이더" 자동 판단 (개수로 고정하지 않음)
     const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
-        useOverflowSlider<HTMLDivElement>(items.length, 344, 24);
+        useOverflowSlider<HTMLDivElement>(resolvedItems.length, 344, 24);
 
     const Card = ({ c }: { c: Col }) => (
         <article className="flex h-[239px] w-[344px] shrink-0 snap-start flex-col border border-cocoa bg-transparent">
@@ -35,7 +38,7 @@ export default function ColumnSlider({ items }: { items: Col[] }) {
     // ref 필수: 정적일 때도 폭을 계속 재야 창을 줄였을 때 슬라이더로 전환됨
     const renderStatic = () => (
         <div ref={ref} className="flex shrink-0 justify-center gap-6">
-            {items.map((c, i) => (
+            {resolvedItems.map((c, i) => (
                 <Card key={`${c.title}-${i}`} c={c} />
             ))}
         </div>
@@ -52,7 +55,7 @@ export default function ColumnSlider({ items }: { items: Col[] }) {
                 dragClass,
             )}
         >
-            {items.map((c, i) => (
+            {resolvedItems.map((c, i) => (
                 <Card key={`${c.title}-${i}`} c={c} />
             ))}
         </div>
