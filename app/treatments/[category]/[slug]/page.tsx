@@ -182,9 +182,7 @@ export default async function TreatmentPage({ params }: Params) {
                                     </p>
                                     {/* 라인 + 점 하강 커넥터 */}
                                     <SectionDivider light className="my-4" />
-                                    <p className="whitespace-normal lg:whitespace-pre-line text-lead  text-cream break-keep">
-                                        {sig.story.body}
-                                    </p>
+                                    <p className="whitespace-pre-line text-lead  text-cream">{sig.story.body}</p>
                                 </div>
                                 <div className="relative order-first aspect-[4/3] w-full min-[1100px]:order-none min-[1100px]:aspect-auto min-[1100px]:min-h-[340px]">
                                     <Image
@@ -222,7 +220,8 @@ export default async function TreatmentPage({ params }: Params) {
             {/* #FIX: 반응형 좀 더 다듬기 */}
             <section
                 className={cn(
-                    'relative py-20 lg:pt-[180px] lg:pb-[170px]',
+                    'relative overflow-hidden py-20 lg:pt-[180px] lg:pb-[170px]',
+                    t.category === 'signature' && 'bg-[#e8e2d6]',
                     t.category === 'skin' && 'bg-sand',
                     t.category === 'aging' && 'bg-cocoa text-cream',
                 )}
@@ -234,14 +233,14 @@ export default async function TreatmentPage({ params }: Params) {
                         fill
                         quality={80}
                         sizes="100vw"
-                        className="object-cover"
+                        className="scale-[1.02] object-cover"
                     />
                 )}
-                <div className="container-site relative overflow-hidden">
+                <div className="container-site relative">
                     {sig && (
                         <Reveal className="text-center">
                             <Eyebrow light={t.category === 'aging'}>RE:BERRY</Eyebrow>
-                            <h2 className="mt-5 text-h2 break-keep">
+                            <h2 className="mt-5 text-h2">
                                 같은 고민이라도 <strong className="font-bold">원인은 모두 다릅니다</strong>
                             </h2>
                         </Reveal>
@@ -263,16 +262,11 @@ export default async function TreatmentPage({ params }: Params) {
                         </p>
                     </Reveal>
                     <div className="mt-12 lg:mt-16">
+                        {/* 카드 톤은 SolutionSlider 내부(tones 표)에서 category 기준으로 결정 — 여기선 로직 없음 */}
                         <SolutionSlider
                             slugs={t.items}
                             baseHref={`/treatments/${t.category}/${t.slug}`}
-                            pointClass={
-                                t.category === 'aging'
-                                    ? 'bg-cream text-cocoa'
-                                    : t.category === 'skin'
-                                      ? 'bg-cocoa text-cream'
-                                      : 'bg-latte text-cream'
-                            }
+                            category={t.category}
                         />
                     </div>
                 </div>
@@ -282,7 +276,7 @@ export default async function TreatmentPage({ params }: Params) {
 
             {/* 시그니처 전용 — Column */}
             {sig && getColumnsBySlug(t.slug).length > 0 && (
-                <section className="bg-cream relative py-20 lg:pt-32.5 lg:pb-37.5 ">
+                <section className="bg-cream relative py-20 lg:pt-32.5 lg:pb-37.5 overflow-x-clip">
                     <Image
                         src="/images/bg-texture-08.jpg"
                         alt=""

@@ -6,10 +6,19 @@ import { getSolutionsBySlugs } from '@/components/lib/solutions';
 import { useOverflowSlider } from '@/components/lib/useOverflowSlider';
 import { cn } from '@/components/lib/cn';
 
+// 카테고리별 카드 톤 — 단일 진실 공급원. 페이지(템플릿)는 category만 넘기면 됨
+type Category = 'signature' | 'skin' | 'aging';
+const TONES: Record<Category, { pointClass: string; panelClass: string }> = {
+    signature: { pointClass: 'bg-latte text-cream', panelClass: 'bg-sand' },
+    skin: { pointClass: 'bg-latte text-cream', panelClass: 'bg-latte/10' },
+    aging: { pointClass: 'bg-latte text-cream', panelClass: 'bg-sand' },
+};
+
 interface Props {
     slugs: string[];
     baseHref: string;
     className?: string;
+    category?: Category;
     pointClass?: string;
     panelClass?: string;
 }
@@ -17,16 +26,14 @@ interface Props {
 const CARD_W = 262;
 const GAP = 24;
 
-export default function SolutionSlider({
-    slugs,
-    baseHref,
-    className,
-    pointClass = 'bg-latte text-cream',
-    panelClass = 'bg-sand',
-}: Props) {
+export default function SolutionSlider({ slugs, baseHref, className, category, pointClass, panelClass }: Props) {
     const list = getSolutionsBySlugs(slugs);
     const { ref, dragProps, dragClass, over, wide, canPrev, canNext, move, onScroll } =
         useOverflowSlider<HTMLDivElement>(list.length, CARD_W, GAP, true);
+
+    // category 우선 → 없으면 개별 prop → 그것도 없으면 시그니처 기본값 (기존 호출부 하위 호환)
+    const resolvedPanel = panelClass ?? (category ? TONES[category].panelClass : 'bg-sand');
+    const resolvedPoint = pointClass ?? (category ? TONES[category].pointClass : 'bg-latte text-cream');
 
     if (list.length === 0) return null;
 
@@ -42,7 +49,7 @@ export default function SolutionSlider({
                     className="pointer-events-none object-cover transition-transform duration-500 group-hover:scale-105"
                 />
             </div>
-            <div className={cn('flex flex-1 flex-col px-4 pb-8 pt-6.5 shadow-sm', panelClass)}>
+            <div className={cn('flex flex-1 flex-col px-4 pb-8 pt-6.5 shadow-sm', resolvedPanel)}>
                 <Link
                     href={`${baseHref}/${item.slug}`}
                     className="flex w-fit items-center gap-2.75 rounded-full bg-cocoa px-5 pr-4 py-1.25 text-[15px] tracking-wide text-cream transition-colors hover:bg-deep"
@@ -62,7 +69,7 @@ export default function SolutionSlider({
                     ))}
                 </ul>
                 <p className="mt-5 flex items-center gap-2 font-medium text-small">
-                    <span className="rounded-full bg-latte px-2.5 font-bold text-cream text-small">POINT</span>
+                    <span className={cn('rounded-full px-2.5 font-bold text-small', resolvedPoint)}>POINT</span>
                     {item.point}
                 </p>
             </div>
