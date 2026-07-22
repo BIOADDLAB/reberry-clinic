@@ -6,9 +6,9 @@ import MoreView from '@/components/ui/MoreView';
 import { zoom } from '@/components/lib/motion';
 import { site } from '@/components/lib/site';
 import LocationSection from '@/components/ui/LocationSection';
-import WhySection from '../components/home/WhySection';
-import Reveal from '../components/motion/Reveal';
-import TourSwiper from '../components/ui/TourSwioer';
+import WhySection from '@/components/home/WhySection';
+import Reveal from '@/components/motion/Reveal';
+import TourSwiper from '@/components/ui/TourSwioer';
 import SolutionTabs from '@/components/home/SolutionTabs';
 
 const HERO_IMG = '/images/bg-main-hiro.jpg';

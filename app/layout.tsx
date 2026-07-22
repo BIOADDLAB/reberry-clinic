@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import FloatingButtons from '@/components/layout/FloatingButtons';
 import GoogleTranslate from '@/components/lang/GoogleTranslate';
 import LangAttribute from '@/components/lang/LangAttribute';
 
@@ -59,10 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <body className="antialiased">
                 <GoogleTranslate />
                 <LangAttribute />
-                <Header />
-                <main>{children}</main>
-                <Footer />
-                <FloatingButtons />
+                {children}
             </body>
         </html>
     );

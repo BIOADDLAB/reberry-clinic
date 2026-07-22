@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import SubHero from '../../components/ui/SubHero';
+import SubHero from '../../../components/ui/SubHero';
 import Reveal from '@/components/motion/Reveal';
 import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup';
 import LocationSection from '@/components/ui/LocationSection';
