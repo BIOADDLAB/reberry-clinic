@@ -7,7 +7,6 @@ import { useRef, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 
-// #TODO: 추후 인테리어 사진 전달받으면 배열정리 + alt 맞게 넣어야함
 const tourImages = [
     { src: '/images/bg-tour-01.jpg', alt: '' },
     { src: '/images/bg-tour-02.jpg', alt: '' },
