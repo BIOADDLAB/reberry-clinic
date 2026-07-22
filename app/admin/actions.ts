@@ -2,19 +2,15 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { ADMIN_COOKIE_NAME, getAdminAuthToken } from './auth';
+import { ADMIN_COOKIE_NAME, getAdminAuthToken, verifyAdminCredentials } from './auth';
 
 const ADMIN_COOKIE_MAX_AGE = 60 * 60 * 8;
-
-// 아이디는 형식상 필드 — 실제 잠금은 비밀번호. 원장님용 내부 도구라 둘 다 평문으로 충분
-const ADMIN_ID = 'admin';
-const ADMIN_PASSWORD = 'admingidon12!@';
 
 export const loginAdmin = async (formData: FormData) => {
     const id = String(formData.get('id') ?? '');
     const password = String(formData.get('password') ?? '');
 
-    if (id !== ADMIN_ID || password !== ADMIN_PASSWORD) {
+    if (!verifyAdminCredentials(id, password)) {
         redirect('/admin?error=1');
     }
 
