@@ -17,6 +17,7 @@ export interface Treatment {
     hashtags: Chip[];
     solution: { light: string; strong: string };
     hashtagRows?: [number, number];
+    ivItems?: string[]; // 수액주사 전용 — 값이 있으면 솔루션 슬라이더 대신 이름표 박스가 나옴 // 장비 + 제품 혼합 슬러그
     items: string[]; // 장비 + 제품 혼합 슬러그
     visual: number; // 배경/인물 세트 번호
     visualW: number; // 시술 소개 그룹(카드+인물)
@@ -601,7 +602,21 @@ export const treatments: Treatment[] = [
             // #FIX: 하는 것입니다 light로 가야함
             strong: '근본적인 활력을 회복하는 것입니다',
         },
-        // #FIX: 수액주사 페이지는 솔루션 bas안쓰고 다른거 쓸 예정임
-        items: [''],
+        // 수액주사는 솔루션 카드 슬라이더 대신 IvTagBox(이름표 박스)를 씀 → items 는 비워둠
+        items: [],
+        // IvTagBox 에 들어갈 항목들. 여기 배열만 고치면 화면에 그대로 반영됨
+        ivItems: [
+            '수액·주사',
+            '비타민수액',
+            '백옥주사',
+            '신데렐라주사',
+            '비타민C(고농축)',
+            '비타민B주사',
+            '항산화주사',
+            '감초주사',
+            '마늘주사',
+            '비타민D주사',
+            '태반주사',
+        ],
     },
 ];

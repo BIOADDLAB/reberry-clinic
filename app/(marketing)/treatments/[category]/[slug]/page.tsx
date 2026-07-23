@@ -12,6 +12,7 @@ import SectionDivider from '@/components/ui/SectionDivider';
 import Eyebrow from '@/components/ui/Eyebrow';
 import HashtagChips from '@/components/ui/HashtagChips';
 import SolutionSlider from '@/components/ui/SolutionSlider';
+import IvTagBox from '@/components/ui/IvTagBox';
 import { TwoDots } from '@/components/ui/DecoItem';
 import StepPlan from '@/components/ui/StepPlan';
 import { getColumnsBySlug } from '@/components/lib/columns';
@@ -261,12 +262,17 @@ export default async function TreatmentPage({ params }: Params) {
                         </p>
                     </Reveal>
                     <div className="mt-12 lg:mt-16">
-                        {/* 카드 톤은 SolutionSlider 내부(tones 표)에서 category 기준으로 결정 — 여기선 로직 없음 */}
-                        <SolutionSlider
-                            slugs={t.items}
-                            baseHref={`/treatments/${t.category}/${t.slug}`}
-                            category={t.category}
-                        />
+                        {/* 수액주사처럼 ivItems 가 있는 시술은 카드 슬라이더 대신 이름표 박스만 보여줌 */}
+                        {t.ivItems && t.ivItems.length > 0 ? (
+                            <IvTagBox items={t.ivItems} />
+                        ) : (
+                            /* 카드 톤은 SolutionSlider 내부(tones 표)에서 category 기준으로 결정 — 여기선 로직 없음 */
+                            <SolutionSlider
+                                slugs={t.items}
+                                baseHref={`/treatments/${t.category}/${t.slug}`}
+                                category={t.category}
+                            />
+                        )}
                     </div>
                 </div>
             </section>

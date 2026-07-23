@@ -86,7 +86,7 @@ export default function WhySection() {
                     </h2>
                 </div>
 
-                <div className="relative flex items-center overflow-hidden -mr-6  px-35 min-[1560px]:mr-0 min-[1560px]:rounded-2xl">
+                <div className="relative flex items-center overflow-hidden -mr-6  px-35 min-[1560px]:mr-0 ">
                     <Image
                         src="/images/bg-texture-02.jpg"
                         alt=""
