@@ -88,7 +88,7 @@ export default function AdminBAPage() {
         setEditingId(it.id);
         setForm({
             slug: it.slug,
-            useCustomLabel: it.label !== `${SIGNATURE_PAGES.find((p) => p.slug === it.slug)?.label}치료`,
+            useCustomLabel: it.label !== `${SIGNATURE_PAGES.find((p) => p.slug === it.slug)?.label}`,
             customLabel: it.label,
             order: it.order ?? 1,
             showMain: typeof it.main === 'number',
@@ -209,7 +209,7 @@ export default function AdminBAPage() {
                     </p>
                     <div className="mt-1.5 flex flex-col gap-2 sm:flex-row sm:items-center">
                         <span className="rounded-lg border border-cocoa/15 bg-cocoa/5 px-3 py-2 text-small text-latte">
-                            {form.useCustomLabel ? '직접 입력 중' : `${currentPage.label}치료`}
+                            {form.useCustomLabel ? '직접 입력 중' : `${currentPage.label}`}
                         </span>
                         <label className="flex items-center gap-1.5 text-small text-latte">
                             <input
