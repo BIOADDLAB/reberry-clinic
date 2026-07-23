@@ -46,10 +46,12 @@ function BoxChip({ c, i, tone }: { c: Chip; i: number; tone: ChipTone }) {
             </span>
         </RevealItem>
 
-        // [2안 후보] 가운데 정렬 + 완전 둥근 pill — 쓰려면 위 블록 대신 사용
+        // 2열 박스형 — 가장 정돈되고 밀도 높음. 칩 개수가 많을 때 유리
+        //  ※ 쓰려면 아래 컨테이너를 'grid grid-cols-2 gap-2.5' 로 바꾸기
+        // ══════════════════════════════════════════════════════════════
         // <RevealItem
         //     className={cn(
-        //         'w-fit max-w-full rounded-full px-5 py-2.5 text-center text-medium font-medium leading-snug',
+        //         'flex items-center justify-center rounded-2xl px-4 py-3 text-center text-medium font-medium leading-snug',
         //         c.strong ? tones[tone].strong : tones[tone].base,
         //     )}
         // >
@@ -59,18 +61,7 @@ function BoxChip({ c, i, tone }: { c: Chip; i: number; tone: ChipTone }) {
         //     </span>
         // </RevealItem>
 
-        /* [기존안] 2열 그리드 박스형 — 밋밋한 버전, 되돌리려면 컨테이너를 grid grid-cols-2 로*/
-        // <RevealItem
-        //     className={cn(
-        //         'flex items-center justify-center overflow-hidden rounded-2xl px-4 py-2 text-center text-medium font-medium leading-snug break-all',
-        //         c.strong ? tones[tone].strong : tones[tone].base,
-        //     )}
-        // >
-        //     <span>
-        //         <span className="opacity-50"># </span>
-        //         {c.text}
-        //     </span>
-        // </RevealItem>
+        //
     );
 }
 
