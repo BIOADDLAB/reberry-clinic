@@ -19,8 +19,7 @@ export default function Home() {
             {/* 메인 히어로 영역 */}
             {/* #ISSUE: 배경 높이 디자인팀 의견 반영 100vh로 변경 - 기존코드는 임시로 주석처리 */}
             {/* <section className="relative flex h-[70vh] min-h-[600px] max-h-[850px] w-full items-center justify-center overflow-hidden text-center text-cream"> */}
-            <section className="relative flex h-screen w-full items-center justify-center overflow-hidden text-center text-cream">
-                {/* #TODO: 이미지 최적화 개선 */}
+            <section className="relative flex h-dvh w-full items-center justify-center overflow-hidden text-center text-cream">
                 <Image
                     src={HERO_IMG}
                     alt="리베리의원 메인 비주얼"
@@ -33,7 +32,6 @@ export default function Home() {
                 />
                 <Reveal className="relative px-6">
                     <p className="text-h1-sm">당신의 뷰티 주치의</p>
-                    {/* #ISSUE: 카페24클래식타입 폰트 -> Belleza 벨자 폰트로 변경함 */}
                     <h1 className="font-display font-normal text-h1-sm notranslate mt-1 text-h1 tracking-[-2%] ">
                         RE:BERRY
                     </h1>
@@ -45,8 +43,18 @@ export default function Home() {
                             SIGNATURE
                         </Link>
                     </div>
+
+                    {/* 서브히어로의 스크롤 안내 아이콘을 여기로 — 모바일만, 시그니처 버튼 바로 아래 자연스러운 흐름으로 */}
+                    <div className="mt-14 flex flex-col items-center gap-1.5 md:hidden">
+                        <div className="flex h-8 w-5 items-start justify-center rounded-full border-2 border-white p-1">
+                            <div className="h-1.5 w-0.5 rounded-full bg-white animate-wheel" />
+                        </div>
+                        <img src="/images/i-arr-down-03.svg" alt="" className="w-3" aria-hidden />
+                    </div>
                 </Reveal>
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+
+                {/* 태블릿·PC — 기존 scroll-mouse 그대로, 모바일에서만 숨김 */}
+                <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 md:block">
                     <div className="scroll-mouse" aria-hidden />
                 </div>
             </section>
