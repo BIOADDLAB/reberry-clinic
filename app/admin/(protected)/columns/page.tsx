@@ -1,8 +1,10 @@
 // #LINK: /app/admin/(protected)/columns/page.tsx
 // #ISSUE: 칼럼 관리 — 등록 / 수정 / 삭제 / 페이지별 필터
 //   · 노출 위치 2종:
-//       (1) 시그니처 페이지  → 카드에 [시술명 + 영문명 + 제목 + 더보기] 전부 나옴
-//       (2) 기기·제품 상세   → 카드에 [제목 + 더보기]만 나옴 (시술명/영문명 칸이 아예 없음)
+//       (1) 시그니처 페이지  → 카드에 [시술명 + (선택)영문명 + 제목 + 더보기] 나옴
+//       (2) 기기·제품 상세   → 카드에는 항상 [제목 + 더보기]만 나옴 (title/en 값이 있어도 무시됨 — DeviceColumnSlider 규칙)
+//   · 영문 이름은 선택사항 — 시술명이 여러 개 겹칠 때 구분용으로만 씀. 안 쓰면 시술명 글자수를 더 넉넉하게 씀
+//   · 시그니처 칼럼 등록 시 "같은 칼럼을 기기상세에도 추가" 체크로 중복 입력 없이 양쪽에 동시 노출 가능
 //   · 글자수·개수 제한은 components/lib/adminConfig.ts 에서 한 번에 관리
 'use client';
 
@@ -15,11 +17,11 @@ import { site } from '@/components/lib/site';
 
 interface ColDoc {
     id: string;
-    title: string; // 시술·기기 이름 (기기상세용이면 빈 문자열)
-    en: string; // 영문 이름 (기기상세용이면 빈 문자열)
+    title: string; // 시술·기기 이름 (기기상세 전용 문서면 빈 문자열)
+    en: string; // 영문 이름 (선택사항, 기기상세 전용 문서면 빈 문자열)
     text: string; // 제목 = 카드 본문
     link: string; // 더보기 URL (비우면 블로그 홈으로)
-    slugs: string[]; // 어디에 노출할지. [시그니처slug] 또는 [기기slug]
+    slugs: string[]; // 어디에 노출할지. 시그니처+기기 동시 노출이면 [시그니처slug, 기기slug]
     order: number; // 그 페이지 안에서 몇 번째로 보일지
 }
 
@@ -34,6 +36,8 @@ const EMPTY_FORM = {
     text: '',
     link: '',
     order: 1,
+    alsoDevice: false, // 기기상세에도 같이 추가할지 (시그니처용일 때만 의미 있음)
+    deviceTarget: DEVICE_OPTIONS[0].slug as string, // 어느 기기에 추가할지
 };
 
 export default function AdminColumnsPage() {
@@ -53,6 +57,9 @@ export default function AdminColumnsPage() {
 
     const isDevice = form.scope === 'device';
 
+    // 영문 이름이 비어있으면 시술명 글자수 제한을 늘려줌 (카드 오른쪽 자리가 통째로 비니까)
+    const titleLimit = form.en.trim() ? LIMITS.columnTitle : LIMITS.columnTitle + 6;
+
     // 비어 있는 가장 빠른 순서 번호를 찾아줌 (1,2,4 가 쓰였으면 → 3)
     const nextFreeOrder = (taken: number[]) => {
         for (let n = 1; n <= taken.length + 1; n += 1) if (!taken.includes(n)) return n;
@@ -61,21 +68,21 @@ export default function AdminColumnsPage() {
 
     // 지금 선택한 페이지(target)에 이미 등록된 칼럼들
     const sameTargetItems = useMemo(
-        () => items.filter((it) => it.slugs[0] === form.target && it.id !== editingId),
+        () => items.filter((it) => it.slugs.includes(form.target) && it.id !== editingId),
         [items, form.target, editingId],
     );
     const usedOrders = sameTargetItems.map((it) => it.order);
     const isDuplicateOrder = usedOrders.includes(form.order);
     const isOverCount = !editingId && sameTargetItems.length >= COUNT_LIMITS.columnPerPage;
 
-    // 목록에 실제로 보여줄 것들 (필터 적용)
+    // 목록에 실제로 보여줄 것들 (필터 적용) — slugs 배열 전체를 훑어서 하나라도 매치되면 노출
     const visibleItems = useMemo(() => {
         return items.filter((it) => {
-            const slug = it.slugs[0];
-            const itemIsDevice = !SIGNATURE_PAGES.some((p) => p.slug === slug);
-            if (filterScope === 'signature' && itemIsDevice) return false;
-            if (filterScope === 'device' && !itemIsDevice) return false;
-            if (filterTarget !== 'all' && slug !== filterTarget) return false;
+            const isSigMatch = it.slugs.some((s) => SIGNATURE_PAGES.some((p) => p.slug === s));
+            const isDeviceMatch = it.slugs.some((s) => !SIGNATURE_PAGES.some((p) => p.slug === s));
+            if (filterScope === 'signature' && !isSigMatch) return false;
+            if (filterScope === 'device' && !isDeviceMatch) return false;
+            if (filterTarget !== 'all' && !it.slugs.includes(filterTarget)) return false;
             return true;
         });
     }, [items, filterScope, filterTarget]);
@@ -86,17 +93,19 @@ export default function AdminColumnsPage() {
         slug;
 
     const startEdit = (it: ColDoc) => {
-        const slug = it.slugs[0];
-        const itemIsDevice = !SIGNATURE_PAGES.some((p) => p.slug === slug);
+        const sigSlug = it.slugs.find((s) => SIGNATURE_PAGES.some((p) => p.slug === s));
+        const deviceSlug = it.slugs.find((s) => !SIGNATURE_PAGES.some((p) => p.slug === s));
         setEditingId(it.id);
         setForm({
-            scope: itemIsDevice ? 'device' : 'signature',
-            target: slug,
+            scope: sigSlug ? 'signature' : 'device',
+            target: sigSlug ?? deviceSlug ?? SIGNATURE_PAGES[0].slug,
             title: it.title ?? '',
             en: it.en ?? '',
             text: it.text ?? '',
             link: it.link ?? '',
             order: it.order ?? 1,
+            alsoDevice: Boolean(sigSlug && deviceSlug),
+            deviceTarget: deviceSlug ?? DEVICE_OPTIONS[0].slug,
         });
         window.scrollTo({ top: 0, behavior: 'smooth' }); // 폼이 위에 있으니 스크롤 올려줌
     };
@@ -107,10 +116,9 @@ export default function AdminColumnsPage() {
     };
 
     const submit = async () => {
-        // 기기상세용 칼럼은 제목만 필수, 시그니처용은 시술명/영문명도 필수
         if (!form.text.trim()) return alert('제목(카드 본문)을 입력하세요.');
-        if (!isDevice && (!form.title.trim() || !form.en.trim()))
-            return alert('시술·기기 이름과 영문 이름을 입력하세요.');
+        // 영문 이름은 선택사항 — 시술명이 여러 개 겹칠 때 구분용으로만 쓰면 됨
+        if (!isDevice && !form.title.trim()) return alert('시술·기기 이름을 입력하세요.');
         if (isDuplicateOrder) return alert(`이 페이지에는 이미 ${form.order}번이 있습니다. 다른 번호를 입력하세요.`);
         if (isOverCount)
             return alert(`한 페이지에 칼럼은 최대 ${COUNT_LIMITS.columnPerPage}개까지만 등록할 수 있습니다.`);
@@ -118,12 +126,13 @@ export default function AdminColumnsPage() {
         setBusy(true);
         try {
             const payload = {
-                title: isDevice ? '' : form.title.trim(), // 기기상세는 카드에 안 나오므로 빈 값으로 저장
+                title: isDevice ? '' : form.title.trim(), // 기기상세 전용 문서는 카드에 어차피 안 나오므로 빈 값
                 en: isDevice ? '' : form.en.trim(),
                 // 줄바꿈(엔터)은 그대로 보존. 단, "\\n" 이라고 글자로 직접 친 경우도 진짜 줄바꿈으로 바꿔줌
                 text: form.text.replace(/\\n/g, '\n'),
                 link: form.link.trim(),
-                slugs: [form.target],
+                // 시그니처 + "기기상세에도 추가" 체크 시 slugs 에 기기 slug 도 같이 넣어 동시 노출
+                slugs: !isDevice && form.alsoDevice ? [form.target, form.deviceTarget] : [form.target],
                 order: form.order,
             };
             if (editingId) {
@@ -172,7 +181,7 @@ export default function AdminColumnsPage() {
                             checked={!isDevice}
                             onChange={() => {
                                 const t = SIGNATURE_PAGES[0].slug;
-                                const taken = items.filter((it) => it.slugs[0] === t).map((it) => it.order);
+                                const taken = items.filter((it) => it.slugs.includes(t)).map((it) => it.order);
                                 setForm({ ...form, scope: 'signature', target: t, order: nextFreeOrder(taken) });
                             }}
                         />
@@ -184,7 +193,7 @@ export default function AdminColumnsPage() {
                             checked={isDevice}
                             onChange={() => {
                                 const t = DEVICE_OPTIONS[0].slug;
-                                const taken = items.filter((it) => it.slugs[0] === t).map((it) => it.order);
+                                const taken = items.filter((it) => it.slugs.includes(t)).map((it) => it.order);
                                 setForm({ ...form, scope: 'device', target: t, order: nextFreeOrder(taken) });
                             }}
                         />
@@ -198,7 +207,7 @@ export default function AdminColumnsPage() {
                         // 페이지를 바꾸면 그 페이지에서 아직 안 쓴 번호를 자동으로 넣어줌 → 중복 입력 자체가 잘 안 생김
                         const nextTarget = e.target.value;
                         const taken = items
-                            .filter((it) => it.slugs[0] === nextTarget && it.id !== editingId)
+                            .filter((it) => it.slugs.includes(nextTarget) && it.id !== editingId)
                             .map((it) => it.order);
                         setForm({ ...form, target: nextTarget, order: nextFreeOrder(taken) });
                     }}
@@ -218,36 +227,71 @@ export default function AdminColumnsPage() {
                     </p>
                 )}
 
-                {/* 시술명 / 영문명 — 시그니처용일 때만 */}
+                {/* 시술명 / 영문명 — 시그니처용일 때만. 영문명은 선택사항 */}
                 {!isDevice && (
-                    <div className="mt-4 flex flex-col gap-4 md:flex-row">
-                        <label className="flex-1 text-small">
-                            <span className="font-semibold text-cocoa">시술·기기 이름</span>
-                            <span className="ml-2 text-caption text-latte">
-                                {form.title.length}/{LIMITS.columnTitle}자
-                            </span>
-                            <input
-                                placeholder="예: 온다리프팅"
-                                value={form.title}
-                                maxLength={LIMITS.columnTitle}
-                                onChange={(e) => setForm({ ...form, title: e.target.value })}
-                                className={`${inputCls} mt-1.5`}
-                            />
-                        </label>
-                        <label className="flex-1 text-small">
-                            <span className="font-semibold text-cocoa">영문 이름</span>
-                            <span className="ml-2 text-caption text-latte">
-                                {form.en.length}/{LIMITS.columnEn}자
-                            </span>
-                            <input
-                                placeholder="예: Onda"
-                                value={form.en}
-                                maxLength={LIMITS.columnEn}
-                                onChange={(e) => setForm({ ...form, en: e.target.value })}
-                                className={`${inputCls} mt-1.5`}
-                            />
-                        </label>
-                    </div>
+                    <>
+                        <div className="mt-4 flex flex-col gap-4 md:flex-row">
+                            <label className="flex-1 text-small">
+                                <span className="font-semibold text-cocoa">시술·기기 이름</span>
+                                <span className="ml-2 text-caption text-latte">
+                                    {form.title.length}/{titleLimit}자
+                                </span>
+                                <input
+                                    placeholder="예: 온다리프팅"
+                                    value={form.title}
+                                    maxLength={titleLimit}
+                                    onChange={(e) => setForm({ ...form, title: e.target.value })}
+                                    className={`${inputCls} mt-1.5`}
+                                />
+                            </label>
+                            <label className="flex-1 text-small">
+                                <span className="font-semibold text-cocoa">영문 이름</span>
+                                <span className="ml-2 text-caption text-latte">(선택)</span>
+                                <span className="ml-2 text-caption text-latte">
+                                    {form.en.length}/{LIMITS.columnEn}자
+                                </span>
+                                <input
+                                    placeholder="예: Onda — 시술명이 겹칠 때만 구분용으로 입력"
+                                    value={form.en}
+                                    maxLength={LIMITS.columnEn}
+                                    onChange={(e) => setForm({ ...form, en: e.target.value })}
+                                    className={`${inputCls} mt-1.5`}
+                                />
+                            </label>
+                        </div>
+
+                        {/* 같은 칼럼을 기기상세에도 한 번에 노출 — 두 번 입력할 필요 없게 */}
+                        <div className="mt-4 rounded-lg bg-cocoa/[0.03] p-4">
+                            <label className="flex items-center gap-2 text-small">
+                                <input
+                                    type="checkbox"
+                                    checked={form.alsoDevice}
+                                    onChange={(e) => setForm({ ...form, alsoDevice: e.target.checked })}
+                                />
+                                <span className="font-semibold text-cocoa">
+                                    같은 칼럼을 기기·제품 상세 페이지에도 추가
+                                </span>
+                            </label>
+                            <p className="mt-1 text-caption text-latte">
+                                같은 내용을 두 번 입력할 필요 없이, 이 시술과 관련된 기기 페이지에도 한 번에
+                                노출시킵니다. (기기상세 화면에는 항상 제목만 보이므로 시술명·영문명은 거기선 안
+                                나옵니다)
+                            </p>
+                            {form.alsoDevice && (
+                                <select
+                                    value={form.deviceTarget}
+                                    onChange={(e) => setForm({ ...form, deviceTarget: e.target.value })}
+                                    className={`${inputCls} mt-2`}
+                                >
+                                    {DEVICE_OPTIONS.map((d) => (
+                                        <option key={d.slug} value={d.slug}>
+                                            {d.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                        </div>
+                    </>
                 )}
 
                 {/* 제목(본문) */}
@@ -379,7 +423,8 @@ export default function AdminColumnsPage() {
                             <p className="font-semibold text-cocoa">
                                 {it.title ? (
                                     <>
-                                        {it.title} <span className="text-latte">({it.en})</span>
+                                        {it.title}
+                                        {it.en && <span className="text-latte"> ({it.en})</span>}
                                     </>
                                 ) : (
                                     <span className="text-latte">[기기상세 · 제목만 노출]</span>
@@ -387,7 +432,7 @@ export default function AdminColumnsPage() {
                             </p>
                             <p className="mt-0.5 whitespace-pre-line text-latte">{it.text}</p>
                             <p className="mt-1 text-caption text-latte">
-                                {targetLabel(it.slugs[0])} 페이지 · {it.order}번
+                                {it.slugs.map((s) => targetLabel(s)).join(' · ')} 페이지 · {it.order}번
                                 {!it.link && ' · URL 미입력(블로그 홈으로 연결)'}
                             </p>
                         </div>

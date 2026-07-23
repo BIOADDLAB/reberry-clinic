@@ -1,4 +1,6 @@
-// #ISSUE: 좌측 정렬 고정(1개여도 왼쪽), 영역 안에서만 스와이프(우측 풀블리드 아님), 폭이 모자라면 자동 슬라이더
+// #LINK: /components/ui/DeviceColumnSlider.tsx
+// #ISSUE: 기기·제품 상세 전용 — 시안: 의사사진X / 카드에는 항상 제목+더보기만 (title/en 값이 있어도 무시)
+//         좌측 정렬 고정(1개여도 왼쪽), 영역 안에서만 스와이프(우측 풀블리드 아님), 폭이 모자라면 자동 슬라이더
 
 'use client';
 
@@ -15,6 +17,7 @@ export default function DeviceColumnSlider({ items, slug }: { items: Col[]; slug
     const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
         useOverflowSlider<HTMLDivElement>(resolvedItems.length, 344, 24);
 
+    // 정적/DB 어느 쪽에도 칼럼이 없으면 이 영역 전체를 숨김 (훅 호출 이후에 있어야 함)
     if (resolvedItems.length === 0) return null;
 
     return (
@@ -27,6 +30,8 @@ export default function DeviceColumnSlider({ items, slug }: { items: Col[]; slug
 
             {/* 카드 — 좌측 정렬, 영역 안에서만 스크롤 */}
             <div
+                role="group"
+                aria-label="기기 관련 칼럼 목록"
                 ref={ref}
                 {...dragProps}
                 onScroll={onScroll}
@@ -41,14 +46,9 @@ export default function DeviceColumnSlider({ items, slug }: { items: Col[]; slug
                         className="flex h-[239px] w-[344px] shrink-0 snap-start flex-col border border-cocoa bg-transparent"
                     >
                         <div className="flex flex-1 flex-col px-7.5 pt-9 pb-6">
-                            {/* 기기·제품 상세 칼럼은 관리자에서 시술명/영문명을 비워서 저장함 →
-    값이 있을 때만 헤더를 렌더링해서, 비어 있으면 제목+더보기만 나오게 함 */}
-                            {(c.title || c.en) && (
-                                <div className="flex items-baseline justify-between gap-3 border-t-[2px] border-b border-cocoa p-2.5">
-                                    <h3 className="min-w-0 text-h3 font-bold">{c.title}</h3>
-                                    <span className="font-display text-h3">{c.en}</span>
-                                </div>
-                            )}
+                            {/* #ISSUE: 기기·제품 상세 페이지는 원본 데이터에 title/en 이 들어있어도
+                                (시그니처 칼럼과 같이 공유되는 문서일 수 있음) 무조건 제목만 나오게 고정.
+                                이 화면의 규칙이라 컴포넌트 자체에서 막음 — 관리자에서 뭘 입력하든 영향 없음 */}
                             <p className="mt-4 line-clamp-2 min-h-[3em] whitespace-pre-line text-lead leading-[30px]!">
                                 {c.text}
                             </p>
