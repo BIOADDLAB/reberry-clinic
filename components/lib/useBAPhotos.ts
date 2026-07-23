@@ -12,6 +12,7 @@ interface BAPhotoDoc {
     slug: string; // 어느 시그니처 페이지인지 pigment/lifting/booster/acne/redness
     before: string;
     after: string;
+    order?: number; // 해당 시그니처 페이지 안에서의 순서 (관리자에서 지정)
     main?: number;
 }
 
@@ -35,6 +36,7 @@ export function useBAPhotos(): BAPhoto[] {
                         before: data.before,
                         after: data.after,
                         ...(typeof data.main === 'number' ? { main: data.main } : {}),
+                        ...(typeof data.order === 'number' ? { order: data.order } : {}),
                     };
                 });
 
@@ -55,4 +57,5 @@ export function useBAPhotos(): BAPhoto[] {
 export const filterMainBAPhotos = (photos: BAPhoto[]) =>
     photos.filter((b): b is BAPhoto & { main: number } => typeof b.main === 'number').sort((a, b) => a.main - b.main);
 
-export const filterBAPhotosBySlug = (photos: BAPhoto[], slug: string) => photos.filter((b) => b.slug === slug);
+export const filterBAPhotosBySlug = (photos: BAPhoto[], slug: string) =>
+    photos.filter((b) => b.slug === slug).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));

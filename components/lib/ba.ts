@@ -6,6 +6,7 @@ export interface BAPhoto {
     label: string;
     before: string;
     after: string;
+    order?: number; // 시그니처 페이지 안에서의 노출 순서 (관리자에서 지정, 없으면 등록순)
     main?: number; // 메인페이지(BASlider) 노출 순서. 1,2,3... 숫자 있으면 노출 + 그 순서로 정렬, 없으면(undefined) 메인에 미노출
 }
 
@@ -23,6 +24,7 @@ code 매핑 & 파일명 예시
 카테고리별 장수는 CATEGORIES 배열의 count 값만 수정하면 됨. 10장 넘는 곳은
 count를 그 개수로 바꾸고, 실제 파일도 그 개수만큼 넣으면 끝.
 */
+
 const code: Record<string, string> = {
     lifting: 'vlift',
     booster: 'vboost',
