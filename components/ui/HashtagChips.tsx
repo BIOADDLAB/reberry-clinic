@@ -32,7 +32,7 @@ function BoxChip({ c, i, tone }: { c: Chip; i: number; tone: ChipTone }) {
     return (
         <RevealItem
             className={cn(
-                'w-fit max-w-[78%] rounded-[20px] px-4 py-2.5 text-medium font-medium leading-snug sm:px-6 sm:py-3 sm:text-lead',
+                'w-fit max-w-[78%] rounded-[20px] px-3.75 py-2.5 text-medium font-medium leading-snug sm:px-6 sm:py-3 sm:text-lead',
                 c.strong ? tones[tone].strong : tones[tone].base,
                 i % 2 === 0 ? 'self-start rounded-bl-[5px]' : 'self-end rounded-br-[5px]',
             )}
@@ -41,7 +41,7 @@ function BoxChip({ c, i, tone }: { c: Chip; i: number; tone: ChipTone }) {
                 className={cn('whitespace-pre-line', !c.wrap && 'text-balance')}
                 style={c.wrap ? { maxWidth: `${c.wrap}px` } : undefined}
             >
-                <span className="opacity-50"># </span>
+                <span className=""># </span>
                 {c.text}
             </span>
         </RevealItem>
@@ -108,7 +108,7 @@ export default function HashtagChips({ items, tone = 'sig', rows }: Props) {
             )}
 
             {/* lg 미만 — 2열 그리드 박스형 */}
-            <RevealGroup className="mx-auto flex w-full max-w-[300px] flex-col gap-2.5 sm:max-w-[520px] md:max-w-[640px] lg:hidden">
+            <RevealGroup className="mx-auto flex w-full max-w-[300px] flex-col gap-2.5 sm:max-w-[420px] md:max-w-[440px] lg:hidden">
                 {items.map((c, i) => (
                     <BoxChip key={c.text} c={c} i={i} tone={tone} />
                 ))}
