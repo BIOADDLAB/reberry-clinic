@@ -21,7 +21,7 @@ export default function DeviceColumnSlider({ items, slug }: { items: Col[]; slug
     if (resolvedItems.length === 0) return null;
 
     return (
-        <div>
+        <div className="mt-10">
             {/* 라벨 — 카드 위 좌측 */}
             <p className="text-small font-bold text-cocoa lg:text-medium lg:font-normal">
                 닥터 파이톤 <span className="font-display">Pytone</span>
