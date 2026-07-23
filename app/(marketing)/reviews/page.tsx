@@ -5,8 +5,6 @@ import Image from 'next/image';
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import BAPhotoModal from '@/components/ui/BAPhotoModal';
-import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup';
-import Reveal from '@/components/motion/Reveal';
 import type { BAPhoto } from '@/components/lib/ba';
 import { useBAPhotos } from '@/components/lib/useBAPhotos';
 
@@ -33,7 +31,7 @@ const getMobileServerSnapshot = () => false;
 export default function ReviewsPage() {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [page, setPage] = useState(1);
-    const photos = useBAPhotos(); // 정적 폴백으로 시작 → Firestore 도착하면 자동 교체
+    const photos = useBAPhotos();
     const [shuffled, setShuffled] = useState<BAPhoto[]>(photos);
     const [selectedPhoto, setSelectedPhoto] = useState<BAPhoto | null>(null);
     const topRef = useRef<HTMLDivElement>(null);
@@ -41,12 +39,18 @@ export default function ReviewsPage() {
     const isMobile = useSyncExternalStore(subscribeMobile, getMobileSnapshot, getMobileServerSnapshot);
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- 서버/클라 결과가 달라야 하는 랜덤 셔플
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setShuffled(shuffle(photos));
     }, [photos]);
 
+    const isFirstRender = useRef(true);
     useEffect(() => {
-        topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // 처음 들어왔을 때는 스크롤 안 함(히어로부터 보이게) → 페이지 넘길 때만 화면 맨 위로
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [page]);
 
     const totalPages = Math.ceil(shuffled.length / PER_PAGE);
@@ -55,9 +59,6 @@ export default function ReviewsPage() {
 
     const goPrev = () => setPage((p) => Math.max(1, p - 1));
     const goNext = () => setPage((p) => Math.min(totalPages, p + 1));
-
-    const Group = isMobile ? 'div' : RevealGroup;
-    const Item = isMobile ? 'div' : RevealItem;
 
     return (
         <>
@@ -76,16 +77,14 @@ export default function ReviewsPage() {
                 <div className="container-site relative">
                     <div ref={topRef} />
 
-                    <Reveal className="text-center">
+                    {/* #STYLE: 불필요한 Reveal 애니메이션 컴포넌트들을 제거하고 기본 div 요소로 대체 */}
+                    <div className="text-center">
                         <h2 className="font-display text-h2 tracking-[0.06em]">Before &amp; After</h2>
-                    </Reveal>
+                    </div>
 
-                    <Group
-                        key={isMobile ? 'mobile' : `desktop-${page}`}
-                        className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:mt-21 lg:grid-cols-4"
-                    >
+                    <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:mt-21 lg:grid-cols-4">
                         {currentPhotos.map((r) => (
-                            <Item key={r.id} className="bg-sand p-2.5 rounded-[4px] shadow-sm">
+                            <div key={r.id} className="bg-sand p-2.5 rounded-[4px] shadow-sm">
                                 <div
                                     onClick={() => setSelectedPhoto(r)}
                                     className="cursor-pointer transition-transform hover:scale-[1.02]"
@@ -130,11 +129,11 @@ export default function ReviewsPage() {
                                         RE:BERRY
                                     </p>
                                 </div>
-                            </Item>
+                            </div>
                         ))}
-                    </Group>
+                    </div>
 
-                    <Reveal className="mt-21 flex items-center justify-center gap-6">
+                    <div className="mt-21 flex items-center justify-center gap-6">
                         <button
                             onClick={goPrev}
                             disabled={page === 1}
@@ -163,7 +162,7 @@ export default function ReviewsPage() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                             </svg>
                         </button>
-                    </Reveal>
+                    </div>
                 </div>
             </section>
 
