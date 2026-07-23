@@ -62,7 +62,7 @@ export default function AdminBAPage() {
     };
 
     const currentPage = SIGNATURE_PAGES.find((p) => p.slug === form.slug)!;
-    const finalLabel = form.useCustomLabel ? form.customLabel.trim() : `${currentPage.label}치료`;
+    const finalLabel = form.useCustomLabel ? form.customLabel.trim() : `${currentPage.label}`;
 
     // 같은 카테고리에 등록된 사진들 (수정 중인 자기 자신은 제외)
     const sameSlugItems = useMemo(
