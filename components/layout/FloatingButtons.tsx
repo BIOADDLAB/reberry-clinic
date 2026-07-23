@@ -10,6 +10,7 @@ const buttons = [
     { icon: '/images/i-flo-01.svg', label: '상담예약', href: site.reservationPhone },
     { icon: '/images/i-flo-02.svg', label: '유투브', href: site.youtube },
     { icon: '/images/i-flo-03.svg', label: '문의하기', href: site.kakao },
+    { icon: '/images/i-flo-04.svg', label: '네이버', href: site.naver },
 ];
 
 export default function FloatingButtons() {

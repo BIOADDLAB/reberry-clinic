@@ -15,6 +15,7 @@ export const site = {
     kakao: 'https://pf.kakao.com/_khIcn',
     youtube: 'https://www.youtube.com/@%EB%A7%88%ED%8F%AC%ED%94%BC%EB%B6%80%EC%99%95',
     blog: 'https://blog.naver.com/drpyton',
+    naver: 'https://map.naver.com/p/entry/place/2016111974?c=15.00,0,0,0,dh&isCorrectAnswer=true&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607231740%26locale%3Dko%26svcName%3Dmap_pcv5',
     hours: [
         { label: '평 일', value: '10:30 - 20:30' },
         { label: '토요일', value: '09:00 - 15:30' },
