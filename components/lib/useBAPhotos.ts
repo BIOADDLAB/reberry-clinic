@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
-import { baPhotos, type BAPhoto } from './ba';
+import type { BAPhoto } from './ba';
 
 // Firestore 문서 원본 모양 — 관리자 화면(app/admin/(protected)/ba/page.tsx)이 저장하는 필드와 반드시 일치해야 함
 interface BAPhotoDoc {
@@ -16,8 +16,11 @@ interface BAPhotoDoc {
     main?: number;
 }
 
+// #ISSUE: 예전에는 정적 데이터(public/images/ba)를 먼저 보여주고 Firestore 가 오면 교체했지만,
+// 이제 전후사진은 100% 관리자에서 등록한 것만 쓰기로 해서 정적 폴백을 없앰.
+// → 관리자에 등록된 게 없으면 화면에 아무것도 안 나오는 게 정상 동작임.
 export function useBAPhotos(): BAPhoto[] {
-    const [photos, setPhotos] = useState<BAPhoto[]>(baPhotos);
+    const [photos, setPhotos] = useState<BAPhoto[]>([]);
 
     useEffect(() => {
         let cancelled = false;
@@ -25,7 +28,7 @@ export function useBAPhotos(): BAPhoto[] {
         (async () => {
             try {
                 const snap = await getDocs(collection(db, 'baPhotos'));
-                if (cancelled || snap.empty) return;
+                if (cancelled) return;
 
                 const fromFirestore: BAPhoto[] = snap.docs.map((docSnap) => {
                     const data = docSnap.data() as BAPhotoDoc;

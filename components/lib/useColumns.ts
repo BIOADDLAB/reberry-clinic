@@ -14,8 +14,12 @@ interface ColDoc {
     order?: number;
 }
 
+// #ISSUE: 칼럼도 전후사진과 마찬가지로 관리자에서 등록한 것만 노출하기로 함.
+//         두 번째 인자(staticFallback)는 더 이상 화면에 쓰지 않지만,
+//         기존 호출부를 그대로 두려고 인자는 남겨둠(무시됨).
 export function useColumnsBySlug(slug: string, staticFallback: Col[]): Col[] {
-    const [items, setItems] = useState<Col[]>(staticFallback);
+    void staticFallback; // 의도적으로 사용하지 않음 (관리자 데이터만 노출)
+    const [items, setItems] = useState<Col[]>([]);
 
     useEffect(() => {
         let cancelled = false;
@@ -24,7 +28,7 @@ export function useColumnsBySlug(slug: string, staticFallback: Col[]): Col[] {
             try {
                 const q = query(collection(db, 'columns'), where('slugs', 'array-contains', slug), orderBy('order'));
                 const snap = await getDocs(q);
-                if (cancelled || snap.empty) return; // Firestore 에 이 slug 로 등록된 게 없으면 정적 데이터 유지
+                if (cancelled) return;
 
                 const fromFirestore: Col[] = snap.docs.map((docSnap) => {
                     const data = docSnap.data() as ColDoc;
