@@ -85,11 +85,11 @@ export default async function SolutionDetailPage({ params }: Params) {
                         </Reveal>
                     </div>
 
-                    {itemColumns.length > 0 && (
-                        <Reveal className="mt-10 lg:mt-11.25">
-                            <DeviceColumnSlider items={itemColumns} slug={item} />
-                        </Reveal>
-                    )}
+                    {/* #ISSUE: 예전에는 정적 데이터(itemColumns)가 있을 때만 이 영역을 그렸는데,
+    그러면 정적 데이터에 없는 기기(예: 쥬베룩)는 관리자에 칼럼을 등록해도
+    컴포넌트 자체가 안 만들어져서 Firestore 를 읽어볼 기회조차 없었음.
+    → 항상 렌더하고, 보여줄 게 하나도 없으면 컴포넌트 안에서 스스로 사라지게 함 */}
+                    <DeviceColumnSlider items={itemColumns} slug={item} />
                 </div>
             </section>
 
