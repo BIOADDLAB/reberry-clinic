@@ -5,9 +5,9 @@ import type { Chip } from '@/components/lib/treatments';
 export type ChipTone = 'sig' | 'skin' | 'aging';
 
 const tones: Record<ChipTone, { base: string; strong: string }> = {
-    sig: { base: 'bg-cream text-cocoa', strong: 'bg-cocoa text-cream' },
-    skin: { base: 'bg-cream text-cocoa', strong: 'bg-cocoa text-sand' },
-    aging: { base: 'bg-cream text-cocoa', strong: 'bg-sand text-cocoa' },
+    sig: { base: 'border border-sand text-cocoa', strong: 'bg-sand text-cocoa' },
+    skin: { base: 'border border-cocoa text-cocoa', strong: 'bg-cocoa text-cream' },
+    aging: { base: 'border border-cream text-cream', strong: 'bg-sand text-cocoa' },
 };
 
 function PillChip({ c, tone }: { c: Chip; tone: ChipTone }) {
@@ -20,7 +20,7 @@ function PillChip({ c, tone }: { c: Chip; tone: ChipTone }) {
                 )}
             >
                 <span className="line-clamp-2">
-                    <span className="opacity-50"># </span>
+                    <span className=""># </span>
                     {c.text}
                 </span>
             </span>

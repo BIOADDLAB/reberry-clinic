@@ -20,15 +20,14 @@ export function SpinEmblem() {
 export function FloatingCream() {
     return (
         <motion.span
-            className="absolute hidden origin-bottom-right transition-transform min-[1100px]:-bottom-9 min-[1100px]:-right-10 min-[1100px]:block"
+            className="absolute hidden origin-bottom-right transition-transform min-[1230px]:-bottom-12 min-[1230px]:-right-16 min-[1230px]:block"
             animate={{ y: [0, -10, 0], rotate: [0, -4, 0] }}
             transition={{ duration: 6.5, ease: 'easeInOut', repeat: Infinity }}
         >
-            <Image src="/images/i-cream.png" alt="" width={130} height={100} aria-hidden />
+            <Image src="/images/i-cream.png" alt="" width={170} height={220} aria-hidden />
         </motion.span>
     );
 }
-
 export function TwoDots({ light }: { light?: boolean } = {}) {
     return (
         <div className="flex flex-col items-center gap-2" aria-hidden>

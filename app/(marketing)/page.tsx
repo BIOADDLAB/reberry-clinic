@@ -17,7 +17,9 @@ export default function Home() {
     return (
         <>
             {/* 메인 히어로 영역 */}
-            <section className="relative flex h-[70vh] min-h-[600px] max-h-[850px] w-full items-center justify-center overflow-hidden text-center text-cream">
+            {/* #ISSUE: 배경 높이 디자인팀 의견 반영 100vh로 변경 - 기존코드는 임시로 주석처리 */}
+            {/* <section className="relative flex h-[70vh] min-h-[600px] max-h-[850px] w-full items-center justify-center overflow-hidden text-center text-cream"> */}
+            <section className="relative flex h-screen w-full items-center justify-center overflow-hidden text-center text-cream">
                 {/* #TODO: 이미지 최적화 개선 */}
                 <Image
                     src={HERO_IMG}
