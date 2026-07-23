@@ -1,5 +1,6 @@
-// #LINK: /app/admin/(protected)/layout.tsx
-// #ISSUE: 실제 접근 차단은 proxy.ts 가 처리 — 여기는 로그인 후 대시보드 셸(사이드바+본문)만 담당
+/* #ISSUE: 관리자 공통 셸. 실제 접근 차단은 proxy.ts 가 처리하고 여기는 화면(네비+본문)만 담당
+    반응형: 모바일에서는 사이드바가 위쪽 가로 메뉴로 바뀜 (md 이상에서만 왼쪽 세로 사이드바) */
+
 import Link from 'next/link';
 import { logoutAdmin } from '../actions';
 
@@ -10,25 +11,36 @@ const NAV = [
 
 export default function AdminProtectedLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex min-h-screen bg-[#F5F2EC]">
-            {/* 사이드바 */}
-            <aside className="flex w-60 shrink-0 flex-col bg-cocoa text-cream">
-                <div className="px-6 py-7">
-                    <p className="font-display text-caption tracking-[0.2em] text-cream/60">RE:BERRY</p>
-                    <p className="mt-1 text-lead font-bold">관리자</p>
+        <div className="flex min-h-screen flex-col bg-[#F5F2EC] md:flex-row">
+            {/* 사이드바 (모바일에서는 상단 바) */}
+            <aside className="flex shrink-0 flex-col bg-cocoa text-cream md:w-60">
+                <div className="flex items-center justify-between px-5 py-4 md:block md:px-6 md:py-7">
+                    <div>
+                        <p className="font-display text-caption tracking-[0.2em] text-cream/60">RE:BERRY</p>
+                        <p className="mt-0.5 text-lead font-bold md:mt-1">관리자</p>
+                    </div>
+                    {/* 모바일에서는 로그아웃을 상단 오른쪽에 */}
+                    <form action={logoutAdmin} className="md:hidden">
+                        <button type="submit" className="text-small text-cream/60">
+                            로그아웃
+                        </button>
+                    </form>
                 </div>
-                <nav className="flex flex-1 flex-col gap-1 px-3">
+
+                <nav className="flex gap-1 overflow-x-auto px-3 pb-3 md:flex-1 md:flex-col md:overflow-visible md:pb-0">
                     {NAV.map((n) => (
                         <Link
                             key={n.href}
                             href={n.href}
-                            className="rounded-lg px-3 py-2.5 text-medium text-cream/85 transition-colors hover:bg-cream/10 hover:text-cream"
+                            className="shrink-0 rounded-lg px-3 py-2.5 text-small text-cream/85 transition-colors hover:bg-cream/10 hover:text-cream"
                         >
                             {n.label}
                         </Link>
                     ))}
                 </nav>
-                <form action={logoutAdmin} className="px-3 pb-6">
+
+                {/* 데스크탑에서만 하단 로그아웃 */}
+                <form action={logoutAdmin} className="hidden px-3 pb-6 md:block">
                     <button
                         type="submit"
                         className="w-full rounded-lg px-3 py-2.5 text-left text-small text-cream/60 transition-colors hover:bg-cream/10 hover:text-cream"
@@ -38,8 +50,7 @@ export default function AdminProtectedLayout({ children }: { children: React.Rea
                 </form>
             </aside>
 
-            {/* 본문 */}
-            <main className="flex-1 px-10 py-9">{children}</main>
+            <main className="flex-1 px-4 py-6 md:px-10 md:py-9">{children}</main>
         </div>
     );
 }
