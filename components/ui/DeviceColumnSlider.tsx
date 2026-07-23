@@ -12,9 +12,6 @@ import { useColumnsBySlug } from '@/components/lib/useColumns';
 export default function DeviceColumnSlider({ items, slug }: { items: Col[]; slug: string }) {
     const resolvedItems = useColumnsBySlug(slug, items);
 
-    // 정적/DB 어느 쪽에도 칼럼이 없으면 이 영역 전체를 숨김
-    if (resolvedItems.length === 0) return null;
-
     const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
         useOverflowSlider<HTMLDivElement>(resolvedItems.length, 344, 24);
 
