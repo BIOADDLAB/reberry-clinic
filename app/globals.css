@@ -158,6 +158,72 @@ body {
     overflow: hidden;
 }
 
+/* 피부칼럼 관리자 리치 에디터 */
+.skin-column-editor-content {
+    color: var(--color-cocoa);
+    line-height: 1.8;
+}
+.skin-column-editor-content > * + * {
+    margin-top: 0.85rem;
+}
+.skin-column-editor-content.ProseMirror h2 {
+    display: block;
+    margin-top: 1.8rem;
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    line-height: 1.4;
+}
+.skin-column-editor-content.ProseMirror h3 {
+    display: block;
+    margin-top: 1.5rem;
+    font-size: 1.35rem !important;
+    font-weight: 700 !important;
+    line-height: 1.45;
+}
+.skin-column-editor-content.ProseMirror ul,
+.skin-column-editor-content.ProseMirror ol {
+    margin-block: 0.85rem;
+    padding-left: 1.75rem !important;
+    list-style-position: outside !important;
+}
+.skin-column-editor-content.ProseMirror ul {
+    list-style-type: disc !important;
+}
+.skin-column-editor-content.ProseMirror ol {
+    list-style-type: decimal !important;
+}
+.skin-column-editor-content.ProseMirror li {
+    display: list-item;
+    margin-block: 0.3rem;
+}
+.skin-column-editor-content.ProseMirror li > p {
+    margin: 0;
+}
+.skin-column-editor-content blockquote {
+    border-left: 3px solid var(--color-sand);
+    padding: 0.4rem 0 0.4rem 1rem;
+    color: var(--color-latte);
+}
+.skin-column-editor-content a {
+    color: var(--color-latte);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+}
+.skin-column-editor-content img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1.25rem auto;
+    border-radius: 0.75rem;
+}
+.skin-column-editor-content p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    color: color-mix(in srgb, var(--color-latte) 55%, transparent);
+    pointer-events: none;
+}
+
 /* ─────────────────────────────────────────────
    언어별 스타일 제어
    LangAttribute가 <html data-lang="ko|en|ja|zh-CN|ar">를 심어줌.
