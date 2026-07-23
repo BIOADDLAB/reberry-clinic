@@ -43,17 +43,18 @@ export default function Home() {
                             SIGNATURE
                         </Link>
                     </div>
-
-                    {/* 서브히어로의 스크롤 안내 아이콘을 여기로 — 모바일만, 시그니처 버튼 바로 아래 자연스러운 흐름으로 */}
-                    <div className="mt-14 flex flex-col items-center gap-1.5 md:hidden">
-                        <div className="flex h-8 w-5 items-start justify-center rounded-full border-2 border-white p-1">
-                            <div className="h-1.5 w-0.5 rounded-full bg-white animate-wheel" />
-                        </div>
-                        <img src="/images/i-arr-down-03.svg" alt="" className="w-3" aria-hidden />
-                    </div>
                 </Reveal>
 
-                {/* 태블릿·PC — 기존 scroll-mouse 그대로, 모바일에서만 숨김 */}
+                <div className="absolute bottom-16 left-1/2 -translate-x-1/2 md:hidden">
+                    <div className="flex flex-col items-center gap-1.5">
+                        <div className="flex h-8 w-5 items-start justify-center rounded-full border-[1.5px] border-white p-1">
+                            <div className="h-1.5 w-0.5 rounded-full bg-white animate-wheel" />
+                        </div>
+                        <img src="/images/i-arr-down-03.svg" alt="" className="w-2" aria-hidden />
+                    </div>
+                </div>
+
+                {/* 태블릿·PC — 기존 scroll-mouse 그대로 */}
                 <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 md:block">
                     <div className="scroll-mouse" aria-hidden />
                 </div>
