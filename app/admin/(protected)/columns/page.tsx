@@ -158,8 +158,8 @@ export default function AdminColumnsPage() {
 
     return (
         <div className="mx-auto max-w-4xl">
-            <h1 className="text-h2 font-bold text-cocoa">칼럼 관리</h1>
-            <p className="mt-1 text-small text-latte">닥터 파이톤 칼럼 카드를 등록·수정합니다.</p>
+            <h1 className="text-h2 font-bold text-cocoa">블로그 연결 관리</h1>
+            <p className="mt-1 text-small text-latte">닥터 파이톤 블로그 연결 카드를 등록·수정합니다.</p>
 
             {/* ══════════ 등록/수정 폼 ══════════ */}
             <div className="mt-6 rounded-2xl bg-white p-5 shadow-[0_2px_20px_rgba(69,54,45,0.06)] md:p-7">

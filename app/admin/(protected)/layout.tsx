@@ -6,7 +6,7 @@ import { logoutAdmin } from '../actions';
 
 const NAV = [
     { href: '/admin/ba', label: '전후사진 관리' },
-    { href: '/admin/columns', label: '칼럼 관리' },
+    { href: '/admin/columns', label: '블로그 연결 관리' },
     { href: '/admin/skin-columns', label: '피부칼럼 관리' },
 ];
 
