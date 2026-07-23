@@ -1,5 +1,3 @@
-// #LINK: /components/ui/DeviceColumnSlider.tsx
-// #STYLE: 기기상세 전용 — 시안: 의사사진X / 라벨은 카드 위 좌측 / 페이저(← → n/m)는 카드 아래 우측
 // #ISSUE: 좌측 정렬 고정(1개여도 왼쪽), 영역 안에서만 스와이프(우측 풀블리드 아님), 폭이 모자라면 자동 슬라이더
 
 'use client';
@@ -43,10 +41,14 @@ export default function DeviceColumnSlider({ items, slug }: { items: Col[]; slug
                         className="flex h-[239px] w-[344px] shrink-0 snap-start flex-col border border-cocoa bg-transparent"
                     >
                         <div className="flex flex-1 flex-col px-7.5 pt-9 pb-6">
-                            <div className="flex items-baseline justify-between gap-3 border-t-[2px] border-b border-cocoa p-2.5">
-                                <h3 className="min-w-0 text-h3 font-bold">{c.title}</h3>
-                                <span className="font-display text-h3">{c.en}</span>
-                            </div>
+                            {/* 기기·제품 상세 칼럼은 관리자에서 시술명/영문명을 비워서 저장함 →
+    값이 있을 때만 헤더를 렌더링해서, 비어 있으면 제목+더보기만 나오게 함 */}
+                            {(c.title || c.en) && (
+                                <div className="flex items-baseline justify-between gap-3 border-t-[2px] border-b border-cocoa p-2.5">
+                                    <h3 className="min-w-0 text-h3 font-bold">{c.title}</h3>
+                                    <span className="font-display text-h3">{c.en}</span>
+                                </div>
+                            )}
                             <p className="mt-4 line-clamp-2 min-h-[3em] whitespace-pre-line text-lead leading-[30px]!">
                                 {c.text}
                             </p>
