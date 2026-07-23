@@ -29,7 +29,7 @@ export const LIMITS = {
 // ── 개수 제한
 export const COUNT_LIMITS = {
     columnPerPage: 8, // 한 페이지(시그니처 1개 또는 기기 1개)당 칼럼 최대
-    baPerPage: 12, // 시그니처 페이지 1개당 전후사진 최대
+    baPerPage: 14, // 시그니처 페이지 1개당 전후사진 최대
     baMain: 10, // 메인페이지에 노출할 전후사진 최대
 } as const;
 
