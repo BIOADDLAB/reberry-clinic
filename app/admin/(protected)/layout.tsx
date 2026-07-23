@@ -13,7 +13,7 @@ export default function AdminProtectedLayout({ children }: { children: React.Rea
     return (
         <div className="flex min-h-screen flex-col bg-[#F5F2EC] md:flex-row">
             {/* 사이드바 (모바일에서는 상단 바) */}
-            <aside className="flex shrink-0 flex-col bg-cocoa text-cream md:w-60">
+            <aside className="flex shrink-0 flex-col bg-cocoa text-cream md:sticky md:top-0 md:h-dvh md:w-60">
                 <div className="flex items-center justify-between px-5 py-4 md:block md:px-6 md:py-7">
                     <div>
                         <p className="font-display text-caption tracking-[0.2em] text-cream/60">RE:BERRY</p>
