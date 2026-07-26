@@ -1,0 +1,78 @@
+export const site = {
+    name: '리베리의원',
+    branch: '리베리의원 마포점',
+    nameEn: 'RE:BERRY',
+    director: '유선민',
+    tel: '02-2039-3777',
+    phone: '02 . 2039 . 3777',
+    phoneLink: 'tel:0220393777',
+    bizNo: '876-48-01029',
+    address: '서울특별시 마포구 월드컵로 200 11층',
+    addressDetail: '1101, 1102호 (성산동, SJ라벨라 상암)',
+    subway: '6호선 마포구청역 1번 출구 도보 5분 이내',
+    parking: ['건물 뒷편 주차장 · 주차권 수령 후', '지하 주차, 전기차 주차 제한'],
+    reservationPhone: 'tel:050713643777',
+    kakao: 'https://pf.kakao.com/_khIcn',
+    youtube: 'https://www.youtube.com/@%EB%A7%88%ED%8F%AC%ED%94%BC%EB%B6%80%EC%99%95',
+    blog: 'https://blog.naver.com/drpyton',
+    naver: 'https://map.naver.com/p/entry/place/2016111974?c=15.00,0,0,0,dh&isCorrectAnswer=true&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607231740%26locale%3Dko%26svcName%3Dmap_pcv5',
+    hours: [
+        { label: '평 일', value: '10:30 - 20:30' },
+        { label: '토요일', value: '09:00 - 15:30' },
+    ],
+};
+
+export const nav = [
+    {
+        label: '리베리의원',
+        en: 'ABOUT',
+        href: '/about',
+        children: [
+            { label: 'WE ARE RE:BERRY', en: 'WE ARE RE:BERRY', href: '/about' },
+            { label: '의료진 소개', en: 'Doctors', href: '/doctors' },
+        ],
+    },
+    {
+        label: '시그니처시술',
+        en: 'SIGNATURE',
+        href: '/treatments/signature/pigment',
+        children: [
+            { label: '색소', en: 'Pigmentation', href: '/treatments/signature/pigment' },
+            { label: '리프팅', en: 'Lifting', href: '/treatments/signature/lifting' },
+            { label: '부스터', en: 'Booster', href: '/treatments/signature/booster' },
+            { label: '여드름', en: 'Acne', href: '/treatments/signature/acne' },
+            { label: '홍조', en: 'Redness', href: '/treatments/signature/redness' },
+        ],
+    },
+    {
+        label: '피부교정',
+        en: 'SKIN CARE',
+        href: '/treatments/skin/pigment',
+        children: [
+            { label: '색소', en: 'Pigmentation', href: '/treatments/skin/pigment' },
+            { label: '여드름', en: 'Acne', href: '/treatments/skin/acne' },
+            { label: '홍조', en: 'Redness', href: '/treatments/skin/redness' },
+            { label: '스킨부스터', en: 'Skin Booster', href: '/treatments/skin/skinbooster' },
+            { label: '문신제거', en: 'Tattoo Removal', href: '/treatments/skin/tattoo-removal' },
+            { label: '흉터·모공·피부결', en: 'Scar · Pore', href: '/treatments/skin/scar-pore' },
+            { label: '제모', en: 'Hair Removal', href: '/treatments/skin/hair-removal' },
+            { label: '관리', en: 'Medical Care', href: '/treatments/skin/care' },
+        ],
+    },
+    {
+        label: '안티에이징',
+        en: 'ANTI-AGING',
+        href: '/treatments/aging/laser-lifting',
+        children: [
+            { label: '레이저리프팅', en: 'Laser Lifting', href: '/treatments/aging/laser-lifting' },
+            { label: '실리프팅', en: 'Thread Lifting', href: '/treatments/aging/thread-lifting' },
+            { label: '필러', en: 'Filler', href: '/treatments/aging/filler' },
+            { label: '보톡스', en: 'Botox', href: '/treatments/aging/botox' },
+            { label: '얼굴 체형 관리', en: 'Face Contouring', href: '/treatments/aging/face-contour' },
+            { label: '수액·주사', en: 'IV Therapy', href: '/treatments/aging/iv-therapy' },
+        ],
+    },
+    { label: '시술결과', en: 'RESULTS', href: '/reviews' },
+    { label: '이벤트', en: 'EVENT', href: '/events' },
+    { label: '피부칼럼', en: 'COLUMN', href: '/column' },
+];

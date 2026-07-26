@@ -1,0 +1,150 @@
+{
+  "meta": {
+    "title": "RE:BERRY Clinic | RE:BERRY",
+    "titleTemplate": "%s | RE:BERRY",
+    "description": "Your beauty doctor, RE:BERRY. With sincere care rather than commercial treatment, we design your beauty. RE:BERRY Clinic, a dermatology clinic near Mapogu-office Station.",
+    "ogDescription": "Your beauty doctor, RE:BERRY. RE:BERRY Clinic near Mapogu-office Station.",
+    "ogLocale": "en_US"
+  },
+  "common": {
+    "beforeAfter": "Before & After",
+    "login": "Login",
+    "more": "See more",
+    "prev": "Previous",
+    "next": "Next",
+    "close": "Close",
+    "collapse": "Show less",
+    "doctorLabel": "<brand>Dr. Pytone</brand>",
+    "languageSelect": "Select language",
+    "locationMapTitle": "RE:BERRY Clinic location",
+    "beforeAlt": "Before treatment",
+    "afterAlt": "After treatment",
+    "beforeAltWithLabel": "{label} before treatment (visible after login)",
+    "afterAltWithLabel": "{label} after treatment",
+    "deviceColumnListAria": "Device-related column list",
+    "doctorPhotoAlt": "Dr. Pytone",
+    "homeAria": "RE:BERRY Clinic home",
+    "openMenu": "Open menu"
+  },
+  "labels": {
+    "색소치료": "Pigmentation",
+    "볼륨리프팅": "Volume Lifting",
+    "볼륨부스터": "Volume Booster",
+    "여드름치료": "Acne Care",
+    "홍조치료": "Redness Care",
+    "색소": "Pigmentation",
+    "리프팅": "Lifting",
+    "부스터": "Booster",
+    "여드름": "Acne",
+    "홍조": "Redness",
+    "주사/홍조": "Injection/Redness",
+    "리베리의원 마포점": "RE:BERRY Clinic Mapo",
+    "서울특별시 마포구 월드컵로 200 11층": "11F, 200 World Cup-ro, Mapo-gu, Seoul",
+    "1101, 1102호 (성산동, SJ라벨라 상암)": "Rooms 1101–1102 (Seongsan-dong, SJ Labella Sangam)",
+    "6호선 마포구청역 1번 출구 도보 5분 이내": "Line 6 Mapogu-office Stn. Exit 1, 5 min walk",
+    "건물 뒷편 주차장 · 주차권 수령 후": "Rear parking lot · get a parking ticket",
+    "지하 주차, 전기차 주차 제한": "Underground / EV parking is limited",
+    "평 일": "Mon–Fri",
+    "토요일": "Sat",
+    "영업 시간안내": "Hours",
+    "지하철": "Subway",
+    "주차": "Parking",
+    "비급여수가표": "Price List",
+    "이용약관": "Terms",
+    "개인정보처리방침": "Privacy Policy",
+    "대표": "CEO",
+    "전화": "Tel",
+    "사업자등록번호": "Business No.",
+    "유선민": "Yoo Sun-min",
+    "상담예약": "Booking",
+    "유투브": "YouTube",
+    "문의하기": "Chat",
+    "네이버": "Naver"
+  },
+  "about": {
+    "designHeadline": "<light>We design your beauty</light><br></br>in the <hl>most scientific way</hl>",
+    "designSub": "RE:BERRY is not a clinic that simply recommends procedures.<br></br>Based on objective data and our medical team's experience,<br></br>we design care made for one person only.",
+    "interiorAlt": "Interior of RE:BERRY Clinic",
+    "promiseAlt": "RE:BERRY Promise {no}",
+    "promise1": "We value the time of transformation more than\nthe moment of the procedure.\nRather than a treatment that ends with a single satisfaction,\nwe promise results you can trust for a long time.\nFrom the very first diagnosis to aftercare,\nwe will be with you until the end, for your beauty alone.",
+    "promise2": "We think of an accurate diagnosis first,\nrather than more procedures.\nWe consider the change you truly need, not just a visible one.\nWith objective data and our medical team's experience,\nwe will responsibly design a beauty that is only yours."
+  },
+  "home": {
+    "heroImgAlt": "RE:BERRY Clinic main visual",
+    "heroTagline": "Your beauty doctor",
+    "heroHeadline": "The result of focusing on <mob></mob><hl>each person's concern</hl>",
+    "heroSubline": "With sincere care rather than commercial treatment,<br></br>we design your beauty.",
+    "directorTitle": "Medical Director",
+    "directorImgAlt": "{name}, Medical Director",
+    "directorBio": "I listen to each person's story,<br></br>and this will be a space that proposes treatments<br></br>to bring out their beauty.<br></br>From consultation to procedure and aftercare,<br></br>I personally and carefully take responsibility for every step.<br></br>With sincere care rather than commercial treatment,<br></br>I will design your beauty.",
+    "careText": "Care shaped around each person's skin. <br></br>Necessary treatment over trending procedures, <br></br>honest consultation over excessive care, <br></br>lasting satisfaction over temporary change."
+  },
+  "whySection": {
+    "slides": [
+      [
+        "Dedicated 1:1 care by a responsible director",
+        "Not a “consultation” but “medical treatment”",
+        "Objective facial diagnosis via LifeBiz AI-based\n3D analysis camera",
+        "Only at RE:BERRY — scientific care through a\nsystematic skin-type classification system"
+      ],
+      [
+        "Transparent procedures with genuine, precise-dose products",
+        "Every step of the procedure, done by the director personally",
+        "Systematic aftercare that follows through\non diagnostic data"
+      ]
+    ]
+  },
+  "doctors": {
+    "metaTitle": "Doctors",
+    "bio": "I listen to each person's story,<br></br>and this will be a space that proposes treatments<brMobile></brMobile> to bring out their beauty.<br></br><brMobile></brMobile>From consultation to procedure and aftercare,<brMobile></brMobile>I personally and carefully take responsibility for every step.<br></br><brMobile></brMobile>With sincere care rather than commercial treatment,<brMobile></brMobile>I will design your beauty.",
+    "directorImgAlt": "Yoo Sun-min, Medical Director",
+    "directorTitle": "Medical Director",
+    "signatureAlt": "Signature",
+    "education": "Kyung Hee University College of Medicine, M.D.<br></br>Kyung Hee University College of Pharmacy, B.Pharm.",
+    "career": ["Medical Director, RE:BERRY Clinic Mapo (current)", "Director, RE:BERRY Clinic Hwaseong (former)", "Director, Mepure Clinic Wangsimni (former)"],
+    "certification": ["Juvelook Meister", "Revinas Key Doctor, V-RO", "Advanced Key Doctor"],
+    "memberships": ["Member, Korean Society for Aesthetic Plastic Laser Medicine", "Member, Korean Obesity & Aesthetic Society (KOAT)", "Member, Korean Filler Society", "Member, Korean Society for Laser Dermatology & Hair"],
+    "promiseHeadline": "Beyond experience,<br></br><hl>we speak in evidence</hl>.",
+    "videoFallback": "Your browser does not support the video tag.",
+    "conferenceCaption": "2026 Korean Obesity & Aesthetic Society (KOAT) Spring Conference ▴"
+  },
+  "events": {
+    "metaTitle": "Events",
+    "titles": [
+      "RE:BERRY Clinic Mapo First-Visit Open Event",
+      "RE:BERRY Clinic Mapo — Prepared Just for You This June",
+      "RE:BERRY Clinic Mapo 5th-Gen Skin Booster Lituo Launch Special"
+    ]
+  },
+  "stepPlan": {
+    "headline": "RE:BERRY's own <hl>3-Step 3D Analysis</hl> and <mob></mob><hl>Dedicated Skin Care System</hl>",
+    "steps": [
+      { "title": "Precise Skin Assessment", "desc": "3D skin reconstruction based on\nMark View and LifeBiz Infinity AI" },
+      { "title": "Personal Plan", "desc": "We design a precise treatment based\non detailed 3D imaging and your\nspecific needs." },
+      { "title": "A Treatment Made Only for You", "desc": "A recognized derma specialist plans\ntreatment suited to your skin condition\non the day, under a regular plan." }
+    ]
+  },
+  "column": {
+    "title": "Dr. Pytone's Skin Column",
+    "subtitle": "Accurate information for healthy skin and RE:BERRY's treatment principles.",
+    "categoryNavAria": "Skin column categories",
+    "allFilter": "All",
+    "fallbackCategoryLabel": "Skin Column",
+    "loading": "Loading skin column posts...",
+    "loadError": "Couldn't load the skin column. Please try again shortly.",
+    "empty": "No skin column posts yet.",
+    "readMore": "Read more",
+    "backToList": "← Skin Column list",
+    "notFound": "This post doesn't exist or isn't published.",
+    "notFoundGeneric": "Couldn't find this skin column post.",
+    "backToListButton": "Back to list",
+    "videoTitle": "{title} video"
+  },
+  "reviews": {
+    "metaTitle": "Results",
+    "beforeAlt": "Before treatment (visible after login)",
+    "afterAlt": "After treatment",
+    "prevPage": "Previous page",
+    "nextPage": "Next page"
+  }
+}

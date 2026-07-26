@@ -1,0 +1,377 @@
+@import 'tailwindcss';
+
+/* #ISSUE: next/font 는 실제 패밀리명을 해시(__Belleza_xxxx)로 만들고 그 값을 CSS 변수에 넣는다.
+   여기서 'Belleza' 처럼 문자열을 직접 쓰면 등록된 적 없는 이름이라 폴백 폰트로 떨어짐.
+   → layout.tsx 가 심어준 --font-belleza / --font-asta 를 var() 로 참조한다.
+   var() 참조를 쓰려면 @theme 가 아니라 @theme inline 이어야 함(일반 @theme 는 값을 정적으로 구움). */
+@theme inline {
+    --font-ui: var(--font-asta), ui-sans-serif, system-ui, sans-serif;
+    --font-title: var(--font-belleza), 'Noto Serif KR', ui-serif, serif;
+}
+
+@theme {
+    /* Design Guide 팔레트 */
+    --color-cocoa: #45362d;
+    --color-latte: #705e51;
+    --color-cream: #fffffc;
+    --color-sand: #cdc5b6;
+    --color-deep: #382b22;
+}
+
+@theme {
+    --animate-wheel: wheel 1.5s ease-in-out infinite;
+
+    @keyframes wheel {
+        0%,
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        50% {
+            transform: translateY(6px);
+            opacity: 0.3;
+        }
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--color-cream);
+    color: var(--color-cocoa);
+    font-family: var(--font-ui);
+    letter-spacing: -0.01em;
+    font-size: clamp(16px, 1.05vw, 18px);
+    line-height: 1.75;
+}
+
+/* ───────── Design Guide 타입 스케일 (48/36/24/20/18/16/14) ───────── */
+.text-h1 {
+    font-size: clamp(34px, 3.6vw, 48px);
+    line-height: 1.3;
+}
+.text-h1-sm {
+    font-size: clamp(30px, 2.9vw, 40px);
+    line-height: 1.35;
+}
+.text-h2 {
+    font-size: clamp(26px, 2.7vw, 36px);
+    line-height: 1.45;
+}
+.text-h3 {
+    font-size: clamp(20px, 1.8vw, 24px);
+    line-height: 1.5;
+}
+.text-lead {
+    font-size: clamp(17px, 1.5vw, 20px);
+    line-height: 1.75;
+}
+.text-medium {
+    font-size: clamp(16px, 1.35vw, 18px);
+}
+.text-small {
+    font-size: clamp(15px, 1.15vw, 16px);
+}
+.text-caption {
+    font-size: 14px;
+}
+.text-caption-sm {
+    font-size: 12px;
+}
+.text-caption-xs {
+    font-size: 10px;
+}
+
+.font-display {
+    font-family: var(--font-title);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+}
+
+/* ───────── 레이아웃: 시안 1920 캔버스 / 1366 콘텐츠 ───────── */
+.container-site {
+    width: 100%;
+    max-width: calc(1366px + 3rem);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+}
+
+/* 강조 하이라이트 (텍스트 뒤 사각 박스) */
+.hl {
+    background: color-mix(in srgb, var(--color-sand) 45%, transparent);
+    padding: 0.05em 0.3em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+.hl-down {
+    padding-bottom: 0.25em;
+    padding-inline: 0.2em;
+    background: linear-gradient(180deg, transparent 40%, var(--hl-color, #e3e0dc) 40%);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+/* 슬라이더 스크롤바 숨김 */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    scrollbar-width: none;
+}
+
+/* [선택] GNB 언어별 타이포 제어 — 기본은 아무것도 바꾸지 않음.
+   영어 모드에서만 메뉴 서체/굵기를 바꾸고 싶다면 아래 주석을 해제해서 사용:
+   html[data-lang='en'] .notranslate a { font-weight: 500; letter-spacing: 0.03em; }
+   (layout.tsx 의 <html data-lang="ko"> 기본값 덕분에 한국어에는 절대 적용되지 않음) */
+
+/* 흰색 SVG(로고/아이콘) → 코코아(#45362D) 변환 필터 */
+.to-cocoa {
+    filter: brightness(0) saturate(100%) invert(19%) sepia(14%) saturate(1010%) hue-rotate(342deg) brightness(95%)
+        contrast(87%);
+}
+
+/* 말줄임 */
+.clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 피부칼럼 관리자 리치 에디터 */
+.skin-column-editor-content {
+    color: var(--color-cocoa);
+    line-height: 1.8;
+}
+.skin-column-editor-content > * + * {
+    margin-top: 0.85rem;
+}
+.skin-column-editor-content.ProseMirror h2 {
+    display: block;
+    margin-top: 1.8rem;
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    line-height: 1.4;
+}
+.skin-column-editor-content.ProseMirror h3 {
+    display: block;
+    margin-top: 1.5rem;
+    font-size: 1.35rem !important;
+    font-weight: 700 !important;
+    line-height: 1.45;
+}
+.skin-column-editor-content.ProseMirror ul,
+.skin-column-editor-content.ProseMirror ol {
+    margin-block: 0.85rem;
+    padding-left: 1.75rem !important;
+    list-style-position: outside !important;
+}
+.skin-column-editor-content.ProseMirror ul {
+    list-style-type: disc !important;
+}
+.skin-column-editor-content.ProseMirror ol {
+    list-style-type: decimal !important;
+}
+.skin-column-editor-content.ProseMirror li {
+    display: list-item;
+    margin-block: 0.3rem;
+}
+.skin-column-editor-content.ProseMirror li > p {
+    margin: 0;
+}
+.skin-column-editor-content blockquote {
+    border-left: 3px solid var(--color-sand);
+    padding: 0.4rem 0 0.4rem 1rem;
+    color: var(--color-latte);
+}
+.skin-column-editor-content a {
+    color: var(--color-latte);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+}
+.skin-column-editor-content img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1.25rem auto;
+    border-radius: 0.75rem;
+}
+.skin-column-editor-content p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    color: color-mix(in srgb, var(--color-latte) 55%, transparent);
+    pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────
+   언어별 스타일 제어
+   app/layout.tsx가 next-intl 로케일 값으로 <html lang data-lang="ko|en|ja|zh">를 심어줌.
+   → 특정 언어에서만 다르게 보이고 싶으면 아래처럼 선택자를 추가하면 됨.
+   예) 일본어에서 특정 컴포넌트 숨기기:
+       html[data-lang='ja'] .my-class { display: none; }
+   ───────────────────────────────────────────── */
+
+/* 영문: 자간을 살짝 벌려 세리프 디스플레이 무드 유지 */
+html[data-lang='en'] body {
+    letter-spacing: 0;
+}
+html[data-lang='en'] .font-display {
+    letter-spacing: 0.06em;
+}
+
+/* ── 일본어·중국어 ─────────────────────────────────────────────
+   #ISSUE: 예전 word-break: break-all 이 원인으로 "Pico Toni / ng" 처럼
+   영문 단어가 아무 데서나 잘렸음. CJK 는 word-break: normal 상태에서도
+   글자 단위로 알아서 줄바꿈되므로 break-all 은 불필요하고 해롭기만 하다. */
+html[data-lang='ja'] body,
+html[data-lang='zh'] body {
+    letter-spacing: 0;
+    line-height: 1.85;
+    word-break: normal;
+}
+
+/* ── 번역 모드 공통 보정 (en/ja/zh 전부) ───────────────────── */
+
+/* 긴 단어(장비명·URL·복합어)가 카드를 뚫고 나가는 것만 막는다.
+   break-all 이 아니라 break-word 라서 평범한 문장은 어절 단위로 정상 줄바꿈된다. */
+html:not([data-lang='ko']) body {
+    overflow-wrap: break-word;
+}
+
+/* #ISSUE: tracking-tighter/-tight 는 한글 헤드라인을 시안 폭에 맞추려고 조인 값이다.
+   글자수가 늘어나는 번역문에 그대로 걸리면 단어가 붙어 읽히지 않고, 줄바꿈 위치도 어긋난다. */
+html:not([data-lang='ko']) .tracking-tighter,
+html:not([data-lang='ko']) .tracking-tight {
+    letter-spacing: normal;
+}
+
+/* ── 번역 모드 공통 보정 (en/ja/zh 전부) ───────────────────── */
+
+/* 구글이 감싸는 font 태그의 하이라이트 배경 제거 */
+html:not([data-lang='ko']) font {
+    background: transparent !important;
+}
+
+/* #ISSUE: break-keep(word-break: keep-all)은 한글 어절 보호용이다.
+   중국어·일본어에 걸리면 문장 전체가 한 덩어리로 취급돼 컨테이너를 뚫고 나간다.
+   (장비 카드 설명 / 시술 정의 카드가 잘리던 원인) */
+html:not([data-lang='ko']) .break-keep {
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+/* #ISSUE: 어순이 바뀌면서 <strong class="hl-down"> 안이 비어버리면
+   회색 조각만 덩그러니 남는다. 내용 없는 하이라이트는 지운다. */
+html:not([data-lang='ko']) .hl:empty,
+html:not([data-lang='ko']) .hl-down:empty {
+    display: none;
+}
+/* 수액 태그처럼 큰 글자(30px)로 박아둔 칩 — 번역문은 글자수가 늘어 박스를 넘긴다 */
+html:not([data-lang='ko']) .tag-lg {
+    font-size: 20px !important;
+    line-height: 1.5;
+}
+
+/* ── 번역 모드 레이아웃 유틸 3종 ───────────────────────────────
+   좁은 카드·배지처럼 "한국어 기준으로 폭을 재서 만든 자리"에 붙인다.
+   한국어에서는 아무 일도 일어나지 않고(=시안 그대로), 번역 모드에서만 동작한다.
+
+   .t-tight  카드 안 글자를 한 단계 더 축소 (자식 전체에 상속)
+   .t-1line  무조건 한 줄 + 말줄임 (알약 배지처럼 두 줄이 되면 모양이 깨지는 곳)
+   .t-2line  최대 두 줄 + 말줄임 (카드 제목) */
+html:not([data-lang='ko']) .t-tight {
+    --t-scale: 0.85;
+}
+.t-1line {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.t-2line {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 한국어 어절에 맞춰 수동으로 넣은 <br />. 번역 모드에서는 문장 중간을 끊어놓기만 하므로 숨긴다.
+   사용: <br className="br-ko block lg:hidden" /> */
+html:not([data-lang='ko']) .br-ko {
+    display: none !important;
+}
+
+/* 번역문이 길어져도 배지·칩이 두 줄로 터지지 않게 */
+.badge-fixed {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* 고정 높이 카드는 번역 모드에서만 높이 제한을 푼다 (한국어 시안은 그대로 유지) */
+html:not([data-lang='ko']) .card-fixed-h {
+    height: auto;
+    min-height: var(--card-h);
+}
+
+/* ───────── 로딩 스켈레톤 ─────────
+   연한 샌드색 박스가 은은하게 깜빡임. 색/속도는 여기서만 관리한다. */
+.skeleton {
+    --sk-base: color-mix(in srgb, var(--color-sand) 50%, var(--color-cream));
+    --sk-hl: color-mix(in srgb, var(--color-sand) 20%, var(--color-cream));
+
+    background-image: linear-gradient(90deg, var(--sk-base) 25%, var(--sk-hl) 37%, var(--sk-base) 63%);
+    background-size: 400% 100%;
+    animation: skeleton-shimmer 1.4s ease infinite;
+}
+.skeleton-dark {
+    --sk-base: color-mix(in srgb, var(--color-sand) 26%, var(--color-deep));
+    --sk-hl: color-mix(in srgb, var(--color-sand) 45%, var(--color-deep));
+}
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    .scroll-mouse::after {
+        animation: none;
+    }
+}
+
+/* #STYLE: MoreView 컴포넌트 호버 시 무한 반복되는 느린 확대/축소 애니메이션 */
+@keyframes loop-scale {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.4);
+    }
+}
+
+/* 부모(.group)에 호버했을 때만 내부 동그라미에 1.8초 주기로 부드럽게 무한 반복 주입 */
+.group:hover .animate-pulse-slow {
+    animation: loop-scale 1.8s ease-in-out infinite;
+}
+
+/* #ISSUE: 섹션 사이에 얇은 선(보더처럼 보이는 것)이 생기는 문제 해결 */
+main > section + section {
+    margin-top: -1px;
+}

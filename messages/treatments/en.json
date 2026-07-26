@@ -1,0 +1,152 @@
+{
+  "categoryLabel": { "signature": "Signature Treatments", "skin": "Skin Care", "aging": "Anti-Aging" },
+  "chrome": {
+    "sameConcernHeading": "The same concern can have <hl>completely different causes</hl>",
+    "columnIntro": "Verified by research, <hl>proven in the clinic — the story of {name} treatment</hl>",
+    "faqHeading": "Frequently Asked Questions",
+    "modelAlt": "{name} treatment model"
+  },
+  "faq": {
+    "common": [
+      { "q": "How many sessions do I need?", "a": "It varies by skin condition and lesion depth, but you can usually see a noticeable change after 3–5 sessions. After a precise diagnosis at your first visit, we'll tell you exactly how many sessions you'll need." },
+      { "q": "How much does it hurt?", "a": "We apply sufficient numbing cream before treatment, and most patients say it's a tolerable, mild stinging sensation. If you're sensitive to pain, we can adjust the intensity and technique." },
+      { "q": "Can I wash my face or wear makeup right after treatment?", "a": "Light face washing is possible from the same day, and color makeup is recommended from the same day or the next day depending on the treated area's condition. We'll explain aftercare in detail right after treatment." },
+      { "q": "Will it disrupt my daily life?", "a": "Most patients can return to daily life immediately after treatment. Temporary redness or minor crusting naturally resolves within a few days." }
+    ],
+    "sharedSignatureExtra": [
+      { "q": "Will there be scabbing after treatment?", "a": "Depending on the type of lesion, minor scabbing may occur, and it usually falls off naturally within 5–7 days. As long as you don't pick at it, it will heal without a trace." },
+      { "q": "How is Ulthera different from Thermage?", "a": "Ulthera excels at lifting by tightening the SMAS layer with ultrasound, while Thermage excels at improving elasticity by regenerating dermal collagen with radiofrequency. We diagnose the ratio of sagging to reduced elasticity and design a single or combined treatment." }
+    ],
+    "boosterExtra": [
+      { "q": "Won't my face look unnatural after treatment?", "a": "#TODO: actual answer needed" },
+      { "q": "Do younger patients need a volume booster too?", "a": "#TODO: actual answer needed" },
+      { "q": "Should I get lifting or a volume booster first?", "a": "#TODO: actual answer needed" }
+    ]
+  },
+  "ivItems": ["IV Therapy", "Vitamin IV", "White Glow IV", "Cinderella IV", "Vitamin C (High-Dose)", "Vitamin B IV", "Antioxidant IV", "Glycyrrhizin IV", "Garlic IV", "Vitamin D IV", "Placenta IV"],
+  "signature": {
+    "pigment": {
+      "headline": { "light": "Flawlessly radiant,", "strong": "standing at the peak of brightening" },
+      "definition": { "title": "What is pigmentation (blemish) treatment?", "text": "A treatment that selectively removes melanin pigment with laser energy to improve skin tone." },
+      "hashtags": ["My face tone looks dull", "My melasma keeps getting darker", "I got a lot of pigmentation after pregnancy", "Toning treatments never seem to work for me", "Pigmentation I've had since childhood bothers me"],
+      "solution": { "light": "The key to pigmentation treatment is", "strong": "precision targeting matched to the skin layer" },
+      "story": { "hook": ["Why does your face", "keep looking duller and darker?", "It's not just the UV rays"], "body": "Even a single small blemish\ncan break the overall clarity of your skin, cast a shadow,\nand make you look tired and older.\nClear, translucent skin doesn't start with covering things up —\nit starts with quietly clearing the pigment hidden deep beneath the surface." }
+    },
+    "lifting": {
+      "headline": { "light": "Standing at", "strong": "the peak of lifting" },
+      "definition": { "title": "What is sunken facial volume lifting?", "text": "RE:BERRY's own combination lifting treatment that lifts sagging lines and fills sunken volume to rebuild the axis of the face." },
+      "hashtags": ["My nasolabial folds are deep", "I'm bothered by jowls", "My skin elasticity has dropped", "I'm bothered by neck wrinkles", "I want to improve my double chin and jawline", "My eyelids keep drooping"],
+      "solution": { "light": "The key to lifting is ", "strong": "a design matched to your face shape" },
+      "story": { "hook": ["Why does your face", "keep sliding downward?", "It's not just about getting older"], "body": "When even one layer weakens,\nthe jawline blurs, nasolabial folds deepen,\nand the face starts to look wider and heavier than it really is.\nLifting doesn't start with 'pulling' —\nit starts with finding what caused the structure to collapse." }
+    },
+    "booster": {
+      "headline": { "light": "Standing at", "strong": "the peak of volume" },
+      "definition": { "title": "What is a booster?", "text": "A treatment that delivers active ingredients directly into the dermis to deeply hydrate and reinforce a compromised skin barrier." },
+      "hashtags": ["My nasolabial folds are deep", "I'm bothered by jowls", "My skin elasticity has dropped", "I'm bothered by neck wrinkles", "I want to improve my double chin and jawline", "My eyelids keep drooping"],
+      "solution": { "light": "The key to volume is", "strong": "a design treatment matched to sagging and hollowing" },
+      "story": { "hook": ["Why does your face", "keep losing vitality and looking hollow?", "It's not just about getting older"], "body": "When even one layer loses elasticity,\nvolume hollows out, lines collapse,\nand the face starts to look more gaunt and older than it really is.\nTrue anti-aging doesn't start with filling in —\nit starts with finding the root cause of the lost volume\nand rebuilding it firmly." }
+    },
+    "acne": {
+      "headline": { "light": "Smoothly refined,", "strong": "standing at the peak of flawlessness" },
+      "definition": { "title": "What is acne treatment?", "text": "A treatment that selectively targets the sebaceous glands to remove the root cause of acne and create a clean skin environment." },
+      "hashtags": ["Inflammatory acne keeps appearing on my jawline", "Whiteheads suddenly appeared", "Acne stops me from pushing my hair back", "I have too many acne scars on my cheeks", "I'm scared of acne", "My acne marks won't disappear"],
+      "solution": { "light": "The key to acne treatment is ", "strong": "blocking the root cause to prevent recurrence" },
+      "story": { "hook": ["Why does your skin", "keep breaking out again and again?", "It's not just about improper cleansing"], "body": "Even a single small blemish\ncan break the overall smoothness of your skin,\nleave a mark, and make you look unsettled\nand older.\nClear skin doesn't start with forcing it out —\nit starts with correcting the oil-water balance\nthat builds up beneath the surface." }
+    },
+    "redness": {
+      "headline": { "light": "Calm in any moment,", "strong": "standing at the peak of clarity" },
+      "definition": { "title": "What is redness treatment?", "text": "A treatment that selectively treats only the enlarged, abnormal vessels to improve a red, blotchy skin tone into a clear, even one." },
+      "hashtags": ["My face turns red easily", "My face flushes from menopause", "My face turns red whenever I'm nervous", "I can see fine blood vessels in my skin", "Makeup can't cover the redness"],
+      "solution": { "light": "The key to redness treatment is", "strong": "vascular care tailored to the cause" },
+      "story": { "hook": ["Why does your face", "become red and sensitive so often?", "It's not just about mood swings"], "body": "When even a small stimulus triggers redness,\nthe overall balance of your skin breaks down, blotches appear,\nand you start to look uneasy and older.\nCalm skin doesn't start with covering the redness —\nit starts with building up a skin barrier\nthat isn't shaken by irritation." }
+    }
+  },
+  "skin": {
+    "pigment": {
+      "headline": { "light": "Flawlessly radiant,", "strong": "standing at the peak of brightening" },
+      "definition": { "title": "What is pigmentation (blemish) treatment?", "text": "Laser energy selectively removes melanin pigment\nto improve your skin tone." },
+      "hashtags": ["My nasolabial folds are deep", "I'm bothered by jowls", "My skin elasticity has dropped", "I'm bothered by neck wrinkles", "I want to improve my double chin and jawline", "My eyelids keep drooping"],
+      "solution": { "light": "The key to pigmentation treatment is", "strong": "precision targeting matched to the skin layer" }
+    },
+    "acne": {
+      "headline": { "light": "Smoothly refined,", "strong": "standing at the peak of flawlessness" },
+      "definition": { "title": "What is acne treatment?", "text": "Selectively targets the sebaceous glands to remove\nthe root cause of acne and create a clean skin environment." },
+      "hashtags": ["Inflammatory acne keeps appearing on my jawline", "Whiteheads suddenly appeared", "Acne stops me from pushing my hair back", "I have too many acne scars on my cheeks", "I'm scared of acne", "My acne marks won't disappear"],
+      "solution": { "light": "The key to acne treatment is", "strong": "blocking the root cause to prevent recurrence" }
+    },
+    "redness": {
+      "headline": { "light": "Calm in any moment,", "strong": "standing at the peak of clarity" },
+      "definition": { "title": "What is redness treatment?", "text": "Selectively treats abnormal blood vessels\nto even out red, blotchy skin tone." },
+      "hashtags": ["Makeup can't cover the redness", "My face flushes from menopause", "My face turns red whenever I'm nervous", "I have a lot of visible blood vessels"],
+      "solution": { "light": "The key to redness treatment is", "strong": "vascular care tailored to the cause" }
+    },
+    "skinbooster": {
+      "headline": { "light": "A glow that wells up", "strong": "from deep within the skin" },
+      "definition": { "title": "What is a skin booster?", "text": "Delivers active ingredients into the dermis\nto deeply hydrate and reinforce a compromised barrier." },
+      "hashtags": ["My skin is too dry", "My makeup keeps flaking", "A tight feeling from deep within my skin", "My skin feels rough and lifeless", "I want a natural glass-skin glow"],
+      "solution": { "light": "The key to a skin booster is", "strong": "deep nourishment that rebuilds the barrier from within" }
+    },
+    "tattoo-removal": {
+      "headline": { "light": "Once clean, without a trace —", "strong": "returning to your original self" },
+      "definition": { "title": "What is tattoo removal?", "text": "Precisely breaks down pigment particles of any color,\neven deep traces, without damaging the surrounding skin." },
+      "hashtags": ["I want to remove an outdated tattoo", "I want it removed without scarring", "My semi-permanent eyebrow residue is severe", "I want to go back to clear skin"],
+      "solution": { "light": "The key to tattoo removal is", "strong": "precise pigment destruction with minimal damage to surrounding skin" }
+    },
+    "scar-pore": {
+      "headline": { "light": "Densely filled,", "strong": "flawlessly smooth skin texture" },
+      "definition": { "title": "Scars · Pores · Texture", "text": "Induces the skin's own collagen regeneration\nto fill in indentations and smooth out texture." },
+      "hashtags": ["My pores keep getting bigger", "Acne scars are a concern for me", "I'm bothered by uneven skin texture", "My pores stand out even with makeup", "I want smooth skin texture"],
+      "solution": { "light": "The key to improving scars, pores, and texture is", "strong": "skin regeneration that densely fills in new tissue" }
+    },
+    "hair-removal": {
+      "headline": { "light": "Clean, with no fuss,", "strong": "standing at the peak of smoothness" },
+      "definition": { "title": "Hair removal", "text": "Selectively destroys hair roots and follicles,\nminimizing irritation while keeping skin clean for longer." },
+      "hashtags": ["Shaving every day is a hassle", "Razor burn stings", "I'm bothered by dark shadow marks", "I want a clean, tidy look", "I want hair removal without irritation"],
+      "solution": { "light": "The key to laser hair removal is", "strong": "cycle-targeted treatment that suppresses hair regrowth" }
+    },
+    "care": {
+      "headline": { "light": "Elevating treatment results", "strong": "with deep soothing and regeneration" },
+      "definition": { "title": "Care", "text": "Quickly soothes skin irritated by treatment\nand supports regeneration to maximize results." },
+      "hashtags": ["I want to calm redness after treatment", "I want intensive care before an important appointment", "My skin barrier has become sensitive", "I need professional soothing care", "I want treatment results to last longer"],
+      "solution": { "light": "The key to skin care is", "strong": "customized soothing and regeneration that restores a broken balance" }
+    }
+  },
+  "aging": {
+    "laser-lifting": {
+      "headline": { "light": "Filling in elasticity", "strong": "densely, from deep within the skin" },
+      "definition": { "title": "Laser lifting", "text": "Targets elasticity deep within the skin\nto correct sagging and complete a firm contour." },
+      "hashtags": ["My nasolabial folds are deep", "I'm bothered by jowls", "My skin elasticity has dropped", "I'm bothered by neck wrinkles", "I want to improve my double chin and jawline", "My eyelids keep drooping"],
+      "solution": { "light": "The key to lifting is", "strong": "a design matched to your face shape" }
+    },
+    "thread-lifting": {
+      "headline": { "light": "Lifting sagging skin ", "strong": "to restore firmness" },
+      "definition": { "title": "Thread lifting", "text": "Directly supports sagging tissue to correct\ncollapsed lines and create a powerful lifting effect." },
+      "hashtags": ["My jawline keeps sagging and collapsing", "My nasolabial folds have deepened and I look older", "My jowls make my face line look uneven", "My skin elasticity dropped and my face sags overall", "I want a slim, firm V-line", "My face has sagged and I'm bothered by marionette lines"],
+      "solution": { "light": "The key to lifting is", "strong": "immediate line refinement and fundamentally strengthened skin elasticity" }
+    },
+    "filler": {
+      "headline": { "light": "Awakening dimensionality", "strong": "with the volume you're missing" },
+      "definition": { "title": "Filler", "text": "Fills volume into sunken areas to resolve\nstructural imbalance and complete a three-dimensional face." },
+      "hashtags": ["I'm bothered by a flat forehead and cheekbones", "My nasolabial folds are deep and I look older", "My cheeks have hollowed and I look tired", "My weak chin makes my face line unclear", "I want a slim, three-dimensional face shape", "I'm bothered by marionette lines and mouth-corner wrinkles"],
+      "solution": { "light": "The key to filler is", "strong": "delicate volume design tailored to your individual facial proportions,\ncompleting a natural sense of dimension" }
+    },
+    "botox": {
+      "headline": { "light": "Softly refined,", "strong": "standing at the peak of smoothness" },
+      "definition": { "title": "Botox", "text": "Selectively relaxes overactive muscles\nto smooth out the wrinkles they cause." },
+      "hashtags": ["My square jaw makes my face look big", "I've developed deep wrinkles between my brows and forehead", "Crow's feet bother me when I smile", "My trapezius muscles make my neck look short", "My calf muscles stand out and bother me", "Expression wrinkles have started on the bridge of my nose"],
+      "solution": { "light": "The key to Botox is precise muscle control that completes ", "strong": "a smooth line" }
+    },
+    "face-contour": {
+      "headline": { "light": "Completing a harmonious ", "strong": "facial balance" },
+      "definition": { "title": "Facial contouring", "text": "Cares for unnecessary swelling and fat\nto restore a balanced facial contour." },
+      "hashtags": ["My face is severely asymmetrical", "My face line is uneven", "My face has sagged and the line is unclear", "My face feels bigger than before", "I'm bothered by a double chin and a dull jawline", "I want to refine my overall facial contour"],
+      "solution": { "light": "The key to contouring is", "strong": "balanced contour design and a harmonious line" }
+    },
+    "iv-therapy": {
+      "headline": { "light": "Filling a tired daily life", "strong": "with deep vitality" },
+      "definition": { "title": "IV therapy", "text": "Supplies nutrients deep within the body\nto relieve skin fatigue and restore a clear condition." },
+      "hashtags": ["My body always feels heavy from chronic fatigue", "My skin looks dull and lifeless", "My immunity seems to drop with every change of season", "I don't recover even with enough rest", "I have stress-related headaches and fatigue", "I want to restore skin tone and vitality"],
+      "solution": { "light": "The key to IV therapy is instantly replenishing the nutrients your body needs, ", "strong": "restoring fundamental vitality" }
+    }
+  }
+}

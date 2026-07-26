@@ -1,0 +1,150 @@
+{
+  "meta": {
+    "title": "RE:BERRY 诊所 | RE:BERRY",
+    "titleTemplate": "%s | RE:BERRY",
+    "description": "您的美丽主治医 RE:BERRY。以真诚而非商业化的诊疗，为您设计属于自己的美丽。麻浦区厅站附近的皮肤科诊所 RE:BERRY。",
+    "ogDescription": "您的美丽主治医 RE:BERRY。麻浦区厅站附近的皮肤科诊所 RE:BERRY。",
+    "ogLocale": "zh_CN"
+  },
+  "common": {
+    "beforeAfter": "前后对比",
+    "login": "登录",
+    "more": "查看更多",
+    "prev": "上一个",
+    "next": "下一个",
+    "close": "关闭",
+    "collapse": "收起",
+    "doctorLabel": "<brand>Dr. Pytone</brand>",
+    "languageSelect": "选择语言",
+    "locationMapTitle": "RE:BERRY 诊所位置",
+    "beforeAlt": "治疗前",
+    "afterAlt": "治疗后",
+    "beforeAltWithLabel": "{label} 治疗前（登录后可见）",
+    "afterAltWithLabel": "{label} 治疗后",
+    "deviceColumnListAria": "设备相关专栏列表",
+    "doctorPhotoAlt": "Dr. Pytone",
+    "homeAria": "RE:BERRY 诊所首页",
+    "openMenu": "打开菜单"
+  },
+  "labels": {
+    "색소치료": "色素治疗",
+    "볼륨리프팅": "立体提升",
+    "볼륨부스터": "丰盈提升",
+    "여드름치료": "痘痘治疗",
+    "홍조치료": "红血丝治疗",
+    "색소": "色素",
+    "리프팅": "提升",
+    "부스터": "补水提升",
+    "여드름": "痘痘",
+    "홍조": "红血丝",
+    "주사/홍조": "注射/红血丝",
+    "리베리의원 마포점": "RE:BERRY 诊所 麻浦店",
+    "서울특별시 마포구 월드컵로 200 11층": "首尔特别市麻浦区世界杯路200号 11层",
+    "1101, 1102호 (성산동, SJ라벨라 상암)": "1101、1102室 (城山洞, SJ Labella 上岩)",
+    "6호선 마포구청역 1번 출구 도보 5분 이내": "地铁6号线 麻浦区厅站 1号出口 步行5分钟",
+    "건물 뒷편 주차장 · 주차권 수령 후": "大楼后方停车场 · 请领取停车券",
+    "지하 주차, 전기차 주차 제한": "地下停车、电动车停车受限",
+    "평 일": "平日",
+    "토요일": "周六",
+    "영업 시간안내": "门诊时间",
+    "지하철": "地铁",
+    "주차": "停车",
+    "비급여수가표": "自费价目表",
+    "이용약관": "使用条款",
+    "개인정보처리방침": "隐私政策",
+    "대표": "代表",
+    "전화": "电话",
+    "사업자등록번호": "营业执照号",
+    "유선민": "Yoo Sun-min",
+    "상담예약": "预约",
+    "유투브": "YouTube",
+    "문의하기": "咨询",
+    "네이버": "Naver"
+  },
+  "about": {
+    "designHeadline": "<light>我们以</light><br></br><hl>最科学的方式</hl>为您打造美丽",
+    "designSub": "RE:BERRY 并非只是推荐项目的医院。<br></br>我们以客观数据与医疗团队的经验为基础，<br></br>为每一位顾客设计专属的诊疗方案。",
+    "interiorAlt": "RE:BERRY 诊所内部",
+    "promiseAlt": "RE:BERRY 承诺 {no}",
+    "promise1": "我们认为，比起治疗的瞬间，\n更重要的是变化所需要的时间。\n我们承诺的不是一次性满足的诊疗，\n而是可以长久信赖的效果。\n从最初的诊断到术后管理，\n我们将始终陪伴，只为成就您的美丽。",
+    "promise2": "比起更多的治疗项目，\n我们更先考虑准确的诊断。\n比起肉眼可见的变化，我们更关注您真正需要的改变。\n凭借客观数据与医疗团队的经验，\n我们将负责任地为您打造专属的美丽。"
+  },
+  "home": {
+    "heroImgAlt": "RE:BERRY 诊所主视觉",
+    "heroTagline": "您的美丽主治医",
+    "heroHeadline": "专注于 <mob></mob><hl>每一位顾客的困扰</hl>",
+    "heroSubline": "以真诚而非商业化的诊疗，<br></br>为您设计属于自己的美丽。",
+    "directorTitle": "代表院长",
+    "directorImgAlt": "{name} 代表院长",
+    "directorBio": "倾听每一位顾客的故事，<br></br>为其量身提出<br></br>能够绽放美丽的治疗方案。<br></br>从咨询、治疗到术后管理的每一个环节，<br></br>我都亲自、细致地负责到底。<br></br>以真诚而非商业化的诊疗，<br></br>为您设计属于自己的美丽。",
+    "careText": "为每一位顾客的肌肤量身定制诊疗。 <br></br>比起流行项目，更重视必要的治疗； <br></br>比起过度诊疗，更重视真诚的咨询； <br></br>比起短暂的改变，更追求持久的满意。"
+  },
+  "whySection": {
+    "slides": [
+      [
+        "由负责任的院长1:1专属负责",
+        "不是“咨询”，而是“诊疗”",
+        "基于 LifeBiz AI 的3D分析\n摄像头，客观诊断脸型",
+        "只有在 RE:BERRY，通过科学的\n肌肤类型分类体系进行诊疗"
+      ],
+      [
+        "正品·足量原则下的透明治疗",
+        "治疗全过程，院长亲自操刀",
+        "承接诊断数据的\n系统化术后管理"
+      ]
+    ]
+  },
+  "doctors": {
+    "metaTitle": "医疗团队介绍",
+    "bio": "倾听每一位顾客的故事，<br></br>为其量身提出<brMobile></brMobile>能够绽放美丽的治疗方案。<br></br><brMobile></brMobile>从咨询、治疗到术后管理的每一个环节，<brMobile></brMobile>我都亲自、细致地负责到底。<br></br><brMobile></brMobile>以真诚而非商业化的诊疗，<brMobile></brMobile>为您设计属于自己的美丽。",
+    "directorImgAlt": "Yoo Sun-min 代表院长",
+    "directorTitle": "代表院长",
+    "signatureAlt": "签名",
+    "education": "庆熙大学医学院毕业，医师（MD）<br></br>庆熙大学药学院毕业，药剂师（B.Pharm.）",
+    "career": ["现) RE:BERRY 诊所麻浦店 代表院长", "前) RE:BERRY 诊所华城秉店 院长", "前) Mepure 诊所往十里店 院长"],
+    "certification": ["Juvelook Meister", "Revinas Key Doctor V-RO", "Advanced Key Doctor"],
+    "memberships": ["大韩美容整形激光医学会 正式会员", "大韩肥胖美容学会(KOAT) 正式会员", "大韩填充剂学会 正式会员", "大韩激光皮肤毛发学会 正式会员"],
+    "promiseHeadline": "超越经验，<br></br><hl>用依据说话</hl>",
+    "videoFallback": "您的浏览器不支持 video 标签。",
+    "conferenceCaption": "2026年 大韩肥胖美容学会(KOAT) 春季学术大会 ▴"
+  },
+  "events": {
+    "metaTitle": "活动",
+    "titles": [
+      "RE:BERRY 诊所麻浦店 首次到访开业活动",
+      "RE:BERRY 诊所麻浦店 六月为你准备好了",
+      "RE:BERRY 诊所麻浦店 第五代美肤水光针 Lituo 上市特惠"
+    ]
+  },
+  "stepPlan": {
+    "headline": "RE:BERRY 独有的<hl>三阶段立体分析</hl>与<mob></mob><hl>专属护肤体系</hl>",
+    "steps": [
+      { "title": "精准掌握肌肤状态", "desc": "基于 Mark View 与 LifeBiz Infinity 的\nAI 技术进行肌肤3D重建" },
+      { "title": "个性化方案", "desc": "根据精密的3D影像与顾客的具体\n需求，设计精细的治疗\n方案。" },
+      { "title": "只为您打造的专属治疗", "desc": "备受认可的皮肤专科医师，在定期方案下，\n根据当日肌肤状态\n规划适合的治疗。" }
+    ]
+  },
+  "column": {
+    "title": "Dr. Pytone 皮肤专栏",
+    "subtitle": "为您传递健康肌肤的准确信息与 RE:BERRY 的诊疗原则。",
+    "categoryNavAria": "皮肤专栏分类",
+    "allFilter": "全部",
+    "fallbackCategoryLabel": "皮肤专栏",
+    "loading": "正在加载皮肤专栏。",
+    "loadError": "无法加载皮肤专栏，请稍后再试。",
+    "empty": "暂无已发布的皮肤专栏。",
+    "readMore": "查看详情",
+    "backToList": "← 皮肤专栏列表",
+    "notFound": "该文章不存在或尚未公开。",
+    "notFoundGeneric": "找不到该皮肤专栏。",
+    "backToListButton": "返回列表",
+    "videoTitle": "{title} 视频"
+  },
+  "reviews": {
+    "metaTitle": "治疗效果",
+    "beforeAlt": "治疗前（登录后可见）",
+    "afterAlt": "治疗后",
+    "prevPage": "上一页",
+    "nextPage": "下一页"
+  }
+}

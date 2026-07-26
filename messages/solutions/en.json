@@ -1,0 +1,104 @@
+{
+  "potenza": { "desc": ["Precision treatment tailored to skin type", "Minimized damage with skin texture regeneration"], "point": "Pores, scars, elasticity" },
+  "excelv": {
+    "desc": ["Improves vascular lesions and redness", "Customizable treatment for various skin concerns"],
+    "point": "Redness, vessels, sensitivity",
+    "subTitle": "A combination laser that resolves a range of\nskin concerns with three treatment modes",
+    "introDescription": "From vascular issues like facial redness and telangiectasia\nto melasma, blemishes, and elasticity all at once,\nthe Excel V laser addresses complex skin concerns.",
+    "principles": [
+      {
+        "title": "What is the Excel V laser?",
+        "content": "Excel V is a multi-solution device that uses three wavelengths and modes: 532nm KTP, 1064nm Nd:YAG, and Genesis microsecond mode.\nIt precisely targets complex skin issues that were difficult to treat with a single wavelength, matching each lesion's depth and type."
+      },
+      {
+        "title": "Why it excels at treating vessels and redness",
+        "content": "It can select the optimal wavelength for each type of vascular lesion, from surface redness in the epidermis to deeper blue vessels in the dermis.\nA sapphire cooling system also protects the skin surface and reduces pain during treatment, allowing even sensitive, red skin to be treated comfortably."
+      },
+      {
+        "title": "RE:BERRY's principle for Excel V treatment",
+        "content": "Redness and pigmented lesions require improvement of the dermal environment, not just surface-level treatment.\nRE:BERRY precisely diagnoses the depth and extent of lesions through 3D analysis, and restores a clear, healthy skin tone without damaging the skin barrier by adjusting wavelength and energy to each condition."
+      }
+    ]
+  },
+  "synerjet": { "desc": ["Restores tethered scars using air pressure", "Stimulates collagen and lifts depressed areas"], "point": "Scars, tethering, volume" },
+  "revinas": { "desc": ["Induces collagen production with PLA", "Improves natural volume and skin elasticity"], "point": "Volume, elasticity, collagen" },
+  "shrink": { "desc": ["Improves skin elasticity with ultrasound lifting", "Tightens sagging contours with a lifting effect"], "point": "Lifting, elasticity, contour" },
+  "inmode": { "desc": ["Improves elasticity and lifting with RF energy", "Reduces unwanted fat and refines contour"], "point": "Lifting, elasticity, contour" },
+  "titanium": { "desc": ["Combination lifting using three wavelengths", "Improves skin elasticity and facial contour"], "point": "Lifting, elasticity, contour" },
+  "lipot": { "desc": ["Customizable treatment for various skin concerns", "Improves skin texture and supports regeneration"], "point": "Regeneration, texture, elasticity" },
+  "spectra": { "desc": ["Improves melasma, blemishes, and stubborn pigmentation", "Improves pores and skin tone with elasticity care"], "point": "Pigmentation, tone, pores" },
+  "pico": { "desc": ["Improves melasma, blemishes, and stubborn pigmentation", "Removes pores/tattoos and improves texture"], "point": "Pigmentation, tattoo, texture" },
+  "clarity": { "desc": ["Improves melasma, blemishes, and stubborn pigmentation", "Removes pores/tattoos and improves texture"], "point": "Pigmentation, tattoo, texture" },
+  "pico2": { "desc": ["Low-irritation scar care with pico laser", "Pore tightening using micro-beams"], "point": "Pores, scars, regeneration" },
+  "ulthera": {
+    "desc": ["High-intensity ultrasound lifting", "Improves sagging skin elasticity with contour lifting"],
+    "point": "Elasticity, lifting, double chin",
+    "subTitle": "The original lifting laser that tightens\ndeep skin layers with ultrasound energy",
+    "introDescription": "When facial lines begin to sag with age\nand elasticity starts to decline,\nUlthera is the lifting laser most people\nthink of first among dermatology lifting treatments.",
+    "principles": [
+      {
+        "title": "What is Ulthera?",
+        "content": "Ultherapy Prime is a lifting treatment that uses high-intensity focused ultrasound (HIFU) to deliver energy down to the SMAS layer beneath the skin.\nRather than the surface, it stimulates the skin's structural foundation with ultrasound to tighten the muscle layer. It lifts sagging skin and promotes collagen and elastin production, naturally improving facial elasticity."
+      },
+      {
+        "title": "Why Ulthera is effective for skin elasticity",
+        "content": "Ulthera precisely delivers 65–70°C ultrasound thermal energy to the SMAS layer, inducing tissue contraction and a regenerative response.\nThrough this process, loosened skin structure tightens again, and elasticity gradually recovers over time.\nThe key is that it's a lifting treatment that improves the skin structure itself, rather than temporarily pulling the skin.\nBecause Ulthera's thermal stimulation acts on the SMAS layer that supports the skin, it can deliver energy selectively without damaging the skin surface."
+      },
+      {
+        "title": "RE:BERRY's principle for Ulthera treatment",
+        "content": "Since skin sagging results from multiple factors working together — skin thickness, elastic structure, and fat distribution —\nan accurate diagnosis of the current skin condition is needed first.\nAlso, rather than expecting results from a single session,\nit's important to plan treatment considering the skin's recovery process as collagen regeneration progresses.\nRE:BERRY avoids excessive energy use or unnecessary repeat treatments, and follows the principle of designing treatment tailored to skin condition and improvement goals."
+      }
+    ]
+  },
+  "onda": { "desc": ["Fat reduction with microwave technology", "Improves double chin/cheek fat with added firmness"], "point": "Fat, contour, elasticity" },
+  "vro": { "desc": ["Customizable lifting for each skin layer", "Improves elasticity and refines facial contour"], "point": "Lifting, elasticity, contour" },
+  "clarity2": { "desc": ["Laser hair removal tailored to follicle depth", "Minimizes pain with an intelligent cooling system"], "point": "Hair, pain, customized removal" },
+  "aqua": { "desc": ["Removes sebum and blackheads from pores", "Supplies hydration and improves dead skin cells"], "point": "Sebum, pores, hydration" },
+  "cryocell": { "desc": ["Soothes and cools skin via cryo-ion infusion", "Regenerates the skin barrier after treatment irritation"], "point": "Soothing, redness, cooling" },
+  "ionzyme": { "desc": ["Powerful brightening via high-concentration vitamin infusion", "Suppresses melanin formation and improves blemishes"], "point": "Brightening, vitamin, blemishes" },
+  "lituo": { "desc": ["Normalizes the skin turnover cycle and regenerates", "Improves rough texture and complexion"], "point": "Texture, complexion, regeneration" },
+  "deuce": { "desc": ["Natural lifting with improved elasticity", "Improved elasticity with a defined facial contour"], "point": "Lifting, elasticity, contour" },
+  "restylane": { "desc": ["Improves deep wrinkles and adds facial volume", "Precise line correction"], "point": "Volume, lines" },
+  "belotero-soft": { "desc": ["Creates natural facial expressions", "Subtle wrinkle improvement"], "point": "Cohesion, natural look" },
+  "renefill": { "desc": ["Corrects facial contour", "Fills volume in sunken areas"], "point": "Volume, contour, viscoelasticity" },
+  "lenafill": { "desc": ["Creates facial dimensionality", "Overall improvement of skin contour"], "point": "Volume, safety, dimensionality" },
+  "artier": { "desc": ["Enhances facial feature volume", "Completes a defined contour line"], "point": "Moldability, longevity, contour" },
+  "dca": { "desc": ["Destroys fat cells, improves double chin", "Improves double chin"], "point": "Fat destruction, jawline correction" },
+  "wegovy": { "desc": ["Helps suppress appetite", "Improves body fat"], "point": "Diet management, weight control" },
+  "rejuran-healer": { "desc": ["Promotes skin cell regeneration with PN", "Restores oil-water balance and elasticity"], "point": "Regeneration, elasticity, skin care" },
+  "lillide": { "desc": ["Strengthens the skin barrier", "Replenishes deep hydration in dry skin"], "point": "Barrier, hydration, regeneration" },
+  "newarti": { "desc": ["Injects concentrated amino acids and hyaluronic acid", "Promotes radiance and improves fine wrinkles"], "point": "Radiance, hydration, elasticity care" },
+  "gold-ptt": {
+    "desc": ["A 1:1 customized solution for each skin concern", "Fundamentally improves skin environment for a bright tone"],
+    "point": "Tone, redness, pores",
+    "subTitle": "Specially engineered gold particles that\ndestroy the root cause of acne",
+    "introDescription": "For recurring acne and increasing sebum production,\nthis is a targeted treatment that combines gold\nmicro-particles with a laser to selectively destroy\nsebaceous glands and acne-causing bacteria.",
+    "principles": [
+      {
+        "title": "What is Gold PTT?",
+        "content": "This treatment infuses specially coated microscopic gold particles deep into the sebaceous glands and acne bacteria, then irradiates a specific laser wavelength.\nThe gold particles absorb the laser light and generate localized heat, destroying the sebaceous glands that are the root cause of acne and eliminating the bacteria."
+      },
+      {
+        "title": "Why it's effective for recurring acne",
+        "content": "Rather than surface exfoliation or temporary inflammation relief, it lowers the activity of the sebaceous glands themselves that cause acne, significantly reducing the recurrence rate.\nBecause it acts only on the targeted area while minimizing damage to surrounding healthy skin, it reduces side effects such as dryness or redness after treatment."
+      },
+      {
+        "title": "RE:BERRY's principle for Gold PTT treatment",
+        "content": "This is not simply applying a solution and irradiating a laser.\nRE:BERRY combines pre-treatment scaling and ultrasound infusion care to ensure the gold particles are sufficiently absorbed into the pores. We aim for customized treatment, adjusting laser intensity and frequency to each person's sebum production and skin sensitivity."
+      }
+    ]
+  },
+  "juvelook-volume": { "desc": ["Natural volume improvement via collagen production", "Improves sunken areas and skin elasticity"], "point": "Volume, elasticity, collagen" },
+  "exosome": { "desc": ["Precision treatment tailored to skin type", "Minimized damage with skin texture regeneration"], "point": "Pores, scars, elasticity" },
+  "juvelook": { "desc": ["Builds volume through collagen regeneration", "Improves depressed scars, fine lines, and pores"], "point": "Volume, elasticity, scar treatment" },
+  "xeomin": { "desc": ["Natural wrinkle improvement", "Smooth skin expression"], "point": "Wrinkles, contour, natural look" },
+  "hitox": { "desc": ["Fine line improvement", "Defined facial line"], "point": "Wrinkles, elasticity, contour" },
+  "coretox": { "desc": ["Improves expression wrinkles", "Natural facial line"], "point": "Wrinkles, contour, natural look" },
+  "aha-bha": { "desc": ["Customized exfoliation scaling by skin type", "Controls comedonal acne and sebum production"], "point": "Exfoliation, sebum, acne" },
+  "pdrn": { "desc": ["Repairs damaged cells with salmon-derived injection", "Reduces inflammation with fast soothing effect"], "point": "Regeneration, soothing, wound care" },
+  "mounjaro": { "desc": ["Supports body fat reduction", "Helps with weight management"], "point": "Weight loss, metabolic activation" },
+  "contour-inj": { "desc": ["Breaks down facial fat, smooths facial lines", "Refines contour, reduces facial fat"], "point": "Contour refinement, facial fat reduction" },
+  "signature-ha": { "desc": ["Delivers highly hydrating hyaluronic acid", "Powerful relief for deep dryness with a dewy glow"], "point": "Hydration, glow, deep-dryness care" },
+  "peeling": { "desc": ["Sheds old dead skin cells and promotes turnover", "Refines rough texture and purifies complexion"], "point": "Texture, complexion, regeneration" },
+  "scrubber": { "desc": ["Removes dead skin cells with ultrasonic micro-vibration", "Clears residual impurities with deep cleansing"], "point": "Exfoliation, sebum, impurities" }
+}
