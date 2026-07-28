@@ -86,7 +86,6 @@ export default function BASlider({ light }: Props) {
                             <T ko={p.label} /> {t('beforeAfter')}
                         </p>
                         <div className="relative">
-                            {/* #ISSUE: 의료법 대응 - 가림 처리를 After에서 Before(시술 전) 영역으로 이동 */}
                             <div className="skeleton skeleton-dark relative aspect-[8/5] overflow-hidden">
                                 <Image
                                     src={p.before}
@@ -94,13 +93,8 @@ export default function BASlider({ light }: Props) {
                                     fill
                                     quality={85}
                                     sizes="(max-width: 768px) 240px, 244px"
-                                    className="scale-110 object-cover blur-[6px]"
+                                    className="object-cover"
                                 />
-                                <span className="absolute inset-0 flex items-center justify-center">
-                                    <span className="badge-fixed rounded-full border border-cream/70 bg-deep/40 px-3 py-1 text-caption backdrop-blur-sm">
-                                        {t('login')}
-                                    </span>
-                                </span>
                             </div>
 
                             <div className="skeleton skeleton-dark relative aspect-[8/5]">

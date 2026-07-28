@@ -9,10 +9,9 @@ import T from '@/components/lang/T';
 interface Props {
     photo: BAPhoto | null;
     onClose: () => void;
-    onLoginRequired: () => void;
 }
 
-export default function BAPhotoModal({ photo, onClose, onLoginRequired }: Props) {
+export default function BAPhotoModal({ photo, onClose }: Props) {
     const t = useTranslations('common');
 
     useEffect(() => {
@@ -57,19 +56,8 @@ export default function BAPhotoModal({ photo, onClose, onLoginRequired }: Props)
                             fill
                             quality={90}
                             sizes="(max-width: 640px) 45vw, 320px"
-                            className="scale-110 object-cover blur-[7px]"
+                            className="object-cover"
                         />
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onLoginRequired();
-                            }}
-                            className="absolute inset-0 flex items-center justify-center bg-deep/5 transition-colors hover:bg-deep/15"
-                        >
-                            <span className="badge-fixed rounded-full border border-cream px-3 py-1 text-caption font-bold text-cream shadow-sm transition-transform hover:scale-105">
-                                {t('login')}
-                            </span>
-                        </button>
                     </div>
                     <div className="skeleton relative aspect-[4/3] overflow-hidden rounded-[4px]">
                         <Image

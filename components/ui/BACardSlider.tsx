@@ -39,13 +39,8 @@ function Card({ b, overflow }: { b: BAPhoto; overflow: boolean }) {
                     fill
                     quality={85}
                     sizes="244px"
-                    className="scale-110 object-cover blur-[6px]"
+                    className="object-cover"
                 />
-                <span className="absolute inset-0 flex items-center justify-center">
-                    <span className="badge-fixed rounded-full bg-deep/70 px-3.5 py-1.5 text-caption-sm text-cream">
-                        {t('login')}
-                    </span>
-                </span>
             </div>
 
             <div className="relative z-10 flex h-0 justify-center">

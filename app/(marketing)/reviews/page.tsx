@@ -22,10 +22,7 @@ const shuffle = (arr: BAPhoto[]) => {
 };
 
 export default function ReviewsPage() {
-    const t = useTranslations('common');
     const tReviews = useTranslations('reviews');
-    // #TODO: 로그인 모달 붙일 자리. 현재는 상태만 잡아두고 화면은 없음
-    const [, setIsLoginModalOpen] = useState(false);
     const [page, setPage] = useState(1);
     const photos = useBAPhotos();
     const loading = useBAPhotosLoading();
@@ -104,19 +101,8 @@ export default function ReviewsPage() {
                                                       fill
                                                       quality={85}
                                                       sizes="(max-width: 768px) 160px, 220px"
-                                                      className="scale-110 object-cover blur-[7px]"
+                                                      className="object-cover"
                                                   />
-                                                  <button
-                                                      onClick={(e) => {
-                                                          e.stopPropagation();
-                                                          setIsLoginModalOpen(true);
-                                                      }}
-                                                      className="absolute inset-0 flex items-center justify-center bg-deep/5 transition-colors hover:bg-deep/15"
-                                                  >
-                                                      <span className="badge-fixed rounded-full border border-cream/90 px-3 py-1 text-[11px] font-bold text-cream/90 shadow-sm transition-transform hover:scale-105">
-                                                          {t('login')}
-                                                      </span>
-                                                  </button>
                                               </div>
                                               <div className="skeleton relative aspect-[4/3]">
                                                   <Image
@@ -183,7 +169,6 @@ export default function ReviewsPage() {
             <BAPhotoModal
                 photo={selectedPhoto}
                 onClose={() => setSelectedPhoto(null)}
-                onLoginRequired={() => setIsLoginModalOpen(true)}
             />
             <LocationSection />
         </>
