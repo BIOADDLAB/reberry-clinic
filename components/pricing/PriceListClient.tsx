@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import {
@@ -13,12 +13,13 @@ import {
     type PriceListItem,
 } from '@/components/lib/priceList';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 12;
 
 export default function PriceListClient() {
     const t = useTranslations('priceList');
     const locale = useLocale();
     const router = useRouter();
+    const rootRef = useRef<HTMLDivElement>(null);
     const [categories, setCategories] = useState<PriceCategory[]>([]);
     const [items, setItems] = useState<PriceListItem[]>([]);
     const [activeCategory, setActiveCategory] = useState('all');
@@ -26,6 +27,8 @@ export default function PriceListClient() {
     const [page, setPage] = useState(1);
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
     const [cart, setCart] = useState<PriceCartItem[]>([]);
+    const [mobileCartOpen, setMobileCartOpen] = useState(false);
+    const [mobileBarVisible, setMobileBarVisible] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -53,6 +56,31 @@ export default function PriceListClient() {
             unsubscribeItems();
         };
     }, [t]);
+
+    useEffect(() => {
+        const target = rootRef.current;
+        if (!target) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => setMobileBarVisible(entry.isIntersecting),
+            { threshold: 0.05 },
+        );
+        observer.observe(target);
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        if (!mobileCartOpen) return;
+        const previousOverflow = document.body.style.overflow;
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') setMobileCartOpen(false);
+        };
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('keydown', closeOnEscape);
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            window.removeEventListener('keydown', closeOnEscape);
+        };
+    }, [mobileCartOpen]);
 
     const categoryById = useMemo(
         () => new Map(categories.map((category) => [category.docId, category.label])),
@@ -115,7 +143,7 @@ export default function PriceListClient() {
     };
 
     return (
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
+        <div ref={rootRef} className="grid gap-10 pb-24 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:pb-0">
             <div>
                 <div className="flex gap-2 overflow-x-auto pb-2">
                     <CategoryButton
@@ -237,98 +265,212 @@ export default function PriceListClient() {
                 )}
             </div>
 
-            <aside className="rounded-2xl border border-cocoa/10 bg-cream p-5 shadow-[0_8px_30px_rgba(69,54,45,0.08)] lg:sticky lg:top-28">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-lead font-bold text-cocoa">{t('cart')}</h2>
-                    <span className="text-caption text-latte">{cart.length}{t('countUnit')}</span>
-                </div>
-                {cart.length === 0 ? (
-                    <p className="py-12 text-center text-caption text-latte">{t('cartEmpty')}</p>
-                ) : (
-                    <div className="mt-4 space-y-4">
-                        {cart.map((item) => (
-                            <div key={`${item.itemId}-${item.optionId}`} className="border-b border-cocoa/10 pb-4">
-                                <div className="flex items-start justify-between gap-3">
-                                    <div>
-                                        <p className="text-caption-sm text-latte">{item.categoryLabel}</p>
-                                        <p className="mt-1 text-caption font-semibold text-cocoa">{item.itemName}</p>
-                                        <p className="mt-0.5 text-caption-sm text-latte">
-                                            {item.optionLabel} · {formatPrice(item.unitPrice, moneyLocale)}
-                                        </p>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            updateCart((current) =>
-                                                current.filter(
-                                                    (candidate) =>
-                                                        candidate.itemId !== item.itemId ||
-                                                        candidate.optionId !== item.optionId,
-                                                ),
-                                            )
-                                        }
-                                        className="text-caption-sm text-red-500"
-                                    >
-                                        {t('remove')}
-                                    </button>
-                                </div>
-                                <div className="mt-2 flex items-center gap-2">
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            updateCart((current) =>
-                                                current.map((candidate) =>
-                                                    candidate.itemId === item.itemId &&
-                                                    candidate.optionId === item.optionId
-                                                        ? { ...candidate, quantity: Math.max(1, candidate.quantity - 1) }
-                                                        : candidate,
-                                                ),
-                                            )
-                                        }
-                                        className="grid size-7 place-items-center rounded-full border border-cocoa/15"
-                                    >
-                                        −
-                                    </button>
-                                    <span className="min-w-5 text-center text-caption">{item.quantity}</span>
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            updateCart((current) =>
-                                                current.map((candidate) =>
-                                                    candidate.itemId === item.itemId &&
-                                                    candidate.optionId === item.optionId
-                                                        ? { ...candidate, quantity: candidate.quantity + 1 }
-                                                        : candidate,
-                                                ),
-                                            )
-                                        }
-                                        className="grid size-7 place-items-center rounded-full border border-cocoa/15"
-                                    >
-                                        +
-                                    </button>
-                                    <strong className="ml-auto text-caption text-cocoa">
-                                        {formatPrice(item.unitPrice * item.quantity, moneyLocale)}
-                                    </strong>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                <div className="mt-5 flex items-center justify-between">
-                    <span className="text-small text-latte">{t('estimatedTotal')}</span>
-                    <strong className="text-lead text-cocoa">{formatPrice(total, moneyLocale)}</strong>
-                </div>
-                <p className="mt-3 text-caption-sm leading-5 text-latte">{t('estimateNotice')}</p>
+            <aside className="hidden rounded-2xl border border-cocoa/10 bg-cream p-5 shadow-[0_8px_30px_rgba(69,54,45,0.08)] lg:sticky lg:top-28 lg:block">
+                <CartPanel
+                    cart={cart}
+                    total={total}
+                    moneyLocale={moneyLocale}
+                    labels={{
+                        cart: t('cart'),
+                        countUnit: t('countUnit'),
+                        cartEmpty: t('cartEmpty'),
+                        remove: t('remove'),
+                        estimatedTotal: t('estimatedTotal'),
+                        estimateNotice: t('estimateNotice'),
+                        reserve: t('reserve'),
+                    }}
+                    updateCart={updateCart}
+                    onReserve={() => router.push('/reservation?from=price-list')}
+                />
+            </aside>
+
+            {mobileBarVisible && (
+            <div className="fixed bottom-4 left-4 right-20 z-40 flex items-center gap-2 rounded-2xl border border-cocoa/10 bg-cream p-2 shadow-[0_8px_30px_rgba(69,54,45,0.22)] lg:hidden">
+                <button
+                    type="button"
+                    onClick={() => setMobileCartOpen(true)}
+                    className="min-w-0 flex-1 px-3 py-2 text-left"
+                >
+                    <span className="block text-caption-sm text-latte">
+                        {t('cart')} · {cart.length}{t('countUnit')}
+                    </span>
+                    <strong className="block truncate text-small text-cocoa">
+                        {formatPrice(total, moneyLocale)}
+                    </strong>
+                </button>
                 <button
                     type="button"
                     disabled={cart.length === 0}
                     onClick={() => router.push('/reservation?from=price-list')}
-                    className="mt-5 w-full rounded-full bg-cocoa px-5 py-3 text-small font-semibold text-cream hover:bg-deep disabled:opacity-40"
+                    className="shrink-0 rounded-xl bg-cocoa px-4 py-3 text-caption font-semibold text-cream disabled:opacity-40"
                 >
-                    {t('reserve')}
+                    {t('reserveShort')}
                 </button>
-            </aside>
+            </div>
+            )}
+
+            {mobileCartOpen && (
+                <div
+                    className="fixed inset-0 z-[70] flex items-end bg-deep/60 lg:hidden"
+                    onClick={() => setMobileCartOpen(false)}
+                >
+                    <div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label={t('cart')}
+                        onClick={(event) => event.stopPropagation()}
+                        className="max-h-[82dvh] w-full overflow-y-auto rounded-t-3xl bg-cream p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]"
+                    >
+                        <div className="mb-2 flex justify-end">
+                            <button
+                                type="button"
+                                aria-label={t('closeCart')}
+                                onClick={() => setMobileCartOpen(false)}
+                                className="grid size-9 place-items-center rounded-full bg-cocoa/5 text-2xl text-cocoa"
+                            >
+                                ×
+                            </button>
+                        </div>
+                        <CartPanel
+                            cart={cart}
+                            total={total}
+                            moneyLocale={moneyLocale}
+                            labels={{
+                                cart: t('cart'),
+                                countUnit: t('countUnit'),
+                                cartEmpty: t('cartEmpty'),
+                                remove: t('remove'),
+                                estimatedTotal: t('estimatedTotal'),
+                                estimateNotice: t('estimateNotice'),
+                                reserve: t('reserve'),
+                            }}
+                            updateCart={updateCart}
+                            onReserve={() => router.push('/reservation?from=price-list')}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
+    );
+}
+
+function CartPanel({
+    cart,
+    total,
+    moneyLocale,
+    labels,
+    updateCart,
+    onReserve,
+}: {
+    cart: PriceCartItem[];
+    total: number;
+    moneyLocale: string;
+    labels: {
+        cart: string;
+        countUnit: string;
+        cartEmpty: string;
+        remove: string;
+        estimatedTotal: string;
+        estimateNotice: string;
+        reserve: string;
+    };
+    updateCart: (updater: (current: PriceCartItem[]) => PriceCartItem[]) => void;
+    onReserve: () => void;
+}) {
+    return (
+        <>
+            <div className="flex items-center justify-between">
+                <h2 className="text-lead font-bold text-cocoa">{labels.cart}</h2>
+                <span className="text-caption text-latte">{cart.length}{labels.countUnit}</span>
+            </div>
+            {cart.length === 0 ? (
+                <p className="py-12 text-center text-caption text-latte">{labels.cartEmpty}</p>
+            ) : (
+                <div className="mt-4 space-y-4">
+                    {cart.map((item) => (
+                        <div key={`${item.itemId}-${item.optionId}`} className="border-b border-cocoa/10 pb-4">
+                            <div className="flex items-start justify-between gap-3">
+                                <div>
+                                    <p className="text-caption-sm text-latte">{item.categoryLabel}</p>
+                                    <p className="mt-1 text-caption font-semibold text-cocoa">{item.itemName}</p>
+                                    <p className="mt-0.5 text-caption-sm text-latte">
+                                        {item.optionLabel} · {formatPrice(item.unitPrice, moneyLocale)}
+                                    </p>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        updateCart((current) =>
+                                            current.filter(
+                                                (candidate) =>
+                                                    candidate.itemId !== item.itemId ||
+                                                    candidate.optionId !== item.optionId,
+                                            ),
+                                        )
+                                    }
+                                    className="text-caption-sm text-red-500"
+                                >
+                                    {labels.remove}
+                                </button>
+                            </div>
+                            <div className="mt-2 flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    aria-label="수량 줄이기"
+                                    onClick={() =>
+                                        updateCart((current) =>
+                                            current.map((candidate) =>
+                                                candidate.itemId === item.itemId &&
+                                                candidate.optionId === item.optionId
+                                                    ? { ...candidate, quantity: Math.max(1, candidate.quantity - 1) }
+                                                    : candidate,
+                                            ),
+                                        )
+                                    }
+                                    className="grid size-7 place-items-center rounded-full border border-cocoa/15"
+                                >
+                                    −
+                                </button>
+                                <span className="min-w-5 text-center text-caption">{item.quantity}</span>
+                                <button
+                                    type="button"
+                                    aria-label="수량 늘리기"
+                                    onClick={() =>
+                                        updateCart((current) =>
+                                            current.map((candidate) =>
+                                                candidate.itemId === item.itemId &&
+                                                candidate.optionId === item.optionId
+                                                    ? { ...candidate, quantity: candidate.quantity + 1 }
+                                                    : candidate,
+                                            ),
+                                        )
+                                    }
+                                    className="grid size-7 place-items-center rounded-full border border-cocoa/15"
+                                >
+                                    +
+                                </button>
+                                <strong className="ml-auto text-caption text-cocoa">
+                                    {formatPrice(item.unitPrice * item.quantity, moneyLocale)}
+                                </strong>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+            <div className="mt-5 flex items-center justify-between">
+                <span className="text-small text-latte">{labels.estimatedTotal}</span>
+                <strong className="text-lead text-cocoa">{formatPrice(total, moneyLocale)}</strong>
+            </div>
+            <p className="mt-3 text-caption-sm leading-5 text-latte">{labels.estimateNotice}</p>
+            <button
+                type="button"
+                disabled={cart.length === 0}
+                onClick={onReserve}
+                className="mt-5 w-full rounded-full bg-cocoa px-5 py-3 text-small font-semibold text-cream hover:bg-deep disabled:opacity-40"
+            >
+                {labels.reserve}
+            </button>
+        </>
     );
 }
 

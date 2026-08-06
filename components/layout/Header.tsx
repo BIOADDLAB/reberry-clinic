@@ -102,7 +102,7 @@ export default function Header() {
                         {pathname === '/' && (
                             <Link
                                 href="/reservation"
-                                className="absolute right-0 top-full mt-3 flex w-max items-center gap-2 rounded-full border border-cocoa/15 bg-cream px-4 py-2.5 text-caption font-semibold text-cocoa shadow-[0_5px_20px_rgba(69,54,45,0.16)] transition-transform hover:-translate-y-0.5"
+                                className="absolute right-0 top-full mt-3 hidden w-max items-center gap-2 rounded-full border border-cocoa/15 bg-cream px-4 py-2.5 text-caption font-semibold text-cocoa shadow-[0_5px_20px_rgba(69,54,45,0.16)] transition-transform hover:-translate-y-0.5 xl:flex"
                             >
                                 <span
                                     className="grid size-5 place-items-center rounded-full bg-cocoa text-[11px] text-cream"
@@ -139,6 +139,14 @@ export default function Header() {
             {open && (
                 <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-cocoa/10 bg-cream text-cocoa xl:hidden">
                     <nav className="container-site py-6">
+                        <Link
+                            href="/reservation"
+                            onClick={close}
+                            className="mb-3 flex w-full items-center justify-between rounded-xl bg-cocoa px-5 py-4 text-small font-bold text-cream"
+                        >
+                            <span>{reservationT('title')}</span>
+                            <span aria-hidden="true">→</span>
+                        </Link>
                         {nav.map((item) => (
                             <div key={item.label} className="border-b border-cocoa/10 py-4">
                                 <Link href={item.href} onClick={close} className="notranslate text-h3 font-medium">
