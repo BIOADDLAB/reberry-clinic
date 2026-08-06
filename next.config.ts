@@ -13,7 +13,11 @@ const nextConfig: NextConfig = {
         /* 큰 화면에서 한 단계 큰 원본을 내려주도록 상한 확장 (업스케일 방지) */
         deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 2560],
         /* Firebase Storage 업로드 이미지(관리자 등록 전후사진 등)를 next/image 로 쓰기 위해 허용 */
-        remotePatterns: [{ protocol: 'https', hostname: 'firebasestorage.googleapis.com' }],
+        remotePatterns: [
+            { protocol: 'https', hostname: 'firebasestorage.googleapis.com' },
+            { protocol: 'https', hostname: 'i.ytimg.com' },
+            { protocol: 'https', hostname: 'blogthumb.pstatic.net' },
+        ],
     },
 };
 

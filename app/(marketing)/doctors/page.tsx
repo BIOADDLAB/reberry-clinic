@@ -4,6 +4,8 @@ import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import Reveal from '@/components/motion/Reveal';
 import { site } from '@/components/lib/site';
+import { fetchLatestYouTubeVideos } from '@/components/lib/youtube';
+import { fetchLatestNaverBlogPosts } from '@/components/lib/naverBlog';
 import DoctorMore from '@/components/ui/DoctorMore';
 
 export async function generateMetadata() {
@@ -18,86 +20,183 @@ export default async function DoctorsPage() {
     const directorName = locale !== 'ko' && tLabels.has(site.director) ? tLabels(site.director) : site.director;
     const career = t.raw('career') as string[];
     const certification = t.raw('certification') as string[];
+    const [youtubeVideos, blogPosts] = await Promise.all([
+        fetchLatestYouTubeVideos(site.youtubeChannelId),
+        fetchLatestNaverBlogPosts(3),
+    ]);
 
     return (
         <>
             <SubHero en="RE:BERRY Specialist" image="/images/bg-sub-01.jpg" />
 
-            <section className="bg-cream py-30 lg:py-24">
-                <div className="container-site text-center">
-                    <Reveal>
-                        <h2 className="font-display text-h2 tracking-[0.06em]">RE:BERRY Specialist</h2>
-                        <div className="flex w-fit flex-col mx-auto mt-8">
-                            <div className="h-[2px] w-full bg-cocoa rounded-[50%]" />
-                            <p className="font-display mx-auto px-6 py-2 text-h3 tracking-tight!">
-                                Academic Background &amp; License
-                            </p>
-                            <div className="h-[2px] w-full bg-cocoa rounded-[50%]" />
+            {/* 원장 소개 상단 — 인물과 소개글을 나란히 배치 */}
+            <section className="overflow-hidden bg-cream pt-20 md:pt-24 lg:pt-28">
+                <div className="container-site grid items-end gap-10 lg:grid-cols-[minmax(320px,430px)_minmax(0,570px)] lg:justify-center lg:gap-20">
+                    <Reveal className="mx-auto w-full max-w-[363px]">
+                        <div className="relative aspect-[363/525] w-full">
+                            <Image
+                                src="/images/img-doc-02.png"
+                                alt={t('directorImgAlt')}
+                                fill
+                                quality={90}
+                                priority
+                                sizes="(max-width: 1024px) 363px, 363px"
+                                className="object-contain object-bottom"
+                            />
                         </div>
+                    </Reveal>
 
-                        <p className="mt-8 text-medium leading-[30px]">
+                    <Reveal delay={0.1} className="pb-14 text-center lg:pb-20 lg:text-left">
+                        <p className="font-display text-h2 tracking-[0.05em]">RE:BERRY Specialist</p>
+                        <div className="mt-5 inline-flex flex-col">
+                            <span className="h-px w-full bg-cocoa/35" />
+                            <h1 className="font-display px-1 py-2 text-h3">Academic Background &amp; License</h1>
+                            <span className="h-px w-full bg-cocoa/35" />
+                        </div>
+                        <p className="mt-8 text-pretty text-small leading-8 text-latte">
                             {t.rich('bio', {
-                                br: () => <br />,
+                                br: () => <br className="hidden lg:block" />,
                                 brMobile: () => <br className="block lg:hidden" />,
+                                strong: (chunks) => (
+                                    <strong className="mb-5 block font-bold text-cocoa lg:mb-0 lg:inline">{chunks}</strong>
+                                ),
+                                gap: () => <span className="block h-6" aria-hidden="true" />,
                             })}
                         </p>
                     </Reveal>
                 </div>
             </section>
 
-            <section className="texture-paper py-33 lg:py-28 bg-[url('/images/bg-texture-07.jpg')] bg-cover bg-center bg-fixed bg-cream">
-                <div className="container-site grid items-start gap-12 lg:grid-cols-[356px_575px] lg:justify-center lg:gap-[100px]">
-                    <Reveal className="mx-auto w-full max-w-xs lg:max-w-full">
-                        <div className="relative aspect-[356/576] w-full overflow-hidden rounded-full">
-                            <Image
-                                src="/images/img-doc-02.jpg"
-                                alt={t('directorImgAlt')}
-                                fill
-                                quality={90}
-                                sizes="(max-width: 1024px) 320px, 356px"
-                                className="object-cover object-top"
-                            />
-                        </div>
-                    </Reveal>
-                    <Reveal delay={0.1}>
-                        <p className="flex flex-wrap items-center ml-4">
-                            <span className="text-h2 font-extrabold mr-[10px]">{directorName}</span>
-                            <span className="text-lead mr-[15px]">{t('directorTitle')}</span>
+            {/* 이력 및 콘텐츠 레이아웃 */}
+            <section className="texture-paper bg-cream bg-[url('/images/bg-texture-07.jpg')] bg-cover bg-center">
+                <div className="container-site grid items-stretch gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12">
+                    <Reveal className="h-full bg-cream/75 px-6 py-20 md:px-9 lg:px-11 lg:py-28">
+                        <div className="flex flex-wrap items-center gap-3">
+                            <span className="text-h2 font-extrabold">{directorName}</span>
+                            <span className="text-lead">{t('directorTitle')}</span>
                             <Image
                                 src="/images/i-sig-02.svg"
                                 alt={t('signatureAlt')}
                                 width={180}
                                 height={64}
-                                className="h-[64px] w-auto"
+                                className="h-12 w-auto"
                             />
-                        </p>
-                        <p className="mt-4.25 text-[20px]/[30px] font-bold leading-relaxed ml-4">
+                        </div>
+                        <p className="mt-4 text-medium font-bold leading-relaxed">
                             {t.rich('education', { br: () => <br /> })}
                         </p>
-                        <p className="font-display mt-6 inline-block w-fit px-1.5 text-small bg-gradient-to-b from-transparent from-[50%] to-[#CDC5B6] to-[50%] ml-4">
-                            Career
-                        </p>
-                        <ul className="mt-3 space-y-1 text-small leading-[24px]">
-                            {career.map((c) => (
-                                <li key={c} className="flex items-start">
-                                    <span className="mr-1.5 mt-[2px] shrink-0 text-lg font-bold leading-[24px]">·</span>
-                                    <span>{c}</span>
-                                </li>
-                            ))}
-                        </ul>
-                        <p className="font-display mt-5.5 inline-block w-fit px-1.5 text-small bg-gradient-to-b from-transparent from-[50%] to-[#CDC5B6] to-[50%] ml-4">
-                            Certification · Key Doctor
-                        </p>
-                        <ul className="mt-3 space-y-1 text-small leading-[24px]">
-                            {certification.map((c) => (
-                                <li key={c} className="flex items-start">
-                                    <span className="mr-1.5 mt-[2px] shrink-0 text-lg font-bold leading-[24px]">·</span>
-                                    <span>{c}</span>
-                                </li>
-                            ))}
-                        </ul>
+
+                        <ProfileList title="Career" items={career} />
+                        <ProfileList title="Certification · Key Doctor" items={certification} />
                         <DoctorMore />
                     </Reveal>
+
+                    <div className="grid content-start gap-8 py-20 lg:py-28">
+                        <Reveal delay={0.1} className="py-2">
+                            <div className="flex items-end justify-between gap-4">
+                                <div>
+                                    <h2 className="text-h3 font-bold text-cocoa">마포피부왕 닥터파이톤</h2>
+                                    <p className="mt-1 font-display text-caption text-latte">RE:BERRY YouTube</p>
+                                </div>
+                                <a
+                                    href={site.youtube}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="shrink-0 text-caption font-semibold text-latte underline-offset-4 hover:text-cocoa hover:underline"
+                                >
+                                    채널 바로가기
+                                </a>
+                            </div>
+                            {youtubeVideos.length > 0 ? (
+                                <div className="mt-6 grid gap-4 sm:grid-cols-3">
+                                    {youtubeVideos.map((video) => (
+                                        <a
+                                            key={video.id}
+                                            href={video.url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="group min-w-0"
+                                        >
+                                            <div className="relative aspect-video overflow-hidden rounded-lg bg-cocoa/10">
+                                                <Image
+                                                    src={video.thumbnailUrl}
+                                                    alt=""
+                                                    fill
+                                                    quality={85}
+                                                    sizes="(max-width: 640px) 100vw, 220px"
+                                                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                                                />
+                                            </div>
+                                            <p className="clamp-2 mt-2 text-caption font-semibold leading-5 text-cocoa">
+                                                {video.title}
+                                            </p>
+                                        </a>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="mt-6 grid min-h-56 place-items-center border-b border-cocoa/10">
+                                    <span className="text-caption text-latte/60">영상을 불러오지 못했습니다.</span>
+                                </div>
+                            )}
+                        </Reveal>
+
+                        <Reveal delay={0.15} className="py-2">
+                            <div className="flex items-end justify-between gap-4">
+                                <div>
+                                    <h2 className="font-display text-h3 text-cocoa">RE:BERRY Blog</h2>
+                                    <p className="mt-1 text-caption text-latte">Naver Blog</p>
+                                </div>
+                                <a
+                                    href={site.blog}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="shrink-0 text-caption font-semibold text-latte underline-offset-4 hover:text-cocoa hover:underline"
+                                >
+                                    블로그 바로가기
+                                </a>
+                            </div>
+                            {blogPosts.length > 0 ? (
+                                <div className="mt-6 grid gap-4 sm:grid-cols-3">
+                                    {blogPosts.map((post) => (
+                                        <a
+                                            key={post.id}
+                                            href={post.url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="group min-w-0"
+                                        >
+                                            <div className="relative aspect-video overflow-hidden rounded-lg bg-cocoa/10">
+                                                {post.thumbnailUrl ? (
+                                                    <Image
+                                                        src={post.thumbnailUrl}
+                                                        alt=""
+                                                        fill
+                                                        quality={85}
+                                                        sizes="(max-width: 640px) 100vw, 220px"
+                                                        className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                                                    />
+                                                ) : (
+                                                    <div className="grid h-full place-items-center text-caption text-latte/50">
+                                                        RE:BERRY
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <p className="clamp-2 mt-2 text-caption font-semibold leading-5 text-cocoa">
+                                                {post.title}
+                                            </p>
+                                            <time className="mt-1 block text-[11px] text-latte/70">
+                                                {formatBlogDate(post.publishedAt)}
+                                            </time>
+                                        </a>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="mt-6 grid min-h-56 place-items-center border-b border-cocoa/10">
+                                    <span className="text-caption text-latte/60">글을 불러오지 못했습니다.</span>
+                                </div>
+                            )}
+                        </Reveal>
+                    </div>
                 </div>
             </section>
 
@@ -137,4 +236,32 @@ export default async function DoctorsPage() {
             <LocationSection />
         </>
     );
+}
+
+function ProfileList({ title, items }: { title: string; items: string[] }) {
+    return (
+        <div className="mt-7">
+            <p className="font-display inline-block bg-gradient-to-b from-transparent from-[50%] to-sand to-[50%] px-1.5 text-small">
+                {title}
+            </p>
+            <ul className="mt-3 space-y-1 text-small leading-6 text-latte">
+                {items.map((item) => (
+                    <li key={item} className="flex items-start">
+                        <span className="mr-1.5 shrink-0 font-bold text-cocoa">·</span>
+                        <span>{item}</span>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+function formatBlogDate(value: string) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+    return new Intl.DateTimeFormat('ko-KR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    }).format(date);
 }

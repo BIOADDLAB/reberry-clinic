@@ -8,7 +8,7 @@ import T from '@/components/lang/T';
 import { site } from '@/components/lib/site';
 
 const links = [
-    { label: '비급여수가표', href: '#' },
+    { label: '비급여수가표', href: '/price-list' },
     { label: '이용약관', href: '#' },
     { label: '개인정보처리방침', href: '#' },
 ];

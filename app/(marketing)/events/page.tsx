@@ -2,7 +2,8 @@ import { getTranslations } from 'next-intl/server';
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import Reveal from '@/components/motion/Reveal';
-import EventModal from '@/components/ui/EventModal';
+import PriceListClient from '@/components/pricing/PriceListClient';
+import ManagedEventList from '@/components/events/ManagedEventList';
 
 export async function generateMetadata() {
     const t = await getTranslations('events');
@@ -10,16 +11,7 @@ export async function generateMetadata() {
 }
 
 export default async function EventsPage() {
-    const t = await getTranslations('events');
-    const titles = t.raw('titles') as string[];
-    const events = [
-        { image: '/images/ev-01.jpg', title: titles[0] },
-        { image: '/images/ev-02.jpg', title: titles[1] },
-        { image: '/images/ev-03.jpg', title: titles[2] },
-        { image: '/images/ev-01.jpg', title: titles[0] },
-        { image: '/images/ev-02.jpg', title: titles[1] },
-        { image: '/images/ev-03.jpg', title: titles[2] },
-    ];
+    const tp = await getTranslations('priceList');
 
     return (
         <>
@@ -30,7 +22,17 @@ export default async function EventsPage() {
                     <Reveal className="text-center">
                         <h2 className="font-display text-h2 tracking-[0.06em]">RE:BERRY Event</h2>
                     </Reveal>
-                    <EventModal events={events} />
+                    <ManagedEventList />
+
+                    <div className="mt-20 border-t border-cocoa/10 pt-20 lg:mt-28 lg:pt-28">
+                        <Reveal className="mb-12 text-center">
+                            <h2 className="text-h2 font-bold text-cocoa">{tp('title')}</h2>
+                            <p className="mx-auto mt-4 max-w-2xl text-small leading-7 text-latte">
+                                {tp('description')}
+                            </p>
+                        </Reveal>
+                        <PriceListClient />
+                    </div>
                 </div>
             </section>
 

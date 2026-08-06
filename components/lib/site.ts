@@ -11,9 +11,11 @@ export const site = {
     addressDetail: '1101, 1102호 (성산동, SJ라벨라 상암)',
     subway: '6호선 마포구청역 1번 출구 도보 5분 이내',
     parking: ['건물 뒷편 주차장 · 주차권 수령 후', '지하 주차, 전기차 주차 제한'],
+    reservation: '/reservation',
     reservationPhone: 'tel:050713643777',
     kakao: 'https://pf.kakao.com/_khIcn',
     youtube: 'https://www.youtube.com/@%EB%A7%88%ED%8F%AC%ED%94%BC%EB%B6%80%EC%99%95',
+    youtubeChannelId: 'UCcEfj1HHetVysv3WwUhRIuA',
     blog: 'https://blog.naver.com/drpyton',
     naver: 'https://map.naver.com/p/entry/place/2016111974?c=15.00,0,0,0,dh&isCorrectAnswer=true&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202607231740%26locale%3Dko%26svcName%3Dmap_pcv5',
     hours: [
@@ -44,6 +46,7 @@ export const nav = [
             { label: '홍조', en: 'Redness', href: '/treatments/signature/redness' },
         ],
     },
+    { label: '전후사진', en: 'BEFORE & AFTER', href: '/reviews' },
     {
         label: '피부교정',
         en: 'SKIN CARE',
@@ -72,7 +75,6 @@ export const nav = [
             { label: '수액·주사', en: 'IV Therapy', href: '/treatments/aging/iv-therapy' },
         ],
     },
-    { label: '시술결과', en: 'RESULTS', href: '/reviews' },
     { label: '이벤트', en: 'EVENT', href: '/events' },
     { label: '피부칼럼', en: 'COLUMN', href: '/column' },
 ];

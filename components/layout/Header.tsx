@@ -26,6 +26,7 @@ export default function Header() {
     const close = () => setOpen(false);
     const lang = useLang();
     const t = useTranslations('common');
+    const reservationT = useTranslations('reservation');
     const pathname = usePathname();
 
     // #STYLE: 스크롤되었거나, 모바일 메뉴가 열렸거나, PC 메뉴에 호버했을 때 solid 상태(배경색 활성화)로 변경
@@ -68,7 +69,7 @@ export default function Header() {
                             </Link>
 
                             {item.children && (
-                                <div className="invisible absolute left-1/2 top-full z-50 mt-9.5 min-w-44 -translate-x-1/2 bg-cream py-2 rounded-b-[20px]  shadow-lg ring-1 ring-cocoa/10 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
+                                <div className="invisible absolute left-1/2 top-full z-50 mt-9.5 min-w-44 -translate-x-1/2 rounded-b-[20px] bg-cream/85 py-2 shadow-lg ring-1 ring-cocoa/10 backdrop-blur-md opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
                                     <ul className="py-3">
                                         {item.children.map((c) => {
                                             const isActive = pathname === c.href;
@@ -96,7 +97,23 @@ export default function Header() {
                 </nav>
 
                 <div className="relative z-10 flex shrink-0 items-center gap-2">
-                    <LanguageToggle solid={solid} />
+                    <div className="relative">
+                        <LanguageToggle solid={solid} />
+                        {pathname === '/' && (
+                            <Link
+                                href="/reservation"
+                                className="absolute right-0 top-full mt-3 flex w-max items-center gap-2 rounded-full border border-cocoa/15 bg-cream px-4 py-2.5 text-caption font-semibold text-cocoa shadow-[0_5px_20px_rgba(69,54,45,0.16)] transition-transform hover:-translate-y-0.5"
+                            >
+                                <span
+                                    className="grid size-5 place-items-center rounded-full bg-cocoa text-[11px] text-cream"
+                                    aria-hidden="true"
+                                >
+                                    R
+                                </span>
+                                {reservationT('title')}
+                            </Link>
+                        )}
+                    </div>
                     <button
                         onClick={() => setOpen(!open)}
                         aria-label={t('openMenu')}

@@ -8,6 +8,9 @@ const NAV = [
     { href: '/admin/ba', label: '전후사진 관리' },
     { href: '/admin/columns', label: '블로그 연결 관리' },
     { href: '/admin/skin-columns', label: '피부칼럼 관리' },
+    { href: '/admin/reservations', label: '예약 관리' },
+    { href: '/admin/price-list', label: '수가표 관리' },
+    { href: '/admin/events', label: '이벤트 관리' },
 ];
 
 export default function AdminProtectedLayout({ children }: { children: React.ReactNode }) {

@@ -10,18 +10,22 @@ import LocationSection from '@/components/ui/LocationSection';
 import WhySection from '@/components/home/WhySection';
 import Reveal from '@/components/motion/Reveal';
 import TourSwiper from '@/components/ui/TourSwioer';
-import SolutionTabs from '@/components/home/SolutionTabs';
+import MainSidePopups from '@/components/home/MainSidePopups';
+import ManagedEventList from '@/components/events/ManagedEventList';
 
 const HERO_IMG = '/images/bg-main-hiro.jpg';
 
 export default async function Home() {
     const t = await getTranslations('home');
+    const tEvents = await getTranslations('events');
     const locale = await getLocale();
     const tLabels = await getTranslations('labels');
     const directorName = locale !== 'ko' && tLabels.has(site.director) ? tLabels(site.director) : site.director;
 
     return (
         <>
+            <MainSidePopups />
+
             {/* 메인 히어로 영역 */}
             {/* #ISSUE: 배경 높이 디자인팀 의견 반영 100vh로 변경 - 기존코드는 임시로 주석처리 */}
             {/* <section className="relative flex h-[70vh] min-h-[600px] max-h-[850px] w-full items-center justify-center overflow-hidden text-center text-cream"> */}
@@ -38,8 +42,15 @@ export default async function Home() {
                 />
                 <Reveal className="relative px-6">
                     <p className="text-h1-sm">{t('heroTagline')}</p>
-                    <h1 className="font-display font-normal text-h1-sm notranslate mt-1 text-h1 tracking-[-2%] ">
-                        RE:BERRY
+                    <h1 className="notranslate mt-3 flex justify-center">
+                        <Image
+                            src="/images/logo-main.svg"
+                            alt="RE:BERRY"
+                            width={352}
+                            height={38}
+                            priority
+                            className="h-auto w-[240px] md:w-[300px]"
+                        />
                     </h1>
                     <div className="mt-11 flex justify-center">
                         <Link
@@ -101,8 +112,19 @@ export default async function Home() {
                 </div>
             </section>
 
-            {/* 솔루션 장비, 제품 영역 */}
-            <SolutionTabs />
+            {/* 진행 중인 이벤트 영역 */}
+            <section className="overflow-hidden bg-cream py-20 lg:py-32">
+                <div className="container-site">
+                    <Reveal className="text-center">
+                        <h2 className="font-display text-h2 tracking-[0.08em]">RE:BERRY EVENT</h2>
+                        <p className="mt-3 text-lead font-semibold text-cocoa">{tEvents('currentTitle')}</p>
+                    </Reveal>
+                    <ManagedEventList limit={3} />
+                    <div className="mt-10 text-center">
+                        <MoreView href="/events" dark />
+                    </div>
+                </div>
+            </section>
 
             {/* 의사소개 영역 */}
             <section className="texture-paper py-16 lg:py-28 bg-[url('/images/bg-texture-07.jpg')] bg-cover bg-top bg-cream">
