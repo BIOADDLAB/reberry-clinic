@@ -143,9 +143,12 @@ export default function PriceListClient() {
     };
 
     return (
-        <div ref={rootRef} className="grid gap-10 pb-24 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:pb-0">
-            <div>
-                <div className="flex gap-2 overflow-x-auto pb-2">
+        <div
+            ref={rootRef}
+            className="grid w-full min-w-0 max-w-full gap-10 overflow-x-clip pb-24 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:pb-0"
+        >
+            <div className="min-w-0 max-w-full">
+                <div className="flex w-full min-w-0 max-w-full gap-2 overflow-x-auto pb-2">
                     <CategoryButton
                         active={activeCategory === 'all'}
                         label={t('all')}
@@ -175,7 +178,7 @@ export default function PriceListClient() {
                             setPage(1);
                         }}
                         placeholder={t('searchPlaceholder')}
-                        className="w-full rounded-2xl border border-cocoa/15 bg-cream px-5 py-3.5 text-small text-cocoa outline-none focus:border-cocoa/40"
+                        className="block w-full min-w-0 max-w-full rounded-2xl border border-cocoa/15 bg-cream px-5 py-3.5 text-small text-cocoa outline-none focus:border-cocoa/40"
                     />
                 </label>
 
@@ -207,7 +210,7 @@ export default function PriceListClient() {
                                                 </p>
                                             )}
                                         </div>
-                                        <div className="w-full shrink-0 sm:w-56">
+                                        <div className="w-full min-w-0 shrink-0 sm:w-56">
                                             <select
                                                 value={selectedId}
                                                 onChange={(event) =>
@@ -216,7 +219,7 @@ export default function PriceListClient() {
                                                         [item.docId]: event.target.value,
                                                     }))
                                                 }
-                                                className="w-full rounded-xl border border-cocoa/15 bg-white px-3 py-2.5 text-caption text-cocoa outline-none"
+                                                className="block w-full min-w-0 max-w-full rounded-xl border border-cocoa/15 bg-white px-3 py-2.5 text-caption text-cocoa outline-none"
                                             >
                                                 {item.options.map((option) => (
                                                     <option key={option.id} value={option.id}>

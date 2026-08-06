@@ -13,7 +13,7 @@ export default async function PriceListPage() {
     return (
         <>
             <SubHero en="PRICE LIST" title={t('title')} image="/images/bg-sub-06.jpg" />
-            <section className="bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-top py-20 lg:py-28">
+            <section className="overflow-x-clip bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-top py-20 lg:py-28">
                 <div className="container-site">
                     <div className="mb-12 text-center">
                         <h1 className="text-h2 font-bold text-cocoa">{t('title')}</h1>

@@ -17,7 +17,7 @@ export default async function EventsPage() {
         <>
             <SubHero en="RE:BERRY EVENT" image="/images/bg-sub-06.jpg" />
 
-            <section className="texture-paper py-20 lg:py-33 bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-top bg-cream">
+            <section className="texture-paper overflow-x-clip py-20 lg:py-33 bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-top bg-cream">
                 <div className="container-site">
                     <Reveal className="text-center">
                         <h2 className="font-display text-h2 tracking-[0.06em]">RE:BERRY Event</h2>
