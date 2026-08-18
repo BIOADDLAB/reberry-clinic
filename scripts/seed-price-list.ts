@@ -31,15 +31,36 @@ const seedPath = resolve(process.cwd(), 'data/price-list.seed.json');
 
 async function main() {
     const payload = JSON.parse(await readFile(seedPath, 'utf8')) as SeedPayload;
-    const packagePattern = /pkg|패키지/i;
     const invalidItem = payload.items.find(
         (item) =>
-            packagePattern.test(item.name) ||
-            packagePattern.test(item.description) ||
             item.options.length === 0 ||
             item.options.some((option) => !Number.isInteger(option.price) || option.price <= 0),
     );
     if (invalidItem) throw new Error(`Invalid seed item: ${invalidItem.name}`);
+
+    const [existingCategories, existingItems] = await Promise.all([
+        getDocs(collection(db, CATEGORY_COLLECTION)),
+        getDocs(collection(db, ITEM_COLLECTION)),
+    ]);
+    const targetCategoryIds = new Set(payload.categories.map((category) => category.docId));
+    const targetItemIds = new Set(payload.items.map((item) => item.docId));
+    const staleSeedDocs = [
+        ...existingCategories.docs.filter(
+            (entry) =>
+                String(entry.data().seedVersion ?? '').startsWith('xlsx-seed-') &&
+                !targetCategoryIds.has(entry.id),
+        ),
+        ...existingItems.docs.filter(
+            (entry) =>
+                String(entry.data().seedVersion ?? '').startsWith('xlsx-seed-') &&
+                !targetItemIds.has(entry.id),
+        ),
+    ];
+    for (let offset = 0; offset < staleSeedDocs.length; offset += 450) {
+        const batch = writeBatch(db);
+        staleSeedDocs.slice(offset, offset + 450).forEach((entry) => batch.delete(entry.ref));
+        await batch.commit();
+    }
 
     const now = new Date().toISOString();
     const writes = [
@@ -96,6 +117,7 @@ async function main() {
                 uploadedItems: payload.items.length,
                 firestoreCategories: categorySnapshot.size,
                 firestoreItems: itemSnapshot.size,
+                removedStaleSeedDocs: staleSeedDocs.length,
                 sample: firstItem ? { id: firstItem.id, name: firstItem.data().name } : null,
             },
             null,

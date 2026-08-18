@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { getLocale, getTranslations } from 'next-intl/server';
 import Eyebrow from '@/components/ui/Eyebrow';
 import BASlider from '@/components/ui/BASlider';
@@ -14,6 +15,12 @@ import MainSidePopups from '@/components/home/MainSidePopups';
 import ManagedEventList from '@/components/events/ManagedEventList';
 
 const HERO_IMG = '/images/bg-main-hiro.jpg';
+
+export const metadata: Metadata = {
+    alternates: {
+        canonical: '/',
+    },
+};
 
 export default async function Home() {
     const t = await getTranslations('home');
@@ -45,7 +52,7 @@ export default async function Home() {
                     <h1 className="notranslate mt-3 flex justify-center">
                         <Image
                             src="/images/logo-main.svg"
-                            alt="RE:BERRY"
+                            alt="마포 리베리의원 RE:BERRY"
                             width={352}
                             height={38}
                             priority

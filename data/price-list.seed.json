@@ -1,100 +1,128 @@
 {
-  "version": "xlsx-seed-v1",
+  "version": "xlsx-seed-v2",
   "source": "수가표 !!!!! (3).xlsx",
   "categories": [
     {
-      "docId": "botox-hair-removal",
-      "label": "보톡스·제모",
+      "docId": "botox",
+      "label": "보톡스",
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "hair-removal",
+      "label": "제모",
+      "sort": 1,
+      "isPublished": true,
+      "seedVersion": "xlsx-seed-v2"
     },
     {
       "docId": "filler",
-      "label": "필러·실리프팅",
-      "sort": 1,
-      "isPublished": true,
-      "seedVersion": "xlsx-seed-v1"
-    },
-    {
-      "docId": "titanium",
-      "label": "티타늄",
+      "label": "필러",
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "co2-keloid-contouring",
-      "label": "CO2·켈로이드·지방분해",
+      "docId": "thread-lifting",
+      "label": "실리프팅",
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "xlsx-seed-v1"
-    },
-    {
-      "docId": "skin-booster",
-      "label": "스킨부스터",
-      "sort": 4,
-      "isPublished": true,
-      "seedVersion": "xlsx-seed-v1"
-    },
-    {
-      "docId": "tattoo-body-toning",
-      "label": "문신제거·바디토닝",
-      "sort": 5,
-      "isPublished": true,
-      "seedVersion": "xlsx-seed-v1"
-    },
-    {
-      "docId": "potenza-acne-scar",
-      "label": "포텐자·여드름·모공흉터",
-      "sort": 6,
-      "isPublished": true,
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
       "docId": "lifting",
       "label": "리프팅",
+      "sort": 4,
+      "isPublished": true,
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "skin-booster",
+      "label": "스킨부스터",
+      "sort": 5,
+      "isPublished": true,
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "acne-ptt",
+      "label": "여드름 (PTT)",
+      "sort": 6,
+      "isPublished": true,
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "pore-scar",
+      "label": "모공흉터",
       "sort": 7,
       "isPublished": true,
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "potenza",
+      "label": "포텐자",
+      "sort": 8,
+      "isPublished": true,
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "pigment",
+      "label": "색소",
+      "sort": 9,
+      "isPublished": true,
+      "seedVersion": "xlsx-seed-v2"
     },
     {
       "docId": "skin-care",
       "label": "피부관리",
-      "sort": 8,
+      "sort": 10,
       "isPublished": true,
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "tattoo-body-toning",
+      "label": "문신제거·바디토닝",
+      "sort": 11,
+      "isPublished": true,
+      "seedVersion": "xlsx-seed-v2"
     },
     {
       "docId": "iv-therapy",
-      "label": "수액·주사",
-      "sort": 9,
+      "label": "수액",
+      "sort": 12,
       "isPublished": true,
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "other",
+      "label": "기타",
+      "sort": 13,
+      "isPublished": true,
+      "seedVersion": "xlsx-seed-v2"
     }
   ],
   "items": [
     {
-      "docId": "6508cd952f40cd8f2b7f",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "a1b00966be16d2bebffb",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "주름 1부위",
       "description": "",
       "options": [
         {
-          "id": "b289e2c38a45207fcc3e",
+          "id": "e5c9e0c50a4bcd7e3119",
           "label": "하이톡스",
           "price": 19000,
           "sourceCell": "D5"
         },
         {
-          "id": "1dacd2f7d10565af4f07",
+          "id": "8fa557b60999447e2381",
           "label": "코어톡스",
           "price": 39000,
           "sourceCell": "E5"
         },
         {
-          "id": "50f73a8668f8774eead0",
+          "id": "86034e5c781662538e23",
           "label": "제오민",
           "price": 59000,
           "sourceCell": "F5"
@@ -104,637 +132,658 @@
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A5",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "f50fd85900fd8efbccff",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "7fc2f052008bfbb1f292",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "주름3부위",
       "description": "",
       "options": [
         {
-          "id": "f69746330de61fabf7c2",
+          "id": "16dfb816a7a6fe4088aa",
           "label": "하이톡스",
           "price": 51000,
           "sourceCell": "D7"
         },
         {
-          "id": "6a22737f5fcab676cb4e",
+          "id": "7531e8b72b425d4de8a1",
           "label": "코어톡스",
           "price": 105000,
           "sourceCell": "E7"
         },
         {
-          "id": "795874f45e0249fed4b1",
+          "id": "da3d364f6214c83a30c4",
           "label": "제오민",
           "price": 159000,
           "sourceCell": "F7"
         }
       ],
-      "sort": 0,
+      "sort": 1,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A7",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "c9cbb4467fb7136ce003",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "9cdb538f2ee298a9bc7f",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "주름 올인원",
       "description": "",
       "options": [
         {
-          "id": "7a6802d863e1824ac290",
+          "id": "f42b4bc83d00063fca21",
           "label": "하이톡스",
           "price": 89000,
           "sourceCell": "D8"
         },
         {
-          "id": "83c982d6bf2b914cdf56",
+          "id": "e29bf08e38c959fa2854",
           "label": "코어톡스",
           "price": 190000,
           "sourceCell": "E8"
         },
         {
-          "id": "684559944aff9f55767a",
+          "id": "0f6533a58f84856a5da7",
           "label": "제오민",
           "price": 289000,
           "sourceCell": "F8"
         }
       ],
-      "sort": 0,
+      "sort": 2,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A8",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "3a3e4983e2d057fca1af",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "ea28317d9c8cf5047554",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "특수부위 1부위",
       "description": "",
       "options": [
         {
-          "id": "053c7b849f570df68761",
+          "id": "6870405920b8139af9b2",
           "label": "하이톡스",
           "price": 29000,
           "sourceCell": "D9"
         },
         {
-          "id": "34b88092d974d5fe6c23",
+          "id": "8210c0bbb4319abd0bc2",
           "label": "코어톡스",
           "price": 49000,
           "sourceCell": "E9"
         },
         {
-          "id": "befe02529b30c8283694",
+          "id": "794590f784b6d2a37fc5",
           "label": "제오민",
           "price": 89000,
           "sourceCell": "F9"
         }
       ],
-      "sort": 0,
+      "sort": 3,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A9",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "1eb736b6ad35b18cb044",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "cb19b3321b64a99b2357",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "주름보톡스 리터치",
       "description": "",
       "options": [
         {
-          "id": "20fe93ad4db9e6326e7c",
+          "id": "60af555ef3b6feb51d36",
           "label": "하이톡스",
           "price": 9000,
           "sourceCell": "D11"
         },
         {
-          "id": "c1609ab812fac470ef71",
+          "id": "af38c0a7f2c9f96c3bd0",
           "label": "코어톡스",
           "price": 19000,
           "sourceCell": "E11"
         },
         {
-          "id": "7d5bde3a52e8204f94a3",
+          "id": "7c9daebeec36fbf4854f",
           "label": "제오민",
           "price": 29000,
           "sourceCell": "F11"
         }
       ],
-      "sort": 0,
+      "sort": 4,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A11",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "e0ac7799b697d1d28476",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "fb85fdcd996eb27e8367",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "사각턱 보톡스 50U",
       "description": "",
       "options": [
         {
-          "id": "f548a71c66a71b1a9478",
+          "id": "f59087b8361df3a75627",
           "label": "하이톡스",
           "price": 29000,
           "sourceCell": "D12"
         },
         {
-          "id": "a43889bc52cccd84d701",
+          "id": "10164b00731be9adb9e2",
           "label": "코어톡스",
           "price": 59000,
           "sourceCell": "E12"
         },
         {
-          "id": "a77168288d2cdd6c9b4f",
+          "id": "f88ac6ebd4dfec80228a",
           "label": "제오민",
           "price": 129000,
           "sourceCell": "F12"
         }
       ],
-      "sort": 0,
+      "sort": 5,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A12",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "2f7c1d805283296b0e60",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "06f493d4489b8c7e4e23",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "75U",
       "description": "",
       "options": [
         {
-          "id": "3283e305c831f48d1088",
+          "id": "3c4ad55791bf0406ba3c",
           "label": "하이톡스",
           "price": 44000,
           "sourceCell": "D13"
         },
         {
-          "id": "96c79a943298f3b784cf",
+          "id": "e39b7195b3c665d324ca",
           "label": "코어톡스",
           "price": 79000,
           "sourceCell": "E13"
         },
         {
-          "id": "99c86b4afe6be90cf390",
+          "id": "747bd5c3b57ebd8f3c02",
           "label": "제오민",
           "price": 179000,
           "sourceCell": "F13"
         }
       ],
-      "sort": 0,
+      "sort": 6,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A13",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "6100f597bb74c5b94916",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "5efeb7b05ff9248488ff",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "100U",
       "description": "",
       "options": [
         {
-          "id": "1b556eb29df816c9018d",
+          "id": "46d84eaa0f4d73782ec4",
           "label": "하이톡스",
           "price": 55000,
           "sourceCell": "D14"
         },
         {
-          "id": "72dca6d91a46206a9b32",
+          "id": "9900a2c315e102256042",
           "label": "코어톡스",
           "price": 99000,
           "sourceCell": "E14"
         },
         {
-          "id": "3c9b117f9bcef99e4448",
+          "id": "654809fe145558676590",
           "label": "제오민",
           "price": 229000,
           "sourceCell": "F14"
         }
       ],
-      "sort": 0,
+      "sort": 7,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A14",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "1e46ff72512d6004f6d5",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "c68ed17bc2632736f401",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "리터치 사각턱",
       "description": "",
       "options": [
         {
-          "id": "039bdd1cbbd4d89d5060",
+          "id": "38ecbf21fcddfed89b74",
           "label": "하이톡스",
           "price": 15000,
           "sourceCell": "D15"
         },
         {
-          "id": "3c8cdd64c703b27144d0",
+          "id": "e760cb6f87b40dfe28d3",
           "label": "코어톡스",
           "price": 29000,
           "sourceCell": "E15"
         },
         {
-          "id": "5b92543e7bc04e9a9c93",
+          "id": "5f6df9b95d21f7aeaff8",
           "label": "제오민",
           "price": 65000,
           "sourceCell": "F15"
         }
       ],
-      "sort": 0,
+      "sort": 8,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A15",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "f73b8eed7db937510b76",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "394b24285cd41cb4cb95",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "침샘 보톡스 50U",
       "description": "",
       "options": [
         {
-          "id": "958d050e5f98957edf3b",
+          "id": "d6cf5d78f9bba81461fc",
           "label": "하이톡스",
           "price": 59000,
           "sourceCell": "D16"
         },
         {
-          "id": "68b33710276d848e9a60",
+          "id": "f50cb923a2ecdfdc401c",
           "label": "코어톡스",
           "price": 89000,
           "sourceCell": "E16"
         },
         {
-          "id": "1fe79b29b08b33a10118",
+          "id": "5b613a78c139da1426cd",
           "label": "제오민",
           "price": 159000,
           "sourceCell": "F16"
         }
       ],
-      "sort": 0,
+      "sort": 9,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A16",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "7ee9571e578738a4d5c2",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "a7600887b5db2db710de",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "75U",
       "description": "",
       "options": [
         {
-          "id": "2076425f8ed000743889",
+          "id": "c3a337787639363e3349",
           "label": "하이톡스",
           "price": 89000,
           "sourceCell": "D17"
         },
         {
-          "id": "5d404d20fbb0efa54e8e",
+          "id": "e20f997a5a25b6cb63d6",
           "label": "코어톡스",
           "price": 109000,
           "sourceCell": "E17"
         },
         {
-          "id": "8b397fcdc577990b8b14",
+          "id": "88e0158ec1754a427567",
           "label": "제오민",
           "price": 219000,
           "sourceCell": "F17"
         }
       ],
-      "sort": 0,
+      "sort": 10,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A17",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "cbe4f7052829d50b0206",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "35c9b2ff61bf781a093d",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "100U",
       "description": "",
       "options": [
         {
-          "id": "f22ba4a9825bea7e6559",
+          "id": "386746beb07ded74b589",
           "label": "하이톡스",
           "price": 119000,
           "sourceCell": "D18"
         },
         {
-          "id": "6cbea3328a2fd8fa3769",
+          "id": "4fd66f554bdc9012bed8",
           "label": "코어톡스",
           "price": 129000,
           "sourceCell": "E18"
         },
         {
-          "id": "ed8cc5b494e67679c59a",
+          "id": "08b4e8bcda5286df96fe",
           "label": "제오민",
           "price": 279000,
           "sourceCell": "F18"
         }
       ],
-      "sort": 0,
+      "sort": 11,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A18",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "3fbc391a30bfe79516b7",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "6ffe07306580e6d60d07",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "침샘 25U 추가",
       "description": "",
       "options": [
         {
-          "id": "aac03f75608db700dc12",
+          "id": "dfdebad475ddaee798ad",
           "label": "하이톡스",
           "price": 30000,
           "sourceCell": "D19"
         },
         {
-          "id": "2a8aa8e6b5c86d751811",
+          "id": "847786f5eae845edec77",
           "label": "코어톡스",
           "price": 20000,
           "sourceCell": "E19"
         },
         {
-          "id": "f829c90a118e19858f0e",
+          "id": "12db89cc203253afe782",
           "label": "제오민",
           "price": 60000,
           "sourceCell": "F19"
         }
       ],
-      "sort": 0,
+      "sort": 12,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A19",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "911fa5c4a3b0ff729b6b",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "2ce65ba6608806c3100e",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "관자 보톡스 50U",
       "description": "",
       "options": [
         {
-          "id": "60b4d8f3804fee500f93",
+          "id": "d5bf631a828a3e77ca5a",
           "label": "하이톡스",
           "price": 59000,
           "sourceCell": "D20"
         },
         {
-          "id": "7c58a74d2ad35bfa30a3",
+          "id": "d0c69312aac49e705030",
           "label": "코어톡스",
           "price": 89000,
           "sourceCell": "E20"
         },
         {
-          "id": "a9fef89fe724981b012c",
+          "id": "c644f27e8c8795fbd305",
           "label": "제오민",
           "price": 159000,
           "sourceCell": "F20"
         }
       ],
-      "sort": 0,
+      "sort": 13,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A20",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "2fd7f1d924327046a9ab",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "82a9e5603094ebac6904",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "바디 보톡스 100U",
       "description": "",
       "options": [
         {
-          "id": "6f270a2088bb2405c249",
+          "id": "6d0fdebcf111a878b751",
           "label": "하이톡스",
           "price": 79000,
           "sourceCell": "D21"
         },
         {
-          "id": "c24777e78e45deb83825",
+          "id": "d18f9635759cf46c335e",
           "label": "코어톡스",
           "price": 129000,
           "sourceCell": "E21"
         },
         {
-          "id": "f3eae1c0e16a1e48c2ea",
+          "id": "4751aa4fff592db03ab9",
           "label": "제오민",
           "price": 279000,
           "sourceCell": "F21"
         }
       ],
-      "sort": 0,
+      "sort": 14,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A21",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "de8da950d9c7f2ddad23",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "30790ea252a4671acdbb",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "200U",
       "description": "",
       "options": [
         {
-          "id": "752cf55212c372c93a38",
+          "id": "1c69c5c0ad1c614a2844",
           "label": "하이톡스",
           "price": 149000,
           "sourceCell": "D22"
         },
         {
-          "id": "d6b8fa515628f4c19d67",
+          "id": "356de942457f7df569cd",
           "label": "코어톡스",
           "price": 209000,
           "sourceCell": "E22"
         },
         {
-          "id": "e27274d73c20b4f3716e",
+          "id": "3fc45bc7db45a3d1fafe",
           "label": "제오민",
           "price": 499000,
           "sourceCell": "F22"
         }
       ],
-      "sort": 0,
+      "sort": 15,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A22",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "b17cab2feee4c14ea9f5",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "6ff948faa751a258f929",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "300U",
       "description": "",
       "options": [
         {
-          "id": "28e23eb615089e5ccb82",
+          "id": "7af7e3fac4bdc45ab275",
           "label": "하이톡스",
           "price": 219000,
           "sourceCell": "D23"
         },
         {
-          "id": "1c4a869d3146f3b6f810",
+          "id": "19ddc76972ad0fbd4cbf",
           "label": "코어톡스",
           "price": 279000,
           "sourceCell": "E23"
         },
         {
-          "id": "1dadd662e8f8f76af31b",
+          "id": "7ff3b7e156a5c53acd8b",
           "label": "제오민",
           "price": 699000,
           "sourceCell": "F23"
         }
       ],
-      "sort": 0,
+      "sort": 16,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A23",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "6058604b908d1a77cbee",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "4056e8af34eadbbc4fc1",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "다한증 보톡스 100U",
       "description": "",
       "options": [
         {
-          "id": "535be40224d05fffbe55",
+          "id": "81ad4dad5ce66da12543",
           "label": "하이톡스",
           "price": 149000,
           "sourceCell": "D24"
         },
         {
-          "id": "230a02dd410f830201f4",
+          "id": "160482a4d7c76ebbe8a7",
           "label": "코어톡스",
           "price": 239000,
           "sourceCell": "E24"
         },
         {
-          "id": "ee7dd48a0eb78df0fee9",
+          "id": "3388f5978e812a8b8308",
           "label": "제오민",
           "price": 399000,
           "sourceCell": "F24"
         }
       ],
-      "sort": 0,
+      "sort": 17,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A24",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "b70a1ffb62048ba38a72",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "0b8970e973ac194b1fff",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "스킨보톡스 1CC",
       "description": "",
       "options": [
         {
-          "id": "4ec20a67275eab68d2d7",
+          "id": "adea71028d98c033f47e",
           "label": "하이톡스",
           "price": 39000,
           "sourceCell": "D25"
         },
         {
-          "id": "9f942e9d8065cc11993f",
+          "id": "ecf13a3f96056f1a617d",
           "label": "코어톡스",
           "price": 59000,
           "sourceCell": "E25"
         },
         {
-          "id": "8ee36db9a94248c83f78",
+          "id": "cda5a1ecfe18562d18f2",
           "label": "제오민",
           "price": 99000,
           "sourceCell": "F25"
         }
       ],
-      "sort": 0,
+      "sort": 18,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A25",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "92af86bf4fce773873c7",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "16dfb0ac13ad89c20511",
+      "categoryId": "botox",
+      "section": "보톡스",
       "name": "3CC",
       "description": "",
       "options": [
         {
-          "id": "f49db615461ef4c5f4f2",
+          "id": "3b1a32ce16927ed2c9bb",
           "label": "하이톡스",
           "price": 109000,
           "sourceCell": "D26"
         },
         {
-          "id": "9b9e615f0b422ca489e2",
+          "id": "a7b96fcb85bd54ec3751",
           "label": "코어톡스",
           "price": 159000,
           "sourceCell": "E26"
         },
         {
-          "id": "92d47ae15956f31962bd",
+          "id": "34ba524cd68ed2f45e14",
           "label": "제오민",
           "price": 249000,
           "sourceCell": "F26"
         }
       ],
-      "sort": 0,
+      "sort": 19,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A26",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "34671e6214c32e488fbd",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "713cc3b97b94b7567651",
+      "categoryId": "botox",
+      "targetCategoryId": "botox",
+      "section": "보톡스",
+      "name": "원데이 종아리 알빼기 PKG",
+      "description": "",
+      "options": [
+        {
+          "id": "5d36f0a38731da3faa65",
+          "label": "기본",
+          "price": 179000,
+          "sourceCell": "D27"
+        }
+      ],
+      "sort": 20,
+      "isPublished": true,
+      "sourceSheet": "보톡스,제모",
+      "sourceCell": "A27",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "9b27452ee1372e63f984",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "겨드랑이 / 인중",
       "description": "",
       "options": [
         {
-          "id": "023e1e0d840ac6d72774",
+          "id": "e2cf36ce956144325fc4",
           "label": "1회",
           "price": 10000,
           "sourceCell": "F32"
         },
         {
-          "id": "f54d5cc5100f28d82aa5",
+          "id": "0b2a672715bda2aa2c47",
           "label": "5회",
           "price": 39000,
           "sourceCell": "G32"
         },
         {
-          "id": "da260aaeccd6d6f1473f",
+          "id": "1b3e36210db95e2e4ea1",
           "label": "10회",
           "price": 74000,
           "sourceCell": "H32"
@@ -744,893 +793,893 @@
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A32",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "e4ef30072e6b0598cd7f",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "9b43f365d81ad32f4a90",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "손등,손가락/발등,발가락/미간,코",
       "description": "",
       "options": [
         {
-          "id": "92dfcc4e36111f271234",
+          "id": "dc35642f3a26c6b6d1e9",
           "label": "1회",
           "price": 30000,
           "sourceCell": "F33"
         },
         {
-          "id": "d2bd43df47f469ba012f",
+          "id": "eedbec37acd9b63daa5c",
           "label": "5회",
           "price": 120000,
           "sourceCell": "G33"
         },
         {
-          "id": "9f50fcc1aedafe9f202c",
+          "id": "acaafc78a0f2a97a5ccc",
           "label": "10회",
           "price": 219000,
           "sourceCell": "H33"
         }
       ],
-      "sort": 0,
+      "sort": 1,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A33",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "86a1c8fb549f7adb6a34",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "577284097f4516f6359d",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "나비존 속모증",
       "description": "",
       "options": [
         {
-          "id": "6eada6c5d151d0f4dc88",
+          "id": "5c0e119135784e131350",
           "label": "1회",
           "price": 60000,
           "sourceCell": "F34"
         },
         {
-          "id": "d4804a0f2062fff4dd10",
+          "id": "a9bd360152eb4e26fc26",
           "label": "5회",
           "price": 250000,
           "sourceCell": "G34"
         },
         {
-          "id": "379b30e34e1eed794ce7",
+          "id": "68a25cc1926a19108af6",
           "label": "10회",
           "price": 499000,
           "sourceCell": "H34"
         }
       ],
-      "sort": 0,
+      "sort": 2,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A34",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "226bc80e0a42113c3b6d",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "8b269d91c9425fb1c271",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "헤어라인",
       "description": "",
       "options": [
         {
-          "id": "4c58e71b1397182d92b6",
+          "id": "548e9919322c1bc0f446",
           "label": "1회",
           "price": 45000,
           "sourceCell": "F35"
         },
         {
-          "id": "678b0c7ebd7af03fa007",
+          "id": "f08d9b6f9fecb4c232be",
           "label": "5회",
           "price": 179000,
           "sourceCell": "G35"
         },
         {
-          "id": "c87771ee26b81ec5f93c",
+          "id": "cde054687564d3551abf",
           "label": "10회",
           "price": 319000,
           "sourceCell": "H35"
         }
       ],
-      "sort": 0,
+      "sort": 3,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A35",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "c5c1ad06658ddd299bc6",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "189a907b8fcf8868836a",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "이마전체(미간,헤어라인포함)",
       "description": "",
       "options": [
         {
-          "id": "a0fb3f4541ab6596bb55",
+          "id": "7ea31905225e6b2b7c1e",
           "label": "1회",
           "price": 55000,
           "sourceCell": "F36"
         },
         {
-          "id": "2941b93be61fc60ace23",
+          "id": "b5531c1237eecee4bf6e",
           "label": "5회",
           "price": 219000,
           "sourceCell": "G36"
         },
         {
-          "id": "d3b0fd48d70245000328",
+          "id": "af2945e861c410efaf4f",
           "label": "10회",
           "price": 399000,
           "sourceCell": "H36"
         }
       ],
-      "sort": 0,
+      "sort": 4,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A36",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "3a4f2c6acd4b28eab678",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "361ace619a2e1aebd61a",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "얼굴전체",
       "description": "",
       "options": [
         {
-          "id": "b3b7585890d6a6456b09",
+          "id": "c393693a7e105184962a",
           "label": "1회",
           "price": 130000,
           "sourceCell": "F37"
         },
         {
-          "id": "522819c697000266c81f",
+          "id": "27e5da4faa4307d56bfe",
           "label": "5회",
           "price": 500000,
           "sourceCell": "G37"
         },
         {
-          "id": "b4f687061049778581aa",
+          "id": "6044b3e652206e8389f7",
           "label": "10회",
           "price": 900000,
           "sourceCell": "H37"
         }
       ],
-      "sort": 0,
+      "sort": 5,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A37",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "bf7813ff20d3cc2cf160",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "c3719966fbae41bb539a",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "뒷목전체",
       "description": "",
       "options": [
         {
-          "id": "0d5132f74a8875355c22",
+          "id": "fcdb65f8c7d93ffe0896",
           "label": "1회",
           "price": 70000,
           "sourceCell": "F38"
         },
         {
-          "id": "3208c9322e48a0735fc4",
+          "id": "bf5a6b80a1f287030eb0",
           "label": "5회",
           "price": 300000,
           "sourceCell": "G38"
         },
         {
-          "id": "fb647dfb95f3297b6af2",
+          "id": "1b8c53ef1aff94003e35",
           "label": "10회",
           "price": 500000,
           "sourceCell": "H38"
         }
       ],
-      "sort": 0,
+      "sort": 6,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A38",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "356230d2ffc62452db67",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "45ec6506fc3f82de488c",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "팔하완+팔꿈치/상완",
       "description": "",
       "options": [
         {
-          "id": "ab6a67455d44252c2ed0",
+          "id": "56f7abcd4b21d9495b38",
           "label": "1회",
           "price": 60000,
           "sourceCell": "F39"
         },
         {
-          "id": "748629acadd32a3778c0",
+          "id": "208b1a9b612d7e7ecc1f",
           "label": "5회",
           "price": 250000,
           "sourceCell": "G39"
         },
         {
-          "id": "ea053a895b844c7d670c",
+          "id": "91132121584fb38f6237",
           "label": "10회",
           "price": 450000,
           "sourceCell": "H39"
         }
       ],
-      "sort": 0,
+      "sort": 7,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A39",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "df7f4532f83f79cf137e",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "7f85ca05f207a01fec5f",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "팔전체(손등+손가락포함)",
       "description": "",
       "options": [
         {
-          "id": "af8cb87d9869bcfabdec",
+          "id": "d8b2e390cb71dd2bd7bc",
           "label": "1회",
           "price": 90000,
           "sourceCell": "F40"
         },
         {
-          "id": "e1e07c32adfe65b1af29",
+          "id": "6faeedd6e85bdd31bdf2",
           "label": "5회",
           "price": 350000,
           "sourceCell": "G40"
         },
         {
-          "id": "80cbe7fb88adf495c618",
+          "id": "32d6bd5271e912befeb6",
           "label": "10회",
           "price": 600000,
           "sourceCell": "H40"
         }
       ],
-      "sort": 0,
+      "sort": 8,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A40",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "d36cc41feb2c2485f4a9",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "aaa44a0dc245fbb96e6d",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "종아리+무릎",
       "description": "",
       "options": [
         {
-          "id": "ee154865d9d06534558f",
+          "id": "7f63207c5a1ee57fd204",
           "label": "1회",
           "price": 75000,
           "sourceCell": "F41"
         },
         {
-          "id": "773156ff9d910995f93d",
+          "id": "e13653961c407c55cc04",
           "label": "5회",
           "price": 325000,
           "sourceCell": "G41"
         },
         {
-          "id": "784822d8dac718da8092",
+          "id": "4f791b9a9951e31b8c19",
           "label": "10회",
           "price": 550000,
           "sourceCell": "H41"
         }
       ],
-      "sort": 0,
+      "sort": 9,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A41",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "478ef573006de93b7d08",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "6dfbb7fd4d704e6539c0",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "허벅지",
       "description": "",
       "options": [
         {
-          "id": "4624cdb2e1c53f35b41e",
+          "id": "3df4ecbe0e765579002e",
           "label": "1회",
           "price": 100000,
           "sourceCell": "F42"
         },
         {
-          "id": "02517b25042fb93e394f",
+          "id": "528f938d369756b97c0f",
           "label": "5회",
           "price": 400000,
           "sourceCell": "G42"
         },
         {
-          "id": "60ca0c9d31c3af60361c",
+          "id": "476fa71bb0868e3a8752",
           "label": "10회",
           "price": 700000,
           "sourceCell": "H42"
         }
       ],
-      "sort": 0,
+      "sort": 10,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A42",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "f8749ef24ff97acf2d55",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "153d8fea4fc49efc04d0",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "다리전체",
       "description": "",
       "options": [
         {
-          "id": "13e1182aded3cf14627e",
+          "id": "439b9c12741aa62ebba0",
           "label": "1회",
           "price": 149000,
           "sourceCell": "F43"
         },
         {
-          "id": "3bef0403ba41cb7f0a82",
+          "id": "8ae8614f907eec007599",
           "label": "5회",
           "price": 650000,
           "sourceCell": "G43"
         },
         {
-          "id": "eddfb9596aaa5f1f4d3b",
+          "id": "3a44f0962f4286b99a7c",
           "label": "10회",
           "price": 900000,
           "sourceCell": "H43"
         }
       ],
-      "sort": 0,
+      "sort": 11,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A43",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "709dc7dba647e6d97fcd",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "11b3e15fcde6b94379a7",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "*웨딩라인*(뒷목+어깨라인+상부승모근)",
       "description": "",
       "options": [
         {
-          "id": "8eb4e0af789bba634e72",
+          "id": "07bf7de1c91ec964d42c",
           "label": "1회",
           "price": 200000,
           "sourceCell": "F44"
         },
         {
-          "id": "d39aaadb4b0e734b8701",
+          "id": "8be1b009ff209198b4bf",
           "label": "(3회) · 5회",
           "price": 490000,
           "sourceCell": "G44"
         },
         {
-          "id": "408c27869928bfd2d78e",
+          "id": "f27a46b74e6438da8de0",
           "label": "(5회) · 10회",
           "price": 790000,
           "sourceCell": "H44"
         }
       ],
-      "sort": 0,
+      "sort": 12,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A44",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "a25a5d39332af44c691b",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "2f4ab7e619c946c4dc10",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "인중 / 앞턱",
       "description": "",
       "options": [
         {
-          "id": "b811cb8b7c5423cb0208",
+          "id": "0c92849c4d4654ee2e49",
           "label": "1회",
           "price": 20000,
           "sourceCell": "F50"
         },
         {
-          "id": "dafc938a8c4aa4013cc1",
+          "id": "83686a58c15d4782e5c8",
           "label": "5회",
           "price": 79000,
           "sourceCell": "G50"
         },
         {
-          "id": "daeb04cf55b7f4b24a36",
+          "id": "8f04f324d32f7ed9868b",
           "label": "10회",
           "price": 149000,
           "sourceCell": "H50"
         }
       ],
-      "sort": 0,
+      "sort": 13,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A50",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "e29ff9059d695263fbaa",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "3322b6fe2cda015ce5a7",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "인중+앞턱",
       "description": "",
       "options": [
         {
-          "id": "9ecf4ab28075b5ed29c4",
+          "id": "2f485c565faf1bb2fe1b",
           "label": "1회",
           "price": 45000,
           "sourceCell": "F51"
         },
         {
-          "id": "a68083596e8d2313dd4e",
+          "id": "e1fdb7a1e27bee845a11",
           "label": "5회",
           "price": 179000,
           "sourceCell": "G51"
         },
         {
-          "id": "7ffec21c8a5fc0a58982",
+          "id": "2428ef212c98bd808033",
           "label": "10회",
           "price": 319000,
           "sourceCell": "H51"
         }
       ],
-      "sort": 0,
+      "sort": 14,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A51",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "4aeadea3c78ff175b4cd",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "145d3c15b3b4bcfd5f4b",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "양볼",
       "description": "",
       "options": [
         {
-          "id": "472d8e09bdf04ce6052b",
+          "id": "1cd8b9b980fe27255865",
           "label": "1회",
           "price": 60000,
           "sourceCell": "F52"
         },
         {
-          "id": "c84e5a410b21f332d270",
+          "id": "45aeac19817a2b4845d2",
           "label": "5회",
           "price": 250000,
           "sourceCell": "G52"
         },
         {
-          "id": "dac57a19902d1c8e22e4",
+          "id": "00dd79baa1efe8a269c2",
           "label": "10회",
           "price": 499000,
           "sourceCell": "H52"
         }
       ],
-      "sort": 0,
+      "sort": 15,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A52",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "f8dd481181e587314a61",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "ff3e3df594efb2559437",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "나비존 속모증",
       "description": "",
       "options": [
         {
-          "id": "d91c12015951de217b93",
+          "id": "fb231361cf80f80cfc64",
           "label": "1회",
           "price": 60000,
           "sourceCell": "F53"
         },
         {
-          "id": "54d92b77644232a8f58c",
+          "id": "89467ececa220aea69d9",
           "label": "5회",
           "price": 250000,
           "sourceCell": "G53"
         },
         {
-          "id": "5af20f473e092d31affd",
+          "id": "ba9ad449fc6999920a16",
           "label": "10회",
           "price": 499000,
           "sourceCell": "H53"
         }
       ],
-      "sort": 0,
+      "sort": 16,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A53",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "05c55c08ae8b49836d36",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "524cb106520995b72c7c",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "하관전체 (인중+앞턱+턱선라인+양볼+구렛)",
       "description": "",
       "options": [
         {
-          "id": "896340851bf1b4f78f11",
+          "id": "473155eb127874f1a3df",
           "label": "1회",
           "price": 90000,
           "sourceCell": "F54"
         },
         {
-          "id": "c6907e0137aa470f6fb4",
+          "id": "626e26fc940d25c2b4ef",
           "label": "5회",
           "price": 350000,
           "sourceCell": "G54"
         },
         {
-          "id": "25a979290e7fb3c82d2f",
+          "id": "1d85062843ccf3e95bcc",
           "label": "10회",
           "price": 600000,
           "sourceCell": "H54"
         }
       ],
-      "sort": 0,
+      "sort": 17,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A54",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "5272e9d35f6d071633a4",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "0061185e0276771121af",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "하관전체+이중턱or앞목",
       "description": "",
       "options": [
         {
-          "id": "119c65602609935c6d3b",
+          "id": "5bd93b131a1b219a401d",
           "label": "1회",
           "price": 109000,
           "sourceCell": "F55"
         },
         {
-          "id": "94e8d345f841a91cd1d3",
+          "id": "b1ad3fea1250fb6e1c50",
           "label": "5회",
           "price": 429000,
           "sourceCell": "G55"
         },
         {
-          "id": "a836ef0be1b917d2788a",
+          "id": "fc06ea4bab6264ae3019",
           "label": "10회",
           "price": 729000,
           "sourceCell": "H55"
         }
       ],
-      "sort": 0,
+      "sort": 18,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A55",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "ccc2a4ee0ce780e861ce",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "a9a9dd0ef86eb0f2aca3",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "하관전체+이중턱+앞목",
       "description": "",
       "options": [
         {
-          "id": "244220aa8eb8413b8137",
+          "id": "c64c8b23e561c03f7000",
           "label": "1회",
           "price": 124000,
           "sourceCell": "F56"
         },
         {
-          "id": "2b58b030283c8e414bad",
+          "id": "3c6e337373e3b3c56851",
           "label": "5회",
           "price": 495000,
           "sourceCell": "G56"
         },
         {
-          "id": "10bec3da8fb8d98db64c",
+          "id": "ba2f8e71a6eea7a4988e",
           "label": "10회",
           "price": 899000,
           "sourceCell": "H56"
         }
       ],
-      "sort": 0,
+      "sort": 19,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A56",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "a59d0e4955929a76304d",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "a90b5db325acc4d1d617",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "종아리+무릎",
       "description": "",
       "options": [
         {
-          "id": "3545bc76cb2f83b3c19f",
+          "id": "feb4f4515599003757ac",
           "label": "1회",
           "price": 120000,
           "sourceCell": "F57"
         },
         {
-          "id": "1b5a1e83aab264d358cf",
+          "id": "dcea0f3bfb42021c3187",
           "label": "5회",
           "price": 500000,
           "sourceCell": "G57"
         },
         {
-          "id": "d2f2d112c3f28b9cfb73",
+          "id": "4f8135fe980ab0692b31",
           "label": "10회",
           "price": 800000,
           "sourceCell": "H57"
         }
       ],
-      "sort": 0,
+      "sort": 20,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A57",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "a5272a664b230e54c953",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "274a3365403bab742b92",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "허벅지",
       "description": "",
       "options": [
         {
-          "id": "53811fc8c099019be9ec",
+          "id": "68246d3cc1773e257171",
           "label": "1회",
           "price": 150000,
           "sourceCell": "F58"
         },
         {
-          "id": "6b16c364e3ea5f2ff5d8",
+          "id": "dbefb9f181e34ee81630",
           "label": "5회",
           "price": 600000,
           "sourceCell": "G58"
         },
         {
-          "id": "21f761fc4ef828cfdeb3",
+          "id": "1b7a6ae682ad3271f70d",
           "label": "10회",
           "price": 1000000,
           "sourceCell": "H58"
         }
       ],
-      "sort": 0,
+      "sort": 21,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A58",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "f6cf8983dd22eef50520",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "21b84664cf66aa9370cb",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "다리전체",
       "description": "",
       "options": [
         {
-          "id": "8e03b33dd28f2507f9b6",
+          "id": "4d51f2694dd98e8af863",
           "label": "1회",
           "price": 250000,
           "sourceCell": "F59"
         },
         {
-          "id": "049424588025b9abcd46",
+          "id": "eb1d155a83d243057769",
           "label": "5회",
           "price": 1000000,
           "sourceCell": "G59"
         },
         {
-          "id": "9d9d043145af72e15cc8",
+          "id": "a7eb616571fcbe3c035c",
           "label": "10회",
           "price": 1700000,
           "sourceCell": "H59"
         }
       ],
-      "sort": 0,
+      "sort": 22,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A59",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "309391e4ef2f0e10acaf",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "2329476c3db1f7de3e0c",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "팔하완+팔꿈치,상완",
       "description": "",
       "options": [
         {
-          "id": "cff2f5a55a3d8b9e6c91",
+          "id": "cc2b6fe81ac305477f9a",
           "label": "1회",
           "price": 70000,
           "sourceCell": "F60"
         },
         {
-          "id": "cc011b28003b1e561b24",
+          "id": "d773546dddab332604cf",
           "label": "5회",
           "price": 300000,
           "sourceCell": "G60"
         },
         {
-          "id": "c24be0034a4f483b34c6",
+          "id": "790611e45077bb3c4abd",
           "label": "10회",
           "price": 500000,
           "sourceCell": "H60"
         }
       ],
-      "sort": 0,
+      "sort": 23,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A60",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "481bef92b4d09c9c9f71",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "b1517d7701abaee4ddca",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "팔전체",
       "description": "",
       "options": [
         {
-          "id": "5e8fc6f72186efad5718",
+          "id": "f5e9e94e8c5e7df606d8",
           "label": "1회",
           "price": 100000,
           "sourceCell": "F61"
         },
         {
-          "id": "b9ddfb33d7ce1f5683db",
+          "id": "3ea670a51c48b8b18a46",
           "label": "5회",
           "price": 400000,
           "sourceCell": "G61"
         },
         {
-          "id": "e3e2b98e2fda14900515",
+          "id": "67ca90476695464196d7",
           "label": "10회",
           "price": 700000,
           "sourceCell": "H61"
         }
       ],
-      "sort": 0,
+      "sort": 24,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A61",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "6b97567535bcec85f0c2",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "9fc16019be98086fbba8",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "손등+손가락 / 발등+발가락",
       "description": "",
       "options": [
         {
-          "id": "32a3dd50ab55e28a6d0f",
+          "id": "36e95834eeab42226b6f",
           "label": "1회",
           "price": 30000,
           "sourceCell": "F62"
         },
         {
-          "id": "02ea0114a74858c10ecb",
+          "id": "ec05028bb2e2dc4f83dd",
           "label": "5회",
           "price": 120000,
           "sourceCell": "G62"
         },
         {
-          "id": "db2c9f18a33ea87a6078",
+          "id": "0d88a563b8decb3690c7",
           "label": "10회",
           "price": 219000,
           "sourceCell": "H62"
         }
       ],
-      "sort": 0,
+      "sort": 25,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A62",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "2f2c8a27c6bcf1552c6c",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "579e0def4e9d1ec2b213",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "뒷목 / 배렛",
       "description": "",
       "options": [
         {
-          "id": "908465f582bcf0a59bba",
+          "id": "d39cbc3c11746137f719",
           "label": "1회",
           "price": 60000,
           "sourceCell": "F63"
         },
         {
-          "id": "c5635a02e43c1ac019bc",
+          "id": "3c966b642ea271531e3b",
           "label": "5회",
           "price": 250000,
           "sourceCell": "G63"
         },
         {
-          "id": "5be44444a0aaa9de8a13",
+          "id": "c0b751607122b0a851a0",
           "label": "10회",
           "price": 450000,
           "sourceCell": "H63"
         }
       ],
-      "sort": 0,
+      "sort": 26,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A63",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "8db86fa3179e93a23d9b",
-      "categoryId": "botox-hair-removal",
-      "section": "보톡스·제모",
+      "docId": "148ab9b3786b9b12cb65",
+      "categoryId": "hair-removal",
+      "section": "제모",
       "name": "등 전체",
       "description": "",
       "options": [
         {
-          "id": "899da10613cc50b3584e",
+          "id": "30ebd2cb864e0de64abc",
           "label": "1회",
           "price": 225000,
           "sourceCell": "F64"
         },
         {
-          "id": "80705c154b4e3b903abb",
+          "id": "bb9f0756d28c33ba30fc",
           "label": "5회",
           "price": 900000,
           "sourceCell": "G64"
         },
         {
-          "id": "17030a5aa1b324d94825",
+          "id": "f98bb12b3127d168b2e4",
           "label": "10회",
           "price": 1530000,
           "sourceCell": "H64"
         }
       ],
-      "sort": 0,
+      "sort": 27,
       "isPublished": true,
       "sourceSheet": "보톡스,제모",
       "sourceCell": "A64",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "ada6fbd4036713c9a7c0",
+      "docId": "ae1e130eb24f0ea57661",
       "categoryId": "filler",
-      "section": "필러·실리프팅",
+      "section": "필러",
       "name": "1cc",
       "description": "",
       "options": [
         {
-          "id": "b650b7d468d4014a9e08",
+          "id": "17451d75401950fb9513",
           "label": "레나 / 아띠에르",
           "price": 129000,
           "sourceCell": "B4"
         },
         {
-          "id": "1a6716d45e20daf3d80d",
+          "id": "17de19ce0033956ab481",
           "label": "르네필 / 리쥬비엘c",
           "price": 199000,
           "sourceCell": "C4"
         },
         {
-          "id": "b9b06162c7436b15cfc5",
+          "id": "abc6b7cff3ed1fd4a4ae",
           "label": "벨로테로/레스틸렌",
           "price": 319000,
           "sourceCell": "D4"
@@ -1640,179 +1689,341 @@
       "isPublished": true,
       "sourceSheet": "필러",
       "sourceCell": "A4",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "308daa9216f2cdb41d70",
+      "docId": "94fa7f8bc45fbe3710a4",
       "categoryId": "filler",
-      "section": "필러·실리프팅",
+      "section": "필러",
       "name": "3cc",
       "description": "",
       "options": [
         {
-          "id": "62d6720229ada3bca6f9",
+          "id": "9740fe53e288d36e987c",
           "label": "레나 / 아띠에르",
           "price": 299000,
           "sourceCell": "B6"
         },
         {
-          "id": "5af97de6bbedcfee2d18",
+          "id": "0747ef43c7b1c0b51869",
           "label": "르네필 / 리쥬비엘c",
           "price": 479000,
           "sourceCell": "C6"
         },
         {
-          "id": "1fb6b3e700287e509afd",
+          "id": "cb0797805ace62361850",
           "label": "벨로테로/레스틸렌",
           "price": 819000,
           "sourceCell": "D6"
         }
       ],
-      "sort": 0,
+      "sort": 1,
       "isPublished": true,
       "sourceSheet": "필러",
       "sourceCell": "A6",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "75e2b2d0cd88b5d1d5d4",
+      "docId": "eb18705e4e732e2de945",
       "categoryId": "filler",
-      "section": "필러·실리프팅",
+      "section": "필러",
       "name": "5cc",
       "description": "",
       "options": [
         {
-          "id": "673e76f89dd99aca8ed9",
+          "id": "d80a655e14d0da8b51df",
           "label": "레나 / 아띠에르",
           "price": 519000,
           "sourceCell": "B8"
         },
         {
-          "id": "8e395b2736dc27b54531",
+          "id": "62326530384c622868ef",
           "label": "르네필 / 리쥬비엘c",
           "price": 759000,
           "sourceCell": "C8"
         },
         {
-          "id": "02426a30902188157346",
+          "id": "11be1c43a510bca0f70f",
           "label": "벨로테로/레스틸렌",
           "price": 1290000,
           "sourceCell": "D8"
         }
       ],
-      "sort": 0,
+      "sort": 2,
       "isPublished": true,
       "sourceSheet": "필러",
       "sourceCell": "A8",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "e433cf343da3159e6625",
+      "docId": "b91c311d6b3181577ecb",
       "categoryId": "filler",
-      "section": "필러·실리프팅",
+      "section": "필러",
       "name": "특수부위 필러 (이마,미간,눈가,마리오네트,목주름)",
       "description": "",
       "options": [
         {
-          "id": "8a9da177bc594368c61e",
+          "id": "a317ea37e79f5cf45995",
           "label": "1cc · 르네필 / 리쥬비엘c",
           "price": 259000,
           "sourceCell": "C11"
         },
         {
-          "id": "4d6415b5450eee23efea",
+          "id": "b0ab49c8a4829d336854",
           "label": "1cc · 벨로테로/레스틸렌",
           "price": 429000,
           "sourceCell": "D11"
         }
       ],
-      "sort": 0,
+      "sort": 3,
       "isPublished": true,
       "sourceSheet": "필러",
       "sourceCell": "A9",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "5aca2db4cb559283cdf6",
+      "docId": "109619b5d126abc42fdc",
       "categoryId": "filler",
-      "section": "필러·실리프팅",
+      "section": "필러",
       "name": "2cc",
       "description": "",
       "options": [
         {
-          "id": "8f805268d00126711eeb",
+          "id": "9a281372160f5567de4e",
           "label": "르네필 / 리쥬비엘c",
           "price": 429000,
           "sourceCell": "C14"
         },
         {
-          "id": "659b19f772c5a248c764",
+          "id": "68ef2430a338613d645b",
           "label": "벨로테로/레스틸렌",
           "price": 699000,
           "sourceCell": "D14"
         }
       ],
-      "sort": 0,
+      "sort": 4,
       "isPublished": true,
       "sourceSheet": "필러",
       "sourceCell": "A14",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "cbc49e4d9e0f198699ac",
+      "docId": "0df323f174ac3c9d312e",
       "categoryId": "filler",
-      "section": "필러·실리프팅",
+      "targetCategoryId": "filler",
+      "section": "필러",
+      "name": "풀페이스 필러 10cc",
+      "description": "",
+      "options": [
+        {
+          "id": "eecf2cc41d94a33dcb68",
+          "label": "국산 · 레나/아띠",
+          "price": 890000,
+          "sourceCell": "C20"
+        },
+        {
+          "id": "0f4cb6707ed500682d8f",
+          "label": "국산 프리미엄 · 르네필/리쥬비엘/레나",
+          "price": 1500000,
+          "sourceCell": "D20"
+        },
+        {
+          "id": "54d29f83dddc891fd09c",
+          "label": "수입 · 레스틸렌/벨로테로",
+          "price": 2500000,
+          "sourceCell": "E20"
+        }
+      ],
+      "sort": 5,
+      "isPublished": true,
+      "sourceSheet": "필러",
+      "sourceCell": "A19",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "6014f148f91fa113174e",
+      "categoryId": "filler",
+      "targetCategoryId": "filler",
+      "section": "필러",
+      "name": "풀페이스 필러 20cc",
+      "description": "",
+      "options": [
+        {
+          "id": "269d8c0c2854d58222ec",
+          "label": "국산 · 레나/아띠",
+          "price": 1650000,
+          "sourceCell": "C21"
+        },
+        {
+          "id": "5d37105a39e004228911",
+          "label": "국산 프리미엄 · 르네필/리쥬비엘/레나",
+          "price": 2500000,
+          "sourceCell": "D21"
+        },
+        {
+          "id": "e8ff89ad0ff2aee5172d",
+          "label": "수입 · 레스틸렌/벨로테로",
+          "price": 4400000,
+          "sourceCell": "E21"
+        }
+      ],
+      "sort": 6,
+      "isPublished": true,
+      "sourceSheet": "필러",
+      "sourceCell": "A21",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "a71c8e102ee9ffd850e9",
+      "categoryId": "filler",
+      "targetCategoryId": "filler",
+      "section": "필러",
+      "name": "원데이 목주름 PKG",
+      "description": "",
+      "options": [
+        {
+          "id": "edaa94ea4cc6b5647851",
+          "label": "기본",
+          "price": 590000,
+          "sourceCell": "E24"
+        }
+      ],
+      "sort": 7,
+      "isPublished": true,
+      "sourceSheet": "필러",
+      "sourceCell": "A23",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "ab94690bc4ea7dd750ff",
+      "categoryId": "filler",
+      "targetCategoryId": "filler",
+      "section": "필러",
+      "name": "원데이 팔자주름 PKG",
+      "description": "",
+      "options": [
+        {
+          "id": "c0766cc0902ce036d5d4",
+          "label": "기본",
+          "price": 390000,
+          "sourceCell": "E27"
+        }
+      ],
+      "sort": 8,
+      "isPublished": true,
+      "sourceSheet": "필러",
+      "sourceCell": "A26",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "d784a350d51be74dfdf8",
+      "categoryId": "filler",
+      "targetCategoryId": "filler",
+      "section": "필러",
+      "name": "원데이 팔자주름 스페셜 PKG",
+      "description": "",
+      "options": [
+        {
+          "id": "8ce3f7b22442ef9919cf",
+          "label": "기본",
+          "price": 690000,
+          "sourceCell": "E30"
+        }
+      ],
+      "sort": 9,
+      "isPublished": true,
+      "sourceSheet": "필러",
+      "sourceCell": "A29",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "a6bc7d65fa36c6469b6f",
+      "categoryId": "filler",
+      "targetCategoryId": "filler",
+      "section": "필러",
+      "name": "아름다운 코라인",
+      "description": "",
+      "options": [
+        {
+          "id": "5231e3698bde93646232",
+          "label": "아띠에르",
+          "price": 539000,
+          "sourceCell": "E33"
+        },
+        {
+          "id": "c1c8b7b5cab80637b357",
+          "label": "리쥬비엘 C",
+          "price": 649000,
+          "sourceCell": "E34"
+        },
+        {
+          "id": "17bdef6f5c244e1d7919",
+          "label": "레스틸렌 리프트",
+          "price": 849000,
+          "sourceCell": "E35"
+        }
+      ],
+      "sort": 10,
+      "isPublished": true,
+      "sourceSheet": "필러",
+      "sourceCell": "A32",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "cecdee3e3185e8afdf3f",
+      "categoryId": "filler",
+      "section": "필러",
       "name": "하이코/바비코 추가 1줄 당",
       "description": "",
       "options": [
         {
-          "id": "0e7fc3e7613a6d0a8de7",
+          "id": "78ea57501a4d836398a7",
           "label": "기본",
           "price": 100000,
           "sourceCell": "E36"
         }
       ],
-      "sort": 0,
+      "sort": 11,
       "isPublished": true,
       "sourceSheet": "필러",
       "sourceCell": "A36",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "af1a2a7bec256af75214",
+      "docId": "c609448a1374e0bf24bf",
       "categoryId": "filler",
-      "section": "필러·실리프팅",
+      "section": "필러",
       "name": "히알라제",
       "description": "",
       "options": [
         {
-          "id": "af50f281352789c4ccd2",
+          "id": "b7c5222d476e1043c0ed",
           "label": "본원",
           "price": 79000,
           "sourceCell": "E39"
         },
         {
-          "id": "a3c411be76d9ea4f082e",
+          "id": "445f1fb3be985998e9fc",
           "label": "타원",
           "price": 99000,
           "sourceCell": "E40"
         }
       ],
-      "sort": 0,
+      "sort": 12,
       "isPublished": true,
       "sourceSheet": "필러",
       "sourceCell": "A39",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "579c1e77bb98680cd49c",
-      "categoryId": "filler",
-      "section": "필러·실리프팅",
+      "docId": "7a876d6e14f9521f68e1",
+      "categoryId": "thread-lifting",
+      "section": "실리프팅",
       "name": "듀스 실리프팅",
       "description": "",
       "options": [
         {
-          "id": "5881ded09b92a39f44c1",
+          "id": "8f42556382f890897cac",
           "label": "1줄",
           "price": 149000,
           "sourceCell": "B43"
@@ -1822,103 +2033,103 @@
       "isPublished": true,
       "sourceSheet": "필러",
       "sourceCell": "A42",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "aa85c651a6acf92e1a78",
-      "categoryId": "filler",
-      "section": "필러·실리프팅",
+      "docId": "1acf21bdb377573add48",
+      "categoryId": "thread-lifting",
+      "section": "실리프팅",
       "name": "8줄",
       "description": "",
       "options": [
         {
-          "id": "ef08ee2f989485a3b875",
+          "id": "710c75d0d2e0e906847f",
           "label": "기본",
           "price": 990000,
           "sourceCell": "B44"
         }
       ],
-      "sort": 0,
+      "sort": 1,
       "isPublished": true,
       "sourceSheet": "필러",
       "sourceCell": "A44",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "b7ffd215ba0cacd71218",
-      "categoryId": "filler",
-      "section": "필러·실리프팅",
+      "docId": "930b4f759c832b6d1236",
+      "categoryId": "thread-lifting",
+      "section": "실리프팅",
       "name": "12줄",
       "description": "",
       "options": [
         {
-          "id": "5d6aaa23e730f8a92ead",
+          "id": "2378440ed30f8ba677dc",
           "label": "기본",
           "price": 1290000,
           "sourceCell": "B45"
         }
       ],
-      "sort": 0,
+      "sort": 2,
       "isPublished": true,
       "sourceSheet": "필러",
       "sourceCell": "A45",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "675a63bc121e49796a7c",
-      "categoryId": "filler",
-      "section": "필러·실리프팅",
+      "docId": "89fa6d17157d1894ef45",
+      "categoryId": "thread-lifting",
+      "section": "실리프팅",
       "name": "1줄 추가 (8줄이상)",
       "description": "",
       "options": [
         {
-          "id": "e5bf7f8bca02e1b8bd6c",
+          "id": "112657937813a31a7a05",
           "label": "기본",
           "price": 129000,
           "sourceCell": "B46"
         }
       ],
-      "sort": 0,
+      "sort": 3,
       "isPublished": true,
       "sourceSheet": "필러",
       "sourceCell": "A46",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "ba25d592f63a97a195f8",
-      "categoryId": "filler",
-      "section": "필러·실리프팅",
+      "docId": "cdbeb5f4a1c8b08970ee",
+      "categoryId": "thread-lifting",
+      "section": "실리프팅",
       "name": "1줄 추가 (12줄이상)",
       "description": "",
       "options": [
         {
-          "id": "0eb1bc02a42cf5bf6d7d",
+          "id": "d88bf8763d5b681f1538",
           "label": "기본",
           "price": 99000,
           "sourceCell": "B47"
         }
       ],
-      "sort": 0,
+      "sort": 4,
       "isPublished": true,
       "sourceSheet": "필러",
       "sourceCell": "A47",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "3418ef5726713f7cad8e",
-      "categoryId": "titanium",
-      "section": "티타늄",
+      "docId": "36a219692444ea75cf41",
+      "categoryId": "lifting",
+      "section": "리프팅",
       "name": "티타늄 이중턱 or 목주름 타이트닝 35KJ",
       "description": "",
       "options": [
         {
-          "id": "27e9ae621109450df02b",
+          "id": "e5312a59b0e4e71f062e",
           "label": "1회",
           "price": 390000,
           "sourceCell": "C4"
         },
         {
-          "id": "6394a0ae428afbc48d14",
+          "id": "da8fef19601f163484f6",
           "label": "3회",
           "price": 890000,
           "sourceCell": "C5"
@@ -1928,155 +2139,155 @@
       "isPublished": true,
       "sourceSheet": "티타늄",
       "sourceCell": "A4",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "52cc7eeda0ea36ac4fb9",
-      "categoryId": "titanium",
-      "section": "티타늄",
+      "docId": "6aab2454028b97ba7bff",
+      "categoryId": "lifting",
+      "section": "리프팅",
       "name": "환한얼굴 미백 티타늄 35KJ",
       "description": "",
       "options": [
         {
-          "id": "d1be2abea530a6a2d2e5",
+          "id": "de8ba59fdf8f7d44ae84",
           "label": "1회",
           "price": 390000,
           "sourceCell": "C6"
         },
         {
-          "id": "dc31445dacc5fed8e261",
+          "id": "b602080bd97358c99fc8",
           "label": "3회",
           "price": 890000,
           "sourceCell": "C7"
         }
       ],
-      "sort": 0,
+      "sort": 1,
       "isPublished": true,
       "sourceSheet": "티타늄",
       "sourceCell": "A6",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "8be781326d264724d69e",
-      "categoryId": "titanium",
-      "section": "티타늄",
+      "docId": "cbd5df3bd2b23a8b8a36",
+      "categoryId": "lifting",
+      "section": "리프팅",
       "name": "브이라인 하관전체 티타늄 리프팅 50KJ",
       "description": "",
       "options": [
         {
-          "id": "313aeef8e75c97c5cf31",
+          "id": "d135610f1f0103bb17d7",
           "label": "1회",
           "price": 549000,
           "sourceCell": "C8"
         },
         {
-          "id": "a5b69eec4b4c73bb99ae",
+          "id": "66f70ca2d2ead658c799",
           "label": "3회",
           "price": 1490000,
           "sourceCell": "C9"
         }
       ],
-      "sort": 0,
+      "sort": 2,
       "isPublished": true,
       "sourceSheet": "티타늄",
       "sourceCell": "A8",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "a763f36919616c71beca",
-      "categoryId": "titanium",
-      "section": "티타늄",
+      "docId": "edf08e73dd5e228a21ca",
+      "categoryId": "lifting",
+      "section": "리프팅",
       "name": "풀페이스 강력 티타늄 리프팅 80KJ",
       "description": "",
       "options": [
         {
-          "id": "f098d7c0bbbe81285610",
+          "id": "dfae8089131f7abd4844",
           "label": "1회",
           "price": 770000,
           "sourceCell": "C10"
         },
         {
-          "id": "2b9da150ff97eb4b4bb7",
+          "id": "568383829ca48827219e",
           "label": "3회",
           "price": 2190000,
           "sourceCell": "C11"
         }
       ],
-      "sort": 0,
+      "sort": 3,
       "isPublished": true,
       "sourceSheet": "티타늄",
       "sourceCell": "A10",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "94f448bf4f11015371d3",
-      "categoryId": "titanium",
-      "section": "티타늄",
+      "docId": "8cd8ec803e2d10d5d1e3",
+      "categoryId": "lifting",
+      "section": "리프팅",
       "name": "매끈 풀페이스 목주름 티타늄 리프팅 100KJ",
       "description": "",
       "options": [
         {
-          "id": "3b4697a72f059cd454e5",
+          "id": "e09f95c090ed22e57694",
           "label": "1회",
           "price": 990000,
           "sourceCell": "C12"
         }
       ],
-      "sort": 0,
+      "sort": 4,
       "isPublished": true,
       "sourceSheet": "티타늄",
       "sourceCell": "A12",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "26a3e849321a9a62c1a0",
-      "categoryId": "titanium",
-      "section": "티타늄",
+      "docId": "f8c8a1c14cf41f4d12ef",
+      "categoryId": "lifting",
+      "section": "리프팅",
       "name": "티타늄 6개월 지속 정기 케어 40KJ",
       "description": "",
       "options": [
         {
-          "id": "ceedf2015448e86bd0ac",
+          "id": "fe30f6b936df9b2ff040",
           "label": "6회",
           "price": 2190000,
           "sourceCell": "C14"
         }
       ],
-      "sort": 0,
+      "sort": 5,
       "isPublished": true,
       "sourceSheet": "티타늄",
       "sourceCell": "A14",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "233721565063590d7ab3",
-      "categoryId": "titanium",
-      "section": "티타늄",
+      "docId": "723d461dd5c006d12283",
+      "categoryId": "lifting",
+      "section": "리프팅",
       "name": "티타늄 년간 토탈 정기 케어 40KJ",
       "description": "",
       "options": [
         {
-          "id": "afbe5dccfa2e595e744f",
+          "id": "470e055a05df5b8b225e",
           "label": "12회",
           "price": 3900000,
           "sourceCell": "C16"
         }
       ],
-      "sort": 0,
+      "sort": 6,
       "isPublished": true,
       "sourceSheet": "티타늄",
       "sourceCell": "A16",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "e8f11741d2bca4ba7415",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "7df841729e2e8147a55a",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "소 (1~2mm)",
       "description": "",
       "options": [
         {
-          "id": "1bd03631b92578642d26",
+          "id": "9a5767dc6ce0670b94e8",
           "label": "기본",
           "price": 9900,
           "sourceCell": "C7"
@@ -2086,283 +2297,283 @@
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A7",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "34dd20dfdf5e804dc910",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "b75b693622357a9a93fe",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "20개 (소 사이즈 기준)",
       "description": "",
       "options": [
         {
-          "id": "985d23854c5c2280d2d6",
+          "id": "3e1676e4f795c6d62b09",
           "label": "기본",
           "price": 159000,
           "sourceCell": "G7"
         }
       ],
-      "sort": 0,
+      "sort": 1,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "D7",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "80252f04da4c21131a4b",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "23d2e01f1a459189d854",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "중 (3~4mm)",
       "description": "",
       "options": [
         {
-          "id": "25da74ec87c88e11081a",
+          "id": "48dbc70088fe324f517b",
           "label": "기본",
           "price": 29000,
           "sourceCell": "C8"
         }
       ],
-      "sort": 0,
+      "sort": 2,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A8",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "60a8522bf53b50da7f0f",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "ad888c1c93b72875dfca",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "50개",
       "description": "",
       "options": [
         {
-          "id": "9496b0464a4ed951e7f8",
+          "id": "959c25c744273e62d624",
           "label": "기본",
           "price": 359000,
           "sourceCell": "G8"
         }
       ],
-      "sort": 0,
+      "sort": 3,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "D8",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "7df439d826b6f7a07914",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "2afcfd935f1ef6f05068",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "대 (5~1cm)",
       "description": "",
       "options": [
         {
-          "id": "35bf6f5e7f7ea7c92c90",
+          "id": "189e8df705a06918793f",
           "label": "기본",
           "price": 49000,
           "sourceCell": "C9"
         }
       ],
-      "sort": 0,
+      "sort": 4,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A9",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "d9f72318df527405545b",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "6584881d66b7e9eaf171",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "100개",
       "description": "",
       "options": [
         {
-          "id": "0dc60edad86499a19430",
+          "id": "4cd882f3869624798b7a",
           "label": "기본",
           "price": 549000,
           "sourceCell": "G9"
         }
       ],
-      "sort": 0,
+      "sort": 5,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "D9",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "fefd7f0dfae88a02bfb4",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "cf1539bb144cae4de6da",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "특대 (1cm ~)",
       "description": "",
       "options": [
         {
-          "id": "670d0afbd33e23da6dab",
+          "id": "ca4d2d60038c5abf32b7",
           "label": "기본",
           "price": 99000,
           "sourceCell": "C10"
         }
       ],
-      "sort": 0,
+      "sort": 6,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A10",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "e23b87e2e94ca3fdcd01",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "d77648b7b109cb6a10d2",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "특수 사마귀(0.5cm~)",
       "description": "",
       "options": [
         {
-          "id": "27de685840f804cd1644",
+          "id": "c0067fe8421304aa02f1",
           "label": "기본",
           "price": 49000,
           "sourceCell": "C11"
         }
       ],
-      "sort": 0,
+      "sort": 7,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A11",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "7298fa53f52990746fb7",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "66b7b27d41facbd31635",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "(1cm~)",
       "description": "",
       "options": [
         {
-          "id": "6f4a6ad2b1cead0b59d9",
+          "id": "feb6dd4a6e0416fcfd24",
           "label": "기본",
           "price": 149000,
           "sourceCell": "C12"
         }
       ],
-      "sort": 0,
+      "sort": 8,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A12",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "2fefed117c3cd5a433ec",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "f01ef54e23830b173d17",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "소 (0.5 이하)",
       "description": "",
       "options": [
         {
-          "id": "419e8a3f92d1485cdd91",
+          "id": "90c34c58a388389a772d",
           "label": "기본",
           "price": 29000,
           "sourceCell": "G15"
         }
       ],
-      "sort": 0,
+      "sort": 9,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A15",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "898e9771ed5c08cf8328",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "7193865ea92867e54ec5",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "중 (0.5~1cm)",
       "description": "",
       "options": [
         {
-          "id": "59dbb3adda25ff438a13",
+          "id": "2a3e277096b863321072",
           "label": "기본",
           "price": 39000,
           "sourceCell": "G16"
         }
       ],
-      "sort": 0,
+      "sort": 10,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A16",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "53ee3c05cd5916fb1205",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "d0c3376c8f70da5df1df",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "대 (2~3cm)",
       "description": "",
       "options": [
         {
-          "id": "91a4b7241d456a27a2c9",
+          "id": "00c31dd58ad7994e2828",
           "label": "기본",
           "price": 49000,
           "sourceCell": "G17"
         }
       ],
-      "sort": 0,
+      "sort": 11,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A17",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "cd8964bf1bb2dd233d50",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "339bc2fa34371c889f0e",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "특대 (3~5cm)",
       "description": "",
       "options": [
         {
-          "id": "1e70a6ea2fcb4ee2bf6c",
+          "id": "f002431c3be5b7e326ea",
           "label": "기본",
           "price": 59000,
           "sourceCell": "G18"
         }
       ],
-      "sort": 0,
+      "sort": 12,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A18",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "af88c05a5a6b7e53f6e3",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "d855eba6b0e1a9972d35",
+      "categoryId": "pore-scar",
+      "section": "모공흉터",
       "name": "5cm~",
       "description": "",
       "options": [
         {
-          "id": "e645aeeef542e9d1e810",
+          "id": "68730325e1de0f9f32a0",
           "label": "기본",
           "price": 79000,
           "sourceCell": "G19"
         }
       ],
-      "sort": 0,
+      "sort": 13,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A19",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "e4a406bfe7eca494987e",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "b41519d034d556b26e32",
+      "categoryId": "other",
+      "section": "기타",
       "name": "베리슬림 1회",
       "description": "",
       "options": [
         {
-          "id": "2a0093d59567d52837b8",
+          "id": "9357e551fc4b4f248726",
           "label": "1회",
           "price": 59000,
           "sourceCell": "C24"
         },
         {
-          "id": "921c3f6dba7e0c5cecf6",
+          "id": "4118caafd7155d99227d",
           "label": "3회",
           "price": 159000,
           "sourceCell": "D24"
@@ -2372,185 +2583,185 @@
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A23",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "2b45c2a432fa30a7986c",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "30bf52b22a13a5c8fd5b",
+      "categoryId": "other",
+      "section": "기타",
       "name": "파워슬림 1회",
       "description": "",
       "options": [
         {
-          "id": "4b6b901c000ae6964210",
+          "id": "95d89d83986025e2c904",
           "label": "1회",
           "price": 99000,
           "sourceCell": "G24"
         },
         {
-          "id": "d3cc6e816cd657cd338f",
+          "id": "c605b29cc96338500bb5",
           "label": "3회",
           "price": 259000,
           "sourceCell": "H24"
         }
       ],
-      "sort": 0,
+      "sort": 1,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "E23",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "ce4939ebd23f503dfc2f",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "15e2c0d31071a9740972",
+      "categoryId": "other",
+      "section": "기타",
       "name": "베리슬림 2패치",
       "description": "",
       "options": [
         {
-          "id": "e18f4b76e42817fd9936",
+          "id": "1459f008bfed288f04b0",
           "label": "1회",
           "price": 109000,
           "sourceCell": "C26"
         },
         {
-          "id": "893d71403449d0bc955e",
+          "id": "f449522f7e6100962305",
           "label": "3회",
           "price": 279000,
           "sourceCell": "D26"
         }
       ],
-      "sort": 0,
+      "sort": 2,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A25",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "81e5f10a23d7476222f4",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "2c88aac7dbcaf47d20a5",
+      "categoryId": "other",
+      "section": "기타",
       "name": "베리슬림 4패치",
       "description": "",
       "options": [
         {
-          "id": "b5ead74faa1040c682bf",
+          "id": "de79e57658f1406c5b66",
           "label": "1회",
           "price": 199000,
           "sourceCell": "C28"
         },
         {
-          "id": "75dc8647d23e43e23772",
+          "id": "c893497507c29550d023",
           "label": "3회",
           "price": 529000,
           "sourceCell": "D28"
         }
       ],
-      "sort": 0,
+      "sort": 3,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A27",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "afb3e23a1140e34f7e3e",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "74371bb4c568164dc3a8",
+      "categoryId": "other",
+      "section": "기타",
       "name": "베리슬림 6패치",
       "description": "",
       "options": [
         {
-          "id": "6a52282b50f49777c296",
+          "id": "2f51918c4bd1accabf97",
           "label": "1회",
           "price": 279000,
           "sourceCell": "C30"
         },
         {
-          "id": "a1c62971f73435993912",
+          "id": "6b31c3a8d613a3defcb2",
           "label": "3회",
           "price": 729000,
           "sourceCell": "D30"
         }
       ],
-      "sort": 0,
+      "sort": 4,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A29",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "8e6a070656d6e527ab31",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "cf28dceee377cc80b69f",
+      "categoryId": "other",
+      "section": "기타",
       "name": "바이블주 2CC",
       "description": "",
       "options": [
         {
-          "id": "aa11c5267af5b9aad4d4",
+          "id": "cf5a3537709903f0be1a",
           "label": "1회",
           "price": 190000,
           "sourceCell": "C32"
         },
         {
-          "id": "3c54514f945ed35c0294",
+          "id": "3e8913a908d457de420e",
           "label": "3회",
           "price": 539000,
           "sourceCell": "D32"
         }
       ],
-      "sort": 0,
+      "sort": 5,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A31",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "7496c5984684677a2030",
-      "categoryId": "co2-keloid-contouring",
-      "section": "CO2·켈로이드·지방분해",
+      "docId": "025249abbf09228cd60d",
+      "categoryId": "other",
+      "section": "기타",
       "name": "바디 바이블주",
       "description": "",
       "options": [
         {
-          "id": "fd561afec9dda3956ca7",
+          "id": "f367e19d3825d320933b",
           "label": "1병",
           "price": 350000,
           "sourceCell": "C34"
         },
         {
-          "id": "87bccbb2651742bcf5c9",
+          "id": "5fd385e81d6dcee25cf6",
           "label": "2병",
           "price": 600000,
           "sourceCell": "D34"
         },
         {
-          "id": "ea5a8f18ec75e4bdbdf0",
+          "id": "6c24d5859d7a610b91bd",
           "label": "3병",
           "price": 850000,
           "sourceCell": "E34"
         }
       ],
-      "sort": 0,
+      "sort": 6,
       "isPublished": true,
       "sourceSheet": "co2,켈로이드,지분",
       "sourceCell": "A33",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "3ea7ddcd37cb8c02c4c3",
+      "docId": "7cd7277831fc899413a9",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "쥬베룩스킨 4CC",
       "description": "",
       "options": [
         {
-          "id": "6efd3119208d3cee64c9",
+          "id": "0f07ea423e4f7ae85d98",
           "label": "1회",
           "price": 389000,
           "sourceCell": "H2"
         },
         {
-          "id": "2209d3f0981792f9f0e2",
+          "id": "b4235357d7b54bb4bd24",
           "label": "3회",
           "price": 1050000,
           "sourceCell": "H3"
@@ -2560,393 +2771,393 @@
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A2",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "a8a036c8828b379ea893",
+      "docId": "8081cd970d602ac4ead8",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "쥬베룩스킨 8CC",
       "description": "",
       "options": [
         {
-          "id": "6e2097d567cd293a3509",
+          "id": "91c2fb02f51d96107517",
           "label": "1회",
           "price": 739000,
           "sourceCell": "H4"
         },
         {
-          "id": "7cf3f5c277294f7f8758",
+          "id": "af2459034038db1af6bc",
           "label": "3회",
           "price": 1990000,
           "sourceCell": "H5"
         }
       ],
-      "sort": 0,
+      "sort": 1,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A4",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "b1525565240bba55d06c",
+      "docId": "915937a959013abd0c11",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "무통 쥬베룩스킨 4CC",
       "description": "",
       "options": [
         {
-          "id": "6289dfb5e2dfe2916522",
+          "id": "8296fc335a70222f0d5a",
           "label": "1회",
           "price": 439000,
           "sourceCell": "H6"
         },
         {
-          "id": "9aa8b82ab93aa643c94b",
+          "id": "9c96f0720734f48b8cd6",
           "label": "3회",
           "price": 1190000,
           "sourceCell": "H7"
         }
       ],
-      "sort": 0,
+      "sort": 2,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A6",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "601586542c80541dfd6d",
+      "docId": "196e681cf319b43c0a1c",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "무통 쥬베룩스킨 8CC",
       "description": "",
       "options": [
         {
-          "id": "7d7fc9b40ca3207f2669",
+          "id": "ed9150a694036ded440f",
           "label": "1회",
           "price": 839000,
           "sourceCell": "H8"
         },
         {
-          "id": "452b10e64d3eab4820f2",
+          "id": "750377cd73a1ce1ccba6",
           "label": "3회",
           "price": 2290000,
           "sourceCell": "H9"
         }
       ],
-      "sort": 0,
+      "sort": 3,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A8",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "6ebce37a878ff5d99f1c",
+      "docId": "7678911eb4c208dc4839",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "리베리 시그니처 스킨 2CC",
       "description": "",
       "options": [
         {
-          "id": "d5a76cc40a58ba64bbed",
+          "id": "d61cb24a640a9c5451a5",
           "label": "1회",
           "price": 149000,
           "sourceCell": "H10"
         },
         {
-          "id": "fb82d1f3c255ab0a7bf8",
+          "id": "0fc811a972ffa2ee3158",
           "label": "3회",
           "price": 399000,
           "sourceCell": "H11"
         }
       ],
-      "sort": 0,
+      "sort": 4,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A10",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "f9fda9866ac00b013ad0",
+      "docId": "348cc09f08e55298cc5b",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "리베리 시그니처 스킨 4CC",
       "description": "",
       "options": [
         {
-          "id": "8326a3a6262562e49745",
+          "id": "9baeb35c4ebbd48e3646",
           "label": "1회",
           "price": 279000,
           "sourceCell": "H12"
         },
         {
-          "id": "dafd17270f61388bb41e",
+          "id": "c89540f6d2d7ba8aeb5e",
           "label": "3회",
           "price": 690000,
           "sourceCell": "H13"
         }
       ],
-      "sort": 0,
+      "sort": 5,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A12",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "a80ea04ff50563fc0a32",
+      "docId": "3ac5f232ac67d547544d",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "무통 리쥬란 3CC",
       "description": "",
       "options": [
         {
-          "id": "3df9eb18763021dd5bb1",
+          "id": "5189c399fb15ac8e9350",
           "label": "1회",
           "price": 299000,
           "sourceCell": "H14"
         },
         {
-          "id": "1efbb1329a4ea32a7ff6",
+          "id": "7387f78e7552290ad341",
           "label": "3회",
           "price": 799000,
           "sourceCell": "H15"
         }
       ],
-      "sort": 0,
+      "sort": 6,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A14",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "5cf6ae54d71a5aae4cea",
+      "docId": "8e9678b199c77906432c",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "무통 리쥬란 6CC",
       "description": "",
       "options": [
         {
-          "id": "0ce9da48be8e1b0d9b82",
+          "id": "8c68c35a2682f0192286",
           "label": "1회",
           "price": 569000,
           "sourceCell": "H16"
         },
         {
-          "id": "d90e76ad86bcc0450405",
+          "id": "219dd64a2f9309444eb0",
           "label": "3회",
           "price": 1530000,
           "sourceCell": "H17"
         }
       ],
-      "sort": 0,
+      "sort": 7,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A16",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "f37358bf0bea07d8c3a9",
+      "docId": "7228057929fc01576d3c",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "리쥬란 2cc",
       "description": "",
       "options": [
         {
-          "id": "74d125927b427255006c",
+          "id": "c416a5333ddf386dde75",
           "label": "1회",
           "price": 249000,
           "sourceCell": "H18"
         },
         {
-          "id": "f127ef681b2ccb28f12e",
+          "id": "47438386e2bdf9902cbc",
           "label": "3회",
           "price": 699000,
           "sourceCell": "H19"
         }
       ],
-      "sort": 0,
+      "sort": 8,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A18",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "d3aae9aa8f926b400d15",
+      "docId": "5e968ba228481550db50",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "리쥬란 4cc",
       "description": "",
       "options": [
         {
-          "id": "84cea70ca9fe0baf60d0",
+          "id": "0757f1d62a428049db07",
           "label": "1회",
           "price": 479000,
           "sourceCell": "H20"
         },
         {
-          "id": "621ea032c4ea1eab7214",
+          "id": "dc03f63619911cbf5bc9",
           "label": "3회",
           "price": 1290000,
           "sourceCell": "H21"
         }
       ],
-      "sort": 0,
+      "sort": 9,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A20",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "641199689d71fb4e88eb",
+      "docId": "f7967eaeef67a4987964",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "리쥬베룩 4cc",
       "description": "",
       "options": [
         {
-          "id": "4af53e1f7249cf2569dd",
+          "id": "2f4414a4a99507609726",
           "label": "1회",
           "price": 399000,
           "sourceCell": "H22"
         },
         {
-          "id": "70846063a720385d6d91",
+          "id": "bc6e4517ad606fb40422",
           "label": "3회",
           "price": 1090000,
           "sourceCell": "H23"
         }
       ],
-      "sort": 0,
+      "sort": 10,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A22",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "ccc5879e4f028911729f",
+      "docId": "181f04acac082ee146f8",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "리투오 5cc",
       "description": "",
       "options": [
         {
-          "id": "0b26d47b840825051450",
+          "id": "0c99ca8666929ac47bc5",
           "label": "1회",
           "price": 590000,
           "sourceCell": "H24"
         },
         {
-          "id": "282107f92004a35bb1be",
+          "id": "3f6d9ee8ab2c6b5a1839",
           "label": "3회",
           "price": 1590000,
           "sourceCell": "H25"
         }
       ],
-      "sort": 0,
+      "sort": 11,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A24",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "75f397648c0799a41c9b",
+      "docId": "840667a31061bf739b87",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "릴리이드 5cc",
       "description": "",
       "options": [
         {
-          "id": "058351c66f746cb2f117",
+          "id": "1ab65c854b3f8052336e",
           "label": "1회",
           "price": 150000,
           "sourceCell": "H26"
         },
         {
-          "id": "248b50ae43acd81309d8",
+          "id": "cbc39839cb071177baa1",
           "label": "3회",
           "price": 419000,
           "sourceCell": "H27"
         }
       ],
-      "sort": 0,
+      "sort": 12,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A26",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "36753a244ae1a143e702",
+      "docId": "29ab4af9c8f8688eed8d",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "뉴아티 3.5cc",
       "description": "",
       "options": [
         {
-          "id": "b27f3b1d702bf9478504",
+          "id": "8eb98ad23f4ddaebd104",
           "label": "1회",
           "price": 89000,
           "sourceCell": "H28"
         },
         {
-          "id": "50ec86f6e4057106ab73",
+          "id": "81cb9952c671aa579580",
           "label": "3회",
           "price": 240000,
           "sourceCell": "H29"
         }
       ],
-      "sort": 0,
+      "sort": 13,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A28",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "6074d83defe56ff2af95",
+      "docId": "db80ba67c0ae64ac26c8",
       "categoryId": "skin-booster",
       "section": "스킨부스터",
       "name": "힐로웨이브",
       "description": "",
       "options": [
         {
-          "id": "fa1342399a99613db55c",
+          "id": "e7021135b69dd3e275e0",
           "label": "1cc",
           "price": 250000,
           "sourceCell": "H30"
         },
         {
-          "id": "5deb78d589d98b408b63",
+          "id": "4362b874ef3cf432af3c",
           "label": "2cc",
           "price": 400000,
           "sourceCell": "H31"
         },
         {
-          "id": "3a6e05076d666301360d",
+          "id": "547b92bc091b278dee61",
           "label": "4cc",
           "price": 750000,
           "sourceCell": "H32"
         }
       ],
-      "sort": 0,
+      "sort": 14,
       "isPublished": true,
       "sourceSheet": "스킨부스터",
       "sourceCell": "A30",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "2ceedc02fd0cbc1e4169",
+      "docId": "d1ed23dbd1099ad8d274",
       "categoryId": "tattoo-body-toning",
       "section": "문신제거·바디토닝",
       "name": "바디토닝",
       "description": "",
       "options": [
         {
-          "id": "3294e584da4c5abb35c4",
+          "id": "2709ddc33380ed355efd",
           "label": "1회",
           "price": 119000,
           "sourceCell": "H2"
         },
         {
-          "id": "784564f65382dfbdc7ff",
+          "id": "0faa37df1d6eaf025497",
           "label": "8회",
           "price": 799000,
           "sourceCell": "H3"
@@ -2956,121 +3167,121 @@
       "isPublished": true,
       "sourceSheet": "문신,바디토닝",
       "sourceCell": "A2",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "2aa2b3613c3562db2c75",
+      "docId": "498ce169b0a9a1706d74",
       "categoryId": "tattoo-body-toning",
       "section": "문신제거·바디토닝",
       "name": "바디토닝",
       "description": "",
       "options": [
         {
-          "id": "11c6f650ff0b01c9e906",
+          "id": "0314ea31e55d9d91b3f2",
           "label": "8회",
           "price": 1190000,
           "sourceCell": "H4"
         }
       ],
-      "sort": 0,
+      "sort": 1,
       "isPublished": true,
       "sourceSheet": "문신,바디토닝",
       "sourceCell": "A4",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "44f753b70c353bf04c69",
+      "docId": "2a8e61c91b8de2c4fd0a",
       "categoryId": "tattoo-body-toning",
       "section": "문신제거·바디토닝",
       "name": "피코문신제거 (소_1cm)",
       "description": "",
       "options": [
         {
-          "id": "bd43c19337c84648d98c",
+          "id": "b529620a0e92b123626a",
           "label": "1회",
           "price": 99000,
           "sourceCell": "H6"
         },
         {
-          "id": "9d4043def738517dbc65",
+          "id": "78bed6fa91c9404c0481",
           "label": "8회",
           "price": 539000,
           "sourceCell": "H7"
         }
       ],
-      "sort": 0,
+      "sort": 2,
       "isPublished": true,
       "sourceSheet": "문신,바디토닝",
       "sourceCell": "A6",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "e5129af0c9684f91f426",
+      "docId": "e45964212830f9760ba2",
       "categoryId": "tattoo-body-toning",
       "section": "문신제거·바디토닝",
       "name": "피코문신제거 (중_500원 크기)",
       "description": "",
       "options": [
         {
-          "id": "d99618a59225efd2cbaf",
+          "id": "3f03e5997723dfcceb78",
           "label": "1회",
           "price": 129000,
           "sourceCell": "H8"
         },
         {
-          "id": "fc6f5e8deffe109fff81",
+          "id": "5ba4f25a3807b42c7ebb",
           "label": "8회",
           "price": 879000,
           "sourceCell": "H9"
         }
       ],
-      "sort": 0,
+      "sort": 3,
       "isPublished": true,
       "sourceSheet": "문신,바디토닝",
       "sourceCell": "A8",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "2a4e5706e632befcb666",
+      "docId": "e73b4085705531245a40",
       "categoryId": "tattoo-body-toning",
       "section": "문신제거·바디토닝",
       "name": "피코문신제거 (대_명함크기)",
       "description": "",
       "options": [
         {
-          "id": "50e1af6bfac19f9d1acf",
+          "id": "1f520bcfc3c3dc14ec38",
           "label": "1회",
           "price": 149000,
           "sourceCell": "H10"
         },
         {
-          "id": "1df94447c4fa4d9aa87f",
+          "id": "ae43413425b6cdc5e311",
           "label": "8회",
           "price": 1190000,
           "sourceCell": "H11"
         }
       ],
-      "sort": 0,
+      "sort": 4,
       "isPublished": true,
       "sourceSheet": "문신,바디토닝",
       "sourceCell": "A10",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "5efe70b9fbf8fa195c82",
-      "categoryId": "potenza-acne-scar",
-      "section": "포텐자·여드름·모공흉터",
+      "docId": "50a0556c5dbd11e2af33",
+      "categoryId": "potenza",
+      "section": "포텐자",
       "name": "포텐자 + 물광",
       "description": "",
       "options": [
         {
-          "id": "89f0912bffa6a061fe34",
+          "id": "f146798b3fbe487f719e",
           "label": "1회",
           "price": 259000,
           "sourceCell": "J2"
         },
         {
-          "id": "8d236fc4e592446a6231",
+          "id": "1987f3d586a5941ae2cb",
           "label": "3회",
           "price": 709000,
           "sourceCell": "J3"
@@ -3080,587 +3291,911 @@
       "isPublished": true,
       "sourceSheet": "포텐자,여드름,모공흉터",
       "sourceCell": "A2",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "60e376ce97e4c3b351db",
-      "categoryId": "potenza-acne-scar",
-      "section": "포텐자·여드름·모공흉터",
+      "docId": "8375286a20e57cd34037",
+      "categoryId": "potenza",
+      "section": "포텐자",
       "name": "포텐자 + 쥬베룩",
       "description": "",
       "options": [
         {
-          "id": "cb4c3c42a5c61aa3cce4",
+          "id": "ade193c64c9ba9cf84e1",
           "label": "1회",
           "price": 449000,
           "sourceCell": "J4"
         },
         {
-          "id": "1541c897ba8e80624ec4",
+          "id": "1876ead2eca12552725c",
           "label": "3회",
           "price": 1190000,
           "sourceCell": "J5"
         },
         {
-          "id": "43aed7ce50cbc1d90b5b",
+          "id": "f4b7472703d11afc42c5",
           "label": "4회",
           "price": 1490000,
           "sourceCell": "J6"
         }
       ],
-      "sort": 0,
+      "sort": 1,
       "isPublished": true,
       "sourceSheet": "포텐자,여드름,모공흉터",
       "sourceCell": "A4",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "7199b7ae529043b63b20",
-      "categoryId": "potenza-acne-scar",
-      "section": "포텐자·여드름·모공흉터",
+      "docId": "4cdce210847bbb453a20",
+      "categoryId": "potenza",
+      "section": "포텐자",
       "name": "포텐자 + 엑소좀",
       "description": "",
       "options": [
         {
-          "id": "c6012e1bb6231c0bf23f",
+          "id": "207c83de7bd40886db85",
           "label": "1회",
           "price": 319000,
           "sourceCell": "J7"
         },
         {
-          "id": "35bbe998011cefac75ca",
+          "id": "9666b10101bddf9489b8",
           "label": "3회",
           "price": 900000,
           "sourceCell": "J8"
         },
         {
-          "id": "23372241387b28bb7ac3",
+          "id": "97abba806d78183d39bc",
           "label": "5회",
           "price": 1400000,
           "sourceCell": "J9"
         }
       ],
-      "sort": 0,
+      "sort": 2,
       "isPublished": true,
       "sourceSheet": "포텐자,여드름,모공흉터",
       "sourceCell": "A7",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "384701a6e88317cab96f",
-      "categoryId": "potenza-acne-scar",
-      "section": "포텐자·여드름·모공흉터",
-      "name": "*골드 PTT (약처방전 포함/압출,TA 별도)",
+      "docId": "31b7b6716573d8a7764d",
+      "categoryId": "acne-ptt",
+      "targetCategoryId": "acne-ptt",
+      "section": "여드름 (PTT)",
+      "name": "안티아크네 8주",
       "description": "",
       "options": [
         {
-          "id": "cae53b6b1339b0c614e1",
-          "label": "1회",
-          "price": 200000,
-          "sourceCell": "B30"
-        },
-        {
-          "id": "223efcdb6c8d17ada49e",
-          "label": "4회",
-          "price": 620000,
-          "sourceCell": "B31"
+          "id": "9fb8b94c6ef07cc66c21",
+          "label": "기본",
+          "price": 1190000,
+          "sourceCell": "J12"
         }
       ],
       "sort": 0,
       "isPublished": true,
       "sourceSheet": "포텐자,여드름,모공흉터",
-      "sourceCell": "A29",
-      "seedVersion": "xlsx-seed-v1"
+      "sourceCell": "A12",
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "461aae68aa0dfde63b2d",
+      "docId": "ad3584f92c350c7a5817",
+      "categoryId": "acne-ptt",
+      "targetCategoryId": "acne-ptt",
+      "section": "여드름 (PTT)",
+      "name": "프리미엄 안티아크네 8주",
+      "description": "",
+      "options": [
+        {
+          "id": "45d350697fbd0769cc79",
+          "label": "기본",
+          "price": 1490000,
+          "sourceCell": "J14"
+        }
+      ],
+      "sort": 1,
+      "isPublished": true,
+      "sourceSheet": "포텐자,여드름,모공흉터",
+      "sourceCell": "A14",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "2a2fae7f6659d688ee02",
+      "categoryId": "acne-ptt",
+      "targetCategoryId": "acne-ptt",
+      "section": "여드름 (PTT)",
+      "name": "시그니처 안티아크네 12주",
+      "description": "",
+      "options": [
+        {
+          "id": "b99aa3074bea4c4dda86",
+          "label": "기본",
+          "price": 2590000,
+          "sourceCell": "J16"
+        }
+      ],
+      "sort": 2,
+      "isPublished": true,
+      "sourceSheet": "포텐자,여드름,모공흉터",
+      "sourceCell": "A16",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "0d1fea6af0d6aa3f365c",
+      "categoryId": "pore-scar",
+      "targetCategoryId": "pore-scar",
+      "section": "모공흉터",
+      "name": "도자기 피부 패키지",
+      "description": "",
+      "options": [
+        {
+          "id": "b99b96119b1fd6361b82",
+          "label": "4회",
+          "price": 1590000,
+          "sourceCell": "J20"
+        },
+        {
+          "id": "fb1d672a9a65867d3bc7",
+          "label": "8회",
+          "price": 2490000,
+          "sourceCell": "J21"
+        }
+      ],
+      "sort": 14,
+      "isPublished": true,
+      "sourceSheet": "포텐자,여드름,모공흉터",
+      "sourceCell": "A19",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "f131131de87666216973",
+      "categoryId": "pore-scar",
+      "targetCategoryId": "pore-scar",
+      "section": "모공흉터",
+      "name": "프리미엄 도자기 8회",
+      "description": "",
+      "options": [
+        {
+          "id": "f5b3ad626904cffc0197",
+          "label": "기본",
+          "price": 2990000,
+          "sourceCell": "I23"
+        }
+      ],
+      "sort": 15,
+      "isPublished": true,
+      "sourceSheet": "포텐자,여드름,모공흉터",
+      "sourceCell": "A22",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "3e7ca2b9e643ddce5f8a",
+      "categoryId": "pore-scar",
+      "targetCategoryId": "pore-scar",
+      "section": "모공흉터",
+      "name": "시그니처 도자기 8회",
+      "description": "",
+      "options": [
+        {
+          "id": "02b13663000686d84199",
+          "label": "기본",
+          "price": 3490000,
+          "sourceCell": "I26"
+        }
+      ],
+      "sort": 16,
+      "isPublished": true,
+      "sourceSheet": "포텐자,여드름,모공흉터",
+      "sourceCell": "A25",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "616fa6b7682757718698",
+      "categoryId": "acne-ptt",
+      "section": "여드름 (PTT)",
+      "name": "*골드 PTT (약처방전 포함/압출,TA 별도)",
+      "description": "",
+      "options": [
+        {
+          "id": "a6fd92fa2ad88c8c15f4",
+          "label": "1회",
+          "price": 200000,
+          "sourceCell": "B30"
+        },
+        {
+          "id": "627fcc91d882d18ec185",
+          "label": "4회",
+          "price": 620000,
+          "sourceCell": "B31"
+        }
+      ],
+      "sort": 3,
+      "isPublished": true,
+      "sourceSheet": "포텐자,여드름,모공흉터",
+      "sourceCell": "A29",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "b01672abb3152e7f3c0f",
+      "categoryId": "pigment",
+      "targetCategoryId": "pigment",
+      "section": "색소",
+      "name": "진주광채 피코&헐리우드 토닝 4회",
+      "description": "",
+      "options": [
+        {
+          "id": "e66169d32d3fe82f04b4",
+          "label": "기본",
+          "price": 1290000,
+          "sourceCell": "I2"
+        }
+      ],
+      "sort": 0,
+      "isPublished": true,
+      "sourceSheet": "색소pkg",
+      "sourceCell": "A2",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "fb356d9d471bdef1fb91",
+      "categoryId": "pigment",
+      "targetCategoryId": "pigment",
+      "section": "색소",
+      "name": "프리미엄 진주광채 피코&헐리우드 토닝 8회",
+      "description": "",
+      "options": [
+        {
+          "id": "339dfa5510d8834d9f7f",
+          "label": "기본",
+          "price": 1990000,
+          "sourceCell": "I4"
+        }
+      ],
+      "sort": 1,
+      "isPublished": true,
+      "sourceSheet": "색소pkg",
+      "sourceCell": "A4",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "6bafd4978e10d826a053",
+      "categoryId": "pigment",
+      "targetCategoryId": "pigment",
+      "section": "색소",
+      "name": "시그니처 진주광채 피코&헐리우드 토닝 8회",
+      "description": "",
+      "options": [
+        {
+          "id": "1e2e80e573a9a8a46917",
+          "label": "기본",
+          "price": 2490000,
+          "sourceCell": "I6"
+        }
+      ],
+      "sort": 2,
+      "isPublished": true,
+      "sourceSheet": "색소pkg",
+      "sourceCell": "A6",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "1b949aa6c0ff7f2ce25f",
+      "categoryId": "pigment",
+      "targetCategoryId": "pigment",
+      "section": "색소",
+      "name": "프레스티지 진주광채 피코&헐리우드 토닝 10회",
+      "description": "",
+      "options": [
+        {
+          "id": "b9ebfb8807f48f22a66e",
+          "label": "기본",
+          "price": 2790000,
+          "sourceCell": "I8"
+        }
+      ],
+      "sort": 3,
+      "isPublished": true,
+      "sourceSheet": "색소pkg",
+      "sourceCell": "A8",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "33d6fa6dc1885aed03ee",
+      "categoryId": "pigment",
+      "targetCategoryId": "pigment",
+      "section": "색소",
+      "name": "플래티넘 진주광채 피코&헐리우드 토닝 12회",
+      "description": "",
+      "options": [
+        {
+          "id": "2fa3228c5ef0c47731a6",
+          "label": "기본",
+          "price": 3190000,
+          "sourceCell": "I10"
+        }
+      ],
+      "sort": 4,
+      "isPublished": true,
+      "sourceSheet": "색소pkg",
+      "sourceCell": "A10",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "8f59d0ab0e0d88609117",
+      "categoryId": "other",
+      "targetCategoryId": "other",
+      "section": "기타",
+      "name": "엑셀 홍조",
+      "description": "",
+      "options": [
+        {
+          "id": "a2535608de9b9d168d5f",
+          "label": "1회",
+          "price": 299000,
+          "sourceCell": "G3"
+        },
+        {
+          "id": "fc74020945c2c6399bf8",
+          "label": "4회",
+          "price": 990000,
+          "sourceCell": "G4"
+        }
+      ],
+      "sort": 7,
+      "isPublished": true,
+      "sourceSheet": "홍조",
+      "sourceCell": "A2",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "8d0edbd1cf565618df28",
+      "categoryId": "other",
+      "targetCategoryId": "other",
+      "section": "기타",
+      "name": "프리미엄 엑셀 홍조",
+      "description": "",
+      "options": [
+        {
+          "id": "743aa3fc1050ad1e1886",
+          "label": "4회",
+          "price": 1690000,
+          "sourceCell": "G7"
+        },
+        {
+          "id": "77b9668d43e3c3a0079f",
+          "label": "8회",
+          "price": 2690000,
+          "sourceCell": "G8"
+        }
+      ],
+      "sort": 8,
+      "isPublished": true,
+      "sourceSheet": "홍조",
+      "sourceCell": "A5",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "916575ad489951d65376",
+      "categoryId": "other",
+      "targetCategoryId": "other",
+      "section": "기타",
+      "name": "프리미엄 재생 홍조",
+      "description": "",
+      "options": [
+        {
+          "id": "ed101e6e082555775127",
+          "label": "1회",
+          "price": 319000,
+          "sourceCell": "G10"
+        },
+        {
+          "id": "4cd03356c971e6733c26",
+          "label": "4회",
+          "price": 1490000,
+          "sourceCell": "G11"
+        },
+        {
+          "id": "1f421159e71002ba38b4",
+          "label": "8회",
+          "price": 2290000,
+          "sourceCell": "G12"
+        }
+      ],
+      "sort": 9,
+      "isPublished": true,
+      "sourceSheet": "홍조",
+      "sourceCell": "A9",
+      "seedVersion": "xlsx-seed-v2"
+    },
+    {
+      "docId": "23174e9e72f4ce0fc023",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "60KJ",
       "description": "",
       "options": [
         {
-          "id": "3f1f87fa32394eeebc07",
+          "id": "0b9153d012b79a7fba7a",
           "label": "1회",
           "price": 429000,
           "sourceCell": "C4"
         },
         {
-          "id": "9f6c8776f100873f36dd",
+          "id": "807de6f810f7452d28b0",
           "label": "3회",
           "price": 1190000,
           "sourceCell": "D4"
         }
       ],
-      "sort": 0,
+      "sort": 7,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "A4",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "d160ec8ccd6decc7ada0",
+      "docId": "f9764469c1997bf90ed8",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "H 300샷",
       "description": "",
       "options": [
         {
-          "id": "021aec7e65da5ecd77e4",
+          "id": "ce4175c7356b587a2869",
           "label": "1회",
           "price": 279000,
           "sourceCell": "H4"
         },
         {
-          "id": "484fe82d7f6b7638e237",
+          "id": "6039187201e425c71bb6",
           "label": "3회",
           "price": 599000,
           "sourceCell": "I4"
         }
       ],
-      "sort": 0,
+      "sort": 8,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F4",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "d84c27a5b7094927760b",
+      "docId": "1d1565eb0f0694311bd6",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "90kJ",
       "description": "",
       "options": [
         {
-          "id": "785dcbb16d09cfdaac89",
+          "id": "8db45ce0d1d1d975cd02",
           "label": "1회",
           "price": 599000,
           "sourceCell": "C6"
         },
         {
-          "id": "2b53ff4356777983f5f9",
+          "id": "ba20994702311db2d42c",
           "label": "3회",
           "price": 1590000,
           "sourceCell": "D6"
         }
       ],
-      "sort": 0,
+      "sort": 9,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "A6",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "f5c014ea9e8784687e13",
+      "docId": "fbf8bf026fb91bf249ee",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "600샷",
       "description": "",
       "options": [
         {
-          "id": "33cf80acf3b062304432",
+          "id": "5b17735f2247bcf01d38",
           "label": "1회",
           "price": 499000,
           "sourceCell": "H6"
         },
         {
-          "id": "f96cd177d4e6a86bea77",
+          "id": "5276d4ba9748ad2aa322",
           "label": "3회",
           "price": 1090000,
           "sourceCell": "I6"
         }
       ],
-      "sort": 0,
+      "sort": 10,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F6",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "256e4784d23e8bd08401",
+      "docId": "9817bf6fd9f0e756f329",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "120KJ",
       "description": "",
       "options": [
         {
-          "id": "2d74de31ab901e7e8624",
+          "id": "9acd93ef28ef1318206f",
           "label": "1회",
           "price": 759000,
           "sourceCell": "C8"
         },
         {
-          "id": "12af6d2c3f3a4f1242c3",
+          "id": "efbfd39749d67214f37a",
           "label": "3회",
           "price": 1990000,
           "sourceCell": "D8"
         }
       ],
-      "sort": 0,
+      "sort": 11,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "A8",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "d11222a35f72005b9706",
+      "docId": "ad7fd085bb35b9380739",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "S 3000샷",
       "description": "",
       "options": [
         {
-          "id": "b80b0ce40a42c88b599a",
+          "id": "43708c6c1fc5f4eefb53",
           "label": "1회",
           "price": 279000,
           "sourceCell": "H8"
         },
         {
-          "id": "4539564ea8563b98ed51",
+          "id": "0ef56dbaf1efad3a8b22",
           "label": "3회",
           "price": 599000,
           "sourceCell": "I8"
         }
       ],
-      "sort": 0,
+      "sort": 12,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F8",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "4a81e715353125663806",
+      "docId": "82135df8d544d20e0f3a",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "6000샷",
       "description": "",
       "options": [
         {
-          "id": "eb851deac8bef96e3a0f",
+          "id": "76ac89a0692773c6c805",
           "label": "1회",
           "price": 499000,
           "sourceCell": "H10"
         },
         {
-          "id": "8c041c2c63e42ab8d3f1",
+          "id": "bc6912fdbeb5fc3c3340",
           "label": "3회",
           "price": 1090000,
           "sourceCell": "I10"
         }
       ],
-      "sort": 0,
+      "sort": 13,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F10",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "a866c5be7c6c1efb271f",
+      "docId": "1f4d070d69da1ffb812c",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "300+3000샷",
       "description": "",
       "options": [
         {
-          "id": "88e56bc33260c76e3f1e",
+          "id": "1f199a6912849da52eed",
           "label": "1회",
           "price": 499000,
           "sourceCell": "H12"
         },
         {
-          "id": "c5511c199b7be477f220",
+          "id": "c070ba7badf84251fb3c",
           "label": "3회",
           "price": 1090000,
           "sourceCell": "I12"
         }
       ],
-      "sort": 0,
+      "sort": 14,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F12",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "3f69c61296b2a7948de4",
+      "docId": "aced27a64e01a07f0d32",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "레비나스 6000샷",
       "description": "",
       "options": [
         {
-          "id": "33f184641b3ce785c355",
+          "id": "d3d1f0718ddebd1c799a",
           "label": "1회",
           "price": 590000,
           "sourceCell": "C14"
         },
         {
-          "id": "33ae9aa8843f8d6e4cbb",
+          "id": "43b522004d37a98d63ae",
           "label": "3회",
           "price": 1590000,
           "sourceCell": "D14"
         }
       ],
-      "sort": 0,
+      "sort": 15,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "A14",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "af5106b0bdfa520d703c",
+      "docId": "711d28612c4d029be087",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "600+6000샷",
       "description": "",
       "options": [
         {
-          "id": "438231edfeb0efdbed6f",
+          "id": "486cd0f82f997afeef71",
           "label": "1회",
           "price": 759000,
           "sourceCell": "H14"
         },
         {
-          "id": "b319f5a996ca5f387245",
+          "id": "1466ba855c8f5f987f5e",
           "label": "3회",
           "price": 2050000,
           "sourceCell": "I14"
         }
       ],
-      "sort": 0,
+      "sort": 16,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F14",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "62420f938bf730fc8484",
+      "docId": "9fd0ffefac21c207a28d",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "FX 1부위",
       "description": "",
       "options": [
         {
-          "id": "642264cc8f0eace5fec8",
+          "id": "597aadca8c3f27886404",
           "label": "1회",
           "price": 69000,
           "sourceCell": "H20"
         },
         {
-          "id": "1ecabfd9135b7853ae31",
+          "id": "9f7f05fa1e604c89f19e",
           "label": "3회",
           "price": 189000,
           "sourceCell": "I20"
         }
       ],
-      "sort": 0,
+      "sort": 17,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F20",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "454758fb9b3262200100",
+      "docId": "fadb0dbd91d5ffa83197",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "FX 얼굴전체",
       "description": "",
       "options": [
         {
-          "id": "1f8696a2ed70d8b1372d",
+          "id": "cabdbc33b8b0c5648c3f",
           "label": "1회",
           "price": 109000,
           "sourceCell": "H22"
         },
         {
-          "id": "6d4d570cea2412ea180d",
+          "id": "6e2ca4b9516d1e9e6f3c",
           "label": "3회",
           "price": 299000,
           "sourceCell": "I22"
         }
       ],
-      "sort": 0,
+      "sort": 18,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F22",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "9825ebc1eaee6d3585a3",
+      "docId": "677109c16bd103bc98b1",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "FORMA",
       "description": "",
       "options": [
         {
-          "id": "99f05a0e912ab246c979",
+          "id": "03accb2df80b80a8a2a6",
           "label": "1회",
           "price": 89000,
           "sourceCell": "H24"
         },
         {
-          "id": "7fb672fec285659d06df",
+          "id": "2c29c901db6d3f2f3057",
           "label": "3회",
           "price": 239000,
           "sourceCell": "I24"
         }
       ],
-      "sort": 0,
+      "sort": 19,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F24",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "765fc6b9c0e9cc0c2ad8",
+      "docId": "2e1f1d67f48abbfbc2f3",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "FX+FORMA 얼굴전체",
       "description": "",
       "options": [
         {
-          "id": "c413ec85ba00a5ca1f87",
+          "id": "4c8fdc306f965c3309de",
           "label": "1회",
           "price": 179000,
           "sourceCell": "H26"
         },
         {
-          "id": "711470fe285cd1c7b6cc",
+          "id": "d3188ce48290cab5c660",
           "label": "3회",
           "price": 489000,
           "sourceCell": "I26"
         }
       ],
-      "sort": 0,
+      "sort": 20,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F26",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "8f2c1b9ad4e5950eff20",
+      "docId": "6936654ddf120b90392a",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "100샷",
       "description": "",
       "options": [
         {
-          "id": "5e404e9cc0ef61ab67af",
+          "id": "620c1a85cd4ae7d72490",
           "label": "1회",
           "price": 55000,
           "sourceCell": "H32"
         },
         {
-          "id": "931202c1603002b7343e",
+          "id": "8dc4e50024fa20bc4b05",
           "label": "3회",
           "price": 149000,
           "sourceCell": "I32"
         }
       ],
-      "sort": 0,
+      "sort": 21,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F32",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "46fd62e3b160ef085b9d",
+      "docId": "e04fb60855f5b44dc071",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "300샷",
       "description": "",
       "options": [
         {
-          "id": "727ddd31a59da47ebb1a",
+          "id": "801ec267e6d7ae1e9e06",
           "label": "1회",
           "price": 149000,
           "sourceCell": "H34"
         },
         {
-          "id": "b5fbfade8c54a60fab07",
+          "id": "04eaf3ccf897e02d79df",
           "label": "3회",
           "price": 390000,
           "sourceCell": "I34"
         }
       ],
-      "sort": 0,
+      "sort": 22,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F34",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "6d40b2eeff203db2675a",
+      "docId": "86f0722c860a79f01114",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "600샷",
       "description": "",
       "options": [
         {
-          "id": "af22d1e422f9b0cb647e",
+          "id": "9859789fb20216964a30",
           "label": "1회",
           "price": 279000,
           "sourceCell": "H36"
         },
         {
-          "id": "0f103bf23bbe642fe922",
+          "id": "10b98e41c8c3f189c07b",
           "label": "3회",
           "price": 759000,
           "sourceCell": "I36"
         }
       ],
-      "sort": 0,
+      "sort": 23,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F36",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "8a4e1c95b22705a69458",
+      "docId": "570926b7c616e31fbcea",
       "categoryId": "lifting",
       "section": "리프팅",
       "name": "아이슈링크 100샷",
       "description": "",
       "options": [
         {
-          "id": "c5d0cb2a556e81c49b71",
+          "id": "6e6663729b2b53574012",
           "label": "1회",
           "price": 49000,
           "sourceCell": "H38"
         },
         {
-          "id": "14ea7b57ddd6abbf0032",
+          "id": "6e903670da8b94baabb5",
           "label": "3회",
           "price": 139000,
           "sourceCell": "I38"
         },
         {
-          "id": "5d99f30e9e897063d10a",
+          "id": "28905e146b0c3358b78c",
           "label": "200샷 · 1회",
           "price": 93000,
           "sourceCell": "H40"
         },
         {
-          "id": "bb825117d359e349f5c2",
+          "id": "9982010ba0f75e6e4651",
           "label": "200샷 · 3회",
           "price": 249000,
           "sourceCell": "I40"
         }
       ],
-      "sort": 0,
+      "sort": 24,
       "isPublished": true,
       "sourceSheet": "리프팅",
       "sourceCell": "F38",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "41a2c765b67d91efe7f4",
+      "docId": "25ff91ba869cdcec620c",
       "categoryId": "skin-care",
       "section": "피부관리",
       "name": "아쿠아필, 멀티마스터 관리",
       "description": "",
       "options": [
         {
-          "id": "0e77330cc66bcbb344ce",
+          "id": "04efbcb90deacbd50cc6",
           "label": "1회",
           "price": 59000,
           "sourceCell": "G2"
@@ -3670,101 +4205,101 @@
       "isPublished": true,
       "sourceSheet": "관리",
       "sourceCell": "A2",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "21fad13d8e3b2d48d3c8",
+      "docId": "fd1848921a4a32377e5d",
       "categoryId": "skin-care",
       "section": "피부관리",
       "name": "라라필",
       "description": "",
       "options": [
         {
-          "id": "9273301fc72ca6c4c01e",
+          "id": "c6645d224620929b73a0",
           "label": "1회",
           "price": 79000,
           "sourceCell": "G3"
         },
         {
-          "id": "49c71546bc18f3d3e101",
+          "id": "16095eb4541206f93c06",
           "label": "3회",
           "price": 189000,
           "sourceCell": "G4"
         }
       ],
-      "sort": 0,
+      "sort": 1,
       "isPublished": true,
       "sourceSheet": "관리",
       "sourceCell": "A3",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "d9f506e168fbcb5b7731",
+      "docId": "05210d17145d650ad1c9",
       "categoryId": "skin-care",
       "section": "피부관리",
       "name": "내맘대로 관리 Basic\n(아쿠아필, 멀티마스터, 단독 수액)",
       "description": "",
       "options": [
         {
-          "id": "e64c13eeeb086af82b72",
+          "id": "b2b2aa6df4a63b15219f",
           "label": "5회",
           "price": 260000,
           "sourceCell": "G5"
         },
         {
-          "id": "7683652370184209e7df",
+          "id": "a1d4f876a8dc4f9fc9c5",
           "label": "10회",
           "price": 450000,
           "sourceCell": "G6"
         }
       ],
-      "sort": 0,
+      "sort": 2,
       "isPublished": true,
       "sourceSheet": "관리",
       "sourceCell": "A5",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "c41bb6b323ace2fc1379",
+      "docId": "8045575d80447702322c",
       "categoryId": "skin-care",
       "section": "피부관리",
       "name": "내맘대로 관리 Premium\n(Basic+라라필, 울킨LDM, 압출, 칵테일 수액)",
       "description": "",
       "options": [
         {
-          "id": "8bf64264cb723e14d256",
+          "id": "6ea2868f874d70bd217d",
           "label": "5회",
           "price": 370000,
           "sourceCell": "G7"
         },
         {
-          "id": "3690098ac9c7c46b1b47",
+          "id": "a5a3c6ce093e1f8f0d3a",
           "label": "10회",
           "price": 650000,
           "sourceCell": "G8"
         }
       ],
-      "sort": 0,
+      "sort": 3,
       "isPublished": true,
       "sourceSheet": "관리",
       "sourceCell": "A7",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "05a6c811ad4c92becc54",
+      "docId": "e8bd4c39438cad4c131b",
       "categoryId": "iv-therapy",
-      "section": "수액·주사",
+      "section": "수액",
       "name": "백옥, 신데렐라, 비타민 C,B",
       "description": "",
       "options": [
         {
-          "id": "b37661b8a1a5a702a109",
+          "id": "c0eb82c24d713dcbbc94",
           "label": "1회",
           "price": 19000,
           "sourceCell": "E7"
         },
         {
-          "id": "3781b509101b715b1d36",
+          "id": "260d5fcd6415d34753d9",
           "label": "10회",
           "price": 150000,
           "sourceCell": "H7"
@@ -3774,102 +4309,102 @@
       "isPublished": true,
       "sourceSheet": "수액",
       "sourceCell": "A7",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "ee6421c2cc9b2bd19e01",
+      "docId": "5c64a2f8e7e0382b21d8",
       "categoryId": "iv-therapy",
-      "section": "수액·주사",
+      "section": "수액",
       "name": "와인,감초,마늘,태반,비타민D",
       "description": "",
       "options": [
         {
-          "id": "efe9566013bf24669d55",
+          "id": "2c869388cf53b381320c",
           "label": "1회",
           "price": 35000,
           "sourceCell": "E8"
         },
         {
-          "id": "9bd0d14c01f2ce87cdd9",
+          "id": "c8f8b51751a3bc1a83a0",
           "label": "10회",
           "price": 300000,
           "sourceCell": "H8"
         }
       ],
-      "sort": 0,
+      "sort": 1,
       "isPublished": true,
       "sourceSheet": "수액",
       "sourceCell": "A8",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "30fcf663fe6d0200fa30",
+      "docId": "f34ed8b6799aa3ea5daf",
       "categoryId": "iv-therapy",
-      "section": "수액·주사",
+      "section": "수액",
       "name": "붓기주사,항산화 주사",
       "description": "",
       "options": [
         {
-          "id": "0adb9a1d6fb29eed9908",
+          "id": "a2dc77061975ad9c00cd",
           "label": "1회",
           "price": 59000,
           "sourceCell": "E9"
         },
         {
-          "id": "847d5169eb852edfc2ed",
+          "id": "4c996fea78beb3b7b87b",
           "label": "5회",
           "price": 280000,
           "sourceCell": "G9"
         },
         {
-          "id": "99f6532ca6e00d1fdd99",
+          "id": "b3122688cce95e6e0e88",
           "label": "10회",
           "price": 430000,
           "sourceCell": "H9"
         }
       ],
-      "sort": 0,
+      "sort": 2,
       "isPublished": true,
       "sourceSheet": "수액",
       "sourceCell": "A9",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     },
     {
-      "docId": "0d4dd9a0893d27b99bcf",
+      "docId": "7cd1df65a23f98bfeacf",
       "categoryId": "iv-therapy",
-      "section": "수액·주사",
+      "section": "수액",
       "name": "동안예쁨,화이트 디톡스 주사",
       "description": "",
       "options": [
         {
-          "id": "c8e513d5b61943d2662a",
+          "id": "472e17c5a7e4fe679b05",
           "label": "1회",
           "price": 79000,
           "sourceCell": "E10"
         },
         {
-          "id": "075510b5b7113289b176",
+          "id": "e57130269cb5a78cb55c",
           "label": "5회",
           "price": 370000,
           "sourceCell": "G10"
         },
         {
-          "id": "b730b2e764c8e8584d0b",
+          "id": "dea3856f19d0007053f8",
           "label": "10회",
           "price": 660000,
           "sourceCell": "H10"
         }
       ],
-      "sort": 0,
+      "sort": 3,
       "isPublished": true,
       "sourceSheet": "수액",
       "sourceCell": "A10",
-      "seedVersion": "xlsx-seed-v1"
+      "seedVersion": "xlsx-seed-v2"
     }
   ],
   "summary": {
-    "categoryCount": 10,
-    "itemCount": 138,
-    "optionCount": 310
+    "categoryCount": 14,
+    "itemCount": 159,
+    "optionCount": 342
   }
 }

@@ -28,6 +28,24 @@ SHEETS = [
     ("수액", "iv-therapy", "수액·주사", []),
 ]
 
+TARGET_CATEGORIES = [
+    ("botox", "보톡스"),
+    ("hair-removal", "제모"),
+    ("filler", "필러"),
+    ("thread-lifting", "실리프팅"),
+    ("lifting", "리프팅"),
+    ("skin-booster", "스킨부스터"),
+    ("acne-ptt", "여드름 (PTT)"),
+    ("pore-scar", "모공흉터"),
+    ("potenza", "포텐자"),
+    ("pigment", "색소"),
+    ("skin-care", "피부관리"),
+    ("tattoo-body-toning", "문신제거·바디토닝"),
+    ("iv-therapy", "수액"),
+    ("other", "기타"),
+]
+TARGET_LABELS = dict(TARGET_CATEGORIES)
+
 PRICE_FIXES = {
     "699,00원": "699,000원",
     "14,9000원": "149,000원",
@@ -90,6 +108,124 @@ def context_value(ws: Any, merged: dict[tuple[int, int], tuple[str, str]], row: 
 
 def excluded(row: int, ranges: list[tuple[int, int]]) -> bool:
     return any(start <= row <= end for start, end in ranges)
+
+
+def source_row(item: dict) -> int:
+    match = re.search(r"\d+", item["sourceCell"])
+    return int(match.group()) if match else 0
+
+
+def target_category(item: dict) -> str:
+    if "targetCategoryId" in item:
+        return item["targetCategoryId"]
+    source = item["categoryId"]
+    row = source_row(item)
+    if source == "botox-hair-removal":
+        return "botox" if row <= 26 else "hair-removal"
+    if source == "filler":
+        return "thread-lifting" if row >= 42 else "filler"
+    if source in {"titanium", "lifting"}:
+        return "lifting"
+    if source == "co2-keloid-contouring":
+        return "pore-scar" if row <= 19 else "other"
+    if source == "skin-booster":
+        return "skin-booster"
+    if source == "tattoo-body-toning":
+        return "tattoo-body-toning"
+    if source == "potenza-acne-scar":
+        return "acne-ptt" if row >= 29 else "potenza"
+    if source == "skin-care":
+        return "skin-care"
+    if source == "iv-therapy":
+        return "iv-therapy"
+    raise RuntimeError(f"unmapped source category: {source}")
+
+
+def package_item(category_id: str, sheet: str, cell: str, name: str, options: list[tuple[str, int, str]]) -> dict:
+    item_id = stable_id(category_id, sheet, cell, name)
+    return {
+        "docId": item_id,
+        "categoryId": category_id,
+        "targetCategoryId": category_id,
+        "section": TARGET_LABELS[category_id],
+        "name": name,
+        "description": "",
+        "options": [
+            {
+                "id": stable_id(item_id, source_cell, label),
+                "label": label,
+                "price": price,
+                "sourceCell": source_cell,
+            }
+            for label, price, source_cell in options
+        ],
+        "sort": 0,
+        "isPublished": True,
+        "sourceSheet": sheet,
+        "sourceCell": cell,
+    }
+
+
+def package_items() -> list[dict]:
+    return [
+        package_item("botox", "보톡스,제모", "A27", "원데이 종아리 알빼기 PKG", [("기본", 179_000, "D27")]),
+        package_item(
+            "filler",
+            "필러",
+            "A19",
+            "풀페이스 필러 10cc",
+            [
+                ("국산 · 레나/아띠", 890_000, "C20"),
+                ("국산 프리미엄 · 르네필/리쥬비엘/레나", 1_500_000, "D20"),
+                ("수입 · 레스틸렌/벨로테로", 2_500_000, "E20"),
+            ],
+        ),
+        package_item(
+            "filler",
+            "필러",
+            "A21",
+            "풀페이스 필러 20cc",
+            [
+                ("국산 · 레나/아띠", 1_650_000, "C21"),
+                ("국산 프리미엄 · 르네필/리쥬비엘/레나", 2_500_000, "D21"),
+                ("수입 · 레스틸렌/벨로테로", 4_400_000, "E21"),
+            ],
+        ),
+        package_item("filler", "필러", "A23", "원데이 목주름 PKG", [("기본", 590_000, "E24")]),
+        package_item("filler", "필러", "A26", "원데이 팔자주름 PKG", [("기본", 390_000, "E27")]),
+        package_item("filler", "필러", "A29", "원데이 팔자주름 스페셜 PKG", [("기본", 690_000, "E30")]),
+        package_item(
+            "filler",
+            "필러",
+            "A32",
+            "아름다운 코라인",
+            [
+                ("아띠에르", 539_000, "E33"),
+                ("리쥬비엘 C", 649_000, "E34"),
+                ("레스틸렌 리프트", 849_000, "E35"),
+            ],
+        ),
+        package_item("acne-ptt", "포텐자,여드름,모공흉터", "A12", "안티아크네 8주", [("기본", 1_190_000, "J12")]),
+        package_item("acne-ptt", "포텐자,여드름,모공흉터", "A14", "프리미엄 안티아크네 8주", [("기본", 1_490_000, "J14")]),
+        package_item("acne-ptt", "포텐자,여드름,모공흉터", "A16", "시그니처 안티아크네 12주", [("기본", 2_590_000, "J16")]),
+        package_item(
+            "pore-scar",
+            "포텐자,여드름,모공흉터",
+            "A19",
+            "도자기 피부 패키지",
+            [("4회", 1_590_000, "J20"), ("8회", 2_490_000, "J21")],
+        ),
+        package_item("pore-scar", "포텐자,여드름,모공흉터", "A22", "프리미엄 도자기 8회", [("기본", 2_990_000, "I23")]),
+        package_item("pore-scar", "포텐자,여드름,모공흉터", "A25", "시그니처 도자기 8회", [("기본", 3_490_000, "I26")]),
+        package_item("pigment", "색소pkg", "A2", "진주광채 피코&헐리우드 토닝 4회", [("기본", 1_290_000, "I2")]),
+        package_item("pigment", "색소pkg", "A4", "프리미엄 진주광채 피코&헐리우드 토닝 8회", [("기본", 1_990_000, "I4")]),
+        package_item("pigment", "색소pkg", "A6", "시그니처 진주광채 피코&헐리우드 토닝 8회", [("기본", 2_490_000, "I6")]),
+        package_item("pigment", "색소pkg", "A8", "프레스티지 진주광채 피코&헐리우드 토닝 10회", [("기본", 2_790_000, "I8")]),
+        package_item("pigment", "색소pkg", "A10", "플래티넘 진주광채 피코&헐리우드 토닝 12회", [("기본", 3_190_000, "I10")]),
+        package_item("other", "홍조", "A2", "엑셀 홍조", [("1회", 299_000, "G3"), ("4회", 990_000, "G4")]),
+        package_item("other", "홍조", "A5", "프리미엄 엑셀 홍조", [("4회", 1_690_000, "G7"), ("8회", 2_690_000, "G8")]),
+        package_item("other", "홍조", "A9", "프리미엄 재생 홍조", [("1회", 319_000, "G10"), ("4회", 1_490_000, "G11"), ("8회", 2_290_000, "G12")]),
+    ]
 
 
 def normalize_sheet(ws: Any, category_id: str, category_label: str, excluded_ranges: list[tuple[int, int]]) -> list[dict]:
@@ -262,32 +398,46 @@ def main() -> None:
     args = parser.parse_args()
 
     workbook = openpyxl.load_workbook(args.source, data_only=True)
-    now_marker = "xlsx-seed-v1"
-    categories = []
+    now_marker = "xlsx-seed-v2"
+    categories = [
+        {
+            "docId": category_id,
+            "label": label,
+            "sort": sort,
+            "isPublished": True,
+            "seedVersion": now_marker,
+        }
+        for sort, (category_id, label) in enumerate(TARGET_CATEGORIES)
+    ]
     items = []
 
-    for sort, (sheet_name, category_id, label, excluded_ranges) in enumerate(SHEETS):
+    for sheet_name, category_id, label, excluded_ranges in SHEETS:
         ws = workbook[sheet_name]
-        categories.append(
-            {
-                "docId": category_id,
-                "label": label,
-                "sort": sort,
-                "isPublished": True,
-                "seedVersion": now_marker,
-            }
-        )
         sheet_items = normalize_sheet(ws, category_id, label, excluded_ranges)
-        for item in sheet_items:
-            item["sort"] = len([existing for existing in items if existing["categoryId"] == category_id])
-            item["seedVersion"] = now_marker
         items.extend(sheet_items)
 
-    package_hits = [
-        item["name"]
-        for item in items
-        if PACKAGE_RE.search(item["name"]) or PACKAGE_RE.search(item["description"])
-    ]
+    items.extend(package_items())
+    sheet_order = {sheet_name.strip(): index for index, sheet_name in enumerate(workbook.sheetnames)}
+    items.sort(
+        key=lambda item: (
+            sheet_order.get(item["sourceSheet"].strip(), len(sheet_order)),
+            source_row(item),
+            openpyxl.utils.column_index_from_string(re.match(r"[A-Z]+", item["sourceCell"]).group()),
+        )
+    )
+
+    target_counts: dict[str, int] = {}
+    for item in items:
+        category_id = target_category(item)
+        item["categoryId"] = category_id
+        item["section"] = TARGET_LABELS[category_id]
+        item["sort"] = target_counts.get(category_id, 0)
+        target_counts[category_id] = item["sort"] + 1
+        item["docId"] = stable_id(category_id, item["sourceSheet"], item["sourceCell"], item["name"])
+        for option in item["options"]:
+            option["id"] = stable_id(item["docId"], option["sourceCell"], option["label"])
+        item["seedVersion"] = now_marker
+
     invalid_prices = [
         (item["name"], option["price"])
         for item in items
@@ -297,9 +447,9 @@ def main() -> None:
     doc_ids = [item["docId"] for item in items]
     duplicate_ids = len(doc_ids) - len(set(doc_ids))
 
-    if package_hits or invalid_prices or duplicate_ids:
+    if invalid_prices or duplicate_ids:
         raise RuntimeError(
-            f"validation failed: package_hits={package_hits}, invalid_prices={invalid_prices}, duplicate_ids={duplicate_ids}"
+            f"validation failed: invalid_prices={invalid_prices}, duplicate_ids={duplicate_ids}"
         )
 
     payload = {

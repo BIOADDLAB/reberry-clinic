@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import './globals.css';
 import LangAttribute from '@/components/lang/LangAttribute';
+import { site } from '@/components/lib/site';
 
 /* #ISSUE: 본문 폰트가 두 벌 로드되고 있었음.
    - public/fonts/AstaSans[wght].ttf (5.6MB) 를 next/font/local 로 preload
@@ -30,19 +31,50 @@ export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations('meta');
 
     return {
-        // TODO: 실제 배포 도메인으로 교체
-        metadataBase: new URL('https://reberry-clinic.vercel.app'),
+        metadataBase: new URL(site.url),
         title: {
             default: t('title'),
             template: t('titleTemplate'),
         },
         description: t('description'),
+        applicationName: '마포 리베리의원',
+        authors: [{ name: '리베리의원 마포점', url: site.url }],
+        creator: '리베리의원 마포점',
+        publisher: '리베리의원',
+        category: 'medical',
+        keywords: [
+            '마포 리베리의원',
+            '리베리 마포',
+            '리베리의원 마포점',
+            '마포 피부과',
+            '마포구청역 피부과',
+            '성산동 피부과',
+            '상암 피부과',
+            '망원동 피부과',
+            '마포 보톡스',
+            '마포 필러',
+            '마포 리프팅',
+            '마포 피부관리',
+        ],
+        alternates: {
+            types: {
+                'application/rss+xml': `${site.url}/rss.xml`,
+            },
+        },
+        verification: {
+            google: 'BG3UGHCDV8WrgCKP_0eZYKMHVP0N7SnEMLZZzgQVe-4',
+        },
+        other: {
+            'naver-site-verification': '23552e6b1f890503e018185ef223ad1ca8ee3a76',
+        },
         openGraph: {
             title: t('title'),
             description: t('ogDescription'),
             images: ['/images/og-img.png'],
             locale: t('ogLocale'),
             type: 'website',
+            url: site.url,
+            siteName: '마포 리베리의원',
         },
         twitter: {
             card: 'summary_large_image',

@@ -1,4 +1,5 @@
 export const site = {
+    url: 'https://www.reberryclinicmapo.com',
     name: '리베리의원',
     branch: '리베리의원 마포점',
     nameEn: 'RE:BERRY',
