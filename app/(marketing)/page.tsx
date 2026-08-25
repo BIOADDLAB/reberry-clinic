@@ -11,7 +11,7 @@ import LocationSection from '@/components/ui/LocationSection';
 import WhySection from '@/components/home/WhySection';
 import Reveal from '@/components/motion/Reveal';
 import TourSwiper from '@/components/ui/TourSwioer';
-import MainSidePopups from '@/components/home/MainSidePopups';
+import PopupModal from '@/components/home/PopupModal';
 import ManagedEventList from '@/components/events/ManagedEventList';
 
 const HERO_IMG = '/images/bg-main-hiro.jpg';
@@ -31,7 +31,7 @@ export default async function Home() {
 
     return (
         <>
-            <MainSidePopups />
+            <PopupModal />
 
             {/* 메인 히어로 영역 */}
             {/* #ISSUE: 배경 높이 디자인팀 의견 반영 100vh로 변경 - 기존코드는 임시로 주석처리 */}

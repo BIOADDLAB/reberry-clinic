@@ -26,6 +26,11 @@
     "homeAria": "RE:BERRY 诊所首页",
     "openMenu": "打开菜单"
   },
+  "popup": {
+    "label": "主页弹窗",
+    "tab": "公告 {n}",
+    "hideToday": "今日不再显示"
+  },
   "labels": {
     "색소치료": "色素治疗",
     "볼륨리프팅": "立体提升",
@@ -59,7 +64,14 @@
     "상담예약": "预约",
     "유투브": "YouTube",
     "문의하기": "咨询",
-    "네이버": "Naver"
+    "네이버": "Naver",
+    "전체": "全部",
+    "모공/흉터": "毛孔・疤痕",
+    "주름": "皱纹",
+    "리프팅/탄력": "提拉紧致",
+    "쁘띠성형": "微整形",
+    "제모": "脱毛",
+    "평일 점심시간": "平日午休"
   },
   "about": {
     "designHeadline": "<light>我们以</light><br></br><hl>最科学的方式</hl>为您打造美丽",
@@ -101,9 +113,22 @@
     "directorTitle": "代表院长",
     "signatureAlt": "签名",
     "education": "庆熙大学医学院毕业，医师（MD）<br></br>庆熙大学药学院毕业，药剂师（B.Pharm.）",
-    "career": ["现) RE:BERRY 诊所麻浦店 代表院长", "前) RE:BERRY 诊所华城秉店 院长", "前) Mepure 诊所往十里店 院长"],
-    "certification": ["Juvelook Meister", "Revinas Key Doctor V-RO", "Advanced Key Doctor"],
-    "memberships": ["大韩美容整形激光医学会 正式会员", "大韩肥胖美容学会(KOAT) 正式会员", "大韩填充剂学会 正式会员", "大韩激光皮肤毛发学会 正式会员"],
+    "career": [
+      "现) RE:BERRY 诊所麻浦店 代表院长",
+      "前) RE:BERRY 诊所华城秉店 院长",
+      "前) Mepure 诊所往十里店 院长"
+    ],
+    "certification": [
+      "Juvelook Meister",
+      "Revinas Key Doctor V-RO",
+      "Advanced Key Doctor"
+    ],
+    "memberships": [
+      "大韩美容整形激光医学会 正式会员",
+      "大韩肥胖美容学会(KOAT) 正式会员",
+      "大韩填充剂学会 正式会员",
+      "大韩激光皮肤毛发学会 正式会员"
+    ],
     "promiseHeadline": "超越经验，<br></br><hl>用依据说话</hl>",
     "videoFallback": "您的浏览器不支持 video 标签。",
     "conferenceCaption": "2026年 大韩肥胖美容学会(KOAT) 春季学术大会 ▴"
@@ -143,7 +168,15 @@
     "submitError": "预约提交失败，请稍后重试。",
     "previousMonth": "上个月",
     "nextMonth": "下个月",
-    "weekdays": ["日", "一", "二", "三", "四", "五", "六"]
+    "weekdays": [
+      "日",
+      "一",
+      "二",
+      "三",
+      "四",
+      "五",
+      "六"
+    ]
   },
   "priceList": {
     "metaTitle": "治疗价格表",
@@ -175,9 +208,18 @@
   "stepPlan": {
     "headline": "RE:BERRY 独有的<hl>三阶段立体分析</hl>与<mob></mob><hl>专属护肤体系</hl>",
     "steps": [
-      { "title": "精准掌握肌肤状态", "desc": "基于 Mark View 与 LifeBiz Infinity 的\nAI 技术进行肌肤3D重建" },
-      { "title": "个性化方案", "desc": "根据精密的3D影像与顾客的具体\n需求，设计精细的治疗\n方案。" },
-      { "title": "只为您打造的专属治疗", "desc": "备受认可的皮肤专科医师，在定期方案下，\n根据当日肌肤状态\n规划适合的治疗。" }
+      {
+        "title": "精准掌握肌肤状态",
+        "desc": "基于 Mark View 与 LifeBiz Infinity 的\nAI 技术进行肌肤3D重建"
+      },
+      {
+        "title": "个性化方案",
+        "desc": "根据精密的3D影像与顾客的具体\n需求，设计精细的治疗\n方案。"
+      },
+      {
+        "title": "只为您打造的专属治疗",
+        "desc": "备受认可的皮肤专科医师，在定期方案下，\n根据当日肌肤状态\n规划适合的治疗。"
+      }
     ]
   },
   "column": {
@@ -201,6 +243,8 @@
     "beforeAlt": "治疗前（登录后可见）",
     "afterAlt": "治疗后",
     "prevPage": "上一页",
-    "nextPage": "下一页"
+    "nextPage": "下一页",
+    "categoryLabel": "项目分类",
+    "empty": "暂无照片。"
   }
 }

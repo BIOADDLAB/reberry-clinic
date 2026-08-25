@@ -1,16 +1,21 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import BAPhotoModal from '@/components/ui/BAPhotoModal';
 import Skeleton from '@/components/ui/Skeleton';
-import type { BAPhoto } from '@/components/lib/ba';
-import { useBAPhotos, useBAPhotosLoading } from '@/components/lib/useBAPhotos';
+import T from '@/components/lang/T';
+import { cn } from '@/components/lib/cn';
+import { BA_CATEGORIES, resolveBACategory, type BAPhoto } from '@/components/lib/ba';
+import { filterReviewBAPhotos, useBAPhotos, useBAPhotosLoading } from '@/components/lib/useBAPhotos';
 
 const PER_PAGE = 8;
+
+/** 카테고리 탭의 '전체' 자리. BA_CATEGORIES 에 넣지 않는 이유는 실제 분류값이 아니기 때문 */
+const ALL = 'all';
 
 const shuffle = (arr: BAPhoto[]) => {
     const copy = [...arr];
@@ -24,9 +29,12 @@ const shuffle = (arr: BAPhoto[]) => {
 export default function ReviewsPage() {
     const tReviews = useTranslations('reviews');
     const [page, setPage] = useState(1);
-    const photos = useBAPhotos();
+    const [category, setCategory] = useState<string>(ALL);
+    const allPhotos = useBAPhotos();
     const loading = useBAPhotosLoading();
-    const [shuffled, setShuffled] = useState<BAPhoto[]>(photos);
+    // 관리자에서 '시술 페이지만' 으로 등록한 사진은 이 페이지에 안 나온다
+    const photos = useMemo(() => filterReviewBAPhotos(allPhotos), [allPhotos]);
+    const [shuffled, setShuffled] = useState<BAPhoto[]>([]);
     const [selectedPhoto, setSelectedPhoto] = useState<BAPhoto | null>(null);
     const topRef = useRef<HTMLDivElement>(null);
 
@@ -45,9 +53,34 @@ export default function ReviewsPage() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [page]);
 
-    const totalPages = Math.ceil(shuffled.length / PER_PAGE);
+    // 카테고리별 장수 — 0장인 탭은 아예 안 그린다(빈 탭을 눌러 빈 화면을 보게 두지 않음)
+    const counts = useMemo(() => {
+        const map = new Map<string, number>();
+        for (const p of shuffled) {
+            const key = resolveBACategory(p);
+            if (key) map.set(key, (map.get(key) ?? 0) + 1);
+        }
+        return map;
+    }, [shuffled]);
+
+    const visibleTabs = useMemo(
+        () => [{ key: ALL, label: '전체' }, ...BA_CATEGORIES.filter((c) => (counts.get(c.key) ?? 0) > 0)],
+        [counts],
+    );
+
+    const filtered = useMemo(
+        () => (category === ALL ? shuffled : shuffled.filter((p) => resolveBACategory(p) === category)),
+        [shuffled, category],
+    );
+
+    const totalPages = Math.ceil(filtered.length / PER_PAGE);
     const start = (page - 1) * PER_PAGE;
-    const currentPhotos = shuffled.slice(start, start + PER_PAGE);
+    const currentPhotos = filtered.slice(start, start + PER_PAGE);
+
+    const pickCategory = (key: string) => {
+        setCategory(key);
+        setPage(1);
+    };
 
     const goPrev = () => setPage((p) => Math.max(1, p - 1));
     const goNext = () => setPage((p) => Math.min(totalPages, p + 1));
@@ -74,7 +107,35 @@ export default function ReviewsPage() {
                         <h2 className="notranslate font-display text-h2 tracking-[0.06em]">Before &amp; After</h2>
                     </div>
 
-                    <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:mt-21 lg:grid-cols-4">
+                    {/* 카테고리 탭 — 모바일에서는 가로 스크롤. 탭 목록은 ba.ts 의 BA_CATEGORIES 에서 온다 */}
+                    {!loading && visibleTabs.length > 1 && (
+                        <div className="mt-10 flex justify-center lg:mt-14">
+                            <div
+                                role="group"
+                                aria-label={tReviews('categoryLabel')}
+                                className="no-scrollbar flex max-w-full gap-1 overflow-x-auto rounded-full border border-cocoa/15 bg-cream/70 p-1.5"
+                            >
+                                {visibleTabs.map((tab) => (
+                                    <button
+                                        key={tab.key}
+                                        type="button"
+                                        onClick={() => pickCategory(tab.key)}
+                                        aria-pressed={category === tab.key}
+                                        className={cn(
+                                            'shrink-0 rounded-full px-4 py-2 text-small whitespace-nowrap transition-colors sm:px-5',
+                                            category === tab.key
+                                                ? 'bg-cocoa font-semibold text-cream'
+                                                : 'text-cocoa/60 hover:bg-sand/40 hover:text-cocoa',
+                                        )}
+                                    >
+                                        <T ko={tab.label} />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:mt-16 lg:grid-cols-4">
                         {/* Firestore 응답 대기 중 — 한 페이지 분량(8개)만큼 스켈레톤 카드 */}
                         {loading
                             ? Array.from({ length: PER_PAGE }).map((_, i) => (
@@ -126,6 +187,10 @@ export default function ReviewsPage() {
                               ))}
                     </div>
 
+                    {!loading && filtered.length === 0 && (
+                        <p className="mt-16 text-center text-small text-latte">{tReviews('empty')}</p>
+                    )}
+
                     {!loading && totalPages > 1 && (
                         <div className="mt-21 flex items-center justify-center gap-6">
                             <button
@@ -166,10 +231,7 @@ export default function ReviewsPage() {
                 </div>
             </section>
 
-            <BAPhotoModal
-                photo={selectedPhoto}
-                onClose={() => setSelectedPhoto(null)}
-            />
+            <BAPhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />
             <LocationSection />
         </>
     );

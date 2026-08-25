@@ -21,6 +21,16 @@ import {
 import { db } from '@/components/lib/firebase';
 import { uploadImage } from '@/components/lib/storageUpload';
 import { SIGNATURE_PAGES, LIMITS, COUNT_LIMITS, BA_IMAGE_GUIDE } from '@/components/lib/adminConfig';
+import {
+    BA_CATEGORIES,
+    BA_PLACES,
+    baCategoryLabel,
+    baPlaceLabel,
+    resolveBACategory,
+    resolveBAPlace,
+    showsOnReviews,
+    showsOnTreatment,
+} from '@/components/lib/ba';
 
 interface BAPhotoDoc {
     id: string;
@@ -30,10 +40,16 @@ interface BAPhotoDoc {
     after: string;
     main?: number; // 메인페이지 노출 순서 (없으면 메인 미노출)
     order?: number; // 그 시그니처 페이지 안에서의 순서
+    category?: string; // 전후사진 페이지(/reviews) 카테고리 탭
+    place?: string; // 노출 위치 treatment/reviews/both (없으면 both)
 }
 
 const EMPTY_FORM = {
+    // 새로 올리는 사진은 어디에 띄울지 반드시 고르게 한다(기본값 = 시술 페이지)
+    place: 'treatment' as string,
     slug: SIGNATURE_PAGES[0].slug as string,
+    // 전후사진 페이지 탭. 카테고리를 따로 안 건드리면 시술 페이지 기준으로 자동 배정된다
+    category: (resolveBACategory({ slug: SIGNATURE_PAGES[0].slug }) ?? BA_CATEGORIES[0].key) as string,
     useCustomLabel: false,
     customLabel: '',
     order: 1,
@@ -49,6 +65,7 @@ export default function AdminBAPage() {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [busy, setBusy] = useState(false);
     const [filterSlug, setFilterSlug] = useState<string>('all');
+    const [filterPlace, setFilterPlace] = useState<string>('all');
 
     useEffect(() => {
         const q = query(collection(db, 'baPhotos'), orderBy('createdAt', 'desc'));
@@ -61,17 +78,25 @@ export default function AdminBAPage() {
         return taken.length + 1;
     };
 
-    const currentPage = SIGNATURE_PAGES.find((p) => p.slug === form.slug)!;
-    const finalLabel = form.useCustomLabel ? form.customLabel.trim() : `${currentPage.label}`;
+    // 시술 페이지에 뜨는 사진인지 (= 시술 페이지 선택·순서 칸을 보여줄지)
+    const usesTreatment = form.place !== 'reviews';
+    // 전후사진 페이지에 뜨는 사진인지 (= 카테고리 칸을 보여줄지)
+    const usesReviews = form.place !== 'treatment';
 
-    // 같은 카테고리에 등록된 사진들 (수정 중인 자기 자신은 제외)
+    const currentPage = SIGNATURE_PAGES.find((p) => p.slug === form.slug)!;
+    // 자동 라벨은 그 사진이 실제로 걸리는 쪽 이름을 쓴다
+    const autoLabel = usesTreatment ? currentPage.label : baCategoryLabel(form.category);
+    const finalLabel = form.useCustomLabel ? form.customLabel.trim() : autoLabel;
+
+    // 같은 시술 페이지에 등록된 사진들 (수정 중인 자기 자신 / 전후사진 전용 사진은 제외)
     const sameSlugItems = useMemo(
-        () => items.filter((it) => it.slug === form.slug && it.id !== editingId),
+        () => items.filter((it) => it.slug === form.slug && it.id !== editingId && showsOnTreatment(it)),
         [items, form.slug, editingId],
     );
     const usedOrders = sameSlugItems.map((it) => it.order ?? 0).filter(Boolean);
-    const isDuplicateOrder = usedOrders.includes(form.order);
-    const isOverCount = !editingId && sameSlugItems.length >= COUNT_LIMITS.baPerPage;
+    // 순서·개수 제한은 시술 페이지에 뜨는 사진에만 해당
+    const isDuplicateOrder = usesTreatment && usedOrders.includes(form.order);
+    const isOverCount = usesTreatment && !editingId && sameSlugItems.length >= COUNT_LIMITS.baPerPage;
 
     // 메인 노출 순서는 카테고리와 무관하게 "메인페이지 전체"에서 하나뿐이어야 함
     const mainItems = items.filter((it) => typeof it.main === 'number' && it.id !== editingId);
@@ -80,15 +105,29 @@ export default function AdminBAPage() {
     const isOverMainCount = form.showMain && !editingId && mainItems.length >= COUNT_LIMITS.baMain;
 
     const visibleItems = useMemo(
-        () => (filterSlug === 'all' ? items : items.filter((it) => it.slug === filterSlug)),
-        [items, filterSlug],
+        () =>
+            items
+                .filter((it) => filterPlace === 'all' || resolveBAPlace(it) === filterPlace)
+                // 시술 페이지 필터는 시술 페이지에 뜨는 사진에만 의미가 있다
+                .filter((it) => filterSlug === 'all' || (it.slug === filterSlug && showsOnTreatment(it))),
+        [items, filterSlug, filterPlace],
     );
 
     const startEdit = (it: BAPhotoDoc) => {
+        const place = resolveBAPlace(it);
+        const category = resolveBACategory(it) ?? BA_CATEGORIES[0].key;
+        // 저장된 라벨이 자동 라벨과 다르면 '직접 입력' 상태로 되살린다
+        const auto =
+            place === 'reviews'
+                ? baCategoryLabel(category)
+                : (SIGNATURE_PAGES.find((p) => p.slug === it.slug)?.label ?? '');
+
         setEditingId(it.id);
         setForm({
+            place,
             slug: it.slug,
-            useCustomLabel: it.label !== `${SIGNATURE_PAGES.find((p) => p.slug === it.slug)?.label}`,
+            category,
+            useCustomLabel: it.label !== auto,
             customLabel: it.label,
             order: it.order ?? 1,
             showMain: typeof it.main === 'number',
@@ -131,7 +170,9 @@ export default function AdminBAPage() {
             const afterUrl = afterFile ? await uploadImage(afterFile, 'ba') : existing!.after;
 
             const payload = {
+                place: form.place,
                 slug: form.slug,
+                category: form.category,
                 label: finalLabel,
                 before: beforeUrl,
                 after: afterUrl,
@@ -175,29 +216,83 @@ export default function AdminBAPage() {
                     </div>
                 )}
 
-                {/* 카테고리 */}
-                <label className="block text-small">
-                    <span className="font-semibold text-cocoa">카테고리 (어느 시술 페이지에 노출할지)</span>
-                    <select
-                        value={form.slug}
-                        onChange={(e) => {
-                            // 카테고리를 바꾸면 그 카테고리에서 아직 안 쓴 번호를 자동으로 넣어줌
-                            const nextSlug = e.target.value;
-                            const taken = items
-                                .filter((it) => it.slug === nextSlug && it.id !== editingId)
-                                .map((it) => it.order ?? 0)
-                                .filter(Boolean);
-                            setForm({ ...form, slug: nextSlug, order: nextFreeOrder(taken) });
-                        }}
-                        className={`${inputCls} mt-1.5`}
-                    >
-                        {SIGNATURE_PAGES.map((p) => (
-                            <option key={p.slug} value={p.slug}>
+                {/* 노출 위치 — 이 값에 따라 아래 칸이 달라진다 */}
+                <fieldset className="rounded-lg bg-cocoa/[0.03] p-4">
+                    <legend className="px-1 text-small font-semibold text-cocoa">이 사진을 어디에 띄울까요?</legend>
+                    <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:gap-5">
+                        {BA_PLACES.map((p) => (
+                            <label key={p.key} className="flex items-center gap-2 text-small text-cocoa">
+                                <input
+                                    type="radio"
+                                    name="ba-place"
+                                    value={p.key}
+                                    checked={form.place === p.key}
+                                    onChange={() => setForm({ ...form, place: p.key })}
+                                />
                                 {p.label}
-                            </option>
+                            </label>
                         ))}
-                    </select>
-                </label>
+                    </div>
+                    <p className="mt-2 text-caption text-latte">
+                        시술 페이지 = 시그니처 시술 페이지의 &lsquo;Your Beauty Physician&rsquo; 슬라이더 / 전후사진
+                        페이지 = 상단 메뉴의 &lsquo;전후사진&rsquo;. 예전에 올린 사진은 값이 없어서 <b>양쪽 다</b> 로
+                        읽히며, 지금까지처럼 두 곳에 계속 나옵니다.
+                    </p>
+                </fieldset>
+
+                {/* 시술 페이지 — '전후사진 페이지만' 이면 필요 없는 값이라 숨긴다 */}
+                {usesTreatment && (
+                    <label className="mt-4 block text-small">
+                        <span className="font-semibold text-cocoa">시술 페이지 (어느 시술 페이지에 노출할지)</span>
+                        <select
+                            value={form.slug}
+                            onChange={(e) => {
+                                // 시술 페이지를 바꾸면 그 페이지에서 아직 안 쓴 번호를 자동으로 넣어줌
+                                // 전후사진 탭 카테고리도 같이 자동 배정한다 (아래 칸에서 따로 바꿀 수 있음)
+                                const nextSlug = e.target.value;
+                                const taken = items
+                                    .filter((it) => it.slug === nextSlug && it.id !== editingId && showsOnTreatment(it))
+                                    .map((it) => it.order ?? 0)
+                                    .filter(Boolean);
+                                setForm({
+                                    ...form,
+                                    slug: nextSlug,
+                                    category: resolveBACategory({ slug: nextSlug }) ?? form.category,
+                                    order: nextFreeOrder(taken),
+                                });
+                            }}
+                            className={`${inputCls} mt-1.5`}
+                        >
+                            {SIGNATURE_PAGES.map((p) => (
+                                <option key={p.slug} value={p.slug}>
+                                    {p.label}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                )}
+
+                {/* 전후사진 페이지 카테고리 탭 — '시술 페이지만' 이면 숨긴다 */}
+                {usesReviews && (
+                    <label className="mt-4 block text-small">
+                        <span className="font-semibold text-cocoa">전후사진 페이지 카테고리</span>
+                        <select
+                            value={form.category}
+                            onChange={(e) => setForm({ ...form, category: e.target.value })}
+                            className={`${inputCls} mt-1.5`}
+                        >
+                            {BA_CATEGORIES.map((c) => (
+                                <option key={c.key} value={c.key}>
+                                    {c.label}
+                                </option>
+                            ))}
+                        </select>
+                        <span className="mt-1 block text-caption text-latte">
+                            전후사진 페이지 상단 탭에서 이 사진이 어디에 걸릴지 정합니다. 사진이 한 장도 없는 탭은
+                            화면에 나오지 않습니다.
+                        </span>
+                    </label>
+                )}
 
                 {/* 라벨 */}
                 <div className="mt-4">
@@ -209,7 +304,7 @@ export default function AdminBAPage() {
                     </p>
                     <div className="mt-1.5 flex flex-col gap-2 sm:flex-row sm:items-center">
                         <span className="rounded-lg border border-cocoa/15 bg-cocoa/5 px-3 py-2 text-small text-latte">
-                            {form.useCustomLabel ? '직접 입력 중' : `${currentPage.label}`}
+                            {form.useCustomLabel ? '직접 입력 중' : autoLabel}
                         </span>
                         <label className="flex items-center gap-1.5 text-small text-latte">
                             <input
@@ -270,9 +365,10 @@ export default function AdminBAPage() {
                     )}
                 </div>
 
-                {/* 순서 */}
-                <label className="mt-5 block text-small">
-                    <span className="font-semibold text-cocoa">이 카테고리에서 몇 번째로 보일까요?</span>
+                {/* 순서 — 시술 페이지 안에서의 순번이라 전후사진 전용 사진에는 필요 없다
+                    (전후사진 페이지는 매번 무작위로 섞어서 보여줌) */}
+                <label className={`mt-5 block text-small ${usesTreatment ? '' : 'hidden'}`}>
+                    <span className="font-semibold text-cocoa">이 시술 페이지에서 몇 번째로 보일까요?</span>
                     <input
                         type="number"
                         min={1}
@@ -283,7 +379,7 @@ export default function AdminBAPage() {
                         }`}
                     />
                     <span className="mt-1 block text-caption text-latte">
-                        이 카테고리 등록 수: {sameSlugItems.length}장 / 최대 {COUNT_LIMITS.baPerPage}장
+                        이 시술 페이지 등록 수: {sameSlugItems.length}장 / 최대 {COUNT_LIMITS.baPerPage}장
                         {usedOrders.length > 0 && ` · 사용중: ${[...usedOrders].sort((a, b) => a - b).join(', ')}`}
                     </span>
                     {isDuplicateOrder && (
@@ -373,11 +469,25 @@ export default function AdminBAPage() {
             <div className="mt-8 flex flex-wrap items-center gap-2">
                 <h2 className="mr-auto text-lead font-bold text-cocoa">등록된 사진 ({visibleItems.length})</h2>
                 <select
-                    value={filterSlug}
-                    onChange={(e) => setFilterSlug(e.target.value)}
+                    value={filterPlace}
+                    onChange={(e) => setFilterPlace(e.target.value)}
+                    aria-label="노출 위치로 거르기"
                     className="rounded-lg border border-cocoa/15 px-2 py-1.5 text-small"
                 >
-                    <option value="all">전체 카테고리</option>
+                    <option value="all">노출 위치 전체</option>
+                    {BA_PLACES.map((p) => (
+                        <option key={p.key} value={p.key}>
+                            {p.label}
+                        </option>
+                    ))}
+                </select>
+                <select
+                    value={filterSlug}
+                    onChange={(e) => setFilterSlug(e.target.value)}
+                    aria-label="시술 페이지로 거르기"
+                    className="rounded-lg border border-cocoa/15 px-2 py-1.5 text-small"
+                >
+                    <option value="all">전체 시술 페이지</option>
                     {SIGNATURE_PAGES.map((p) => (
                         <option key={p.slug} value={p.slug}>
                             {p.label}
@@ -401,10 +511,19 @@ export default function AdminBAPage() {
                             </div>
                         </div>
                         <div className="min-w-0 flex-1 text-small">
-                            <p className="font-semibold text-cocoa">{it.label}</p>
+                            <p className="flex flex-wrap items-center gap-2 font-semibold text-cocoa">
+                                {it.label}
+                                <span className="rounded-full bg-cocoa/8 px-2 py-0.5 text-caption font-normal text-latte">
+                                    {baPlaceLabel(it.place)}
+                                </span>
+                            </p>
                             <p className="mt-0.5 text-latte">
-                                {SIGNATURE_PAGES.find((p) => p.slug === it.slug)?.label ?? it.slug}
-                                {typeof it.order === 'number' && ` · ${it.order}번`}
+                                {showsOnTreatment(it) &&
+                                    `${SIGNATURE_PAGES.find((p) => p.slug === it.slug)?.label ?? it.slug}${
+                                        typeof it.order === 'number' ? ` · ${it.order}번` : ''
+                                    }`}
+                                {showsOnTreatment(it) && showsOnReviews(it) && ' / '}
+                                {showsOnReviews(it) && `탭 ${baCategoryLabel(resolveBACategory(it) ?? '미지정')}`}
                                 {typeof it.main === 'number' && (
                                     <span className="ml-2 rounded-full bg-cocoa/8 px-2 py-0.5 text-caption">
                                         메인 {it.main}번

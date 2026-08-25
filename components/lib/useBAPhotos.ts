@@ -4,7 +4,7 @@
 import { useSyncExternalStore } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
-import type { BAPhoto } from './ba';
+import { showsOnReviews, showsOnTreatment, type BAPhoto } from './ba';
 
 // Firestore 문서 원본 모양 — 관리자 화면(app/admin/(protected)/ba/page.tsx)이 저장하는 필드와 반드시 일치해야 함
 interface BAPhotoDoc {
@@ -14,6 +14,8 @@ interface BAPhotoDoc {
     after: string;
     order?: number; // 해당 시그니처 페이지 안에서의 순서 (관리자에서 지정)
     main?: number;
+    category?: string; // 전후사진 페이지 카테고리 탭 (없으면 slug 로 자동 배정)
+    place?: string; // 노출 위치 treatment/reviews/both (없으면 both = 기존처럼 양쪽)
 }
 
 /* #ISSUE: 전에는 컴포넌트마다 useEffect 로 각자 조회해서, 한 페이지에
@@ -47,6 +49,8 @@ function load() {
                     after: data.after,
                     ...(typeof data.main === 'number' ? { main: data.main } : {}),
                     ...(typeof data.order === 'number' ? { order: data.order } : {}),
+                    ...(typeof data.category === 'string' ? { category: data.category } : {}),
+                    ...(typeof data.place === 'string' ? { place: data.place } : {}),
                 };
             });
         })
@@ -90,5 +94,11 @@ export function useBAPhotosLoading(): boolean {
 export const filterMainBAPhotos = (photos: BAPhoto[]) =>
     photos.filter((b): b is BAPhoto & { main: number } => typeof b.main === 'number').sort((a, b) => a.main - b.main);
 
+/* 시술 페이지(BACardSlider)용. '전후사진 페이지만' 으로 등록한 사진은 여기서 빠진다 */
 export const filterBAPhotosBySlug = (photos: BAPhoto[], slug: string) =>
-    photos.filter((b) => b.slug === slug).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+    photos
+        .filter((b) => b.slug === slug && showsOnTreatment(b))
+        .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+
+/* 전후사진 페이지(/reviews)용. '시술 페이지만' 으로 등록한 사진은 여기서 빠진다 */
+export const filterReviewBAPhotos = (photos: BAPhoto[]) => photos.filter(showsOnReviews);

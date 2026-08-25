@@ -26,6 +26,11 @@
     "homeAria": "RE:BERRY Clinic home",
     "openMenu": "Open menu"
   },
+  "popup": {
+    "label": "Main popup",
+    "tab": "Notice {n}",
+    "hideToday": "Don't show today"
+  },
   "labels": {
     "색소치료": "Pigmentation",
     "볼륨리프팅": "Volume Lifting",
@@ -59,7 +64,14 @@
     "상담예약": "Booking",
     "유투브": "YouTube",
     "문의하기": "Chat",
-    "네이버": "Naver"
+    "네이버": "Naver",
+    "전체": "All",
+    "모공/흉터": "Pore & Scar",
+    "주름": "Wrinkles",
+    "리프팅/탄력": "Lifting & Firming",
+    "쁘띠성형": "Petit Procedures",
+    "제모": "Hair Removal",
+    "평일 점심시간": "Weekday lunch break"
   },
   "about": {
     "designHeadline": "<light>We design your beauty</light><br></br>in the <hl>most scientific way</hl>",
@@ -101,9 +113,22 @@
     "directorTitle": "Medical Director",
     "signatureAlt": "Signature",
     "education": "Kyung Hee University College of Medicine, M.D.<br></br>Kyung Hee University College of Pharmacy, B.Pharm.",
-    "career": ["Medical Director, RE:BERRY Clinic Mapo (current)", "Director, RE:BERRY Clinic Hwaseong (former)", "Director, Mepure Clinic Wangsimni (former)"],
-    "certification": ["Juvelook Meister", "Revinas Key Doctor, V-RO", "Advanced Key Doctor"],
-    "memberships": ["Member, Korean Society for Aesthetic Plastic Laser Medicine", "Member, Korean Obesity & Aesthetic Society (KOAT)", "Member, Korean Filler Society", "Member, Korean Society for Laser Dermatology & Hair"],
+    "career": [
+      "Medical Director, RE:BERRY Clinic Mapo (current)",
+      "Director, RE:BERRY Clinic Hwaseong (former)",
+      "Director, Mepure Clinic Wangsimni (former)"
+    ],
+    "certification": [
+      "Juvelook Meister",
+      "Revinas Key Doctor, V-RO",
+      "Advanced Key Doctor"
+    ],
+    "memberships": [
+      "Member, Korean Society for Aesthetic Plastic Laser Medicine",
+      "Member, Korean Obesity & Aesthetic Society (KOAT)",
+      "Member, Korean Filler Society",
+      "Member, Korean Society for Laser Dermatology & Hair"
+    ],
     "promiseHeadline": "Beyond experience,<br></br><hl>we speak in evidence</hl>.",
     "videoFallback": "Your browser does not support the video tag.",
     "conferenceCaption": "2026 Korean Obesity & Aesthetic Society (KOAT) Spring Conference ▴"
@@ -143,7 +168,15 @@
     "submitError": "Unable to submit your reservation. Please try again shortly.",
     "previousMonth": "Previous month",
     "nextMonth": "Next month",
-    "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    "weekdays": [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ]
   },
   "priceList": {
     "metaTitle": "Treatment Price List",
@@ -175,9 +208,18 @@
   "stepPlan": {
     "headline": "RE:BERRY's own <hl>3-Step 3D Analysis</hl> and <mob></mob><hl>Dedicated Skin Care System</hl>",
     "steps": [
-      { "title": "Precise Skin Assessment", "desc": "3D skin reconstruction based on\nMark View and LifeBiz Infinity AI" },
-      { "title": "Personal Plan", "desc": "We design a precise treatment based\non detailed 3D imaging and your\nspecific needs." },
-      { "title": "A Treatment Made Only for You", "desc": "A recognized derma specialist plans\ntreatment suited to your skin condition\non the day, under a regular plan." }
+      {
+        "title": "Precise Skin Assessment",
+        "desc": "3D skin reconstruction based on\nMark View and LifeBiz Infinity AI"
+      },
+      {
+        "title": "Personal Plan",
+        "desc": "We design a precise treatment based\non detailed 3D imaging and your\nspecific needs."
+      },
+      {
+        "title": "A Treatment Made Only for You",
+        "desc": "A recognized derma specialist plans\ntreatment suited to your skin condition\non the day, under a regular plan."
+      }
     ]
   },
   "column": {
@@ -201,6 +243,8 @@
     "beforeAlt": "Before treatment (visible after login)",
     "afterAlt": "After treatment",
     "prevPage": "Previous page",
-    "nextPage": "Next page"
+    "nextPage": "Next page",
+    "categoryLabel": "Treatment category",
+    "empty": "No photos yet."
   }
 }

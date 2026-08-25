@@ -23,6 +23,8 @@ export const site = {
         { label: '평 일', value: '10:30 - 20:30' },
         { label: '토요일', value: '09:00 - 15:30' },
     ],
+    // 평일 점심시간(휴게시간). 예약 화면에서도 이 시간대는 슬롯에서 빠진다 → components/lib/reservationSchedule.ts
+    lunch: '14:00 - 15:00',
 };
 
 export const nav = [

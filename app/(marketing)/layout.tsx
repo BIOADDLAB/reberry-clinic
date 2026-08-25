@@ -26,10 +26,18 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         },
         areaServed: ['마포구', '성산동', '상암동', '망원동', '마포구청역'],
         openingHoursSpecification: [
+            // #ISSUE: 평일 점심시간(14:00-15:00)에도 "영업 중"으로 노출되던 문제.
+            //         화면(오시는 길)의 점심시간 안내와 값이 어긋나지 않게 두 구간으로 쪼갠다
             {
                 '@type': 'OpeningHoursSpecification',
                 dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
                 opens: '10:30',
+                closes: '14:00',
+            },
+            {
+                '@type': 'OpeningHoursSpecification',
+                dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                opens: '15:00',
                 closes: '20:30',
             },
             {

@@ -1,3 +1,4 @@
+import { Fragment, type ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
 import SubHero from '@/components/ui/SubHero';
@@ -19,6 +20,28 @@ import StepPlan from '@/components/ui/StepPlan';
 import { getColumnsBySlug } from '@/components/lib/columns';
 import ColumnSlider from '@/components/ui/ColumnSlider';
 import FAQAccordion from '@/components/ui/FAQAccordion';
+
+/* ════════════════════════════════════════════════════════════════════
+   #ISSUE: 섹션 노출 순서는 아래 배열 하나로만 정한다. 순서를 바꾸고 싶으면
+           JSX 를 옮기지 말고 이 배열의 문자열 순서만 바꾸면 된다.
+
+   intro     시술 소개 ("결점 없이 빛나는 미백의 정점에 서다" 헤드라인 + 인물/정의 카드) — 피부교정·안티에이징
+   story     시그니처 스토리 카드 ("…의 정점에 서다" 헤드라인 + 다크 카드)              — 시그니처
+   ba        전후사진 슬라이더 (Your Beauty Physician)                                  — 시그니처
+   solution  시술·기기 슬라이더 (해시태그 + RE:BERRY SOLUTION)                          — 공통
+   step      시술 STEP (StepPlan)                                                       — 피부교정·안티에이징
+   column    칼럼 슬라이더                                                              — 시그니처
+   faq       FAQ 아코디언                                                               — 시그니처
+
+   맨 위 SubHero(서브 히어로)와 맨 아래 LocationSection(오시는 길)은 항상 고정이라
+   배열에 넣지 않는다. 목록에 없는 키는 그냥 안 그려진다.
+   ════════════════════════════════════════════════════════════════════ */
+const SECTION_ORDER = {
+    // 시그니처: 서브히어로 → 스토리(정점에 서다) → 전후사진 → 시술/기기 → 칼럼 → FAQ → 오시는 길  (원래 순서)
+    signature: ['story', 'ba', 'solution', 'column', 'faq'],
+    // 피부교정·안티에이징: 서브히어로 → 시술/기기 → STEP → 시술소개(정점에 서다) → 오시는 길
+    other: ['solution', 'step', 'intro'],
+} as const;
 
 interface Params {
     params: Promise<{ category: string; slug: string }>;
@@ -88,9 +111,6 @@ export default async function TreatmentPage({ params }: Params) {
     const locale = await getLocale();
     const tTreatments = await getTranslations('treatments');
     const isKo = locale === 'ko';
-    const localizedCategoryLabel: Record<Category, string> = isKo
-        ? categoryLabel
-        : (tTreatments.raw('categoryLabel') as Record<Category, string>);
     const t = localizeTreatment(
         rawTreatment,
         isKo ? undefined : tTreatments.raw(`${rawTreatment.category}.${rawTreatment.slug}`),
@@ -101,186 +121,179 @@ export default async function TreatmentPage({ params }: Params) {
     // 시그니처 여부
     const sig = t.signature;
     const faq = sig && !isKo ? buildFaq(tTreatments.raw('faq'), sig.faqSet) : sig?.faq;
+    const columns = sig ? getColumnsBySlug(t.slug) : [];
 
-    return (
-        <>
-            <SubHero en={t.en} title={isKo ? t.name : undefined} image={heroImage[t.category]} />
+    // 섹션 본문. 여기서는 "무엇을 그릴지"만 만들고, "어떤 순서로 그릴지"는 SECTION_ORDER 가 정한다
+    const sections: Record<string, ReactNode> = {
+        /* 피부교정, 안티에이징 페이지 - 시술 소개 영역 */
+        /* #TODO: 반응형 작업 조금 더 해야함/ 1050 정도가 어색함 */
+        intro: sig ? null : (
+            <section className="relative overflow-hidden">
+                <Image src={modelBg(t)} alt="" fill quality={85} sizes="100vw" className="object-cover" />
+                <div className="absolute inset-0 bg-cream/25" />
+                <div className="container-site relative py-20 lg:pt-26.25 lg:pb-0">
+                    <Reveal className="text-center">
+                        <p className="font-display text-h2 tracking-[0.08em]">{t.en}</p>
+                        {t.headline && (
+                            <h2 className="mt-3 font-light text-h2">
+                                {t.headline.light}
+                                <br className="block md:hidden" />
+                                <strong className="font-bold">{t.headline.strong}</strong>
+                            </h2>
+                        )}
+                    </Reveal>
 
-            {/* 피부교정, 안티에이징 페이지 - 시술 소개 영역 */}
-            {/* #TODO: 반응형 작업 조금 더 해야함/ 1050 정도가 어색함 */}
-            {!sig && (
-                <section className="relative overflow-hidden">
-                    <Image src={modelBg(t)} alt="" fill quality={85} sizes="100vw" className="object-cover" />
-                    <div className="absolute inset-0 bg-cream/25" />
-                    <div className="container-site relative py-20 lg:pt-26.25 lg:pb-0">
-                        <Reveal className="text-center">
-                            <p className="font-display text-h2 tracking-[0.08em]">{t.en}</p>
-                            {t.headline && (
-                                <h2 className="mt-3 font-light text-h2">
-                                    {t.headline.light}
-                                    <br className="block md:hidden" />
-                                    <strong className="font-bold">{t.headline.strong}</strong>
-                                </h2>
+                    {/* 모바일 인물 조정 */}
+                    <div className="relative -mx-6 mt-8 h-80 min-[1100px]:hidden">
+                        <Image
+                            src={modelImage(t)}
+                            alt={tTreatments('chrome.modelAlt', { name })}
+                            fill
+                            quality={88}
+                            sizes="100vw"
+                            className="object-contain object-bottom"
+                        />
+                    </div>
+
+                    <div
+                        className="relative mx-auto mt-12 w-full max-w-(--gw) min-[1100px]:h-(--gh) lg:mt-17"
+                        style={{ '--gw': `${t.visualW}px`, '--gh': `${t.visualH}px` } as React.CSSProperties}
+                    >
+                        <Reveal
+                            className={cn(
+                                'relative z-10 mx-auto -mt-20 w-full max-w-[494px] shadow-md min-[1100px]:z-0 min-[1100px]:mx-0 min-[1100px]:mt-3',
+                                isKo ? 'overflow-hidden min-[1100px]:h-[432px]' : 'min-[1100px]:min-h-[432px]',
                             )}
+                        >
+                            <Image
+                                src="/images/bg-texture-05.jpg"
+                                alt=""
+                                fill
+                                quality={82}
+                                sizes="494px"
+                                className="object-cover rounded-[10px]"
+                            />
+                            <div
+                                className={cn(
+                                    'relative px-9 py-11 lg:pl-22 lg:pt-13',
+                                    isKo ? 'lg:pb-0 lg:pr-2' : 'lg:pb-11 lg:pr-8',
+                                )}
+                            >
+                                <span className="font-display block border-t border-b border-cocoa/40 px-4 py-1 text-small tracking-[0.15em]">
+                                    RE:BERRY
+                                </span>
+                                <p className="font-display pl-2.5 mt-7 text-small text-latte">{t.en}</p>
+                                {/* #ISSUE: 번역문이 길어지면 카드 폭(494px)을 뚫고 나가 잘렸음
+                                    (일본어 "色素（ジャブティ）治療とは？").
+                                    아래 설명문과 같은 max-w 를 줘서 카드 안에서 줄바꿈되게 함 */}
+                                <h3
+                                    className={cn(
+                                        'pl-2.5 font-bold',
+                                        isKo ? 'max-w-[13em] text-h2' : 'max-w-[11em] text-h3',
+                                    )}
+                                >
+                                    {t.definition.title}
+                                </h3>
+                                <span className="mt-5 ml-5 block h-8 w-px bg-cocoa" aria-hidden />
+                                <p
+                                    className={cn(
+                                        'mt-5 pl-2.5 whitespace-pre-line font-medium tracking-tight',
+                                        isKo
+                                            ? 'max-w-[15em] text-lead leading-[30px]!'
+                                            : 'max-w-[12em] text-medium leading-[26px]!',
+                                    )}
+                                >
+                                    {t.definition.text}
+                                </p>
+                            </div>
                         </Reveal>
 
-                        {/* 모바일 인물 조정 */}
-                        <div className="relative -mx-6 mt-8 h-80 min-[1100px]:hidden">
+                        <Reveal
+                            variants={zoom}
+                            className="pointer-events-none absolute inset-0 z-10 hidden min-[1100px]:block"
+                        >
                             <Image
                                 src={modelImage(t)}
                                 alt={tTreatments('chrome.modelAlt', { name })}
                                 fill
-                                quality={88}
-                                sizes="100vw"
-                                className="object-contain object-bottom"
+                                quality={90}
+                                sizes="(max-width: 768px) 100vw, 950px"
+                                className="object-contain object-right-bottom"
                             />
-                        </div>
+                        </Reveal>
+                    </div>
+                </div>
+            </section>
+        ),
 
-                        <div
-                            className="relative mx-auto mt-12 w-full max-w-(--gw) min-[1100px]:h-(--gh) lg:mt-17"
-                            style={{ '--gw': `${t.visualW}px`, '--gh': `${t.visualH}px` } as React.CSSProperties}
-                        >
-                            <Reveal
-                                className={cn(
-                                    'relative z-10 mx-auto -mt-20 w-full max-w-[494px] shadow-md min-[1100px]:z-0 min-[1100px]:mx-0 min-[1100px]:mt-3',
-                                    isKo ? 'overflow-hidden min-[1100px]:h-[432px]' : 'min-[1100px]:min-h-[432px]',
-                                )}
-                            >
+        /* 시그니처 — 스토리 카드 */
+        /* #TODO: 반응형 작업 조금 더 들어가야함 크림이 어색하게 떠있는 부분들이 있음 */
+        story: sig ? (
+            <section className="relative texture-paper py-20 lg:pt-35 lg:pb-42.5">
+                <Image src="/images/bg-texture-06.jpg" alt="" fill quality={85} sizes="100vw" className="object-cover" />
+                <div className="container-site relative">
+                    <Reveal className="text-center">
+                        <p className="font-display text-h2 tracking-tight">{t.en}</p>
+                        {t.headline && (
+                            <h2 className="text-h2 font-light">
+                                {t.headline.light}
+                                <br className="bolck md:hidden" />
+                                <strong className="font-bold">{t.headline.strong}</strong>
+                            </h2>
+                        )}
+                    </Reveal>
+
+                    <Reveal className="relative mx-auto mt-12 max-w-257 lg:mt-16">
+                        <div className="grid min-[1100px]:grid-cols-2">
+                            <div className="-tracking-[5%] texture-dark flex flex-col items-center justify-center px-8 py-12 lg:py-[120px] bg-cocoa text-center text-cream md:px-2">
+                                <p className="text-h3 leading-[35px] tracking-tighter">
+                                    {sig.story.hook[0]}
+                                    <br />
+                                    <strong className="mt-1 inline-block bg-cream px-2 py-0.5 font-bold text-cocoa">
+                                        {sig.story.hook[1]}
+                                    </strong>
+                                    <br />
+                                    {sig.story.hook[2]}
+                                </p>
+                                {/* 라인 + 점 하강 커넥터 */}
+                                <SectionDivider light className="my-4" />
+                                <p className="whitespace-pre-line text-lead  text-cream">{sig.story.body}</p>
+                            </div>
+                            <div className="relative order-first aspect-[4/3] w-full min-[1100px]:order-none min-[1100px]:aspect-auto min-[1100px]:min-h-[340px]">
                                 <Image
-                                    src="/images/bg-texture-05.jpg"
+                                    src={`/images/img-card-${sigCard[t.slug]}.jpg`}
                                     alt=""
                                     fill
-                                    quality={82}
-                                    sizes="494px"
-                                    className="object-cover rounded-[10px]"
+                                    quality={88}
+                                    sizes="(max-width: 768px) 100vw, 480px"
+                                    className="object-cover"
                                 />
-                                <div
-                                    className={cn(
-                                        'relative px-9 py-11 lg:pl-22 lg:pt-13',
-                                        isKo ? 'lg:pb-0 lg:pr-2' : 'lg:pb-11 lg:pr-8',
-                                    )}
-                                >
-                                    <span className="font-display block border-t border-b border-cocoa/40 px-4 py-1 text-small tracking-[0.15em]">
-                                        RE:BERRY
-                                    </span>
-                                    <p className="font-display pl-2.5 mt-7 text-small text-latte">{t.en}</p>
-                                    {/* #ISSUE: 번역문이 길어지면 카드 폭(494px)을 뚫고 나가 잘렸음
-                                        (일본어 "色素（ジャブティ）治療とは？").
-                                        아래 설명문과 같은 max-w 를 줘서 카드 안에서 줄바꿈되게 함 */}
-                                    <h3
-                                        className={cn(
-                                            'pl-2.5 font-bold',
-                                            isKo ? 'max-w-[13em] text-h2' : 'max-w-[11em] text-h3',
-                                        )}
-                                    >
-                                        {t.definition.title}
-                                    </h3>
-                                    <span className="mt-5 ml-5 block h-8 w-px bg-cocoa" aria-hidden />
-                                    <p
-                                        className={cn(
-                                            'mt-5 pl-2.5 whitespace-pre-line font-medium tracking-tight',
-                                            isKo
-                                                ? 'max-w-[15em] text-lead leading-[30px]!'
-                                                : 'max-w-[12em] text-medium leading-[26px]!',
-                                        )}
-                                    >
-                                        {t.definition.text}
-                                    </p>
-                                </div>
-                            </Reveal>
-
-                            <Reveal
-                                variants={zoom}
-                                className="pointer-events-none absolute inset-0 z-10 hidden min-[1100px]:block"
-                            >
-                                <Image
-                                    src={modelImage(t)}
-                                    alt={tTreatments('chrome.modelAlt', { name })}
-                                    fill
-                                    quality={90}
-                                    sizes="(max-width: 768px) 100vw, 950px"
-                                    className="object-contain object-right-bottom"
-                                />
-                            </Reveal>
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* 시그니처 — 스토리 카드 */}
-            {/* #TODO: 반응형 작업 조금 더 들어가야함 크림이 어색하게 떠있는 부분들이 있음 */}
-            {sig && (
-                <section className="relative texture-paper py-20 lg:pt-35 lg:pb-42.5">
-                    <Image
-                        src="/images/bg-texture-06.jpg"
-                        alt=""
-                        fill
-                        quality={85}
-                        sizes="100vw"
-                        className="object-cover"
-                    />
-                    <div className="container-site relative">
-                        <Reveal className="text-center">
-                            <p className="font-display text-h2 tracking-tight">{t.en}</p>
-                            {t.headline && (
-                                <h2 className="text-h2 font-light">
-                                    {t.headline.light}
-                                    <br className="bolck md:hidden" />
-                                    <strong className="font-bold">{t.headline.strong}</strong>
-                                </h2>
-                            )}
-                        </Reveal>
-
-                        <Reveal className="relative mx-auto mt-12 max-w-257 lg:mt-16">
-                            <div className="grid min-[1100px]:grid-cols-2">
-                                <div className="-tracking-[5%] texture-dark flex flex-col items-center justify-center px-8 py-12 lg:py-[120px] bg-cocoa text-center text-cream md:px-2">
-                                    <p className="text-h3 leading-[35px] tracking-tighter">
-                                        {sig.story.hook[0]}
-                                        <br />
-                                        <strong className="mt-1 inline-block bg-cream px-2 py-0.5 font-bold text-cocoa">
-                                            {sig.story.hook[1]}
-                                        </strong>
-                                        <br />
-                                        {sig.story.hook[2]}
-                                    </p>
-                                    {/* 라인 + 점 하강 커넥터 */}
-                                    <SectionDivider light className="my-4" />
-                                    <p className="whitespace-pre-line text-lead  text-cream">{sig.story.body}</p>
-                                </div>
-                                <div className="relative order-first aspect-[4/3] w-full min-[1100px]:order-none min-[1100px]:aspect-auto min-[1100px]:min-h-[340px]">
-                                    <Image
-                                        src={`/images/img-card-${sigCard[t.slug]}.jpg`}
-                                        alt=""
-                                        fill
-                                        quality={88}
-                                        sizes="(max-width: 768px) 100vw, 480px"
-                                        className="object-cover"
-                                    />
-                                </div>
                             </div>
-                            <SpinEmblem />
-                            <FloatingCream />
-                        </Reveal>
-                    </div>
-                </section>
-            )}
+                        </div>
+                        <SpinEmblem />
+                        <FloatingCream />
+                    </Reveal>
+                </div>
+            </section>
+        ) : null,
 
-            {/* 전 후 슬라이더 — 시그니처 전용 */}
-            {sig && (
-                <section className="texture-dark py-20 bg-cocoa! text-cream lg:py-30">
-                    <div className="container-site">
-                        <Reveal className="text-center">
-                            <h2 className="font-display text-h2 tracking-[0.06em]">Your Beauty Physician</h2>
-                        </Reveal>
-                        <Reveal className="mt-12">
-                            <BACardSlider slug={t.slug} />
-                        </Reveal>
-                    </div>
-                </section>
-            )}
+        /* 전 후 슬라이더 — 시그니처 전용 */
+        ba: sig ? (
+            <section className="texture-dark py-20 bg-cocoa! text-cream lg:py-30">
+                <div className="container-site">
+                    <Reveal className="text-center">
+                        <h2 className="font-display text-h2 tracking-[0.06em]">Your Beauty Physician</h2>
+                    </Reveal>
+                    <Reveal className="mt-12">
+                        <BACardSlider slug={t.slug} />
+                    </Reveal>
+                </div>
+            </section>
+        ) : null,
 
-            {/* 솔루션 영역 - 시그니처, 안티에이징, 피부교정 공통 */}
-            {/* #FIX: 반응형 좀 더 다듬기 */}
+        /* 솔루션 영역 - 시그니처, 안티에이징, 피부교정 공통 */
+        /* #FIX: 반응형 좀 더 다듬기 */
+        solution: (
             <section
                 className={cn(
                     'relative overflow-hidden py-20 lg:pt-[180px] lg:pb-[170px]',
@@ -341,11 +354,13 @@ export default async function TreatmentPage({ params }: Params) {
                     </div>
                 </div>
             </section>
+        ),
 
-            {!sig && <StepPlan />}
+        step: sig ? null : <StepPlan />,
 
-            {/* 시그니처 전용 — Column */}
-            {sig && getColumnsBySlug(t.slug).length > 0 && (
+        /* 시그니처 전용 — Column */
+        column:
+            sig && columns.length > 0 ? (
                 <section className="bg-cream relative py-20 lg:pt-32.5 lg:pb-37.5 overflow-x-clip">
                     <Image
                         src="/images/bg-texture-08.jpg"
@@ -366,36 +381,38 @@ export default async function TreatmentPage({ params }: Params) {
                             </p>
                         </Reveal>
                         <Reveal className="mt-19.5">
-                            <ColumnSlider items={getColumnsBySlug(t.slug)} slug={t.slug} />
+                            <ColumnSlider items={columns} slug={t.slug} />
                         </Reveal>
                     </div>
                 </section>
-            )}
+            ) : null,
 
-            {/* 시그니처 전용 — FAQ */}
-            {sig && (
-                <section className="texture-dark relative py-20 text-cream lg:pt-30 lg:pb-25">
-                    <Image
-                        src="/images/bg-texture-09.jpg"
-                        alt=""
-                        fill
-                        quality={80}
-                        sizes="100vw"
-                        className="object-cover"
-                    />
-                    <div className="container-site relative">
-                        <Reveal className="text-center">
-                            <h2 className="font-display text-h2 tracking-[0.7em] leading-12 md:text-h2">
-                                RE:BERRY FAQ
-                            </h2>
-                            <p className="text-h2  font-bold leading-12.5">{tTreatments('chrome.faqHeading')}</p>
-                        </Reveal>
-                        <Reveal className="mt-17">
-                            <FAQAccordion items={faq!} />
-                        </Reveal>
-                    </div>
-                </section>
-            )}
+        /* 시그니처 전용 — FAQ */
+        faq: sig ? (
+            <section className="texture-dark relative py-20 text-cream lg:pt-30 lg:pb-25">
+                <Image src="/images/bg-texture-09.jpg" alt="" fill quality={80} sizes="100vw" className="object-cover" />
+                <div className="container-site relative">
+                    <Reveal className="text-center">
+                        <h2 className="font-display text-h2 tracking-[0.7em] leading-12 md:text-h2">RE:BERRY FAQ</h2>
+                        <p className="text-h2  font-bold leading-12.5">{tTreatments('chrome.faqHeading')}</p>
+                    </Reveal>
+                    <Reveal className="mt-17">
+                        <FAQAccordion items={faq!} />
+                    </Reveal>
+                </div>
+            </section>
+        ) : null,
+    };
+
+    const order = sig ? SECTION_ORDER.signature : SECTION_ORDER.other;
+
+    return (
+        <>
+            <SubHero en={t.en} title={isKo ? t.name : undefined} image={heroImage[t.category]} />
+
+            {order.map((key) => (
+                <Fragment key={key}>{sections[key]}</Fragment>
+            ))}
 
             <LocationSection />
         </>
