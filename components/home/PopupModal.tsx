@@ -115,17 +115,47 @@ export default function PopupModal() {
                         // 배경은 아래 크림 영역들이 각자 갖는다
                         className="relative flex max-h-[calc(100dvh-5rem)] w-full max-w-[720px] flex-col overflow-hidden rounded-[10px] shadow-[0_28px_70px_rgba(56,43,34,0.45)]"
                     >
-                        <div className="grid min-h-0 grid-cols-[minmax(0,1.55fr)_minmax(7.5rem,0.7fr)] items-stretch">
-                            {/* 인스타 4:5. 옆 목록이 라벨을 세로로 받으니 좌우가 잘리지 않는다 */}
+                        {/* #ISSUE: 모바일에서 좌우 2단이면 이미지가 팝업 폭의 60%밖에 못 써서 글씨가 안 보였다.
+                            → 모바일(640px 미만)은 오른쪽 탭 목록을 감추고 이미지가 폭을 통째로 쓴다(4:5 비율 유지).
+                              탭 이동은 이미지 아래쪽 점(●●●)으로 한다. 640px 이상은 기존 좌우 2단 그대로 */}
+                        <div className="grid min-h-0 grid-cols-1 items-stretch sm:grid-cols-[minmax(0,1.55fr)_minmax(7.5rem,0.7fr)]">
+                            {/* 인스타 4:5. 비율은 어느 화면에서도 그대로 유지된다 */}
                             <div className="relative aspect-[4/5] overflow-hidden bg-cream">
                                 {/* key 를 주소로 잡아 탭이 바뀌면 스켈레톤부터 다시 시작한다 */}
                                 <PopupImage key={current.imageUrl} tab={current} onInternalNavigate={close} />
+
                             </div>
 
-                            {/* 탭은 하나여도 그린다. 긴 이름도 줄바꿈해서 통째로 보여준다 */}
+                            {/* 모바일 전용 점 인디케이터 — 탭 개수만큼 찍히고 현재 탭에 불이 들어온다.
+                                #ISSUE: 이미지 위에 얹었더니 팝업 하단의 주소·전화번호를 가렸다 → 이미지 아래 띠로 뺐다 */}
+                            {tabs.length > 1 && (
+                                <div className="flex items-center justify-center border-t border-cocoa/10 bg-cream py-1 sm:hidden">
+                                    {tabs.map((tab, i) => (
+                                        <button
+                                            key={`dot-${tab.imageUrl}-${i}`}
+                                            type="button"
+                                            onClick={() => setIndex(i)}
+                                            aria-current={i === index ? 'true' : undefined}
+                                            aria-label={tab.label || t('tab', { n: i + 1 })}
+                                            // 점은 작아도 누르는 영역은 24px 확보
+                                            className="flex h-6 w-6 items-center justify-center"
+                                        >
+                                            <span
+                                                aria-hidden
+                                                className={cn(
+                                                    'block rounded-full transition-all duration-300',
+                                                    i === index ? 'h-2 w-2 bg-cocoa' : 'h-1.5 w-1.5 bg-cocoa/25',
+                                                )}
+                                            />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* 탭은 하나여도 그린다. 긴 이름도 줄바꿈해서 통째로 보여준다 (640px 이상에서만 노출) */}
                             <nav
                                 aria-label={t('label')}
-                                className="flex min-h-0 flex-col overflow-y-auto border-l border-cocoa/10 bg-cream [scrollbar-width:thin]"
+                                className="hidden min-h-0 flex-col overflow-y-auto border-l border-cocoa/10 bg-cream sm:flex sm:[scrollbar-width:thin]"
                             >
                                 {tabs.map((tab, i) => (
                                     <button
@@ -158,7 +188,8 @@ export default function PopupModal() {
                             <button
                                 type="button"
                                 onClick={close}
-                                className=" flex flex-1 items-center justify-center py-4 pl-[0.08em] text-center text-caption leading-none tracking-[0.08em] text-cocoa/70 transition-colors duration-300 hover:text-cocoa"
+                                // 둥근 모서리 위에서 배경색을 덮으면 안티에일리어싱 틈으로 아래 크림이 비친다 → 글자색만 바꾼다
+                                className="font-display flex flex-1 items-center justify-center py-4 pl-[0.08em] text-center text-caption leading-none tracking-[0.08em] text-cocoa/70 transition-colors duration-300 hover:text-cocoa"
                             >
                                 {tCommon('close')}
                             </button>

@@ -90,9 +90,11 @@ export default function EventModal({ events }: { events: EventItem[] }) {
                     className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain bg-deep/80"
                     onClick={() => setActive(null)}
                 >
-                    <div className="flex min-h-full items-start justify-center p-4 sm:items-center sm:p-8">
+                    {/* #ISSUE: items-center 로 가운데 정렬하면 내용이 화면보다 길 때 위쪽이 잘려서 스크롤로도 못 본다.
+                        → 자식에 m-auto 를 주면 들어갈 땐 정가운데, 넘칠 땐 auto 여백이 0 이 되어 정상 스크롤된다 */}
+                    <div className="flex min-h-full justify-center p-4 sm:p-8">
                         <div
-                            className="relative w-full max-w-[794px]"
+                            className="relative m-auto w-full max-w-[794px]"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="skeleton relative aspect-[210/297] w-full overflow-hidden rounded-[4px] bg-cream">

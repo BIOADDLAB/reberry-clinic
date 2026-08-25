@@ -107,13 +107,16 @@ export default function ReviewsPage() {
                         <h2 className="notranslate font-display text-h2 tracking-[0.06em]">Before &amp; After</h2>
                     </div>
 
-                    {/* 카테고리 탭 — 모바일에서는 가로 스크롤. 탭 목록은 ba.ts 의 BA_CATEGORIES 에서 온다 */}
+                    {/* 카테고리 탭 — 탭 목록은 ba.ts 의 BA_CATEGORIES 에서 온다.
+                        #ISSUE: 가로 스크롤로 두니 모바일에서 뒤쪽 탭이 잘린 것처럼 보였다.
+                        → 좁은 화면에서는 알약 하나하나가 여러 줄로 자동 줄바꿈(flex-wrap)되고,
+                          한 줄에 다 들어가는 lg(1024px) 이상에서만 시안대로 알약 바로 묶인다 */}
                     {!loading && visibleTabs.length > 1 && (
                         <div className="mt-10 flex justify-center lg:mt-14">
                             <div
                                 role="group"
                                 aria-label={tReviews('categoryLabel')}
-                                className="no-scrollbar flex max-w-full gap-1 overflow-x-auto rounded-full border border-cocoa/15 bg-cream/70 p-1.5"
+                                className="flex max-w-full flex-wrap justify-center gap-2 lg:gap-1 lg:rounded-full lg:border lg:border-cocoa/15 lg:bg-cream/70 lg:p-1.5"
                             >
                                 {visibleTabs.map((tab) => (
                                     <button
@@ -122,10 +125,10 @@ export default function ReviewsPage() {
                                         onClick={() => pickCategory(tab.key)}
                                         aria-pressed={category === tab.key}
                                         className={cn(
-                                            'shrink-0 rounded-full px-4 py-2 text-small whitespace-nowrap transition-colors sm:px-5',
+                                            'rounded-full px-4 py-2 text-small whitespace-nowrap transition-colors lg:px-5',
                                             category === tab.key
-                                                ? 'bg-cocoa font-semibold text-cream'
-                                                : 'text-cocoa/60 hover:bg-sand/40 hover:text-cocoa',
+                                                ? 'border border-cocoa bg-cocoa font-semibold text-cream'
+                                                : 'border border-cocoa/15 bg-cream/70 text-cocoa/60 hover:bg-sand/40 hover:text-cocoa lg:border-transparent lg:bg-transparent',
                                         )}
                                     >
                                         <T ko={tab.label} />

@@ -72,7 +72,6 @@ export default function LocationSection() {
                                         <span className="notranslate">{h.value}</span>
                                     </p>
                                 ))}
-                                {/* 평일 점심시간 — 요일 라벨과 칸을 맞추지 않고 한 줄 안내로 둔다(4글자라 48px 칸을 넘김) */}
                                 <p className="pt-1 text-caption text-latte">
                                     <T ko="평일 점심시간" /> <span className="notranslate">{site.lunch}</span>
                                 </p>
