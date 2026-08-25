@@ -123,7 +123,6 @@ export default function PopupModal() {
                             <div className="relative aspect-[4/5] overflow-hidden bg-cream">
                                 {/* key 를 주소로 잡아 탭이 바뀌면 스켈레톤부터 다시 시작한다 */}
                                 <PopupImage key={current.imageUrl} tab={current} onInternalNavigate={close} />
-
                             </div>
 
                             {/* 모바일 전용 점 인디케이터 — 탭 개수만큼 찍히고 현재 탭에 불이 들어온다.
@@ -188,8 +187,7 @@ export default function PopupModal() {
                             <button
                                 type="button"
                                 onClick={close}
-                                // 둥근 모서리 위에서 배경색을 덮으면 안티에일리어싱 틈으로 아래 크림이 비친다 → 글자색만 바꾼다
-                                className="font-display flex flex-1 items-center justify-center py-4 pl-[0.08em] text-center text-caption leading-none tracking-[0.08em] text-cocoa/70 transition-colors duration-300 hover:text-cocoa"
+                                className="flex flex-1 items-center justify-center py-4 pl-[0.08em] text-center text-caption leading-none tracking-[0.08em] text-cocoa/70 transition-colors duration-300 hover:text-cocoa"
                             >
                                 {tCommon('close')}
                             </button>
