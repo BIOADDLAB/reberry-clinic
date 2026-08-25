@@ -5,12 +5,15 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import {
     formatPrice,
+    formatPriceItemName,
     PRICE_CART_STORAGE_KEY,
     subscribePriceCategories,
     subscribePriceListItems,
+    subscribePriceSections,
     type PriceCartItem,
     type PriceCategory,
     type PriceListItem,
+    type PriceSection,
 } from '@/components/lib/priceList';
 
 const PAGE_SIZE = 12;
@@ -21,12 +24,15 @@ export default function PriceListClient() {
     const router = useRouter();
     const rootRef = useRef<HTMLDivElement>(null);
     const [categories, setCategories] = useState<PriceCategory[]>([]);
+    const [sections, setSections] = useState<PriceSection[]>([]);
     const [items, setItems] = useState<PriceListItem[]>([]);
     const [activeCategory, setActiveCategory] = useState('all');
+    const [activeSection, setActiveSection] = useState('all');
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
     const [cart, setCart] = useState<PriceCartItem[]>([]);
+    const [cartLoaded, setCartLoaded] = useState(false);
     const [mobileCartOpen, setMobileCartOpen] = useState(false);
     const [mobileBarVisible, setMobileBarVisible] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -39,6 +45,8 @@ export default function PriceListClient() {
                 if (Array.isArray(saved)) setCart(saved);
             } catch {
                 localStorage.removeItem(PRICE_CART_STORAGE_KEY);
+            } finally {
+                setCartLoaded(true);
             }
         });
         const fail = () => {
@@ -46,6 +54,7 @@ export default function PriceListClient() {
             setLoading(false);
         };
         const unsubscribeCategories = subscribePriceCategories(setCategories, fail, true);
+        const unsubscribeSections = subscribePriceSections(setSections, fail, true);
         const unsubscribeItems = subscribePriceListItems((nextItems) => {
             setItems(nextItems);
             setLoading(false);
@@ -53,9 +62,27 @@ export default function PriceListClient() {
         return () => {
             window.cancelAnimationFrame(frame);
             unsubscribeCategories();
+            unsubscribeSections();
             unsubscribeItems();
         };
     }, [t]);
+
+    useEffect(() => {
+        if (!cartLoaded || loading) return;
+        const frame = window.requestAnimationFrame(() => {
+            setCart((current) => {
+                const next = current.filter((cartItem) => {
+                    const item = items.find((candidate) => candidate.docId === cartItem.itemId);
+                    return item?.sessions.some((session) => session.id === cartItem.optionId);
+                });
+                if (next.length !== current.length) {
+                    localStorage.setItem(PRICE_CART_STORAGE_KEY, JSON.stringify(next));
+                }
+                return next.length === current.length ? current : next;
+            });
+        });
+        return () => window.cancelAnimationFrame(frame);
+    }, [cartLoaded, items, loading]);
 
     useEffect(() => {
         const target = rootRef.current;
@@ -86,23 +113,71 @@ export default function PriceListClient() {
         () => new Map(categories.map((category) => [category.docId, category.label])),
         [categories],
     );
+    const sectionById = useMemo(
+        () => new Map(sections.map((section) => [section.docId, section])),
+        [sections],
+    );
+    const categoryOrder = useMemo(
+        () => new Map(categories.map((category, index) => [category.docId, index])),
+        [categories],
+    );
+    const sectionOrder = useMemo(
+        () => new Map(sections.map((section, index) => [section.docId, index])),
+        [sections],
+    );
+    const categorySections = useMemo(
+        () => sections.filter((section) => section.categoryId === activeCategory),
+        [activeCategory, sections],
+    );
     const visibleItems = useMemo(() => {
         const keyword = search.trim().toLowerCase();
-        return items.filter(
-            (item) =>
-                categoryById.has(item.categoryId) &&
-                (activeCategory === 'all' || item.categoryId === activeCategory) &&
-                (!keyword ||
-                    item.name.toLowerCase().includes(keyword) ||
-                    item.options.some((option) => option.label.toLowerCase().includes(keyword))),
-        );
-    }, [activeCategory, categoryById, items, search]);
+        return items
+            .filter(
+                (item) =>
+                    categoryById.has(item.categoryId) &&
+                    sectionById.has(item.sectionId) &&
+                    (activeCategory === 'all' || item.categoryId === activeCategory) &&
+                    (activeSection === 'all' || item.sectionId === activeSection) &&
+                    (!keyword ||
+                        item.name.toLowerCase().includes(keyword) ||
+                        item.productLabel.toLowerCase().includes(keyword) ||
+                        item.description.toLowerCase().includes(keyword) ||
+                        (sectionById.get(item.sectionId)?.label ?? '').toLowerCase().includes(keyword) ||
+                        item.sessions.some((session) => session.label.toLowerCase().includes(keyword))),
+            )
+            .sort(
+                (a, b) =>
+                    (categoryOrder.get(a.categoryId) ?? 0) - (categoryOrder.get(b.categoryId) ?? 0) ||
+                    (sectionOrder.get(a.sectionId) ?? 0) - (sectionOrder.get(b.sectionId) ?? 0) ||
+                    a.sort - b.sort,
+            );
+    }, [
+        activeCategory,
+        activeSection,
+        categoryById,
+        categoryOrder,
+        items,
+        search,
+        sectionById,
+        sectionOrder,
+    ]);
     const totalPages = Math.max(1, Math.ceil(visibleItems.length / PAGE_SIZE));
     const currentPage = Math.min(page, totalPages);
     const paginatedItems = visibleItems.slice(
         (currentPage - 1) * PAGE_SIZE,
         currentPage * PAGE_SIZE,
     );
+    const paginatedGroups = useMemo(() => {
+        const groups: Array<{ section: PriceSection; items: PriceListItem[] }> = [];
+        paginatedItems.forEach((item) => {
+            const section = sectionById.get(item.sectionId);
+            if (!section) return;
+            const current = groups.at(-1);
+            if (current?.section.docId === section.docId) current.items.push(item);
+            else groups.push({ section, items: [item] });
+        });
+        return groups;
+    }, [paginatedItems, sectionById]);
     const total = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
     const moneyLocale = locale === 'ko' ? 'ko-KR' : locale;
 
@@ -115,23 +190,23 @@ export default function PriceListClient() {
     };
 
     const addItem = (item: PriceListItem) => {
-        const optionId = selectedOptions[item.docId] ?? item.options[0]?.id;
-        const option = item.options.find((candidate) => candidate.id === optionId);
-        if (!option) return;
+        const optionId = selectedOptions[item.docId] ?? item.sessions[0]?.id;
+        const session = item.sessions.find((candidate) => candidate.id === optionId);
+        if (!session) return;
         updateCart((current) => {
             const index = current.findIndex(
-                (cartItem) => cartItem.itemId === item.docId && cartItem.optionId === option.id,
+                (cartItem) => cartItem.itemId === item.docId && cartItem.optionId === session.id,
             );
             if (index < 0) {
                 return [
                     ...current,
                     {
                         itemId: item.docId,
-                        optionId: option.id,
+                        optionId: session.id,
                         categoryLabel: categoryById.get(item.categoryId) ?? '',
-                        itemName: item.name,
-                        optionLabel: option.label,
-                        unitPrice: option.price,
+                        itemName: formatPriceItemName(item),
+                        optionLabel: session.label,
+                        unitPrice: session.price,
                         quantity: 1,
                     },
                 ];
@@ -154,6 +229,7 @@ export default function PriceListClient() {
                         label={t('all')}
                         onClick={() => {
                             setActiveCategory('all');
+                            setActiveSection('all');
                             setPage(1);
                         }}
                     />
@@ -164,11 +240,37 @@ export default function PriceListClient() {
                             label={category.label}
                             onClick={() => {
                                 setActiveCategory(category.docId);
+                                setActiveSection('all');
                                 setPage(1);
                             }}
                         />
                     ))}
                 </div>
+                {activeCategory !== 'all' && categorySections.length > 1 && (
+                    <div className="mt-3 flex w-full min-w-0 max-w-full gap-2 overflow-x-auto pb-2">
+                        <CategoryButton
+                            active={activeSection === 'all'}
+                            label={t('all')}
+                            onClick={() => {
+                                setActiveSection('all');
+                                setPage(1);
+                            }}
+                            secondary
+                        />
+                        {categorySections.map((section) => (
+                            <CategoryButton
+                                key={section.docId}
+                                active={activeSection === section.docId}
+                                label={section.label}
+                                onClick={() => {
+                                    setActiveSection(section.docId);
+                                    setPage(1);
+                                }}
+                                secondary
+                            />
+                        ))}
+                    </div>
+                )}
                 <label className="mt-5 block">
                     <span className="sr-only">{t('search')}</span>
                     <input
@@ -191,26 +293,42 @@ export default function PriceListClient() {
                 ) : visibleItems.length === 0 ? (
                     <Empty message={t('empty')} />
                 ) : (
-                    <div className="mt-6 space-y-3">
-                        {paginatedItems.map((item) => {
-                            const selectedId = selectedOptions[item.docId] ?? item.options[0]?.id ?? '';
-                            const selected = item.options.find((option) => option.id === selectedId);
+                    <div className="mt-7 space-y-10">
+                        {paginatedGroups.map((group) => (
+                            <section key={`${currentPage}-${group.section.docId}`}>
+                                <div className="mb-3 border-b border-cocoa/15 pb-3">
+                                    <p className="text-caption font-semibold tracking-[0.12em] text-latte">
+                                        {categoryById.get(group.section.categoryId)}
+                                    </p>
+                                    <h2 className="mt-1 text-h3 font-bold text-cocoa">{group.section.label}</h2>
+                                </div>
+                                <div className="space-y-3">
+                                {group.items.map((item) => {
+                            const selectedId = selectedOptions[item.docId] ?? item.sessions[0]?.id ?? '';
+                            const selected = item.sessions.find((session) => session.id === selectedId);
                             return (
                                 <article
                                     key={item.docId}
                                     className="rounded-2xl border border-cocoa/10 bg-cream/90 p-5 shadow-[0_2px_12px_rgba(69,54,45,0.04)] md:p-6"
                                 >
-                                    <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+                                    <div className="grid min-w-0 gap-5 sm:grid-cols-[minmax(0,1fr)_220px] sm:items-start">
                                         <div className="min-w-0 flex-1">
-                                            <p className="text-caption text-latte">{categoryById.get(item.categoryId)}</p>
-                                            <h2 className="mt-1 text-lead font-bold text-cocoa">{item.name}</h2>
+                                            <h3 className="flex flex-wrap items-center gap-2 break-keep text-lead font-bold text-cocoa">
+                                                <span>{item.name}</span>
+                                                {item.productLabel ? (
+                                                    <span className="rounded-full border border-cocoa/12 bg-sand/70 px-2.5 py-0.5 text-caption-sm font-semibold tracking-tight text-latte">
+                                                        {item.productLabel}
+                                                    </span>
+                                                ) : null}
+                                            </h3>
                                             {item.description && (
-                                                <p className="mt-2 whitespace-pre-line text-caption leading-6 text-latte">
+                                                <p className="mt-2 whitespace-pre-line break-keep text-caption leading-6 text-latte">
+                                                    <span className="font-semibold text-cocoa">{t('composition')} </span>
                                                     {item.description}
                                                 </p>
                                             )}
                                         </div>
-                                        <div className="w-full min-w-0 shrink-0 sm:w-56">
+                                        <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] gap-2 sm:block">
                                             <select
                                                 value={selectedId}
                                                 onChange={(event) =>
@@ -221,17 +339,20 @@ export default function PriceListClient() {
                                                 }
                                                 className="block w-full min-w-0 max-w-full rounded-xl border border-cocoa/15 bg-white px-3 py-2.5 text-caption text-cocoa outline-none"
                                             >
-                                                {item.options.map((option) => (
-                                                    <option key={option.id} value={option.id}>
-                                                        {option.label} · {formatPrice(option.price, moneyLocale)}
+                                                {item.sessions.map((session) => (
+                                                    <option key={session.id} value={session.id}>
+                                                        {session.label}
                                                     </option>
                                                 ))}
                                             </select>
+                                            <strong className="self-center whitespace-nowrap text-right text-small text-cocoa sm:mt-2 sm:block sm:text-lead">
+                                                {selected ? formatPrice(selected.price, moneyLocale) : ''}
+                                            </strong>
                                             <button
                                                 type="button"
                                                 disabled={!selected}
                                                 onClick={() => addItem(item)}
-                                                className="mt-2 w-full rounded-xl bg-cocoa px-4 py-2.5 text-caption font-semibold text-cream transition-colors hover:bg-deep disabled:opacity-40"
+                                                className="col-span-2 w-full rounded-xl bg-cocoa px-4 py-2.5 text-caption font-semibold text-cream transition-colors hover:bg-deep disabled:opacity-40 sm:mt-2"
                                             >
                                                 {t('add')}
                                             </button>
@@ -239,7 +360,10 @@ export default function PriceListClient() {
                                     </div>
                                 </article>
                             );
-                        })}
+                                })}
+                                </div>
+                            </section>
+                        ))}
                     </div>
                 )}
 
@@ -477,13 +601,27 @@ function CartPanel({
     );
 }
 
-function CategoryButton({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) {
+function CategoryButton({
+    active,
+    label,
+    onClick,
+    secondary = false,
+}: {
+    active: boolean;
+    label: string;
+    onClick: () => void;
+    secondary?: boolean;
+}) {
     return (
         <button
             type="button"
             onClick={onClick}
             className={`shrink-0 rounded-full border px-4 py-2 text-caption font-semibold ${
-                active ? 'border-cocoa bg-cocoa text-cream' : 'border-cocoa/15 bg-cream text-latte'
+                active
+                    ? secondary
+                        ? 'border-cocoa/30 bg-sand/70 text-cocoa'
+                        : 'border-cocoa bg-cocoa text-cream'
+                    : 'border-cocoa/15 bg-cream text-latte'
             }`}
         >
             {label}

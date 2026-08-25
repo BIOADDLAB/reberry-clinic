@@ -375,3 +375,7 @@ html:not([data-lang='ko']) .card-fixed-h {
 main > section + section {
     margin-top: -1px;
 }
+
+.naver-map img {
+    max-width: none !important;
+}

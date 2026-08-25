@@ -203,7 +203,8 @@
     "reserveShort": "予約する",
     "selectedTitle": "選択した施術",
     "selectedDescription": "料金表から選択した施術です。",
-    "clearSelection": "選択をクリア"
+    "clearSelection": "選択をクリア",
+    "composition": "内容"
   },
   "stepPlan": {
     "headline": "リベリ医院だけの<hl>3段階立体分析</hl>と<mob></mob><hl>専属スキンケアシステム</hl>",
@@ -232,6 +233,15 @@
     "loadError": "スキンコラムを読み込めませんでした。しばらくしてから再度お試しください。",
     "empty": "登録されたスキンコラムがありません。",
     "readMore": "詳しく見る",
+    "openBlog": "네이버ブログで見る",
+    "blogRedirectHint": "この記事の本文はドクターパイトンのネイバーブログでご覧いただけます。",
+    "pagination": "スキンコラムページ",
+    "prevPage": "前のページ",
+    "nextPage": "次のページ",
+    "search": "スキンコラム検索",
+    "searchPlaceholder": "タイトルや本文で検索",
+    "searchButton": "検索",
+    "emptySearch": "検索結果がありません。",
     "backToList": "← スキンコラム一覧",
     "notFound": "存在しないか、公開されていないスキンコラムです。",
     "notFoundGeneric": "スキンコラムが見つかりません。",

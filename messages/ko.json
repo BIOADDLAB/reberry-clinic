@@ -203,7 +203,8 @@
     "reserveShort": "예약하기",
     "selectedTitle": "선택한 시술",
     "selectedDescription": "가격표에서 선택한 시술입니다.",
-    "clearSelection": "선택 항목 비우기"
+    "clearSelection": "선택 항목 비우기",
+    "composition": "구성"
   },
   "stepPlan": {
     "headline": "리베리의원만의 <hl>3단계 입체 분석</hl>과 <mob></mob><hl>전담 스킨 케어 시스템</hl>",
@@ -232,6 +233,15 @@
     "loadError": "피부칼럼을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
     "empty": "등록된 피부칼럼이 없습니다.",
     "readMore": "자세히 보기",
+    "openBlog": "네이버 블로그에서 보기",
+    "blogRedirectHint": "이 글의 원문은 닥터 파이톤 네이버 블로그에서 확인할 수 있습니다.",
+    "pagination": "피부칼럼 페이지",
+    "prevPage": "이전 페이지",
+    "nextPage": "다음 페이지",
+    "search": "피부칼럼 검색",
+    "searchPlaceholder": "제목이나 내용으로 검색하세요.",
+    "searchButton": "검색",
+    "emptySearch": "검색 결과가 없습니다.",
     "backToList": "← 피부칼럼 목록",
     "notFound": "존재하지 않거나 공개되지 않은 피부칼럼입니다.",
     "notFoundGeneric": "피부칼럼을 찾을 수 없습니다.",

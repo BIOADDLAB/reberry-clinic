@@ -38,7 +38,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     let columnRoutes: MetadataRoute.Sitemap = [];
     try {
         const posts = await fetchPublishedSkinColumnPosts();
-        columnRoutes = posts.map((post) => ({
+        columnRoutes = posts
+            .filter((post) => post.source !== 'naver-blog')
+            .map((post) => ({
             url: `${site.url}/column/${post.docId}`,
             lastModified: post.updatedAt || post.publishedAt || lastModified,
             changeFrequency: 'monthly',

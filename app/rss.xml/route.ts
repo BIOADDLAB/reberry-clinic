@@ -29,7 +29,7 @@ export async function GET() {
 
     const items = posts
         .map((post) => {
-            const url = `${site.url}/column/${post.docId}`;
+            const url = post.blogUrl || `${site.url}/column/${post.docId}`;
             return `<item>
     <title>${escapeXml(post.title)}</title>
     <link>${url}</link>

@@ -7,8 +7,10 @@ import DeviceColumnSlider from '@/components/ui/DeviceColumnSlider';
 import { columns } from '@/components/lib/columns';
 import Reveal from '@/components/motion/Reveal';
 import { zoom } from '@/components/lib/motion';
-import { treatments, findTreatment } from '@/components/lib/treatments';
+import { treatments, findTreatment, categoryLabel } from '@/components/lib/treatments';
 import { getSolutionBySlug, localizeSolution } from '@/components/lib/solutions';
+import JsonLd from '@/components/seo/JsonLd';
+import { breadcrumbJsonLd, medicalWebPageJsonLd } from '@/components/lib/jsonLd';
 
 interface Params {
     params: Promise<{ category: string; slug: string; item: string }>;
@@ -46,9 +48,27 @@ export default async function SolutionDetailPage({ params }: Params) {
     const tSolutions = await getTranslations('solutions');
     const s = localizeSolution(rawSolution, locale === 'ko' ? undefined : tSolutions.raw(rawSolution.slug));
     const itemColumns = columns.filter((c) => c.slugs.includes(item));
+    const path = `/treatments/${category}/${slug}/${item}`;
+    const itemName = locale === 'ko' ? s.name : s.engName;
+    const description = s.introDescription || s.desc.join(' ');
+    const categoryHub: Record<string, string> = {
+        signature: '/treatments/signature/pigment',
+        skin: '/treatments/skin/pigment',
+        aging: '/treatments/aging/laser-lifting',
+    };
 
     return (
         <>
+            <JsonLd
+                data={breadcrumbJsonLd([
+                    { name: '홈', path: '/' },
+                    { name: categoryLabel[t.category], path: categoryHub[t.category] ?? path },
+                    { name: t.name, path: `/treatments/${category}/${slug}` },
+                    { name: itemName, path },
+                ])}
+            />
+            <JsonLd data={medicalWebPageJsonLd({ name: itemName, description, path })} />
+
             <SubHero en={t.en} title={t.name} image={heroImage[t.category]} />
 
             {/* 소개 영역 좌: 영문/이름+서브타이틀/설명, 우: 기기·제품 사진 */}

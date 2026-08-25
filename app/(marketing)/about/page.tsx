@@ -6,6 +6,14 @@ import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup';
 import LocationSection from '@/components/ui/LocationSection';
 import Eyebrow from '@/components/ui/Eyebrow';
 
+export async function generateMetadata() {
+    const t = await getTranslations('about');
+    return {
+        title: 'WE ARE RE:BERRY',
+        description: t('designSub').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+    };
+}
+
 export default async function AboutPage() {
     const t = await getTranslations('about');
     const promises = [

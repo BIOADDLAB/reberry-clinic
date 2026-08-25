@@ -16,6 +16,9 @@ import { SIGNATURE_PAGES } from '@/components/lib/adminConfig';
 import {
     createSkinColumnPost,
     deleteSkinColumnPost,
+    isHostedColumnThumbnail,
+    isNaverBlogColumnPost,
+    patchSkinColumnPost,
     subscribeSkinColumnPosts,
     updateSkinColumnPost,
     updateSkinColumnPostSorts,
@@ -23,6 +26,7 @@ import {
     type SkinColumnPostItem,
 } from '@/components/lib/skinColumnPosts';
 import { uploadImage } from '@/components/lib/storageUpload';
+import SkinColumnBlogImportPanel from './SkinColumnBlogImportPanel';
 import SkinColumnRichEditor from './SkinColumnRichEditor';
 
 const inputClass =
@@ -135,9 +139,16 @@ export default function SkinColumnPostManager() {
         () => new Map<string, string>(SIGNATURE_PAGES.map((category) => [category.slug, category.label])),
         [],
     );
-    const visiblePosts = useMemo(
-        () => (activeCategory === 'all' ? posts : posts.filter((post) => post.categorySlug === activeCategory)),
-        [activeCategory, posts],
+    const visiblePosts = useMemo(() => {
+        if (activeCategory === 'all') return posts;
+        if (activeCategory === 'unmapped') {
+            return posts.filter((post) => post.source === 'naver-blog' && !post.categorySlug);
+        }
+        return posts.filter((post) => post.categorySlug === activeCategory);
+    }, [activeCategory, posts]);
+    const unmappedCount = useMemo(
+        () => posts.filter((post) => post.source === 'naver-blog' && !post.categorySlug).length,
+        [posts],
     );
 
     const handleCreate = async (input: SkinColumnPostInput) => {
@@ -175,6 +186,37 @@ export default function SkinColumnPostManager() {
             if (editing?.docId === post.docId) setEditing(null);
         } catch (deleteError) {
             setError(deleteError instanceof Error ? deleteError.message : '피부칼럼 삭제에 실패했습니다.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleAssignCategory = async (post: SkinColumnPostItem, categorySlug: string) => {
+        setSaving(true);
+        setError(null);
+        try {
+            await patchSkinColumnPost(post.docId, {
+                categorySlug,
+                isPublished: Boolean(categorySlug),
+            });
+        } catch (assignError) {
+            setError(assignError instanceof Error ? assignError.message : '카테고리 지정에 실패했습니다.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleTogglePublished = async (post: SkinColumnPostItem) => {
+        if (!post.categorySlug && !post.isPublished) {
+            setError('공개하려면 먼저 카테고리를 지정해 주세요.');
+            return;
+        }
+        setSaving(true);
+        setError(null);
+        try {
+            await patchSkinColumnPost(post.docId, { isPublished: !post.isPublished });
+        } catch (toggleError) {
+            setError(toggleError instanceof Error ? toggleError.message : '공개 상태 변경에 실패했습니다.');
         } finally {
             setSaving(false);
         }
@@ -219,7 +261,7 @@ export default function SkinColumnPostManager() {
                 <div>
                     <h1 className="text-h2 font-bold text-cocoa">피부칼럼 관리</h1>
                     <p className="mt-1 text-small text-latte">
-                        피부칼럼 글을 작성하고 공개 상태와 노출 순서를 관리합니다.
+                        네이버 블로그 글을 가져와 공개하고, 직접 작성한 글도 함께 관리합니다.
                     </p>
                 </div>
                 <button
@@ -240,6 +282,8 @@ export default function SkinColumnPostManager() {
                     {error}
                 </div>
             ) : null}
+
+            <SkinColumnBlogImportPanel posts={posts} onError={setError} />
 
             {showForm || editing ? (
                 <SkinColumnPostForm
@@ -279,6 +323,11 @@ export default function SkinColumnPostManager() {
                         label="전체"
                         onClick={() => setActiveCategory('all')}
                     />
+                    <CategoryFilterButton
+                        active={activeCategory === 'unmapped'}
+                        label={unmappedCount > 0 ? `분류 필요 (${unmappedCount})` : '분류 필요'}
+                        onClick={() => setActiveCategory('unmapped')}
+                    />
                     {SIGNATURE_PAGES.map((category) => (
                         <CategoryFilterButton
                             key={category.slug}
@@ -293,9 +342,15 @@ export default function SkinColumnPostManager() {
             {loading ? (
                 <EmptyState message="피부칼럼 목록을 불러오는 중…" />
             ) : posts.length === 0 ? (
-                <EmptyState message="등록된 피부칼럼이 없습니다. 위 버튼으로 첫 글을 작성하세요." />
+                <EmptyState message="등록된 피부칼럼이 없습니다. 블로그에서 글을 가져오거나 직접 작성하세요." />
             ) : visiblePosts.length === 0 ? (
-                <EmptyState message="선택한 카테고리에 등록된 피부칼럼이 없습니다." />
+                <EmptyState
+                    message={
+                        activeCategory === 'unmapped'
+                            ? '분류가 필요한 블로그 글이 없습니다.'
+                            : '선택한 카테고리에 등록된 피부칼럼이 없습니다.'
+                    }
+                />
             ) : (
                 <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                     <SortableContext items={visiblePosts.map((post) => post.docId)} strategy={rectSortingStrategy}>
@@ -307,7 +362,7 @@ export default function SkinColumnPostManager() {
                                     disabled={saving || reorderSaving}
                                 >
                                     <div className="relative aspect-video w-full overflow-hidden bg-[#E9E4DC]">
-                                        {post.thumbnailUrl ? (
+                                        {isHostedColumnThumbnail(post.thumbnailUrl) && post.thumbnailUrl ? (
                                             <Image
                                                 src={post.thumbnailUrl}
                                                 alt=""
@@ -317,13 +372,18 @@ export default function SkinColumnPostManager() {
                                                 className="object-cover transition-transform group-hover:scale-[1.02]"
                                             />
                                         ) : (
-                                            <div className="flex h-full items-center justify-center text-caption text-latte/60">
-                                                썸네일 없음
+                                            <div className="flex h-full items-center justify-center font-display text-lead tracking-[0.08em] text-latte/40">
+                                                RE:BERRY
                                             </div>
                                         )}
                                     </div>
                                     <div className="flex flex-1 flex-col p-4">
                                         <div className="mb-2 flex flex-wrap items-center gap-1.5">
+                                            {isNaverBlogColumnPost(post) ? (
+                                                <span className="rounded-full bg-sky-50 px-2 py-0.5 text-caption-sm font-semibold text-sky-800">
+                                                    블로그
+                                                </span>
+                                            ) : null}
                                             <span className="rounded-full bg-[#F5F2EC] px-2 py-0.5 text-caption-sm font-semibold text-cocoa">
                                                 {categoryLabelBySlug.get(post.categorySlug) ?? '카테고리 없음'}
                                             </span>
@@ -340,6 +400,9 @@ export default function SkinColumnPostManager() {
                                         <h3 className="clamp-2 text-small font-semibold leading-snug text-cocoa">
                                             {post.title || '제목 없음'}
                                         </h3>
+                                        {post.blogCategory ? (
+                                            <p className="mt-1 text-caption-sm text-latte">원문 분류: {post.blogCategory}</p>
+                                        ) : null}
                                         {post.excerpt ? (
                                             <p className="clamp-2 mt-2 text-caption leading-5 text-latte">
                                                 {post.excerpt}
@@ -350,27 +413,69 @@ export default function SkinColumnPostManager() {
                                                 ? new Date(post.publishedAt).toLocaleDateString('ko-KR')
                                                 : '작성일 없음'}
                                         </p>
-                                        <div className="mt-3 flex gap-2 border-t border-cocoa/10 pt-3">
-                                            <button
-                                                type="button"
-                                                disabled={saving || reorderSaving}
-                                                onClick={() => {
-                                                    setShowForm(false);
-                                                    setEditing(post);
-                                                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                                                }}
-                                                className="rounded-full border border-cocoa/20 px-3 py-1.5 text-caption-sm font-semibold text-cocoa hover:bg-cocoa/5 disabled:opacity-40"
-                                            >
-                                                수정
-                                            </button>
-                                            <button
-                                                type="button"
-                                                disabled={saving || reorderSaving}
-                                                onClick={() => void handleDelete(post)}
-                                                className="rounded-full border border-red-200 px-3 py-1.5 text-caption-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-40"
-                                            >
-                                                삭제
-                                            </button>
+                                        <div className="mt-3 flex flex-col gap-2 border-t border-cocoa/10 pt-3">
+                                            {isNaverBlogColumnPost(post) ? (
+                                                <select
+                                                    className="rounded-lg border border-cocoa/15 bg-white px-2.5 py-1.5 text-caption-sm text-cocoa outline-none disabled:opacity-40"
+                                                    value={post.categorySlug}
+                                                    disabled={saving || reorderSaving}
+                                                    onChange={(event) =>
+                                                        void handleAssignCategory(post, event.target.value)
+                                                    }
+                                                >
+                                                    <option value="">분류 필요</option>
+                                                    {SIGNATURE_PAGES.map((category) => (
+                                                        <option key={category.slug} value={category.slug}>
+                                                            {category.label}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            ) : null}
+                                            <div className="flex flex-wrap gap-2">
+                                                {isNaverBlogColumnPost(post) ? (
+                                                    <>
+                                                        <button
+                                                            type="button"
+                                                            disabled={saving || reorderSaving}
+                                                            onClick={() => void handleTogglePublished(post)}
+                                                            className="rounded-full border border-cocoa/20 px-3 py-1.5 text-caption-sm font-semibold text-cocoa hover:bg-cocoa/5 disabled:opacity-40"
+                                                        >
+                                                            {post.isPublished ? '비공개' : '공개'}
+                                                        </button>
+                                                        {post.blogUrl ? (
+                                                            <a
+                                                                href={post.blogUrl}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="rounded-full border border-cocoa/20 px-3 py-1.5 text-caption-sm font-semibold text-cocoa hover:bg-cocoa/5"
+                                                            >
+                                                                원문
+                                                            </a>
+                                                        ) : null}
+                                                    </>
+                                                ) : (
+                                                    <button
+                                                        type="button"
+                                                        disabled={saving || reorderSaving}
+                                                        onClick={() => {
+                                                            setShowForm(false);
+                                                            setEditing(post);
+                                                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                        }}
+                                                        className="rounded-full border border-cocoa/20 px-3 py-1.5 text-caption-sm font-semibold text-cocoa hover:bg-cocoa/5 disabled:opacity-40"
+                                                    >
+                                                        수정
+                                                    </button>
+                                                )}
+                                                <button
+                                                    type="button"
+                                                    disabled={saving || reorderSaving}
+                                                    onClick={() => void handleDelete(post)}
+                                                    className="rounded-full border border-red-200 px-3 py-1.5 text-caption-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-40"
+                                                >
+                                                    삭제
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </SortablePostCard>

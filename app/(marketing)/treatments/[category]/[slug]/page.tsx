@@ -4,6 +4,8 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import { treatments, findTreatment, categoryLabel, localizeTreatment, type Category } from '@/components/lib/treatments';
+import JsonLd from '@/components/seo/JsonLd';
+import { breadcrumbJsonLd, faqPageJsonLd, medicalWebPageJsonLd } from '@/components/lib/jsonLd';
 import Image from 'next/image';
 import Reveal from '@/components/motion/Reveal';
 import { zoom } from '@/components/lib/motion';
@@ -405,9 +407,27 @@ export default async function TreatmentPage({ params }: Params) {
     };
 
     const order = sig ? SECTION_ORDER.signature : SECTION_ORDER.other;
+    const path = `/treatments/${t.category}/${t.slug}`;
+    const description = `${t.definition.title} — ${t.definition.text}`;
+    const localizedCategory =
+        isKo ? categoryLabel[t.category] : (tTreatments.raw('categoryLabel') as Record<Category, string>)[t.category];
+    const categoryHub: Record<string, string> = {
+        signature: '/treatments/signature/pigment',
+        skin: '/treatments/skin/pigment',
+        aging: '/treatments/aging/laser-lifting',
+    };
+    const breadcrumbs = [{ name: '홈', path: '/' }];
+    if (categoryHub[t.category] && categoryHub[t.category] !== path) {
+        breadcrumbs.push({ name: localizedCategory, path: categoryHub[t.category] });
+    }
+    breadcrumbs.push({ name, path });
 
     return (
         <>
+            <JsonLd data={breadcrumbJsonLd(breadcrumbs)} />
+            <JsonLd data={medicalWebPageJsonLd({ name, description, path })} />
+            <JsonLd data={faq ? faqPageJsonLd(faq) : null} />
+
             <SubHero en={t.en} title={isKo ? t.name : undefined} image={heroImage[t.category]} />
 
             {order.map((key) => (

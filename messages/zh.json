@@ -203,7 +203,8 @@
     "reserveShort": "预约",
     "selectedTitle": "已选治疗",
     "selectedDescription": "从价格表中选择的治疗项目。",
-    "clearSelection": "清空选择"
+    "clearSelection": "清空选择",
+    "composition": "包含"
   },
   "stepPlan": {
     "headline": "RE:BERRY 独有的<hl>三阶段立体分析</hl>与<mob></mob><hl>专属护肤体系</hl>",
@@ -232,6 +233,15 @@
     "loadError": "无法加载皮肤专栏，请稍后再试。",
     "empty": "暂无已发布的皮肤专栏。",
     "readMore": "查看详情",
+    "openBlog": "在 Naver 博客阅读",
+    "blogRedirectHint": "全文请到 Dr. Pytone 的 Naver 博客查看。",
+    "pagination": "皮肤专栏分页",
+    "prevPage": "上一页",
+    "nextPage": "下一页",
+    "search": "搜索皮肤专栏",
+    "searchPlaceholder": "按标题或摘要搜索",
+    "searchButton": "搜索",
+    "emptySearch": "没有符合条件的文章。",
     "backToList": "← 皮肤专栏列表",
     "notFound": "该文章不存在或尚未公开。",
     "notFoundGeneric": "找不到该皮肤专栏。",

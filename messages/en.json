@@ -203,7 +203,8 @@
     "reserveShort": "Reserve",
     "selectedTitle": "Selected treatments",
     "selectedDescription": "Treatments selected from the price list.",
-    "clearSelection": "Clear selection"
+    "clearSelection": "Clear selection",
+    "composition": "Includes"
   },
   "stepPlan": {
     "headline": "RE:BERRY's own <hl>3-Step 3D Analysis</hl> and <mob></mob><hl>Dedicated Skin Care System</hl>",
@@ -232,6 +233,15 @@
     "loadError": "Couldn't load the skin column. Please try again shortly.",
     "empty": "No skin column posts yet.",
     "readMore": "Read more",
+    "openBlog": "Read on Naver Blog",
+    "blogRedirectHint": "The full article is available on Dr. Pytone's Naver blog.",
+    "pagination": "Skin column pages",
+    "prevPage": "Previous page",
+    "nextPage": "Next page",
+    "search": "Search skin column",
+    "searchPlaceholder": "Search by title or summary.",
+    "searchButton": "Search",
+    "emptySearch": "No matching posts.",
     "backToList": "← Skin Column list",
     "notFound": "This post doesn't exist or isn't published.",
     "notFoundGeneric": "Couldn't find this skin column post.",

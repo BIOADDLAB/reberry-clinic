@@ -4,31 +4,39 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import {
     createPriceCategory,
     createPriceListItem,
+    createPriceSection,
     deletePriceCategory,
     deletePriceListItem,
+    deletePriceSection,
     formatPrice,
     subscribePriceCategories,
     subscribePriceListItems,
+    subscribePriceSections,
     updatePriceCategory,
     updatePriceListItem,
     updatePriceListItemSorts,
+    updatePriceSection,
+    updatePriceSectionSorts,
     type PriceCategory,
     type PriceListItem,
-    type PriceOption,
+    type PriceSection,
+    type PriceSession,
 } from '@/components/lib/priceList';
 
 const inputClass =
     'block w-full rounded-xl border border-cocoa/15 bg-white px-3.5 py-2.5 text-small text-cocoa outline-none focus:border-cocoa/40 disabled:bg-cocoa/[0.03]';
 const PAGE_SIZE = 20;
+const SESSION_LABEL_RE = /^\d+(?:\.\d+)?(?:회|개|병)$/;
 
-const newOption = (): PriceOption => ({
+const newSession = (): PriceSession => ({
     id: crypto.randomUUID(),
-    label: '기본',
+    label: '1회',
     price: 0,
 });
 
 export default function PriceListManager() {
     const [categories, setCategories] = useState<PriceCategory[]>([]);
+    const [sections, setSections] = useState<PriceSection[]>([]);
     const [items, setItems] = useState<PriceListItem[]>([]);
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [search, setSearch] = useState('');
@@ -36,6 +44,8 @@ export default function PriceListManager() {
     const [editing, setEditing] = useState<PriceListItem | null>(null);
     const [showForm, setShowForm] = useState(false);
     const [categoryLabel, setCategoryLabel] = useState('');
+    const [sectionCategoryId, setSectionCategoryId] = useState('');
+    const [sectionLabel, setSectionLabel] = useState('');
     const [busy, setBusy] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -47,11 +57,14 @@ export default function PriceListManager() {
         };
         const unsubscribeCategories = subscribePriceCategories((nextCategories) => {
             setCategories(nextCategories);
+            setSectionCategoryId((current) => current || nextCategories[0]?.docId || '');
             setLoading(false);
         }, fail);
+        const unsubscribeSections = subscribePriceSections(setSections, fail);
         const unsubscribeItems = subscribePriceListItems(setItems, fail);
         return () => {
             unsubscribeCategories();
+            unsubscribeSections();
             unsubscribeItems();
         };
     }, []);
@@ -63,16 +76,24 @@ export default function PriceListManager() {
                 (selectedCategory === 'all' || item.categoryId === selectedCategory) &&
                 (!keyword ||
                     item.name.toLowerCase().includes(keyword) ||
-                    item.section.toLowerCase().includes(keyword) ||
-                    item.options.some((option) => option.label.toLowerCase().includes(keyword))),
+                    item.productLabel.toLowerCase().includes(keyword) ||
+                    item.description.toLowerCase().includes(keyword) ||
+                    (sections.find((section) => section.docId === item.sectionId)?.label ?? '')
+                        .toLowerCase()
+                        .includes(keyword) ||
+                    item.sessions.some((session) => session.label.toLowerCase().includes(keyword))),
         );
-    }, [items, search, selectedCategory]);
+    }, [items, search, sections, selectedCategory]);
     const totalPages = Math.max(1, Math.ceil(visibleItems.length / PAGE_SIZE));
     const currentPage = Math.min(page, totalPages);
     const paginatedItems = visibleItems.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
     const categoryById = useMemo(
         () => new Map(categories.map((category) => [category.docId, category])),
         [categories],
+    );
+    const sectionById = useMemo(
+        () => new Map(sections.map((section) => [section.docId, section])),
+        [sections],
     );
 
     const run = async (action: () => Promise<void>, fallback: string) => {
@@ -121,8 +142,63 @@ export default function PriceListManager() {
         void run(() => deletePriceCategory(category.docId), '카테고리 삭제에 실패했습니다.');
     };
 
+    const addSection = async (event: FormEvent) => {
+        event.preventDefault();
+        const label = sectionLabel.trim();
+        if (!sectionCategoryId || !label) return;
+        await run(async () => {
+            await createPriceSection({ categoryId: sectionCategoryId, label, isPublished: true });
+            setSectionLabel('');
+        }, '소제목 추가에 실패했습니다.');
+    };
+
+    const renameSection = (section: PriceSection) => {
+        const label = window.prompt('소제목 이름', section.label)?.trim();
+        if (!label || label === section.label) return;
+        void run(
+            () =>
+                updatePriceSection(section.docId, {
+                    categoryId: section.categoryId,
+                    label,
+                    isPublished: section.isPublished,
+                }),
+            '소제목 수정에 실패했습니다.',
+        );
+    };
+
+    const toggleSection = (section: PriceSection) =>
+        run(
+            () =>
+                updatePriceSection(section.docId, {
+                    categoryId: section.categoryId,
+                    label: section.label,
+                    isPublished: !section.isPublished,
+                }),
+            '소제목 공개 상태 변경에 실패했습니다.',
+        );
+
+    const removeSection = (section: PriceSection) => {
+        if (!window.confirm(`"${section.label}" 소제목을 삭제할까요?`)) return;
+        void run(() => deletePriceSection(section.docId), '소제목 삭제에 실패했습니다.');
+    };
+
+    const moveSection = async (section: PriceSection, direction: -1 | 1) => {
+        const siblings = sections.filter((candidate) => candidate.categoryId === section.categoryId);
+        const index = siblings.findIndex((candidate) => candidate.docId === section.docId);
+        const target = siblings[index + direction];
+        if (!target) return;
+        await run(
+            () =>
+                updatePriceSectionSorts([
+                    { docId: section.docId, sort: target.sort },
+                    { docId: target.docId, sort: section.sort },
+                ]),
+            '소제목 정렬 변경에 실패했습니다.',
+        );
+    };
+
     const moveItem = async (item: PriceListItem, direction: -1 | 1) => {
-        const siblings = items.filter((candidate) => candidate.categoryId === item.categoryId);
+        const siblings = items.filter((candidate) => candidate.sectionId === item.sectionId);
         const index = siblings.findIndex((candidate) => candidate.docId === item.docId);
         const target = siblings[index + direction];
         if (!target) return;
@@ -219,10 +295,87 @@ export default function PriceListManager() {
                 </div>
             </section>
 
+            <section className="mt-6 rounded-2xl bg-white p-5 shadow-[0_2px_20px_rgba(69,54,45,0.06)]">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h2 className="text-lead font-bold text-cocoa">소제목</h2>
+                        <p className="mt-1 text-caption text-latte">
+                            고객 가격표에서 상품 묶음 제목으로 표시됩니다.
+                        </p>
+                    </div>
+                    <form onSubmit={addSection} className="flex flex-wrap gap-2">
+                        <select
+                            value={sectionCategoryId}
+                            onChange={(event) => setSectionCategoryId(event.target.value)}
+                            className={`${inputClass} w-auto min-w-36`}
+                        >
+                            {categories.map((category) => (
+                                <option key={category.docId} value={category.docId}>
+                                    {category.label}
+                                </option>
+                            ))}
+                        </select>
+                        <input
+                            value={sectionLabel}
+                            onChange={(event) => setSectionLabel(event.target.value)}
+                            placeholder="새 소제목"
+                            className={`${inputClass} w-44`}
+                        />
+                        <button
+                            type="submit"
+                            disabled={busy || !sectionCategoryId || !sectionLabel.trim()}
+                            className="rounded-xl border border-cocoa/20 px-4 text-caption font-semibold text-cocoa disabled:opacity-40"
+                        >
+                            추가
+                        </button>
+                    </form>
+                </div>
+                <div className="mt-4 space-y-3">
+                    {categories.map((category) => {
+                        const categorySections = sections.filter(
+                            (section) => section.categoryId === category.docId,
+                        );
+                        if (categorySections.length === 0) return null;
+                        return (
+                            <div key={category.docId} className="flex flex-wrap items-center gap-2">
+                                <strong className="w-24 text-caption text-cocoa">{category.label}</strong>
+                                {categorySections.map((section) => (
+                                    <div
+                                        key={section.docId}
+                                        className={`flex items-center gap-1 rounded-full border px-2.5 py-1 text-caption ${
+                                            section.isPublished
+                                                ? 'border-cocoa/15 text-cocoa'
+                                                : 'border-dashed border-cocoa/15 text-latte/60'
+                                        }`}
+                                    >
+                                        <button type="button" disabled={busy} onClick={() => void moveSection(section, -1)}>
+                                            ↑
+                                        </button>
+                                        <button type="button" disabled={busy} onClick={() => void moveSection(section, 1)}>
+                                            ↓
+                                        </button>
+                                        <button type="button" onClick={() => renameSection(section)} className="font-semibold">
+                                            {section.label}
+                                        </button>
+                                        <button type="button" onClick={() => void toggleSection(section)} className="text-[11px] text-latte">
+                                            {section.isPublished ? '공개' : '비공개'}
+                                        </button>
+                                        <button type="button" onClick={() => removeSection(section)} className="text-[11px] text-red-500">
+                                            삭제
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    })}
+                </div>
+            </section>
+
             {(showForm || editing) && (
                 <PriceItemForm
                     key={editing?.docId ?? 'new'}
                     categories={categories}
+                    sections={sections}
                     initial={editing ?? undefined}
                     defaultCategoryId={selectedCategory === 'all' ? categories[0]?.docId : selectedCategory}
                     saving={busy}
@@ -285,15 +438,30 @@ export default function PriceListManager() {
                                         <span className="rounded-full bg-sand/35 px-2.5 py-1 text-caption-sm font-semibold text-cocoa">
                                             {categoryById.get(item.categoryId)?.label ?? '미분류'}
                                         </span>
+                                        <span className="rounded-full border border-cocoa/10 px-2.5 py-1 text-caption-sm text-latte">
+                                            {sectionById.get(item.sectionId)?.label ?? '소제목 없음'}
+                                        </span>
                                         {!item.isPublished && (
                                             <span className="rounded-full bg-slate-100 px-2.5 py-1 text-caption-sm text-slate-500">
                                                 비공개
                                             </span>
                                         )}
                                         <strong className="text-small text-cocoa">{item.name}</strong>
+                                        {item.productLabel ? (
+                                            <span className="rounded-full border border-cocoa/12 bg-sand/60 px-2 py-0.5 text-caption-sm font-semibold text-latte">
+                                                {item.productLabel}
+                                            </span>
+                                        ) : null}
                                     </div>
+                                    {item.description && (
+                                        <p className="mt-2 whitespace-pre-line text-caption leading-5 text-latte">
+                                            {item.description}
+                                        </p>
+                                    )}
                                     <p className="mt-2 text-caption text-latte">
-                                        {item.options.map((option) => `${option.label} ${formatPrice(option.price)}`).join(' · ')}
+                                        {item.sessions
+                                            .map((session) => `${session.label} ${formatPrice(session.price)}`)
+                                            .join(' · ')}
                                     </p>
                                 </div>
                                 <div className="flex shrink-0 gap-2">
@@ -341,6 +509,7 @@ export default function PriceListManager() {
 
 function PriceItemForm({
     categories,
+    sections,
     initial,
     defaultCategoryId,
     saving,
@@ -348,6 +517,7 @@ function PriceItemForm({
     onCancel,
 }: {
     categories: PriceCategory[];
+    sections: PriceSection[];
     initial?: PriceListItem;
     defaultCategoryId?: string;
     saving: boolean;
@@ -355,24 +525,44 @@ function PriceItemForm({
     onCancel: () => void;
 }) {
     const [categoryId, setCategoryId] = useState(initial?.categoryId ?? defaultCategoryId ?? '');
-    const [section, setSection] = useState(initial?.section ?? '');
+    const availableSections = sections.filter((section) => section.categoryId === categoryId);
+    const [sectionId, setSectionId] = useState(
+        initial?.sectionId ??
+            sections.find((section) => section.categoryId === (defaultCategoryId ?? categories[0]?.docId))?.docId ??
+            '',
+    );
     const [name, setName] = useState(initial?.name ?? '');
+    const [productLabel, setProductLabel] = useState(initial?.productLabel ?? '');
     const [description, setDescription] = useState(initial?.description ?? '');
-    const [options, setOptions] = useState<PriceOption[]>(initial?.options ?? [newOption()]);
+    const [sessions, setSessions] = useState<PriceSession[]>(initial?.sessions ?? [newSession()]);
     const [isPublished, setIsPublished] = useState(initial?.isPublished ?? true);
+    const [validationError, setValidationError] = useState<string | null>(null);
 
     const submit = async (event: FormEvent) => {
         event.preventDefault();
-        const normalizedOptions = options
-            .map((option) => ({ ...option, label: option.label.trim() || '기본', price: Math.round(option.price) }))
-            .filter((option) => option.price > 0);
-        if (!categoryId || !name.trim() || normalizedOptions.length === 0) return;
+        setValidationError(null);
+        const normalizedSessions = sessions
+            .map((session) => ({
+                ...session,
+                label: session.label.trim().replace(/\s/g, ''),
+                price: Math.round(session.price),
+            }))
+            .filter((session) => session.price > 0);
+        if (!categoryId || !sectionId || !name.trim() || normalizedSessions.length === 0) {
+            setValidationError('카테고리, 소제목, 상품명과 가격을 모두 입력해 주세요.');
+            return;
+        }
+        if (normalizedSessions.some((session) => !SESSION_LABEL_RE.test(session.label))) {
+            setValidationError('횟수/수량은 1회, 3회, 1병, 20개와 같은 형식만 입력할 수 있습니다.');
+            return;
+        }
         await onSave({
             categoryId,
-            section: section.trim(),
+            sectionId,
             name: name.trim(),
+            productLabel: productLabel.trim(),
             description: description.trim(),
-            options: normalizedOptions,
+            sessions: normalizedSessions,
             isPublished,
         });
     };
@@ -383,18 +573,45 @@ function PriceItemForm({
             <div className="mt-5 grid gap-4 md:grid-cols-2">
                 <label className="text-caption font-semibold text-cocoa">
                     카테고리
-                    <select value={categoryId} onChange={(event) => setCategoryId(event.target.value)} required className={`${inputClass} mt-1.5`}>
+                    <select
+                        value={categoryId}
+                        onChange={(event) => {
+                            const nextCategoryId = event.target.value;
+                            setCategoryId(nextCategoryId);
+                            setSectionId(
+                                sections.find((section) => section.categoryId === nextCategoryId)?.docId ?? '',
+                            );
+                        }}
+                        required
+                        className={`${inputClass} mt-1.5`}
+                    >
                         <option value="">선택</option>
                         {categories.map((category) => <option key={category.docId} value={category.docId}>{category.label}</option>)}
                     </select>
                 </label>
                 <label className="text-caption font-semibold text-cocoa">
-                    섹션
-                    <input value={section} onChange={(event) => setSection(event.target.value)} className={`${inputClass} mt-1.5`} />
+                    소제목
+                    <select value={sectionId} onChange={(event) => setSectionId(event.target.value)} required className={`${inputClass} mt-1.5`}>
+                        <option value="">선택</option>
+                        {availableSections.map((section) => (
+                            <option key={section.docId} value={section.docId}>
+                                {section.label}
+                            </option>
+                        ))}
+                    </select>
                 </label>
-                <label className="text-caption font-semibold text-cocoa md:col-span-2">
+                <label className="text-caption font-semibold text-cocoa">
                     시술명
                     <input value={name} onChange={(event) => setName(event.target.value)} required className={`${inputClass} mt-1.5`} />
+                </label>
+                <label className="text-caption font-semibold text-cocoa">
+                    제품명
+                    <input
+                        value={productLabel}
+                        onChange={(event) => setProductLabel(event.target.value)}
+                        placeholder="예: 아띠에르"
+                        className={`${inputClass} mt-1.5`}
+                    />
                 </label>
                 <label className="text-caption font-semibold text-cocoa md:col-span-2">
                     설명
@@ -403,34 +620,50 @@ function PriceItemForm({
             </div>
             <div className="mt-5">
                 <div className="flex items-center justify-between">
-                    <h3 className="text-small font-bold text-cocoa">가격 옵션</h3>
-                    <button type="button" onClick={() => setOptions((current) => [...current, newOption()])} className="text-caption font-semibold text-cocoa underline">
-                        + 옵션 추가
+                    <div>
+                        <h3 className="text-small font-bold text-cocoa">횟수/수량별 가격</h3>
+                        <p className="mt-1 text-caption-sm text-latte">제품명은 시술명 옆 뱃지로 표시되고, 이곳에는 횟수나 수량만 입력합니다.</p>
+                    </div>
+                    <button type="button" onClick={() => setSessions((current) => [...current, newSession()])} className="text-caption font-semibold text-cocoa underline">
+                        + 가격 행 추가
                     </button>
                 </div>
                 <div className="mt-3 space-y-2">
-                    {options.map((option, index) => (
-                        <div key={option.id} className="grid gap-2 sm:grid-cols-[1fr_180px_auto]">
+                    {sessions.map((session, index) => (
+                        <div key={session.id} className="grid gap-2 sm:grid-cols-[1fr_180px_auto_auto]">
                             <input
-                                value={option.label}
-                                onChange={(event) => setOptions((current) => current.map((entry, entryIndex) => entryIndex === index ? { ...entry, label: event.target.value } : entry))}
-                                placeholder="예: 1회"
+                                value={session.label}
+                                onChange={(event) => setSessions((current) => current.map((entry, entryIndex) => entryIndex === index ? { ...entry, label: event.target.value } : entry))}
+                                placeholder="1회, 3회, 1병, 20개"
                                 className={inputClass}
                             />
                             <input
-                                value={option.price || ''}
-                                onChange={(event) => setOptions((current) => current.map((entry, entryIndex) => entryIndex === index ? { ...entry, price: Number(event.target.value.replace(/\D/g, '')) } : entry))}
+                                value={session.price || ''}
+                                onChange={(event) => setSessions((current) => current.map((entry, entryIndex) => entryIndex === index ? { ...entry, price: Number(event.target.value.replace(/\D/g, '')) } : entry))}
                                 inputMode="numeric"
                                 placeholder="가격"
                                 className={inputClass}
                             />
-                            <button type="button" disabled={options.length === 1} onClick={() => setOptions((current) => current.filter((_, entryIndex) => entryIndex !== index))} className="rounded-lg px-3 text-caption text-red-600 disabled:opacity-30">
+                            <div className="flex">
+                                <button type="button" disabled={index === 0} onClick={() => setSessions((current) => {
+                                    const next = [...current];
+                                    [next[index - 1], next[index]] = [next[index], next[index - 1]];
+                                    return next;
+                                })} className="rounded-lg px-2 text-caption disabled:opacity-30">↑</button>
+                                <button type="button" disabled={index === sessions.length - 1} onClick={() => setSessions((current) => {
+                                    const next = [...current];
+                                    [next[index], next[index + 1]] = [next[index + 1], next[index]];
+                                    return next;
+                                })} className="rounded-lg px-2 text-caption disabled:opacity-30">↓</button>
+                            </div>
+                            <button type="button" disabled={sessions.length === 1} onClick={() => setSessions((current) => current.filter((_, entryIndex) => entryIndex !== index))} className="rounded-lg px-3 text-caption text-red-600 disabled:opacity-30">
                                 삭제
                             </button>
                         </div>
                     ))}
                 </div>
             </div>
+            {validationError && <p role="alert" className="mt-3 text-caption text-red-600">{validationError}</p>}
             <label className="mt-5 flex items-center gap-2 text-caption font-semibold text-cocoa">
                 <input type="checkbox" checked={isPublished} onChange={(event) => setIsPublished(event.target.checked)} />
                 고객 페이지에 공개

@@ -6,6 +6,7 @@ import T from '@/components/lang/T';
 import { cn } from '@/components/lib/cn';
 import { site } from '@/components/lib/site';
 import { useIsKo } from '@/components/lib/useLang';
+import NaverMap from '@/components/ui/NaverMap';
 
 export default function LocationSection() {
     // 영업시간 라벨("평 일")은 한국어에서만 글자를 흩뿌려 정렬한다.
@@ -17,13 +18,7 @@ export default function LocationSection() {
         <section className="bg-cream py-16 lg:py-24">
             <div className="container-site grid items-stretch gap-8 lg:grid-cols-2 lg:gap-14">
                 <Reveal className="relative min-h-[280px] overflow-hidden bg-sand/35 lg:min-h-0">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m5!3m3!1m2!1s0x357c990061dd2c9d%3A0x2995135531b14865!2z66as67Kg66as7J2Y7JuQIOuniO2PrA!5e0!3m2!1sko!2skr!4v1784792342069!5m2!1sko!2skr"
-                        className="absolute inset-0 h-full w-full border-0"
-                        loading="lazy"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        title={t('locationMapTitle')}
-                    />
+                    <NaverMap title={t('locationMapTitle')} />
                 </Reveal>
                 <Reveal delay={0.1}>
                     <dl>

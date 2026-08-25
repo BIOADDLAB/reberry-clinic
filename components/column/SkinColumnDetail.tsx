@@ -8,6 +8,9 @@ import { useTranslations } from 'next-intl';
 import { SIGNATURE_PAGES } from '@/components/lib/adminConfig';
 import {
     fetchPublishedSkinColumnPost,
+    getSkinColumnBlogUrl,
+    isHostedColumnThumbnail,
+    isNaverBlogColumnPost,
     type SkinColumnPostItem,
 } from '@/components/lib/skinColumnPosts';
 import { useLocalizedColumnPost } from '@/components/lib/useColumnTranslation';
@@ -56,6 +59,9 @@ export default function SkinColumnDetail({ docId }: { docId: string }) {
         [post?.categorySlug],
     );
     const youtubeEmbedUrl = useMemo(() => getYoutubeEmbedUrl(post?.youtubeUrl), [post?.youtubeUrl]);
+    const isBlogPost = Boolean(post && isNaverBlogColumnPost(post));
+    const blogUrl = post ? getSkinColumnBlogUrl(post) : null;
+    const thumbnailUrl = post && isHostedColumnThumbnail(post.thumbnailUrl) ? post.thumbnailUrl : undefined;
 
     if (loading) return <DetailMessage message={t('loading')} />;
     if (!post || error) return <DetailMessage message={error ?? t('notFoundGeneric')} error />;
@@ -84,10 +90,10 @@ export default function SkinColumnDetail({ docId }: { docId: string }) {
                     </time>
                 </header>
 
-                {post.thumbnailUrl ? (
+                {thumbnailUrl ? (
                     <div className="relative mt-10 aspect-[16/9] overflow-hidden rounded-2xl bg-sand/20 md:mt-14">
                         <Image
-                            src={post.thumbnailUrl}
+                            src={thumbnailUrl}
                             alt=""
                             fill
                             priority
@@ -110,10 +116,24 @@ export default function SkinColumnDetail({ docId }: { docId: string }) {
                     </div>
                 ) : null}
 
-                <div
-                    className="skin-column-editor-content ProseMirror mt-10 text-small md:mt-14"
-                    dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
-                />
+                {isBlogPost && blogUrl ? (
+                    <div className="mt-10 rounded-2xl border border-cocoa/10 bg-cream px-6 py-8 text-center md:mt-14">
+                        <p className="text-small leading-7 text-latte">{t('blogRedirectHint')}</p>
+                        <a
+                            href={blogUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-5 inline-flex rounded-full bg-cocoa px-6 py-2.5 text-caption font-semibold text-cream transition-colors hover:bg-deep"
+                        >
+                            {t('openBlog')}
+                        </a>
+                    </div>
+                ) : (
+                    <div
+                        className="skin-column-editor-content ProseMirror mt-10 text-small md:mt-14"
+                        dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
+                    />
+                )}
 
                 <div className="mt-14 border-t border-cocoa/10 pt-8 text-center md:mt-20">
                     <Link
