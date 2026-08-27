@@ -47,8 +47,8 @@
     "서울특별시 마포구 월드컵로 200 11층": "11F, 200 World Cup-ro, Mapo-gu, Seoul",
     "1101, 1102호 (성산동, SJ라벨라 상암)": "Rooms 1101–1102 (Seongsan-dong, SJ Labella Sangam)",
     "6호선 마포구청역 1번 출구 도보 5분 이내": "Line 6 Mapogu-office Stn. Exit 1, 5 min walk",
-    "건물 뒷편 주차장 · 주차권 수령 후": "Rear parking lot · get a parking ticket",
-    "지하 주차, 전기차 주차 제한": "Underground / EV parking is limited",
+    "건물 뒷편 주차장 · 기계식 주차": "Rear parking lot · mechanical parking",
+    "전기차는 외부주차 가능": "EVs can park outside",
     "평 일": "Mon–Fri",
     "토요일": "Sat",
     "영업 시간안내": "Hours",
@@ -71,7 +71,8 @@
     "리프팅/탄력": "Lifting & Firming",
     "쁘띠성형": "Petit Procedures",
     "제모": "Hair Removal",
-    "평일 점심시간": "Weekday lunch break"
+    "평일 점심시간": "Weekday lunch break",
+    "토요일 점심시간 없이 진료": "No lunch break on Saturday"
   },
   "about": {
     "designHeadline": "<light>We design your beauty</light><br></br>in the <hl>most scientific way</hl>",

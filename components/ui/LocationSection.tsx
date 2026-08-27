@@ -70,6 +70,9 @@ export default function LocationSection() {
                                 <p className="pt-1 text-caption text-latte">
                                     <T ko="평일 점심시간" /> <span className="notranslate">{site.lunch}</span>
                                 </p>
+                                <p className="text-caption text-latte">
+                                    <T ko={site.saturdayNote} />
+                                </p>
                             </dd>
                         </div>
 

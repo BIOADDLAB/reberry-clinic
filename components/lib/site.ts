@@ -11,7 +11,7 @@ export const site = {
     address: '서울특별시 마포구 월드컵로 200 11층',
     addressDetail: '1101, 1102호 (성산동, SJ라벨라 상암)',
     subway: '6호선 마포구청역 1번 출구 도보 5분 이내',
-    parking: ['건물 뒷편 주차장 · 주차권 수령 후', '지하 주차, 전기차 주차 제한'],
+    parking: ['건물 뒷편 주차장 · 기계식 주차', '전기차는 외부주차 가능'],
     reservation: '/reservation',
     reservationPhone: 'tel:050713643777',
     kakao: 'https://pf.kakao.com/_khIcn',
@@ -28,6 +28,7 @@ export const site = {
     ],
     // 평일 점심시간(휴게시간). 예약 화면에서도 이 시간대는 슬롯에서 빠진다 → components/lib/reservationSchedule.ts
     lunch: '14:00 - 15:00',
+    saturdayNote: '토요일 점심시간 없이 진료',
 };
 
 export const nav = [

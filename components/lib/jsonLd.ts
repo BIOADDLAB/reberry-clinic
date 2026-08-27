@@ -89,6 +89,18 @@ export function medicalClinicNode() {
             availableLanguage: ['Korean', 'English', 'Japanese', 'Chinese'],
         },
         sameAs: [site.naver, site.blog, site.youtube, site.kakao],
+        amenityFeature: [
+            {
+                '@type': 'LocationFeatureSpecification',
+                name: '기계식 주차',
+                value: true,
+            },
+            {
+                '@type': 'LocationFeatureSpecification',
+                name: '전기차 외부주차',
+                value: true,
+            },
+        ],
     };
 }
 
