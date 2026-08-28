@@ -24,13 +24,18 @@ function Card({ b, overflow }: { b: BAPhoto; overflow: boolean }) {
 
     return (
         <article
-            className="card-fixed-h t-tight flex h-[439px] w-[244px] shrink-0 snap-start flex-col rounded-[10px] bg-cream text-cocoa"
-            style={{ '--card-h': '439px' } as React.CSSProperties}
+            className="card-fixed-h t-tight flex h-[464px] w-[244px] shrink-0 snap-start flex-col rounded-[10px] bg-cream text-cocoa"
+            style={{ '--card-h': '464px' } as React.CSSProperties}
         >
             {/* 시술명은 messages/*.json 의 labels 네임스페이스로 교체, "전후 사진"은 common 네임스페이스로 교체.
-                번역문이 길어 제목이 3줄로 터지면 카드(439px)를 넘기므로 t-2line 으로 두 줄 고정 */}
-            <h3 className="t-2line px-3 py-5 text-center text-lead font-bold leading-snug">
-                <T ko={label} /> {t('beforeAfter')}
+                #ISSUE: "시술명 전후 사진" 을 한 줄로 흘리면 이름 길이에 따라 줄 수가 갈려 헤더 높이가 제각각이었다
+                        → 시술명 / 전후 사진 두 덩이로 쪼개고 헤더를 3줄 높이(min-h-[3lh])로 고정.
+                        헤더가 한 줄분 늘어난 만큼 카드 높이도 439 → 464px(화살표 top 은 그 절반) */}
+            <h3 className="flex min-h-[3lh] flex-col justify-center px-3 py-5 text-center text-lead font-bold leading-snug">
+                <span className="line-clamp-2 break-keep">
+                    <T ko={label} />
+                </span>
+                <span>{t('beforeAfter')}</span>
             </h3>
 
             <div className="skeleton relative h-[147px] w-full overflow-hidden">
@@ -90,7 +95,7 @@ export default function BACardSlider({ slug }: { slug: string }) {
             <div className="relative mx-auto max-w-[1045px]">
                 <div className="flex justify-center gap-[23px] overflow-hidden">
                     {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
-                        <Skeleton key={i} className="h-[439px] w-[244px] shrink-0 rounded-[10px]" />
+                        <Skeleton key={i} className="h-[464px] w-[244px] shrink-0 rounded-[10px]" />
                     ))}
                 </div>
                 <div className="mt-6 flex justify-center gap-2 lg:mt-[58px]">
@@ -113,7 +118,7 @@ export default function BACardSlider({ slug }: { slug: string }) {
                         onClick={() => move(-1)}
                         aria-label={t('prev')}
                         className={cn(
-                            'absolute -left-16 top-[219px] z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border border-cream bg-transparent transition-all duration-500 hover:scale-105 min-[1240px]:flex min-[1440px]:-left-24',
+                            'absolute -left-16 top-[232px] z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border border-cream bg-transparent transition-all duration-500 hover:scale-105 min-[1240px]:flex min-[1440px]:-left-24',
                             canPrev ? 'opacity-100' : 'opacity-30',
                         )}
                     >
@@ -126,7 +131,7 @@ export default function BACardSlider({ slug }: { slug: string }) {
                         onClick={() => move(1)}
                         aria-label={t('next')}
                         className={cn(
-                            'absolute -right-16 top-[219px] z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border border-cream bg-transparent transition-all duration-500 hover:scale-105 min-[1240px]:flex min-[1440px]:-right-24',
+                            'absolute -right-16 top-[232px] z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border border-cream bg-transparent transition-all duration-500 hover:scale-105 min-[1240px]:flex min-[1440px]:-right-24',
                             canNext ? 'opacity-100' : 'opacity-30',
                         )}
                     >

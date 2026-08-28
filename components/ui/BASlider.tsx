@@ -84,9 +84,15 @@ export default function BASlider({ light }: Props) {
                     >
                         {/* #ISSUE: 시술명(p.label)은 구글 번역이 오역해서 notranslate 로 막아뒀는데,
                             그 탓에 번역 모드에서 한국어로 남아 있었다 → 사전(dict.ts) 기반 <T /> 로 교체.
-                            #ISSUE: 번역문은 한국어보다 길어 헤더가 3줄로 터지며 카드 폭을 밀어냈다 → t-2line 으로 두 줄 고정 */}
-                        <p className="t-2line px-3 py-2.5 text-lead font-bold leading-snug lg:pt-[26px] lg:pb-[23px]">
-                            <T ko={label} /> {t('beforeAfter')}
+                            #ISSUE: "시술명 전후 사진" 한 줄로 흘리니 이름 길이에 따라 1~2줄로 갈려
+                                    카드마다 사진 시작 위치가 어긋났다 → 시술명 / 전후 사진 두 덩이로 쪼개고
+                                    헤더를 3줄 높이(min-h-[3lh])로 고정해 모든 카드의 헤더 높이를 맞춘다.
+                                    시술명은 line-clamp-2 로 최대 두 줄, break-keep 으로 한글 단어 중간 끊김 방지 */}
+                        <p className="flex min-h-[3lh] flex-col justify-center px-3 py-2.5 text-lead font-bold leading-snug lg:pt-[26px] lg:pb-[23px]">
+                            <span className="line-clamp-2 break-keep">
+                                <T ko={label} />
+                            </span>
+                            <span>{t('beforeAfter')}</span>
                         </p>
                         <div className="relative">
                             <div className="skeleton skeleton-dark relative aspect-[8/5] overflow-hidden">
