@@ -6,11 +6,10 @@
 // ── 시그니처 시술 페이지 (전후사진·칼럼 공통)
 // slug 값은 components/lib/treatments.ts 의 시그니처 slug 와 반드시 같아야 함!!
 export const SIGNATURE_PAGES = [
-    { slug: 'pigment', label: '색소' },
-    { slug: 'lifting', label: '볼륨리프팅' },
-    { slug: 'booster', label: '볼륨부스터' },
-    { slug: 'acne', label: '여드름' },
-    { slug: 'redness', label: '홍조' },
+    // 기존 slug는 Firestore 전후사진·칼럼 연결을 끊지 않기 위해 유지한다.
+    { slug: 'booster', label: '리베리 볼륨 부스터' },
+    { slug: 'acne', label: '비수술 앞턱전진 필러' },
+    { slug: 'redness', label: '비수술 눈밑 지방 재배치' },
 ] as const;
 
 // 피부교정 페이지는 시그니처와 route slug가 겹치므로 관리자 저장 키를 분리한다.
@@ -74,13 +73,13 @@ export const LIMITS = {
     columnEn: 9,
     // 칼럼 — 제목(카드 본문). 2줄까지만 보이고 넘으면 말줄임(...) 처리됨
     columnText: 34,
-    // 전후사진 — 사진 아래 라벨(알약 모양) / 한 줄 안에 들어가야 함
-    baLabel: 10,
+    // 전후사진 — 새 시그니처 정식 명칭까지 입력할 수 있도록 20자로 확장
+    baLabel: 20,
 } as const;
 
 // ── 개수 제한
 export const COUNT_LIMITS = {
-    columnPerPage: 8, // 한 페이지(시그니처 1개 또는 기기 1개)당 칼럼 최대
+    columnPerPage: 12, // 제공받은 칼럼을 빠짐없이 넣기 위해 페이지당 최대 12개
     baPerPage: 14, // 시그니처 페이지 1개당 전후사진 최대
     baMain: 10, // 메인페이지에 노출할 전후사진 최대
 } as const;

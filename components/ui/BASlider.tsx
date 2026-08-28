@@ -7,6 +7,7 @@ import { cn } from '@/components/lib/cn';
 import { useBAPhotos, useBAPhotosLoading, filterMainBAPhotos } from '@/components/lib/useBAPhotos';
 import T from '@/components/lang/T';
 import Skeleton from '@/components/ui/Skeleton';
+import { resolveBALabel } from '@/components/lib/ba';
 
 interface Props {
     light?: boolean;
@@ -74,7 +75,9 @@ export default function BASlider({ light }: Props) {
                     dragClass,
                 )}
             >
-                {photos.map((p) => (
+                {photos.map((p) => {
+                    const label = resolveBALabel(p);
+                    return (
                     <article
                         key={p.id}
                         className="t-tight w-[240px] rounded-[10px] shrink-0 snap-start bg-deep text-center text-cream md:w-[244px]"
@@ -83,7 +86,7 @@ export default function BASlider({ light }: Props) {
                             그 탓에 번역 모드에서 한국어로 남아 있었다 → 사전(dict.ts) 기반 <T /> 로 교체.
                             #ISSUE: 번역문은 한국어보다 길어 헤더가 3줄로 터지며 카드 폭을 밀어냈다 → t-2line 으로 두 줄 고정 */}
                         <p className="t-2line px-3 py-2.5 text-lead font-bold leading-snug lg:pt-[26px] lg:pb-[23px]">
-                            <T ko={p.label} /> {t('beforeAfter')}
+                            <T ko={label} /> {t('beforeAfter')}
                         </p>
                         <div className="relative">
                             <div className="skeleton skeleton-dark relative aspect-[8/5] overflow-hidden">
@@ -116,15 +119,15 @@ export default function BASlider({ light }: Props) {
                                 aria-hidden
                             />
                         </div>
-                        {/* #ISSUE: 알약 배지는 두 줄이 되는 순간 모양이 깨진다 → t-1line 으로 한 줄 + 말줄임 고정 */}
-                        <p className="t-1line mx-auto mt-4.25 w-fit max-w-[88%] min-w-[100px] rounded-full border border-cream bg-cream px-3 text-lead font-bold leading-6.75! text-cocoa">
-                            <T ko={p.label} />
+                        <p className="mx-auto mt-4.25 line-clamp-2 w-fit max-w-[88%] min-w-[100px] rounded-[16px] border border-cream bg-cream px-3 py-0.5 text-small font-bold leading-snug text-cocoa">
+                            <T ko={label} />
                         </p>
                         <p className="notranslate font-display text-caption-sm mb-[15px] mt-1 text-[11px] tracking-[0.2em] text-cream">
                             RE:BERRY
                         </p>
                     </article>
-                ))}
+                    );
+                })}
             </div>
 
             <button

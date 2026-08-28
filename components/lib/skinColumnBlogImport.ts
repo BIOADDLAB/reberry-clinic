@@ -26,44 +26,22 @@ const SITE_CATEGORY_SLUGS = new Set<string>(SIGNATURE_PAGES.map((category) => ca
 // 블로그 카테고리 문자열이 사이트 탭과 거의 1:1인 경우만 기본값으로 넣는다.
 // 애매한 분류(공지, 포텐자, 지방분해 등)는 비워 두고 관리자가 지정한다.
 export const DEFAULT_BLOG_CATEGORY_MAPS: Record<string, string> = {
-    기미: 'pigment',
-    흑자: 'pigment',
-    'MLA, 피코프락셀, 제네시스': 'pigment',
-    여드름: 'acne',
-    '주사, 홍조, 모세혈관확장증': 'redness',
     '볼륨부스터, 쥬베룩 볼륨': 'booster',
     '리쥬란, 물광주사': 'booster',
-    '레비나스 리프팅': 'lifting',
-    '온다 리프팅': 'lifting',
-    '울쎄라, 브이로, 슈링크': 'lifting',
-    '인모드 리프팅': 'lifting',
-    실리프팅: 'lifting',
-    보톡스: 'lifting',
-    필러: 'lifting',
+    필러: 'acne',
+    '턱끝 필러': 'acne',
+    '눈밑 지방 재배치': 'redness',
 };
 
 const TOKEN_HINTS: Array<[string, string]> = [
-    ['홍조', 'redness'],
-    ['주사', 'redness'],
-    ['모세혈관', 'redness'],
-    ['기미', 'pigment'],
-    ['흑자', 'pigment'],
-    ['색소', 'pigment'],
-    ['피코', 'pigment'],
-    ['여드름', 'acne'],
+    ['눈밑', 'redness'],
+    ['하안검', 'redness'],
+    ['턱끝', 'acne'],
+    ['필러', 'acne'],
     ['쥬베룩', 'booster'],
     ['볼륨부스터', 'booster'],
     ['리쥬란', 'booster'],
     ['물광', 'booster'],
-    ['리프팅', 'lifting'],
-    ['울쎄라', 'lifting'],
-    ['온다', 'lifting'],
-    ['실리프팅', 'lifting'],
-    ['인모드', 'lifting'],
-    ['슈링크', 'lifting'],
-    ['브이로', 'lifting'],
-    ['보톡스', 'lifting'],
-    ['필러', 'lifting'],
 ];
 
 export interface BlogImportSettings {

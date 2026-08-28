@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed:price-list": "tsx scripts/seed-price-list.ts",
+    "seed:treatment-columns": "tsx scripts/seed-treatment-columns.ts",
+    "check:treatment-columns": "tsx scripts/seed-treatment-columns.ts --check",
     "seed:events": "tsx scripts/seed-events.ts"
   },
   "dependencies": {

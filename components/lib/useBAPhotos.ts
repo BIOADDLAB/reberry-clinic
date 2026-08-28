@@ -17,6 +17,7 @@ interface BAPhotoDoc {
     main?: number;
     category?: string; // 전후사진 페이지 카테고리 탭 (없으면 slug 로 자동 배정)
     place?: string; // 노출 위치 treatment/reviews/both (없으면 both = 기존처럼 양쪽)
+    treatmentDate?: string; // 시술일 YYYY-MM-DD
 }
 
 /* #ISSUE: 전에는 컴포넌트마다 useEffect 로 각자 조회해서, 한 페이지에
@@ -57,6 +58,7 @@ function load() {
                     ...(typeof data.order === 'number' ? { order: data.order } : {}),
                     ...(typeof data.category === 'string' ? { category: data.category } : {}),
                     ...(typeof data.place === 'string' ? { place: data.place } : {}),
+                    ...(typeof data.treatmentDate === 'string' ? { treatmentDate: data.treatmentDate } : {}),
                 };
             });
         })

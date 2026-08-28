@@ -25,40 +25,32 @@
   },
   "ivItems": ["IV Therapy", "Vitamin IV", "White Glow IV", "Cinderella IV", "Vitamin C (High-Dose)", "Vitamin B IV", "Antioxidant IV", "Glycyrrhizin IV", "Garlic IV", "Vitamin D IV", "Placenta IV"],
   "signature": {
-    "pigment": {
-      "headline": { "light": "Flawlessly radiant,", "strong": "standing at the peak of brightening" },
-      "definition": { "title": "What is pigmentation (blemish) treatment?", "text": "A treatment that selectively removes melanin pigment with laser energy to improve skin tone." },
-      "hashtags": ["My face tone looks dull", "My melasma keeps getting darker", "I got a lot of pigmentation after pregnancy", "Toning treatments never seem to work for me", "Pigmentation I've had since childhood bothers me"],
-      "solution": { "light": "The key to pigmentation treatment is", "strong": "precision targeting matched to the skin layer" },
-      "story": { "hook": ["Why does your face", "keep looking duller and darker?", "It's not just the UV rays"], "body": "Even a single small blemish\ncan break the overall clarity of your skin, cast a shadow,\nand make you look tired and older.\nClear, translucent skin doesn't start with covering things up —\nit starts with quietly clearing the pigment hidden deep beneath the surface." }
-    },
-    "lifting": {
-      "headline": { "light": "Standing at", "strong": "the peak of lifting" },
-      "definition": { "title": "What is sunken facial volume lifting?", "text": "RE:BERRY's own combination lifting treatment that lifts sagging lines and fills sunken volume to rebuild the axis of the face." },
-      "hashtags": ["My nasolabial folds are deep", "I'm bothered by jowls", "My skin elasticity has dropped", "I'm bothered by neck wrinkles", "I want to improve my double chin and jawline", "My eyelids keep drooping"],
-      "solution": { "light": "The key to lifting is ", "strong": "a design matched to your face shape" },
-      "story": { "hook": ["Why does your face", "keep sliding downward?", "It's not just about getting older"], "body": "When even one layer weakens,\nthe jawline blurs, nasolabial folds deepen,\nand the face starts to look wider and heavier than it really is.\nLifting doesn't start with 'pulling' —\nit starts with finding what caused the structure to collapse." }
-    },
     "booster": {
+      "heroDescription": "A RE:BERRY signature treatment for sagging and hollowing",
       "headline": { "light": "Standing at", "strong": "the peak of volume" },
-      "definition": { "title": "What is a booster?", "text": "A treatment that delivers active ingredients directly into the dermis to deeply hydrate and reinforce a compromised skin barrier." },
+      "definition": { "title": "What is the RE:BERRY Volume Booster?", "text": "A signature treatment that addresses both hollowing and sagging to design volume and firmness for each face." },
       "hashtags": ["My nasolabial folds are deep", "I'm bothered by jowls", "My skin elasticity has dropped", "I'm bothered by neck wrinkles", "I want to improve my double chin and jawline", "My eyelids keep drooping"],
       "solution": { "light": "The key to volume is", "strong": "a design treatment matched to sagging and hollowing" },
-      "story": { "hook": ["Why does your face", "keep losing vitality and looking hollow?", "It's not just about getting older"], "body": "When even one layer loses elasticity,\nvolume hollows out, lines collapse,\nand the face starts to look more gaunt and older than it really is.\nTrue anti-aging doesn't start with filling in —\nit starts with finding the root cause of the lost volume\nand rebuilding it firmly." }
+      "story": { "hook": ["Why does your face", "keep losing vitality and looking hollow?", "It's not just about getting older"], "body": "When even one layer loses elasticity,\nvolume hollows out and facial lines collapse.\nTrue anti-aging is not simply about filling.\nIt starts with finding the cause of lost volume\nand rebuilding the structure with balance." },
+      "columnHeading": "Verified by research, clinically proven Volume Booster stories"
     },
     "acne": {
-      "headline": { "light": "Smoothly refined,", "strong": "standing at the peak of flawlessness" },
-      "definition": { "title": "What is acne treatment?", "text": "A treatment that selectively targets the sebaceous glands to remove the root cause of acne and create a clean skin environment." },
-      "hashtags": ["Inflammatory acne keeps appearing on my jawline", "Whiteheads suddenly appeared", "Acne stops me from pushing my hair back", "I have too many acne scars on my cheeks", "I'm scared of acne", "My acne marks won't disappear"],
-      "solution": { "light": "The key to acne treatment is ", "strong": "blocking the root cause to prevent recurrence" },
-      "story": { "hook": ["Why does your skin", "keep breaking out again and again?", "It's not just about improper cleansing"], "body": "Even a single small blemish\ncan break the overall smoothness of your skin,\nleave a mark, and make you look unsettled\nand older.\nClear skin doesn't start with forcing it out —\nit starts with correcting the oil-water balance\nthat builds up beneath the surface." }
+      "heroDescription": "Structural facial balance through non-surgical chin augmentation",
+      "headline": { "light": "Awakening dimension", "strong": "with the volume you need" },
+      "definition": { "title": "What is non-surgical chin augmentation filler?", "text": "Filler restores projection to a recessed or underdeveloped chin, balancing the facial profile and creating natural dimension." },
+      "hashtags": ["My forehead and cheeks look flat", "Deep folds make me look older", "Hollow cheeks make me look tired", "My recessed chin blurs my facial line", "I want a slimmer, more dimensional face", "Lines around my mouth bother me"],
+      "solution": { "light": "The key to filler is", "strong": "precise volume design tailored to each face for natural dimension" },
+      "story": { "hook": ["Why does your face", "lack definition and dimension?", "It is not simply a lack of volume"], "body": "A recessed chin can disrupt facial balance\nand make the mouth and jawline look short or heavy.\nChin augmentation begins not with simply adding volume,\nbut with designing the profile from forehead to chin\naccording to your individual proportions." },
+      "columnHeading": "Verified by research, clinically proven filler stories"
     },
     "redness": {
-      "headline": { "light": "Calm in any moment,", "strong": "standing at the peak of clarity" },
-      "definition": { "title": "What is redness treatment?", "text": "A treatment that selectively treats only the enlarged, abnormal vessels to improve a red, blotchy skin tone into a clear, even one." },
-      "hashtags": ["My face turns red easily", "My face flushes from menopause", "My face turns red whenever I'm nervous", "I can see fine blood vessels in my skin", "Makeup can't cover the redness"],
-      "solution": { "light": "The key to redness treatment is", "strong": "vascular care tailored to the cause" },
-      "story": { "hook": ["Why does your face", "become red and sensitive so often?", "It's not just about mood swings"], "body": "When even a small stimulus triggers redness,\nthe overall balance of your skin breaks down, blotches appear,\nand you start to look uneasy and older.\nCalm skin doesn't start with covering the redness —\nit starts with building up a skin barrier\nthat isn't shaken by irritation." }
+      "heroDescription": "A combined approach to under-eye bulging and hollowing",
+      "headline": { "light": "Clear and defined", "strong": "at the peak of brightening" },
+      "definition": { "title": "What is non-surgical under-eye fat repositioning?", "text": "A combined treatment that addresses under-eye bulging, hollowing, and laxity without surgery to soften shadows and uneven contours." },
+      "hashtags": ["My under-eyes look puffy", "Under-eye hollows bother me", "Dark circles make me look tired", "My under-eye contour looks uneven", "I want a natural non-surgical improvement"],
+      "solution": { "light": "The key to volume is", "strong": "a design treatment matched to sagging and hollowing" },
+      "story": { "hook": ["Why do your under-eyes", "look especially tired and shadowed?", "It is not only about dark-circle color"], "body": "When bulging and hollowing occur together,\nthe boundary between light and shadow deepens.\nUnder-eye correction is not about filling one spot.\nIt begins with restoring the balance among projection,\nhollowing, and skin firmness." },
+      "columnHeading": "Verified by research, clinically proven fat repositioning stories"
     }
   },
   "skin": {

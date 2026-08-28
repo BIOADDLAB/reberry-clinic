@@ -7,7 +7,7 @@
 
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import type { BAPhoto } from '@/components/lib/ba';
+import { resolveBALabel, type BAPhoto } from '@/components/lib/ba';
 import { useBAPhotos, useBAPhotosLoading, filterBAPhotosBySlug } from '@/components/lib/useBAPhotos';
 import { useOverflowSlider } from '@/components/lib/useOverflowSlider';
 import { cn } from '@/components/lib/cn';
@@ -20,6 +20,7 @@ const SKELETON_COUNT = 4;
 
 function Card({ b, overflow }: { b: BAPhoto; overflow: boolean }) {
     const t = useTranslations('common');
+    const label = resolveBALabel(b);
 
     return (
         <article
@@ -29,13 +30,13 @@ function Card({ b, overflow }: { b: BAPhoto; overflow: boolean }) {
             {/* 시술명은 messages/*.json 의 labels 네임스페이스로 교체, "전후 사진"은 common 네임스페이스로 교체.
                 번역문이 길어 제목이 3줄로 터지면 카드(439px)를 넘기므로 t-2line 으로 두 줄 고정 */}
             <h3 className="t-2line px-3 py-5 text-center text-lead font-bold leading-snug">
-                <T ko={b.label} /> {t('beforeAfter')}
+                <T ko={label} /> {t('beforeAfter')}
             </h3>
 
             <div className="skeleton relative h-[147px] w-full overflow-hidden">
                 <Image
                     src={b.before}
-                    alt={t('beforeAltWithLabel', { label: b.label })}
+                    alt={t('beforeAltWithLabel', { label })}
                     fill
                     quality={85}
                     sizes="244px"
@@ -65,8 +66,8 @@ function Card({ b, overflow }: { b: BAPhoto; overflow: boolean }) {
             </div>
 
             <div className="flex flex-1 flex-col items-center justify-center px-3 pb-3.5 pt-4">
-                <p className="t-1line max-w-full rounded-full bg-cocoa px-4 text-center text-lead font-bold text-cream">
-                    <T ko={b.label} />
+                <p className="line-clamp-2 max-w-full rounded-[16px] bg-cocoa px-4 py-0.5 text-center text-small font-bold leading-snug text-cream">
+                    <T ko={label} />
                 </p>
                 <span className="notranslate font-display text-caption mt-1 text-cocoa/30">RE:BERRY</span>
             </div>

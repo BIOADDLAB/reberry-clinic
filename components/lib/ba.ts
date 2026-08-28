@@ -11,6 +11,13 @@ export interface BAPhoto {
     main?: number; // 메인페이지(BASlider) 노출 순서. 1,2,3... 숫자 있으면 노출 + 그 순서로 정렬, 없으면(undefined) 메인에 미노출
     category?: string; // 전후사진 페이지(/reviews) 카테고리 탭. 비어 있으면 slug 로 자동 배정 (BA_CATEGORY_BY_SLUG)
     place?: string; // 어디에 노출할지. 'treatment' | 'reviews' | 'both'. 값이 없는 기존 사진은 'both' 로 읽는다
+    treatmentDate?: string; // 시술일. 관리자 date input에서 저장하는 YYYY-MM-DD 형식
+}
+
+/** 시술일을 시간대 변환 없이 YYYY.MM.DD 형식으로 표시한다. */
+export function formatTreatmentDate(value?: string): string {
+    const matched = value?.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return matched ? `${matched[1]}.${matched[2]}.${matched[3]}` : '';
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -48,6 +55,22 @@ export function resolveBASlugs(photo: Pick<BAPhoto, 'slug' | 'slugs'>): string[]
     return selected.length > 0 ? [...new Set(selected)] : photo.slug ? [photo.slug] : [];
 }
 
+const RENAMED_SIGNATURE_BA_LABELS: Record<string, { label: string; legacy: string[] }> = {
+    booster: { label: '리베리 볼륨 부스터', legacy: ['부스터', '볼륨부스터', '볼륨 부스터'] },
+    acne: { label: '비수술 앞턱전진 필러', legacy: ['여드름', '여드름치료', '여드름 치료'] },
+    redness: { label: '비수술 눈밑 지방 재배치', legacy: ['홍조', '홍조치료', '홍조 치료'] },
+};
+
+/** 기존 시그니처 사진은 DB를 다시 올리지 않아도 예전 라벨만 새 명칭으로 표시한다. */
+export function resolveBALabel(photo: Pick<BAPhoto, 'slug' | 'slugs' | 'label'>): string {
+    const current = photo.label.trim();
+    for (const slug of resolveBASlugs(photo)) {
+        const renamed = RENAMED_SIGNATURE_BA_LABELS[slug];
+        if (renamed?.legacy.includes(current)) return renamed.label;
+    }
+    return current;
+}
+
 /* ─────────────────────────────────────────────────────────────
    전후사진 페이지(/reviews) 카테고리 탭
    #ISSUE: slug 는 "어느 시그니처 페이지에 뜰지"를 정하는 값이라 축이 다르다.
@@ -70,8 +93,9 @@ export type BACategoryKey = (typeof BA_CATEGORIES)[number]['key'];
 /** 카테고리 값이 없는 기존 사진을 기존 slug 로 자동 배정한다 (데이터 마이그레이션 없이 바로 분류됨) */
 const BA_CATEGORY_BY_SLUG: Record<string, BACategoryKey> = {
     pigment: 'pigment',
-    acne: 'acne',
-    redness: 'redness',
+    // 시그니처의 acne/redness route key는 새 시술로 재사용한다.
+    acne: 'petit',
+    redness: 'petit',
     lifting: 'lifting',
     booster: 'petit',
     'skin-pigment': 'pigment',
@@ -103,21 +127,15 @@ export const baCategoryLabel = (key: string) => BA_CATEGORIES.find((c) => c.key 
 저장 위치: /public/images/ba/
 파일명 규칙: {code}-{순번}-{b|a}.jpg
 
-code 매핑 & 파일명 예시
-- pigment (색소)      → pig-1-b.jpg   ~ pig-{count}-a.jpg
-- volume-lifting      → vlift-1-b.jpg ~ vlift-{count}-a.jpg
-- volume-booster      → vboost-1-b.jpg ~ vboost-{count}-a.jpg
-- acne (여드름)        → acne-1-b.jpg  ~ acne-{count}-a.jpg
-- redness (홍조)       → red-1-b.jpg   ~ red-{count}-a.jpg
+code 매핑은 기존 파일명을 유지한다. 화면 라벨과 페이지 의미는 위
+RENAMED_SIGNATURE_BA_LABELS에서 새 시그니처 명칭으로 변환한다.
 
 카테고리별 장수는 CATEGORIES 배열의 count 값만 수정하면 됨. 10장 넘는 곳은
 count를 그 개수로 바꾸고, 실제 파일도 그 개수만큼 넣으면 끝.
 */
 
 const code: Record<string, string> = {
-    lifting: 'vlift',
     booster: 'vboost',
-    pigment: 'pig',
     acne: 'acne',
     redness: 'red',
 };
@@ -125,11 +143,9 @@ const code: Record<string, string> = {
 const ba = (slug: string, n: number, type: 'b' | 'a') => `/images/ba/${code[slug]}-${n}-${type}.jpg`;
 
 const CATEGORIES: { slug: string; label: string; count: number; mainOrder: number }[] = [
-    { slug: 'pigment', label: '색소치료', count: 10, mainOrder: 1 },
-    { slug: 'lifting', label: '볼륨리프팅', count: 9, mainOrder: 2 },
-    { slug: 'booster', label: '볼륨부스터', count: 14, mainOrder: 3 },
-    { slug: 'acne', label: '여드름치료', count: 8, mainOrder: 4 },
-    { slug: 'redness', label: '홍조치료', count: 3, mainOrder: 5 },
+    { slug: 'booster', label: '리베리 볼륨 부스터', count: 14, mainOrder: 1 },
+    { slug: 'acne', label: '비수술 앞턱전진 필러', count: 8, mainOrder: 2 },
+    { slug: 'redness', label: '비수술 눈밑 지방 재배치', count: 3, mainOrder: 3 },
 ];
 
 const genCategory = ({ slug, label, count, mainOrder }: (typeof CATEGORIES)[number]): BAPhoto[] =>

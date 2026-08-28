@@ -3,19 +3,12 @@ import { notFound, redirect } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
-import {
-    treatments,
-    findTreatment,
-    categoryLabel,
-    localizeTreatment,
-    type Category,
-} from '@/components/lib/treatments';
+import { treatments, findTreatment, categoryLabel, localizeTreatment, type Category } from '@/components/lib/treatments';
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbJsonLd, faqPageJsonLd, medicalWebPageJsonLd } from '@/components/lib/jsonLd';
 import Image from 'next/image';
 import Reveal from '@/components/motion/Reveal';
 import { cn } from '@/components/lib/cn';
-import BACardSlider from '@/components/ui/BACardSlider';
 import { SpinEmblem, FloatingCream } from '@/components/ui/DecoItem';
 import SectionDivider from '@/components/ui/SectionDivider';
 import Eyebrow from '@/components/ui/Eyebrow';
@@ -24,11 +17,10 @@ import SolutionSlider from '@/components/ui/SolutionSlider';
 import IvTagBox from '@/components/ui/IvTagBox';
 import { TwoDots } from '@/components/ui/DecoItem';
 import StepPlan from '@/components/ui/StepPlan';
-import { getColumnsBySlug } from '@/components/lib/columns';
-import ColumnSlider from '@/components/ui/ColumnSlider';
 import FAQAccordion from '@/components/ui/FAQAccordion';
 import TreatmentIntroSection from '@/components/ui/TreatmentIntroSection';
 import TreatmentColumnSection from '@/components/ui/TreatmentColumnSection';
+import TreatmentBASection from '@/components/ui/TreatmentBASection';
 import { AGING_LIFTING_PAGES, skinTreatmentPageSlug } from '@/components/lib/adminConfig';
 
 /* ════════════════════════════════════════════════════════════════════
@@ -67,10 +59,7 @@ export function generateStaticParams() {
 // faq.sharedSignatureExtra / faq.boosterExtra 를 faq.common 과 합쳐 원본 treatments.ts 의
 // sharedSignatureFaq / boosterFaq 순서 그대로 재조립한다.
 type FaqItem = { q: string; a: string };
-function buildFaq(
-    faqRaw: { common: FaqItem[]; sharedSignatureExtra: FaqItem[]; boosterExtra: FaqItem[] },
-    kind: 'shared' | 'booster',
-) {
+function buildFaq(faqRaw: { common: FaqItem[]; sharedSignatureExtra: FaqItem[]; boosterExtra: FaqItem[] }, kind: 'shared' | 'booster') {
     if (kind === 'shared') {
         const [first, last] = faqRaw.sharedSignatureExtra;
         return [first, ...faqRaw.common, last];
@@ -106,8 +95,6 @@ const heroImage: Record<string, string> = {
 };
 
 const sigCard: Record<string, string> = {
-    lifting: '01',
-    pigment: '02',
     redness: '03',
     acne: '04',
     booster: '05',
@@ -115,6 +102,10 @@ const sigCard: Record<string, string> = {
 
 export default async function TreatmentPage({ params }: Params) {
     const { category, slug } = await params;
+    // 삭제된 예전 시그니처 주소로 들어와도 404 대신 새 대표 페이지로 보낸다.
+    if (category === 'signature' && (slug === 'pigment' || slug === 'lifting')) {
+        redirect('/treatments/signature/booster');
+    }
     const rawTreatment = findTreatment(category, slug);
     if (!rawTreatment) notFound();
     if (category === 'aging' && slug === 'laser-lifting') {
@@ -133,8 +124,9 @@ export default async function TreatmentPage({ params }: Params) {
 
     // 시그니처 여부
     const sig = t.signature;
-    const faq = sig && !isKo ? buildFaq(tTreatments.raw('faq'), sig.faqSet) : sig?.faq;
-    const columns = sig ? getColumnsBySlug(t.slug) : [];
+    const rawFaq = sig && !sig.hideFaq ? (!isKo ? buildFaq(tTreatments.raw('faq'), sig.faqSet) : sig.faq) : undefined;
+    // 의료진 확정 답변이 아직 없는 #TODO 항목은 공개 화면과 구조화 데이터에서 숨긴다.
+    const faq = rawFaq?.filter((item) => !item.a.startsWith('#TODO'));
     const pageContentSlug = t.category === 'skin' ? (skinTreatmentPageSlug(t.slug) ?? t.slug) : t.slug;
 
     // 섹션 본문. 여기서는 "무엇을 그릴지"만 만들고, "어떤 순서로 그릴지"는 SECTION_ORDER 가 정한다
@@ -152,14 +144,7 @@ export default async function TreatmentPage({ params }: Params) {
         /* #TODO: 반응형 작업 조금 더 들어가야함 크림이 어색하게 떠있는 부분들이 있음 */
         story: sig ? (
             <section className="relative texture-paper py-20 lg:pt-35 lg:pb-42.5">
-                <Image
-                    src="/images/bg-texture-06.jpg"
-                    alt=""
-                    fill
-                    quality={85}
-                    sizes="100vw"
-                    className="object-cover"
-                />
+                <Image src="/images/bg-texture-06.jpg" alt="" fill quality={85} sizes="100vw" className="object-cover" />
                 <div className="container-site relative">
                     <Reveal className="text-center">
                         <p className="font-display text-h2 tracking-tight">{t.en}</p>
@@ -207,19 +192,7 @@ export default async function TreatmentPage({ params }: Params) {
         ) : null,
 
         /* 전후사진 — 시그니처 기존 구성 + 피부교정 신규 구성 */
-        ba:
-            sig || t.category === 'skin' ? (
-                <section className="texture-dark py-20 bg-cocoa! text-cream lg:py-30">
-                    <div className="container-site">
-                        <Reveal className="text-center">
-                            <h2 className="font-display text-h2 tracking-[0.06em]">Your Beauty Physician</h2>
-                        </Reveal>
-                        <Reveal className="mt-12">
-                            <BACardSlider slug={pageContentSlug} />
-                        </Reveal>
-                    </div>
-                </section>
-            ) : null,
+        ba: sig || t.category === 'skin' ? <TreatmentBASection slug={pageContentSlug} /> : null,
 
         /* 솔루션 영역 - 시그니처, 안티에이징, 피부교정 공통 */
         /* #FIX: 반응형 좀 더 다듬기 */
@@ -289,68 +262,40 @@ export default async function TreatmentPage({ params }: Params) {
         step: sig ? null : <StepPlan />,
 
         /* 시그니처 기존 칼럼 + 피부교정 관리자 연결 칼럼 */
-        column:
-            sig && columns.length > 0 ? (
-                <section className="bg-cream relative py-20 lg:pt-32.5 lg:pb-37.5 overflow-x-clip">
-                    <Image
-                        src="/images/bg-texture-08.jpg"
-                        alt=""
-                        fill
-                        quality={80}
-                        sizes="100vw"
-                        className="object-cover"
-                    />
-                    <div className="relative container-site">
-                        <Reveal className="text-center">
-                            <h2 className="font-display text-h2">Column</h2>
-                            <p className="mt-10 text-h2 tracking-tighter leading-9">
-                                {tTreatments.rich('chrome.columnIntro', {
-                                    name,
-                                    hl: (chunks) => <strong className="font-bold">{chunks}</strong>,
-                                })}
-                            </p>
-                        </Reveal>
-                        <Reveal className="mt-19.5">
-                            <ColumnSlider items={columns} slug={t.slug} />
-                        </Reveal>
-                    </div>
-                </section>
+        column: sig ? (
+                <TreatmentColumnSection slug={t.slug} name={name} heading={sig.columnHeading} />
             ) : t.category === 'skin' ? (
                 <TreatmentColumnSection slug={pageContentSlug} name={name} />
             ) : null,
 
         /* 시그니처 전용 — FAQ */
-        faq: sig ? (
+        faq: faq ? (
             <section className="texture-dark relative py-20 text-cream lg:pt-30 lg:pb-25">
-                <Image
-                    src="/images/bg-texture-09.jpg"
-                    alt=""
-                    fill
-                    quality={80}
-                    sizes="100vw"
-                    className="object-cover"
-                />
+                <Image src="/images/bg-texture-09.jpg" alt="" fill quality={80} sizes="100vw" className="object-cover" />
                 <div className="container-site relative">
                     <Reveal className="text-center">
                         <h2 className="font-display text-h2 tracking-[0.7em] leading-12 md:text-h2">RE:BERRY FAQ</h2>
                         <p className="text-h2  font-bold leading-12.5">{tTreatments('chrome.faqHeading')}</p>
                     </Reveal>
                     <Reveal className="mt-17">
-                        <FAQAccordion items={faq!} />
+                        <FAQAccordion items={faq} />
                     </Reveal>
                 </div>
             </section>
         ) : null,
     };
 
-    const order = sig ? SECTION_ORDER.signature : t.category === 'skin' ? SECTION_ORDER.skin : SECTION_ORDER.other;
+    const order = sig
+        ? SECTION_ORDER.signature
+        : t.category === 'skin'
+          ? SECTION_ORDER.skin
+          : SECTION_ORDER.other;
     const path = `/treatments/${t.category}/${t.slug}`;
     const description = `${t.definition.title} — ${t.definition.text}`;
-    const localizedCategory = isKo
-        ? categoryLabel[t.category]
-        : (tTreatments.raw('categoryLabel') as Record<Category, string>)[t.category];
+    const localizedCategory =
+        isKo ? categoryLabel[t.category] : (tTreatments.raw('categoryLabel') as Record<Category, string>)[t.category];
     const categoryHub: Record<string, string> = {
-        signature: '/treatments/signature/pigment',
+        signature: '/treatments/signature/booster',
         skin: '/treatments/skin/pigment',
         aging: `/treatments/aging/laser-lifting/${AGING_LIFTING_PAGES[0].itemSlug}`,
     };
@@ -366,7 +311,12 @@ export default async function TreatmentPage({ params }: Params) {
             <JsonLd data={medicalWebPageJsonLd({ name, description, path })} />
             <JsonLd data={faq ? faqPageJsonLd(faq) : null} />
 
-            <SubHero en={t.en} title={isKo ? t.name : undefined} image={heroImage[t.category]} />
+            <SubHero
+                en={t.heroEn ?? t.en}
+                title={isKo ? t.name : undefined}
+                description={t.heroDescription}
+                image={heroImage[t.category]}
+            />
 
             {order.map((key) => (
                 <Fragment key={key}>{sections[key]}</Fragment>

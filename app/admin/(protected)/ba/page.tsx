@@ -32,6 +32,7 @@ import {
     BA_PLACES,
     baCategoryLabel,
     baPlaceLabel,
+    formatTreatmentDate,
     resolveBACategory,
     resolveBAPlace,
     resolveBASlugs,
@@ -50,6 +51,7 @@ interface BAPhotoDoc {
     order?: number; // 그 시그니처 페이지 안에서의 순서
     category?: string; // 전후사진 페이지(/reviews) 카테고리 탭
     place?: string; // 노출 위치 treatment/reviews/both (없으면 both)
+    treatmentDate?: string; // 시술일 YYYY-MM-DD
 }
 
 const EMPTY_FORM = {
@@ -60,6 +62,7 @@ const EMPTY_FORM = {
     category: (resolveBACategory({ slug: TREATMENT_PAGES[0].slug }) ?? BA_CATEGORIES[0].key) as string,
     useCustomLabel: false,
     customLabel: '',
+    treatmentDate: '',
     order: 1,
     showMain: false,
     mainOrder: 1,
@@ -153,6 +156,7 @@ export default function AdminBAPage() {
             category,
             useCustomLabel: it.label !== auto,
             customLabel: it.label,
+            treatmentDate: it.treatmentDate ?? '',
             order: it.order ?? 1,
             showMain: typeof it.main === 'number',
             mainOrder: it.main ?? 1,
@@ -215,6 +219,7 @@ export default function AdminBAPage() {
     const submit = async () => {
         if (usesTreatment && form.slugs.length === 0) return alert('노출할 시술 페이지를 한 개 이상 선택하세요.');
         if (!finalLabel) return alert('표시 라벨을 입력하세요.');
+        if (!form.treatmentDate) return alert('시술일을 선택하세요.');
         if (!editingId && (!beforeFile || !afterFile)) return alert('전/후 사진을 모두 선택하세요.');
         if (isDuplicateOrder)
             return alert(
@@ -241,6 +246,7 @@ export default function AdminBAPage() {
                 slugs: form.slugs,
                 category: form.category,
                 label: finalLabel,
+                treatmentDate: form.treatmentDate,
                 before: beforeUrl,
                 after: afterUrl,
                 order: form.order,
@@ -408,6 +414,19 @@ export default function AdminBAPage() {
                     </div>
                 </div>
 
+                <label className="mt-4 block text-small">
+                    <span className="font-semibold text-cocoa">시술일</span>
+                    <input
+                        type="date"
+                        value={form.treatmentDate}
+                        onChange={(e) => setForm({ ...form, treatmentDate: e.target.value })}
+                        className={`${inputCls} mt-1.5`}
+                    />
+                    <span className="mt-1 block text-caption text-latte">
+                        전후사진 페이지 카드와 확대 모달에 YYYY.MM.DD 형식으로 표시됩니다.
+                    </span>
+                </label>
+
                 {/* 사진 */}
                 <div className="mt-5 rounded-lg bg-cocoa/[0.03] p-4">
                     <p className="text-small font-semibold text-cocoa">사진 업로드</p>
@@ -544,6 +563,7 @@ export default function AdminBAPage() {
                     onClick={submit}
                     disabled={
                         busy ||
+                        !form.treatmentDate ||
                         (usesTreatment && form.slugs.length === 0) ||
                         isDuplicateOrder ||
                         isDuplicateMain ||
@@ -554,6 +574,8 @@ export default function AdminBAPage() {
                 >
                     {busy
                         ? '업로드 중...'
+                        : !form.treatmentDate
+                          ? '시술일을 선택하세요'
                         : usesTreatment && form.slugs.length === 0
                           ? '시술 페이지를 선택하세요'
                           : isDuplicateOrder || isDuplicateMain
@@ -633,6 +655,11 @@ export default function AdminBAPage() {
                                     </span>
                                 )}
                             </p>
+                            {it.treatmentDate && (
+                                <p className="mt-0.5 text-caption text-latte">
+                                    시술일 {formatTreatmentDate(it.treatmentDate)}
+                                </p>
+                            )}
                         </div>
                         <div className="flex shrink-0 gap-3 text-small">
                             <button onClick={() => startEdit(it)} className="text-cocoa underline">

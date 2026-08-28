@@ -1,6 +1,6 @@
 # 리베리의원 마포점 (RE:BERRY Clinic Mapo)
 
-> 서울 마포구청역 인근 피부과. 대표원장 유선민(닥터 파이톤). 색소, 리프팅, 볼륨부스터, 여드름, 홍조, 보톡스, 필러 등 맞춤 피부 진료를 제공합니다.
+> 서울 마포구청역 인근 피부과. 대표원장 유선민(닥터 파이톤). 리베리 볼륨 부스터, 비수술 앞턱전진 필러, 비수술 눈밑 지방 재배치와 피부교정·안티에이징 진료를 제공합니다.
 
 ## 기본 정보
 - 공식 사이트: https://www.reberryclinicmapo.com
@@ -18,11 +18,9 @@
 ## 주요 페이지
 - [홈](https://www.reberryclinicmapo.com/): 병원 소개와 시술 안내
 - [의료진](https://www.reberryclinicmapo.com/doctors): 대표원장 유선민 소개
-- [색소](https://www.reberryclinicmapo.com/treatments/signature/pigment)
-- [리프팅](https://www.reberryclinicmapo.com/treatments/signature/lifting)
-- [볼륨부스터](https://www.reberryclinicmapo.com/treatments/signature/booster)
-- [여드름](https://www.reberryclinicmapo.com/treatments/signature/acne)
-- [홍조](https://www.reberryclinicmapo.com/treatments/signature/redness)
+- [리베리 볼륨 부스터](https://www.reberryclinicmapo.com/treatments/signature/booster)
+- [비수술 앞턱전진 필러](https://www.reberryclinicmapo.com/treatments/signature/acne)
+- [비수술 눈밑 지방 재배치](https://www.reberryclinicmapo.com/treatments/signature/redness)
 - [비급여 수가표](https://www.reberryclinicmapo.com/price-list)
 - [예약](https://www.reberryclinicmapo.com/reservation)
 - [피부칼럼](https://www.reberryclinicmapo.com/column): 목록은 사이트, 원문은 네이버 블로그

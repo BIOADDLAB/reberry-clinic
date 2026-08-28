@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import type { BAPhoto } from '@/components/lib/ba';
+import { formatTreatmentDate, resolveBALabel, type BAPhoto } from '@/components/lib/ba';
 import T from '@/components/lang/T';
 
 interface Props {
@@ -26,6 +26,7 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
     }, [photo, onClose]);
 
     if (!photo) return null;
+    const label = resolveBALabel(photo);
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-deep/70 p-4" onClick={onClose}>
@@ -44,7 +45,7 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
                 </button>
 
                 <h3 className="t-2line px-8 text-center text-h3 font-bold text-cream/90 text-shadow-2xs">
-                    <T ko={photo.label} />
+                    <T ko={label} />
                 </h3>
 
                 <div className="mt-6 grid grid-cols-2 gap-2 sm:gap-4">
@@ -52,7 +53,7 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
                     <div className="skeleton relative aspect-[4/3] overflow-hidden rounded-[4px]">
                         <Image
                             src={photo.before}
-                            alt={t('beforeAltWithLabel', { label: photo.label })}
+                            alt={t('beforeAltWithLabel', { label })}
                             fill
                             quality={90}
                             sizes="(max-width: 640px) 45vw, 320px"
@@ -62,7 +63,7 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
                     <div className="skeleton relative aspect-[4/3] overflow-hidden rounded-[4px]">
                         <Image
                             src={photo.after}
-                            alt={t('afterAltWithLabel', { label: photo.label })}
+                            alt={t('afterAltWithLabel', { label })}
                             fill
                             quality={90}
                             sizes="(max-width: 640px) 45vw, 320px"
@@ -74,6 +75,14 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
                 <p className="notranslate font-display mt-5 flex items-center justify-center gap-4 text-lead text-cream text-shadow-2xs">
                     Before <span aria-hidden>→</span> After
                 </p>
+                {photo.treatmentDate && (
+                    <p className="mt-2 text-center text-caption text-cocoa/65">
+                        {t('treatmentDate')}{' '}
+                        <time dateTime={photo.treatmentDate} className="notranslate">
+                            {formatTreatmentDate(photo.treatmentDate)}
+                        </time>
+                    </p>
+                )}
                 <p className="notranslate font-display text-center text-small text-shadow-2xs tracking-[0.2em] text-cream">
                     RE:BERRY
                 </p>

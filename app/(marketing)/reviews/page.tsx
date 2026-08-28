@@ -9,7 +9,7 @@ import BAPhotoModal from '@/components/ui/BAPhotoModal';
 import Skeleton from '@/components/ui/Skeleton';
 import T from '@/components/lang/T';
 import { cn } from '@/components/lib/cn';
-import { BA_CATEGORIES, resolveBACategory, type BAPhoto } from '@/components/lib/ba';
+import { BA_CATEGORIES, formatTreatmentDate, resolveBACategory, type BAPhoto } from '@/components/lib/ba';
 import { filterReviewBAPhotos, useBAPhotos, useBAPhotosLoading } from '@/components/lib/useBAPhotos';
 
 const PER_PAGE = 8;
@@ -28,6 +28,7 @@ const shuffle = (arr: BAPhoto[]) => {
 
 export default function ReviewsPage() {
     const tReviews = useTranslations('reviews');
+    const tCommon = useTranslations('common');
     const [page, setPage] = useState(1);
     const [category, setCategory] = useState<string>(ALL);
     const allPhotos = useBAPhotos();
@@ -185,6 +186,14 @@ export default function ReviewsPage() {
                                           <p className="notranslate font-display text-center text-small tracking-[0.2em] text-cream/40">
                                               RE:BERRY
                                           </p>
+                                          {r.treatmentDate && (
+                                              <p className="mt-2 text-center text-caption text-cocoa/60">
+                                                  {tCommon('treatmentDate')}{' '}
+                                                  <time dateTime={r.treatmentDate} className="notranslate">
+                                                      {formatTreatmentDate(r.treatmentDate)}
+                                                  </time>
+                                              </p>
+                                          )}
                                       </div>
                                   </div>
                               ))}

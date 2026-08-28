@@ -4,10 +4,10 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import DeviceColumnSlider from '@/components/ui/DeviceColumnSlider';
-import BACardSlider from '@/components/ui/BACardSlider';
 import StepPlan from '@/components/ui/StepPlan';
 import TreatmentIntroSection from '@/components/ui/TreatmentIntroSection';
 import TreatmentColumnSection from '@/components/ui/TreatmentColumnSection';
+import TreatmentBASection from '@/components/ui/TreatmentBASection';
 import { columns } from '@/components/lib/columns';
 import Reveal from '@/components/motion/Reveal';
 import { zoom } from '@/components/lib/motion';
@@ -21,7 +21,7 @@ interface Params {
     params: Promise<{ category: string; slug: string; item: string }>;
 }
 
-// 시술 × 그 시술의 items 조합으로 상세 주소 자동 생성 (예: /treatments/signature/lifting/ulthera)
+// 시술 × 그 시술의 items 조합으로 상세 주소 자동 생성
 export function generateStaticParams() {
     return treatments.flatMap((t) => t.items.map((item) => ({ category: t.category, slug: t.slug, item })));
 }
@@ -38,13 +38,7 @@ export async function generateMetadata({ params }: Params) {
         category === 'aging' && slug === 'laser-lifting'
             ? AGING_LIFTING_PAGES.find((page) => page.itemSlug === item)
             : undefined;
-    const title = liftingPage
-        ? locale === 'ko'
-            ? liftingPage.label
-            : `${s.engName} Lifting`
-        : locale === 'ko'
-          ? s.name
-          : s.engName;
+    const title = liftingPage ? (locale === 'ko' ? liftingPage.label : `${s.engName} Lifting`) : locale === 'ko' ? s.name : s.engName;
 
     return { title: `${title} | RE:BERRY`, description: s.desc.join(', ') };
 }
@@ -62,7 +56,10 @@ export default async function SolutionDetailPage({ params }: Params) {
     if (!rawTreatment || !rawSolution) notFound();
 
     const locale = await getLocale();
-    const [tSolutions, tTreatments] = await Promise.all([getTranslations('solutions'), getTranslations('treatments')]);
+    const [tSolutions, tTreatments] = await Promise.all([
+        getTranslations('solutions'),
+        getTranslations('treatments'),
+    ]);
     const isKo = locale === 'ko';
     const s = localizeSolution(rawSolution, locale === 'ko' ? undefined : tSolutions.raw(rawSolution.slug));
     const t = localizeTreatment(
@@ -81,7 +78,7 @@ export default async function SolutionDetailPage({ params }: Params) {
     const treatmentName = isKo ? t.name : t.en;
     const description = s.introDescription || s.desc.join(' ');
     const categoryHub: Record<string, string> = {
-        signature: '/treatments/signature/pigment',
+        signature: '/treatments/signature/booster',
         skin: '/treatments/skin/pigment',
         aging: `/treatments/aging/laser-lifting/${AGING_LIFTING_PAGES[0].itemSlug}`,
     };
@@ -92,7 +89,9 @@ export default async function SolutionDetailPage({ params }: Params) {
                 data={breadcrumbJsonLd([
                     { name: '홈', path: '/' },
                     { name: categoryLabel[t.category], path: categoryHub[t.category] ?? path },
-                    ...(!isAgingLiftingPage ? [{ name: t.name, path: `/treatments/${category}/${slug}` }] : []),
+                    ...(!isAgingLiftingPage
+                        ? [{ name: t.name, path: `/treatments/${category}/${slug}` }]
+                        : []),
                     { name: itemName, path },
                 ])}
             />
@@ -187,16 +186,7 @@ export default async function SolutionDetailPage({ params }: Params) {
 
             {isAgingLiftingPage && contentSlug && (
                 <>
-                    <section className="texture-dark bg-cocoa! py-20 text-cream lg:py-30">
-                        <div className="container-site">
-                            <Reveal className="text-center">
-                                <h2 className="font-display text-h2 tracking-[0.06em]">Your Beauty Physician</h2>
-                            </Reveal>
-                            <Reveal className="mt-12">
-                                <BACardSlider slug={contentSlug} />
-                            </Reveal>
-                        </div>
-                    </section>
+                    <TreatmentBASection slug={contentSlug} />
 
                     <TreatmentColumnSection slug={contentSlug} name={itemName} />
                     <StepPlan />

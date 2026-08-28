@@ -44,13 +44,15 @@ export const nav = [
     {
         label: '시그니처시술',
         en: 'SIGNATURE',
-        href: '/treatments/signature/pigment',
+        href: '/treatments/signature/booster',
         children: [
-            { label: '색소', en: 'Pigmentation', href: '/treatments/signature/pigment' },
-            { label: '리프팅', en: 'Lifting', href: '/treatments/signature/lifting' },
-            { label: '부스터', en: 'Booster', href: '/treatments/signature/booster' },
-            { label: '여드름', en: 'Acne', href: '/treatments/signature/acne' },
-            { label: '홍조', en: 'Redness', href: '/treatments/signature/redness' },
+            { label: '리베리 볼륨 부스터', en: 'Volume Booster', href: '/treatments/signature/booster' },
+            { label: '비수술 앞턱전진 필러', en: 'Chin Filler', href: '/treatments/signature/acne' },
+            {
+                label: '비수술 눈밑 지방 재배치',
+                en: 'Under-Eye Repositioning',
+                href: '/treatments/signature/redness',
+            },
         ],
     },
     { label: '전후사진', en: 'BEFORE & AFTER', href: '/reviews' },

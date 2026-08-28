@@ -12,6 +12,8 @@ export interface Treatment {
     category: Category;
     name: string;
     en: string;
+    heroEn?: string; // 히어로에만 쓰는 긴 영문명. 없으면 en을 그대로 사용
+    heroDescription?: string; // 히어로 한글명 아래 보조 문구
     headline?: { light: string; strong: string }; // 캐치프레이즈
     definition: { title: string; text: string };
     hashtags: Chip[];
@@ -27,6 +29,8 @@ export interface Treatment {
         faq: { q: string; a: string }[];
         // messages/treatments/{locale}.json 의 faq.sharedSignatureExtra / faq.boosterExtra 중 어느 것과 조합되는지
         faqSet: 'shared' | 'booster';
+        hideFaq?: boolean;
+        columnHeading: string;
     };
 }
 
@@ -93,82 +97,19 @@ const boosterFaq = [
 export const treatments: Treatment[] = [
     /* ─────────── 시그니처 ─────────── */
     {
-        slug: 'pigment',
-        category: 'signature',
-        visual: 1,
-        visualW: 895,
-        visualH: 584,
-        name: '색소',
-        en: 'Pigmentation',
-        headline: { light: '결점 없이 빛나는', strong: '미백의 정점에 서다' },
-        definition: {
-            title: '색소(잡티) 치료란?',
-            text: '레이저 에너지로 멜라닌 색소를 선택적으로 제거해 피부 톤을 개선하는 시술입니다.',
-        },
-        hashtags: [
-            { text: '얼굴톤이 어두워요' },
-            { text: '기미가 점점 진해져요' },
-            { text: '임신하고 색소가 많이 생겼어요', strong: true },
-            { text: '토닝을 아무리 받아도 효과가 없어요', strong: true },
-            { text: '어릴때부터 있었던 색소가 신경쓰여요' },
-        ],
-        hashtagRows: [3, 2],
-        solution: { light: '색소치료의 핵심은', strong: '피부층에 맞는 정밀한 타겟팅 입니다' },
-        items: ['lipot', 'excelv', 'spectra', 'pico'],
-        signature: {
-            story: {
-                hook: ['당신의 얼굴은', '왜 점점 칙칙하고 어두워질까요?', '자외선 탓만은 아닙니다'],
-                body: '작은 잡티 하나가 생겨도 \n피부 전체의 맑은 빛이 무너지고, 그림자가 지며, \n인상이 지치고 나이 들어 보이기 시작합니다. \n맑고 투명한 피부의 시작은 겉을 가리는 것이 아니라 \n속 깊이 숨은 색소를 깨끗하게 잠재우는 것부터입니다.',
-            },
-            faq: sharedSignatureFaq,
-            faqSet: 'shared',
-        },
-    },
-    {
-        slug: 'lifting',
-        category: 'signature',
-        visual: 9,
-        visualW: 770,
-        visualH: 579,
-        name: '볼륨 리프팅',
-        en: 'Volume Lifting',
-        headline: { light: '리프팅의', strong: '정점에 서다' },
-        definition: {
-            title: '꺼진 얼굴 볼륨 리프팅이란?',
-            text: '처진 라인은 끌어올리고 꺼진 볼륨은 채워, 얼굴의 축을 다시 세우는 리베리만의 복합 리프팅 시술입니다.',
-        },
-        hashtags: [
-            { text: '팔자가 깊어요' },
-            { text: '심술보가 신경쓰여요' },
-            { text: '피부탄력이 떨어져요', strong: true },
-            { text: '목주름이 신경쓰여요', strong: true },
-            { text: '이중턱이랑 턱선을 개선하고 싶어요', strong: true },
-            { text: '눈꺼풀이 점점 처져요' },
-        ],
-        hashtagRows: [3, 3],
-        solution: { light: '리프팅의 핵심은 ', strong: '얼굴형에 맞는 디자인 입니다' },
-        items: ['ulthera', 'onda', 'vro', 'juvelook-volume'],
-        signature: {
-            story: {
-                hook: ['당신의 얼굴은', '왜 점점 아래로 내려올까요?', '나이가 들어서만은 아닙니다'],
-                body: '어느 한 층만 약해져도 \n턱선은 흐려지고, 팔자주름은 깊어지며, \n얼굴은 실제보다 더 넓고 무거워 보이기 시작합니다. \n리프팅의 시작은 ‘당기는 것’이 아니라 \n무너진 원인을 찾는 것부터입니다.',
-            },
-            faq: sharedSignatureFaq,
-            faqSet: 'shared',
-        },
-    },
-    {
         slug: 'booster',
         category: 'signature',
         visual: 15,
         visualW: 843,
         visualH: 591,
-        name: '볼륨 부스터',
+        name: '리베리 볼륨 부스터',
         en: 'Volume Booster',
+        heroEn: 'RE:BERRY Volume Booster',
+        heroDescription: '쥬베룩 볼륨 기반 복합 볼륨 시술',
         headline: { light: '볼륨의', strong: '정점에 서다' },
         definition: {
-            title: '부스터란?',
-            text: '피부 진피층에 유효 성분을 직접 전달하여 깊은 속보습을 채우고 무너진 장벽을 강화하는 시술입니다.',
+            title: '리베리 볼륨 부스터란?',
+            text: '꺼짐과 처짐의 원인을 함께 살펴 얼굴 비율에 맞는 탄력과 볼륨을 설계하는 리베리 시그니처 시술입니다.',
         },
         hashtags: [
             { text: '팔자가 깊어요' },
@@ -188,6 +129,7 @@ export const treatments: Treatment[] = [
             },
             faq: boosterFaq,
             faqSet: 'booster',
+            columnHeading: '논문으로 검증하고, 임상으로 증명한 볼륨부스터 이야기',
         },
     },
     {
@@ -196,31 +138,38 @@ export const treatments: Treatment[] = [
         visual: 2,
         visualW: 949,
         visualH: 592,
-        name: '여드름',
-        en: 'Acne',
-        headline: { light: '매끈하게 정돈된', strong: '무결점의 정점에 서다' },
+        name: '비수술 앞턱전진 필러',
+        en: 'Filler',
+        heroEn: 'Non-Surgical Chin Augmentation Filler',
+        heroDescription: '무턱을 입체적으로 개선하는 구조적 필러 시술',
+        headline: { light: '부족한 볼륨으로', strong: '입체감을 깨우다' },
         definition: {
-            title: '여드름 치료란?',
-            text: '피지선에 선택적으로 작용하여 여드름의 근본적인 원인을 제거하고 깨끗한 피부 환경을 만드는 시술입니다.',
+            title: '비수술 앞턱전진 필러란?',
+            text: '뒤로 들어가거나 부족한 앞턱의 볼륨을 보완해 얼굴의 전후 균형과 자연스러운 입체감을 완성하는 시술입니다.',
         },
         hashtags: [
-            { text: '턱선에 염증성 여드름이 올라와요' },
-            { text: '좁쌀 여드름이 갑자기 생겨요' },
-            { text: '여드름 때문에 앞머리를 못 올려요', strong: true },
-            { text: '볼에 여드름 흉터가 너무 많아요', strong: true },
-            { text: '여드름이 무서워요', strong: true },
-            { text: '여드름 자국이 사라지지 않아요' },
+            { text: '밋밋한 이마와 앞광대가 고민이에요' },
+            { text: '팔자주름이 깊어 나이 들어 보여요' },
+            { text: '볼살이 꺼져 인상이 피곤해 보여요', strong: true },
+            { text: '무턱 때문에 얼굴 라인이 불분명해요', strong: true },
+            { text: '갸름하고 입체적인 얼굴형을 원해요', strong: true },
+            { text: '입가 주름과 마리오네트 라인이 신경 쓰여요' },
         ],
         hashtagRows: [3, 3],
-        solution: { light: '여드름치료의 핵심은 ', strong: '재발을 막는 근본적인 원인 차단입니다' },
-        items: ['gold-ptt', 'potenza'],
+        solution: {
+            light: '필러의 핵심은',
+            strong: '개별 얼굴 비율에 맞춘 섬세한 볼륨 디자인과 자연스러운 입체감 완성입니다',
+        },
+        items: ['restylane', 'belotero-soft', 'renefill', 'lenafill', 'artier'],
         signature: {
             story: {
-                hook: ['당신의 피부는', '왜 반복해서 트러블이 올라올까요?', '잘못된 세안 탓만은 아닙니다'],
-                body: '작은 뽀루지 하나만 생겨도 \n피부 전체의 매끄러움이 무너지고, \n자국이 남으며, 인상이 어수선하고 \n나이 들어 보이기 시작합니다.\n깨끗한 피부의 시작은 억지로 짜내는 것이 아니라 \n속에서 차오르는 유수분 밸런스를 \n바로잡는 것부터입니다.',
+                hook: ['당신의 앞턱은', '왜 어색하게 느껴질까요?', '단순히 용량을 늘리는게 \n답은 아닙니다'],
+                body: '꺼진 부위에 볼륨을 채워 \n구조적 불균형의 원인을 해결하고, \n입체적인 페이스를 완성하는 \n시술입니다.',
             },
             faq: sharedSignatureFaq,
             faqSet: 'shared',
+            hideFaq: true,
+            columnHeading: '논문으로 검증하고, 임상으로 증명한 필러 이야기',
         },
     },
     {
@@ -229,30 +178,34 @@ export const treatments: Treatment[] = [
         visual: 3,
         visualW: 808,
         visualH: 591,
-        name: '홍조',
-        en: 'Redness',
-        headline: { light: '어떤 순간에도 평온한', strong: '투명함의 정점에 서다' },
+        name: '비수술 눈밑 지방 재배치',
+        en: 'Brightening',
+        heroEn: 'Non-Surgical Under-Eye Brightening & Filling',
+        heroDescription: '눈밑 돌출과 꺼짐을 함께 개선하는 복합 시술',
+        headline: { light: '어떤 순간에도 평온한 ', strong: '밝음의 정점에 서다' },
         definition: {
-            title: '홍조 치료란?',
-            text: '늘어난 이상 혈관만을 선택적으로 치료하여 붉고 얼룩덜룩한 피부톤을 맑고 균일하게 개선하는 시술입니다.',
+            title: '비수술 눈밑 지방 재배치란?',
+            text: '눈밑의 돌출과 꺼짐, 피부 탄력을 함께 살펴 수술 없이 그늘진 인상과 울퉁불퉁한 경계를 완화하는 복합 시술입니다.',
         },
         hashtags: [
-            { text: '얼굴이 쉽게 빨개져요' },
-            { text: '갱년기가 와서 얼굴이 화끈거려요' },
-            { text: '긴장할 때마다 얼굴이 붉어져요', strong: true },
-            { text: '피부에 실핏줄이 보여요', strong: true },
-            { text: '화장으로도 붉은기가 안 가려져요' },
+            { text: '눈밑이 불룩해 보여요' },
+            { text: '눈밑 꺼짐이 신경 쓰여요' },
+            { text: '다크서클 때문에 피곤해 보여요', strong: true },
+            { text: '눈밑 경계가 울퉁불퉁해요', strong: true },
+            { text: '수술 없이 자연스럽게 개선하고 싶어요' },
         ],
         hashtagRows: [3, 2],
-        solution: { light: '홍조치료의 핵심은', strong: '원인에 맞는 혈관 맞춤 케어입니다' },
-        items: ['excelv', 'gold-ptt', 'potenza'],
+        // 제공 시안에서 변경 표시가 없는 시술기기 구성을 그대로 사용한다.
+        solution: { light: '볼륨의 핵심은', strong: '처짐과 꺼짐에 맞는 디자인 시술입니다' },
+        items: ['ulthera', 'onda', 'vro', 'juvelook-volume'],
         signature: {
             story: {
-                hook: ['당신의 얼굴은', '왜 수시로 붉고 예민해질까요?', '감정 기복 탓만은 아닙니다'],
-                body: '작은 자극 하나에도 홍조가 생기면 \n피부 전체의 균형이 무너지고, 얼룩이 지며, \n인상이 불안하고 나이 들어 보이기 시작합니다. \n평온한 피부의 시작은 붉기를 가리는 것이 아니라 \n자극에 흔들리는 피부 장벽을 \n튼튼하게 세우는 것부터입니다.',
+                hook: ['당신의 눈밑은', '왜 수시로 어둡고 피곤해 보일까요?', '수면 부족 탓만은 아닙니다'],
+                body: '눈밑 지방이 밀려나와 그늘이 생기면 \n얼굴 전체의 균형이 무너지고, 어둠이 지며, \n인상이 피곤하고 나이 들어 보이기 시작합니다. \n화사한 눈가의 시작은 어두움을 가리는 것이 아니라 \n돌출과 꺼짐을 동시에 잡는 \n구조적 균형을 바로세우는 것부터입니다.',
             },
-            faq: sharedSignatureFaq,
-            faqSet: 'shared',
+            faq: boosterFaq,
+            faqSet: 'booster',
+            columnHeading: '논문으로 검증하고, 임상으로 증명한 지방 재배치 이야기',
         },
     },
 
@@ -313,7 +266,7 @@ export const treatments: Treatment[] = [
         visual: 3,
         visualW: 808,
         visualH: 591,
-        name: '홍조',
+        name: '홍조/주사피부염',
         en: 'Redness',
         headline: { light: '어떤 순간에도 평온한', strong: '투명함의 정점에 서다' },
         definition: {
@@ -630,11 +583,13 @@ export const treatments: Treatment[] = [
 
 // messages/treatments/{locale}.json 의 signature.{slug} / skin.{slug} / aging.{slug} 항목 하나의 모양
 export interface TreatmentTranslation {
+    heroDescription?: string;
     headline?: { light: string; strong: string };
     definition?: { title: string; text: string };
     hashtags?: string[];
     solution?: { light: string; strong: string };
     story?: { hook: [string, string, string]; body: string };
+    columnHeading?: string;
 }
 
 // ko 이외 로케일에서 headline/definition/hashtags/solution/story 를 번역본으로 덮어씌운다.
@@ -643,6 +598,7 @@ export const localizeTreatment = (item: Treatment, override?: TreatmentTranslati
     if (!override) return item;
     return {
         ...item,
+        ...(override.heroDescription && { heroDescription: override.heroDescription }),
         ...(override.headline && { headline: override.headline }),
         ...(override.definition && { definition: override.definition }),
         ...(override.hashtags && {
@@ -650,8 +606,12 @@ export const localizeTreatment = (item: Treatment, override?: TreatmentTranslati
         }),
         ...(override.solution && { solution: override.solution }),
         ...(item.signature &&
-            override.story && {
-                signature: { ...item.signature, story: override.story },
+            (override.story || override.columnHeading) && {
+                signature: {
+                    ...item.signature,
+                    ...(override.story && { story: override.story }),
+                    ...(override.columnHeading && { columnHeading: override.columnHeading }),
+                },
             }),
     };
 };
