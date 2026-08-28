@@ -57,7 +57,7 @@ export default function Header() {
                 <nav
                     onMouseEnter={() => setNavHovered(true)}
                     onMouseLeave={() => setNavHovered(false)}
-                    className="notranslate absolute left-1/2 hidden -translate-x-1/2 items-center gap-9 xl:flex 2xl:gap-11"
+                    className="notranslate absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 xl:flex 2xl:gap-8"
                 >
                     {nav.map((item) => (
                         <div key={item.label} className="group relative">

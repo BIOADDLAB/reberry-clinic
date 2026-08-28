@@ -4,13 +4,18 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import DeviceColumnSlider from '@/components/ui/DeviceColumnSlider';
+import BACardSlider from '@/components/ui/BACardSlider';
+import StepPlan from '@/components/ui/StepPlan';
+import TreatmentIntroSection from '@/components/ui/TreatmentIntroSection';
+import TreatmentColumnSection from '@/components/ui/TreatmentColumnSection';
 import { columns } from '@/components/lib/columns';
 import Reveal from '@/components/motion/Reveal';
 import { zoom } from '@/components/lib/motion';
-import { treatments, findTreatment, categoryLabel } from '@/components/lib/treatments';
+import { treatments, findTreatment, categoryLabel, localizeTreatment } from '@/components/lib/treatments';
 import { getSolutionBySlug, localizeSolution } from '@/components/lib/solutions';
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbJsonLd, medicalWebPageJsonLd } from '@/components/lib/jsonLd';
+import { AGING_LIFTING_PAGES, agingLiftingPageSlug } from '@/components/lib/adminConfig';
 
 interface Params {
     params: Promise<{ category: string; slug: string; item: string }>;
@@ -22,14 +27,26 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Params) {
-    const { item } = await params;
+    const { category, slug, item } = await params;
     const rawSolution = getSolutionBySlug(item);
     if (!rawSolution) return {};
 
     const locale = await getLocale();
     const tSolutions = await getTranslations('solutions');
     const s = localizeSolution(rawSolution, locale === 'ko' ? undefined : tSolutions.raw(rawSolution.slug));
-    return { title: `${locale === 'ko' ? s.name : s.engName} | RE:BERRY`, description: s.desc.join(', ') };
+    const liftingPage =
+        category === 'aging' && slug === 'laser-lifting'
+            ? AGING_LIFTING_PAGES.find((page) => page.itemSlug === item)
+            : undefined;
+    const title = liftingPage
+        ? locale === 'ko'
+            ? liftingPage.label
+            : `${s.engName} Lifting`
+        : locale === 'ko'
+          ? s.name
+          : s.engName;
+
+    return { title: `${title} | RE:BERRY`, description: s.desc.join(', ') };
 }
 
 const heroImage: Record<string, string> = {
@@ -40,21 +57,33 @@ const heroImage: Record<string, string> = {
 
 export default async function SolutionDetailPage({ params }: Params) {
     const { category, slug, item } = await params;
-    const t = findTreatment(category, slug);
+    const rawTreatment = findTreatment(category, slug);
     const rawSolution = getSolutionBySlug(item);
-    if (!t || !rawSolution) notFound();
+    if (!rawTreatment || !rawSolution) notFound();
 
     const locale = await getLocale();
-    const tSolutions = await getTranslations('solutions');
+    const [tSolutions, tTreatments] = await Promise.all([getTranslations('solutions'), getTranslations('treatments')]);
+    const isKo = locale === 'ko';
     const s = localizeSolution(rawSolution, locale === 'ko' ? undefined : tSolutions.raw(rawSolution.slug));
+    const t = localizeTreatment(
+        rawTreatment,
+        isKo ? undefined : tTreatments.raw(`${rawTreatment.category}.${rawTreatment.slug}`),
+    );
+    const liftingPage =
+        category === 'aging' && slug === 'laser-lifting'
+            ? AGING_LIFTING_PAGES.find((page) => page.itemSlug === item)
+            : undefined;
+    const isAgingLiftingPage = Boolean(liftingPage);
+    const contentSlug = isAgingLiftingPage ? agingLiftingPageSlug(item) : undefined;
     const itemColumns = columns.filter((c) => c.slugs.includes(item));
     const path = `/treatments/${category}/${slug}/${item}`;
-    const itemName = locale === 'ko' ? s.name : s.engName;
+    const itemName = liftingPage ? (isKo ? liftingPage.label : `${s.engName} Lifting`) : isKo ? s.name : s.engName;
+    const treatmentName = isKo ? t.name : t.en;
     const description = s.introDescription || s.desc.join(' ');
     const categoryHub: Record<string, string> = {
         signature: '/treatments/signature/pigment',
         skin: '/treatments/skin/pigment',
-        aging: '/treatments/aging/laser-lifting',
+        aging: `/treatments/aging/laser-lifting/${AGING_LIFTING_PAGES[0].itemSlug}`,
     };
 
     return (
@@ -63,13 +92,17 @@ export default async function SolutionDetailPage({ params }: Params) {
                 data={breadcrumbJsonLd([
                     { name: '홈', path: '/' },
                     { name: categoryLabel[t.category], path: categoryHub[t.category] ?? path },
-                    { name: t.name, path: `/treatments/${category}/${slug}` },
+                    ...(!isAgingLiftingPage ? [{ name: t.name, path: `/treatments/${category}/${slug}` }] : []),
                     { name: itemName, path },
                 ])}
             />
             <JsonLd data={medicalWebPageJsonLd({ name: itemName, description, path })} />
 
-            <SubHero en={t.en} title={t.name} image={heroImage[t.category]} />
+            <SubHero
+                en={isAgingLiftingPage ? `${s.engName} Lifting` : t.en}
+                title={isKo ? (isAgingLiftingPage ? itemName : t.name) : undefined}
+                image={heroImage[t.category]}
+            />
 
             {/* 소개 영역 좌: 영문/이름+서브타이틀/설명, 우: 기기·제품 사진 */}
             <section className="relative texture-paper py-20 lg:pt-40 lg:pb-25">
@@ -86,7 +119,7 @@ export default async function SolutionDetailPage({ params }: Params) {
                         <Reveal>
                             <p className="font-display text-h1-sm -tracking-[2em]">{s.engName}</p>
                             <h2 className="mt-6 whitespace-pre-line text-h2 font-bold leading-[46px] lg:mt-7.5">
-                                {locale === 'ko' ? s.name : s.engName}
+                                {itemName}
                                 {s.subTitle && (
                                     <>
                                         {'\n'}
@@ -118,12 +151,12 @@ export default async function SolutionDetailPage({ params }: Params) {
     그러면 정적 데이터에 없는 기기(예: 쥬베룩)는 관리자에 칼럼을 등록해도
     컴포넌트 자체가 안 만들어져서 Firestore 를 읽어볼 기회조차 없었음.
     → 항상 렌더하고, 보여줄 게 하나도 없으면 컴포넌트 안에서 스스로 사라지게 함 */}
-                    <DeviceColumnSlider items={itemColumns} slug={item} />
+                    {!isAgingLiftingPage && <DeviceColumnSlider items={itemColumns} slug={item} />}
                 </div>
             </section>
 
             {/* 원리/원칙 — principles 배열만 채우면 단락이 늘어남 */}
-            {s.principles.length > 0 && (
+            {!isAgingLiftingPage && s.principles.length > 0 && (
                 <section className="relative py-20 lg:py-30">
                     <Image
                         src="/images/bg-texture-08.jpg"
@@ -150,6 +183,30 @@ export default async function SolutionDetailPage({ params }: Params) {
                         ))}
                     </div>
                 </section>
+            )}
+
+            {isAgingLiftingPage && contentSlug && (
+                <>
+                    <section className="texture-dark bg-cocoa! py-20 text-cream lg:py-30">
+                        <div className="container-site">
+                            <Reveal className="text-center">
+                                <h2 className="font-display text-h2 tracking-[0.06em]">Your Beauty Physician</h2>
+                            </Reveal>
+                            <Reveal className="mt-12">
+                                <BACardSlider slug={contentSlug} />
+                            </Reveal>
+                        </div>
+                    </section>
+
+                    <TreatmentColumnSection slug={contentSlug} name={itemName} />
+                    <StepPlan />
+                    <TreatmentIntroSection
+                        treatment={t}
+                        name={treatmentName}
+                        modelAlt={tTreatments('chrome.modelAlt', { name: treatmentName })}
+                        isKo={isKo}
+                    />
+                </>
             )}
 
             <LocationSection />

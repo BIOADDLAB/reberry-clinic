@@ -13,6 +13,44 @@ export const SIGNATURE_PAGES = [
     { slug: 'redness', label: '홍조' },
 ] as const;
 
+// 피부교정 페이지는 시그니처와 route slug가 겹치므로 관리자 저장 키를 분리한다.
+export const SKIN_TREATMENT_PAGES = [
+    { slug: 'skin-pigment', routeSlug: 'pigment', label: '색소' },
+    { slug: 'skin-acne', routeSlug: 'acne', label: '여드름' },
+    { slug: 'skin-redness', routeSlug: 'redness', label: '홍조/주사피부염' },
+    { slug: 'skin-skinbooster', routeSlug: 'skinbooster', label: '스킨부스터' },
+    { slug: 'skin-tattoo-removal', routeSlug: 'tattoo-removal', label: '문신제거' },
+    { slug: 'skin-scar-pore', routeSlug: 'scar-pore', label: '흉터·모공·피부결' },
+    { slug: 'skin-hair-removal', routeSlug: 'hair-removal', label: '제모' },
+    { slug: 'skin-care', routeSlug: 'care', label: '관리' },
+] as const;
+
+// 안티에이징 레이저리프팅 5개 상세 페이지 전용 관리자 저장 키.
+// 시그니처 장비 상세 페이지와 데이터가 섞이지 않도록 item slug와 분리한다.
+export const AGING_LIFTING_PAGES = [
+    { slug: 'aging-ulthera', itemSlug: 'ulthera', label: '울쎄라 리프팅' },
+    { slug: 'aging-onda', itemSlug: 'onda', label: '온다 리프팅' },
+    { slug: 'aging-vro', itemSlug: 'vro', label: '브이로 리프팅' },
+    { slug: 'aging-revinas', itemSlug: 'revinas', label: '레비나스 리프팅' },
+    { slug: 'aging-shrink', itemSlug: 'shrink', label: '슈링크 유니버스 리프팅' },
+] as const;
+
+export const TREATMENT_PAGE_GROUPS = [
+    { key: 'signature', label: '시그니처', pages: SIGNATURE_PAGES },
+    { key: 'skin', label: '피부교정', pages: SKIN_TREATMENT_PAGES },
+    { key: 'aging', label: '안티에이징', pages: AGING_LIFTING_PAGES },
+] as const;
+
+export const TREATMENT_PAGES = TREATMENT_PAGE_GROUPS.flatMap((group) =>
+    group.pages.map((page) => ({ slug: page.slug, label: page.label, group: group.label })),
+);
+
+export const skinTreatmentPageSlug = (routeSlug: string) =>
+    SKIN_TREATMENT_PAGES.find((page) => page.routeSlug === routeSlug)?.slug;
+
+export const agingLiftingPageSlug = (itemSlug: string) =>
+    AGING_LIFTING_PAGES.find((page) => page.itemSlug === itemSlug)?.slug;
+
 /* ── 글자수 제한
    #ISSUE: 예전 값(제목 10자 + 영문 14자)은 카드에 물리적으로 안 들어갔다.
    실제 폰트로 재보면 24px 기준 한글 10자 = 205px, 영문 14자 = 156px → 합계 361px.

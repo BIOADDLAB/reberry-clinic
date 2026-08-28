@@ -4,6 +4,7 @@ import SubHero from '@/components/ui/SubHero';
 import JsonLd from '@/components/seo/JsonLd';
 import { blogPostingJsonLd } from '@/components/lib/jsonLd';
 import { fetchPublishedSkinColumnPost, getSkinColumnBlogUrl } from '@/components/lib/skinColumnPosts';
+import { SIGNATURE_PAGES } from '@/components/lib/adminConfig';
 
 interface SkinColumnDetailPageProps {
     params: Promise<{ id: string }>;
@@ -25,6 +26,7 @@ export default async function SkinColumnDetailPage({ params }: SkinColumnDetailP
     const { id } = await params;
     const post = await fetchPublishedSkinColumnPost(id);
     const blogUrl = post ? getSkinColumnBlogUrl(post) ?? undefined : undefined;
+    const articleSection = SIGNATURE_PAGES.find((category) => category.slug === post?.categorySlug)?.label;
 
     return (
         <main>
@@ -34,8 +36,11 @@ export default async function SkinColumnDetailPage({ params }: SkinColumnDetailP
                         title: post.title,
                         excerpt: post.excerpt,
                         publishedAt: post.publishedAt,
+                        updatedAt: post.updatedAt,
                         path: `/column/${post.docId}`,
                         blogUrl,
+                        imageUrl: post.thumbnailUrl,
+                        articleSection,
                     })}
                 />
             ) : null}

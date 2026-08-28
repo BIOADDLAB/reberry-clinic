@@ -432,6 +432,18 @@ export default function SkinColumnPostManager() {
                                                 </select>
                                             ) : null}
                                             <div className="flex flex-wrap gap-2">
+                                                <button
+                                                    type="button"
+                                                    disabled={saving || reorderSaving}
+                                                    onClick={() => {
+                                                        setShowForm(false);
+                                                        setEditing(post);
+                                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                    }}
+                                                    className="rounded-full border border-cocoa/20 px-3 py-1.5 text-caption-sm font-semibold text-cocoa hover:bg-cocoa/5 disabled:opacity-40"
+                                                >
+                                                    수정
+                                                </button>
                                                 {isNaverBlogColumnPost(post) ? (
                                                     <>
                                                         <button
@@ -453,20 +465,7 @@ export default function SkinColumnPostManager() {
                                                             </a>
                                                         ) : null}
                                                     </>
-                                                ) : (
-                                                    <button
-                                                        type="button"
-                                                        disabled={saving || reorderSaving}
-                                                        onClick={() => {
-                                                            setShowForm(false);
-                                                            setEditing(post);
-                                                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                                                        }}
-                                                        className="rounded-full border border-cocoa/20 px-3 py-1.5 text-caption-sm font-semibold text-cocoa hover:bg-cocoa/5 disabled:opacity-40"
-                                                    >
-                                                        수정
-                                                    </button>
-                                                )}
+                                                ) : null}
                                                 <button
                                                     type="button"
                                                     disabled={saving || reorderSaving}
@@ -543,13 +542,14 @@ function SkinColumnPostForm({
     const [isPublished, setIsPublished] = useState(initial?.isPublished ?? true);
     const [uploadingThumbnail, setUploadingThumbnail] = useState(false);
     const [uploadingBodyImage, setUploadingBodyImage] = useState(false);
+    const isImportedBlog = initial?.source === 'naver-blog';
 
     const submit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         onError(null);
         if (uploadingThumbnail || uploadingBodyImage) return onError('이미지 업로드가 끝난 뒤 저장하세요.');
         if (!title.trim()) return onError('제목을 입력하세요.');
-        if (isContentEmpty(contentHtml)) return onError('본문을 입력하세요.');
+        if (!isImportedBlog && isContentEmpty(contentHtml)) return onError('본문을 입력하세요.');
         if (!validateYoutubeUrl(youtubeUrl)) return onError('올바른 YouTube 주소를 입력하세요.');
         if (!publishedAt || Number.isNaN(new Date(publishedAt).getTime())) return onError('작성일을 확인하세요.');
 
@@ -654,7 +654,14 @@ function SkinColumnPostForm({
                     placeholder="피부칼럼 제목"
                     className={inputClass}
                 />
-                <p className="mt-1 text-right text-caption-sm text-latte">{title.length}/120자</p>
+                <div className="mt-1 flex items-start justify-between gap-3 text-caption-sm text-latte">
+                    <span>
+                        {isImportedBlog
+                            ? '사이트에 표시할 제목입니다. 수정한 제목은 블로그를 다시 가져와도 유지됩니다.'
+                            : ''}
+                    </span>
+                    <span className="shrink-0">{title.length}/120자</span>
+                </div>
             </div>
 
             <div className="mt-4">
@@ -690,23 +697,30 @@ function SkinColumnPostForm({
                 <p className="mt-1 text-caption-sm text-latte">입력하면 상세 페이지 본문 상단에 영상이 표시됩니다.</p>
             </div>
 
-            <div className="mt-4">
-                <span className={labelClass}>본문 *</span>
-                <p className="mb-2 text-caption-sm text-latte">
-                    제목, 강조, 목록, 링크와 본문 이미지를 자유롭게 구성할 수 있습니다.
-                </p>
-                <SkinColumnRichEditor
-                    value={contentHtml}
-                    onChange={setContentHtml}
-                    disabled={saving || uploadingThumbnail}
-                    onImageUpload={(file) => uploadImage(file, 'skin-columns/content')}
-                    onUploadError={onError}
-                    onUploadingChange={(uploading) => {
-                        setUploadingBodyImage(uploading);
-                        onUploadingChange(uploading);
-                    }}
-                />
-            </div>
+            {isImportedBlog ? (
+                <div className="mt-4 rounded-xl bg-cocoa/[0.04] px-4 py-3 text-caption leading-6 text-latte">
+                    네이버 블로그 글은 본문을 중복 저장하지 않고 원문으로 연결됩니다. 제목·요약·카테고리·썸네일은
+                    사이트용으로 자유롭게 수정할 수 있습니다.
+                </div>
+            ) : (
+                <div className="mt-4">
+                    <span className={labelClass}>본문 *</span>
+                    <p className="mb-2 text-caption-sm text-latte">
+                        제목, 강조, 목록, 링크와 본문 이미지를 자유롭게 구성할 수 있습니다.
+                    </p>
+                    <SkinColumnRichEditor
+                        value={contentHtml}
+                        onChange={setContentHtml}
+                        disabled={saving || uploadingThumbnail}
+                        onImageUpload={(file) => uploadImage(file, 'skin-columns/content')}
+                        onUploadError={onError}
+                        onUploadingChange={(uploading) => {
+                            setUploadingBodyImage(uploading);
+                            onUploadingChange(uploading);
+                        }}
+                    />
+                </div>
+            )}
 
             <div className="mt-5">
                 <span className={labelClass}>썸네일</span>
@@ -764,7 +778,7 @@ function SkinColumnPostForm({
                         uploadingThumbnail ||
                         uploadingBodyImage ||
                         !title.trim() ||
-                        isContentEmpty(contentHtml) ||
+                        (!isImportedBlog && isContentEmpty(contentHtml)) ||
                         !publishedAt
                     }
                     className="rounded-xl bg-cocoa px-5 py-2.5 text-small font-semibold text-cream hover:bg-deep disabled:cursor-not-allowed disabled:opacity-40"

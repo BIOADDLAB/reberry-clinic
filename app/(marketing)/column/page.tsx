@@ -3,8 +3,14 @@ import LocationSection from '@/components/ui/LocationSection';
 import SubHero from '@/components/ui/SubHero';
 import JsonLd from '@/components/seo/JsonLd';
 import { collectionPageJsonLd } from '@/components/lib/jsonLd';
+import {
+    fetchPublishedSkinColumnPosts,
+    getSkinColumnBlogUrl,
+} from '@/components/lib/skinColumnPosts';
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
+
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
     const t = await getTranslations('column');
@@ -13,6 +19,7 @@ export async function generateMetadata() {
 
 export default async function ColumnPage() {
     const t = await getTranslations('column');
+    const posts = await fetchPublishedSkinColumnPosts().catch(() => []);
 
     return (
         <>
@@ -21,6 +28,10 @@ export default async function ColumnPage() {
                     name: t('title'),
                     description: t('subtitle'),
                     path: '/column',
+                    items: posts.map((post) => ({
+                        name: post.title,
+                        url: getSkinColumnBlogUrl(post) ?? `/column/${post.docId}`,
+                    })),
                 })}
             />
             <SubHero en="Column" image="/images/bg-sub-07.jpg" />

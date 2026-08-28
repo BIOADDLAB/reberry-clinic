@@ -183,11 +183,19 @@ export function collectionPageJsonLd({
     name,
     description,
     path,
+    items = [],
 }: {
     name: string;
     description: string;
     path: string;
+    items?: Array<{ name: string; url: string }>;
 }) {
+    const itemListElement = items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        url: item.url.startsWith('http') ? item.url : `${site.url}${item.url}`,
+    }));
     return {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
@@ -196,6 +204,15 @@ export function collectionPageJsonLd({
         url: `${site.url}${path}`,
         isPartOf: { '@id': websiteNodeId },
         about: { '@id': directorNodeId },
+        ...(itemListElement.length > 0
+            ? {
+                  mainEntity: {
+                      '@type': 'ItemList',
+                      numberOfItems: itemListElement.length,
+                      itemListElement,
+                  },
+              }
+            : {}),
     };
 }
 
@@ -203,27 +220,38 @@ export function blogPostingJsonLd({
     title,
     excerpt,
     publishedAt,
+    updatedAt,
     path,
     blogUrl,
+    imageUrl,
+    articleSection,
 }: {
     title: string;
     excerpt: string;
     publishedAt: string;
+    updatedAt?: string;
     path: string;
     blogUrl?: string;
+    imageUrl?: string;
+    articleSection?: string;
 }) {
     const pageUrl = `${site.url}${path}`;
+    const image = imageUrl ? (imageUrl.startsWith('http') ? imageUrl : `${site.url}${imageUrl}`) : undefined;
     return {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
         headline: title,
         description: excerpt,
         datePublished: publishedAt || undefined,
+        dateModified: updatedAt || publishedAt || undefined,
         author: { '@id': directorNodeId },
         publisher: { '@id': clinicNodeId },
         mainEntityOfPage: blogUrl || pageUrl,
         url: blogUrl || pageUrl,
         ...(blogUrl ? { sameAs: blogUrl } : {}),
+        ...(image ? { image } : {}),
+        ...(articleSection ? { articleSection } : {}),
+        isPartOf: { '@id': websiteNodeId },
         inLanguage: 'ko-KR',
     };
 }

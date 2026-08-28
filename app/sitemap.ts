@@ -21,12 +21,16 @@ const staticRoutes: Array<{
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const lastModified = new Date();
     const treatmentRoutes: MetadataRoute.Sitemap = treatments.flatMap((treatment) => [
-        {
-            url: `${site.url}/treatments/${treatment.category}/${treatment.slug}`,
-            lastModified,
-            changeFrequency: 'monthly',
-            priority: 0.8,
-        },
+        ...(treatment.category === 'aging' && treatment.slug === 'laser-lifting'
+            ? []
+            : [
+                  {
+                      url: `${site.url}/treatments/${treatment.category}/${treatment.slug}`,
+                      lastModified,
+                      changeFrequency: 'monthly' as const,
+                      priority: 0.8,
+                  },
+              ]),
         ...treatment.items.map((item) => ({
             url: `${site.url}/treatments/${treatment.category}/${treatment.slug}/${item}`,
             lastModified,

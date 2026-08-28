@@ -2,7 +2,8 @@
 // 카드 UI 는 곳마다 다르니 컴포넌트는 각자, 데이터만 여기서 공유
 export interface BAPhoto {
     id: string;
-    slug: string;
+    slug: string; // 기존 단일 페이지 데이터 및 대표 페이지(하위 호환)
+    slugs?: string[]; // 실제 노출할 시술 페이지들. 없으면 기존 slug 한 개로 읽는다
     label: string;
     before: string;
     after: string;
@@ -19,9 +20,9 @@ export interface BAPhoto {
            'both' 로 읽어서 지금까지와 똑같이 양쪽에 계속 나온다(마이그레이션 불필요).
    ───────────────────────────────────────────────────────────── */
 export const BA_PLACES = [
-    { key: 'treatment', label: '시술 페이지만' },
-    { key: 'reviews', label: '전후사진 페이지만' },
-    { key: 'both', label: '양쪽 다' },
+    { key: 'treatment', label: '시술 페이지' },
+    { key: 'reviews', label: '전후사진 페이지' },
+    { key: 'both', label: '시술 페이지 + 전후사진 페이지' },
 ] as const;
 
 export type BAPlaceKey = (typeof BA_PLACES)[number]['key'];
@@ -38,6 +39,14 @@ export const showsOnReviews = (photo: Pick<BAPhoto, 'place'>) => resolveBAPlace(
 
 export const baPlaceLabel = (place?: string) =>
     BA_PLACES.find((p) => p.key === resolveBAPlace({ place }))!.label;
+
+/** 새 다중 선택 데이터와 기존 단일 slug 데이터를 같은 방식으로 읽는다. */
+export function resolveBASlugs(photo: Pick<BAPhoto, 'slug' | 'slugs'>): string[] {
+    const selected = Array.isArray(photo.slugs)
+        ? photo.slugs.filter((slug): slug is string => typeof slug === 'string' && slug.length > 0)
+        : [];
+    return selected.length > 0 ? [...new Set(selected)] : photo.slug ? [photo.slug] : [];
+}
 
 /* ─────────────────────────────────────────────────────────────
    전후사진 페이지(/reviews) 카테고리 탭
@@ -65,12 +74,27 @@ const BA_CATEGORY_BY_SLUG: Record<string, BACategoryKey> = {
     redness: 'redness',
     lifting: 'lifting',
     booster: 'petit',
+    'skin-pigment': 'pigment',
+    'skin-acne': 'acne',
+    'skin-redness': 'redness',
+    'skin-skinbooster': 'petit',
+    'skin-tattoo-removal': 'pigment',
+    'skin-scar-pore': 'pore-scar',
+    'skin-hair-removal': 'hair-removal',
+    'skin-care': 'redness',
+    'aging-ulthera': 'lifting',
+    'aging-onda': 'lifting',
+    'aging-vro': 'lifting',
+    'aging-revinas': 'lifting',
+    'aging-shrink': 'lifting',
 };
 
 /** 이 사진이 속한 카테고리 키. 지정값 → slug 자동배정 → null(어느 탭에도 안 걸림) */
-export function resolveBACategory(photo: Pick<BAPhoto, 'slug' | 'category'>): BACategoryKey | null {
+export function resolveBACategory(photo: Pick<BAPhoto, 'slug' | 'slugs' | 'category'>): BACategoryKey | null {
     const picked = BA_CATEGORIES.find((c) => c.key === photo.category);
-    return picked ? picked.key : (BA_CATEGORY_BY_SLUG[photo.slug] ?? null);
+    if (picked) return picked.key;
+    const matchingSlug = resolveBASlugs(photo).find((slug) => BA_CATEGORY_BY_SLUG[slug]);
+    return matchingSlug ? BA_CATEGORY_BY_SLUG[matchingSlug] : null;
 }
 
 export const baCategoryLabel = (key: string) => BA_CATEGORIES.find((c) => c.key === key)?.label ?? key;
@@ -123,7 +147,7 @@ const genCategory = ({ slug, label, count, mainOrder }: (typeof CATEGORIES)[numb
 
 export const baPhotos: BAPhoto[] = CATEGORIES.flatMap(genCategory);
 
-export const getBAPhotosBySlug = (slug: string) => baPhotos.filter((b) => b.slug === slug);
+export const getBAPhotosBySlug = (slug: string) => baPhotos.filter((b) => resolveBASlugs(b).includes(slug));
 
 export const getMainBAPhotos = () =>
     baPhotos.filter((b): b is BAPhoto & { main: number } => typeof b.main === 'number').sort((a, b) => a.main - b.main);

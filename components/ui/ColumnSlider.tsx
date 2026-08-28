@@ -11,9 +11,8 @@ import { useColumnsBySlug } from '@/components/lib/useColumns';
 import { useLocalizedColumnText } from '@/components/lib/useColumnTextTranslation';
 import DoctorLabel from '@/components/ui/DoctorLabel';
 
-export default function ColumnSlider({ items, slug }: { items: Col[]; slug: string }) {
+export function ColumnSliderContent({ items: resolvedItems }: { items: FirestoreCol[] }) {
     const t = useTranslations('common');
-    const resolvedItems = useColumnsBySlug(slug, items);
     const isKo = useIsKo();
 
     // 카드 344 + 간격 24 기준으로 "안 들어가면 슬라이더" 자동 판단 (개수로 고정하지 않음)
@@ -149,4 +148,9 @@ export default function ColumnSlider({ items, slug }: { items: Col[]; slug: stri
             )}
         </div>
     );
+}
+
+export default function ColumnSlider({ items, slug }: { items: Col[]; slug: string }) {
+    const resolvedItems = useColumnsBySlug(slug, items);
+    return <ColumnSliderContent items={resolvedItems} />;
 }

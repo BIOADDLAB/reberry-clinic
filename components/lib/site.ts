@@ -61,7 +61,7 @@ export const nav = [
         children: [
             { label: '색소', en: 'Pigmentation', href: '/treatments/skin/pigment' },
             { label: '여드름', en: 'Acne', href: '/treatments/skin/acne' },
-            { label: '홍조', en: 'Redness', href: '/treatments/skin/redness' },
+            { label: '홍조/주사피부염', en: 'Redness / Rosacea', href: '/treatments/skin/redness' },
             { label: '스킨부스터', en: 'Skin Booster', href: '/treatments/skin/skinbooster' },
             { label: '문신제거', en: 'Tattoo Removal', href: '/treatments/skin/tattoo-removal' },
             { label: '흉터·모공·피부결', en: 'Scar · Pore', href: '/treatments/skin/scar-pore' },
@@ -72,9 +72,17 @@ export const nav = [
     {
         label: '안티에이징',
         en: 'ANTI-AGING',
-        href: '/treatments/aging/laser-lifting',
+        href: '/treatments/aging/laser-lifting/ulthera',
         children: [
-            { label: '레이저리프팅', en: 'Laser Lifting', href: '/treatments/aging/laser-lifting' },
+            { label: '울쎄라 리프팅', en: 'Ulthera Lifting', href: '/treatments/aging/laser-lifting/ulthera' },
+            { label: '온다 리프팅', en: 'Onda Lifting', href: '/treatments/aging/laser-lifting/onda' },
+            { label: '브이로 리프팅', en: 'V-RO Lifting', href: '/treatments/aging/laser-lifting/vro' },
+            { label: '레비나스 리프팅', en: 'Revinas Lifting', href: '/treatments/aging/laser-lifting/revinas' },
+            {
+                label: '슈링크 유니버스 리프팅',
+                en: 'Shrink Universe Lifting',
+                href: '/treatments/aging/laser-lifting/shrink',
+            },
             { label: '실리프팅', en: 'Thread Lifting', href: '/treatments/aging/thread-lifting' },
             { label: '필러', en: 'Filler', href: '/treatments/aging/filler' },
             { label: '보톡스', en: 'Botox', href: '/treatments/aging/botox' },
@@ -82,6 +90,7 @@ export const nav = [
             { label: '수액·주사', en: 'IV Therapy', href: '/treatments/aging/iv-therapy' },
         ],
     },
+    { label: '시술&가격', en: 'PRICE', href: '/price-list' },
     { label: '이벤트', en: 'EVENT', href: '/events' },
     { label: '피부칼럼', en: 'COLUMN', href: '/column' },
 ];

@@ -18,6 +18,12 @@ import {
 
 const PAGE_SIZE = 12;
 
+type PriceListUiVariant = 'reference' | 'recommended';
+
+// 2안(현재 적용): 전달받은 레퍼런스처럼 대분류는 밑줄 탭, 소분류는 텍스트 메뉴로 표시합니다.
+// 3안(추천 UI)을 적용하려면 아래 값을 'recommended'로만 변경하면 됩니다.
+const PRICE_LIST_UI_VARIANT: PriceListUiVariant = 'reference';
+
 export default function PriceListClient() {
     const t = useTranslations('priceList');
     const locale = useLocale();
@@ -223,54 +229,23 @@ export default function PriceListClient() {
             className="grid w-full min-w-0 max-w-full gap-10 overflow-x-clip pb-24 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:pb-0"
         >
             <div className="min-w-0 max-w-full">
-                <div className="flex w-full min-w-0 max-w-full gap-2 overflow-x-auto pb-2">
-                    <CategoryButton
-                        active={activeCategory === 'all'}
-                        label={t('all')}
-                        onClick={() => {
-                            setActiveCategory('all');
-                            setActiveSection('all');
-                            setPage(1);
-                        }}
-                    />
-                    {categories.map((category) => (
-                        <CategoryButton
-                            key={category.docId}
-                            active={activeCategory === category.docId}
-                            label={category.label}
-                            onClick={() => {
-                                setActiveCategory(category.docId);
-                                setActiveSection('all');
-                                setPage(1);
-                            }}
-                        />
-                    ))}
-                </div>
-                {activeCategory !== 'all' && categorySections.length > 1 && (
-                    <div className="mt-3 flex w-full min-w-0 max-w-full gap-2 overflow-x-auto pb-2">
-                        <CategoryButton
-                            active={activeSection === 'all'}
-                            label={t('all')}
-                            onClick={() => {
-                                setActiveSection('all');
-                                setPage(1);
-                            }}
-                            secondary
-                        />
-                        {categorySections.map((section) => (
-                            <CategoryButton
-                                key={section.docId}
-                                active={activeSection === section.docId}
-                                label={section.label}
-                                onClick={() => {
-                                    setActiveSection(section.docId);
-                                    setPage(1);
-                                }}
-                                secondary
-                            />
-                        ))}
-                    </div>
-                )}
+                <PriceListNavigation
+                    variant={PRICE_LIST_UI_VARIANT}
+                    categories={categories}
+                    sections={categorySections}
+                    activeCategory={activeCategory}
+                    activeSection={activeSection}
+                    allLabel={t('all')}
+                    onCategoryChange={(categoryId) => {
+                        setActiveCategory(categoryId);
+                        setActiveSection('all');
+                        setPage(1);
+                    }}
+                    onSectionChange={(sectionId) => {
+                        setActiveSection(sectionId);
+                        setPage(1);
+                    }}
+                />
                 <label className="mt-5 block">
                     <span className="sr-only">{t('search')}</span>
                     <input
@@ -601,27 +576,171 @@ function CartPanel({
     );
 }
 
-function CategoryButton({
+function PriceListNavigation({
+    variant,
+    categories,
+    sections,
+    activeCategory,
+    activeSection,
+    allLabel,
+    onCategoryChange,
+    onSectionChange,
+}: {
+    variant: PriceListUiVariant;
+    categories: PriceCategory[];
+    sections: PriceSection[];
+    activeCategory: string;
+    activeSection: string;
+    allLabel: string;
+    onCategoryChange: (categoryId: string) => void;
+    onSectionChange: (sectionId: string) => void;
+}) {
+    const categoryButtons = [{ docId: 'all', label: allLabel }, ...categories];
+
+    // 2안: 레퍼런스의 2단 텍스트 내비게이션을 리베리 컬러와 반응형에 맞춰 적용했습니다.
+    if (variant === 'reference') {
+        return (
+            <nav
+                aria-label="시술 가격 분류"
+                className="overflow-hidden border-y border-cocoa/10 bg-cream/70"
+            >
+                <div className="flex min-w-0 overflow-x-auto px-1">
+                    {categoryButtons.map((category) => {
+                        const active = activeCategory === category.docId;
+                        return (
+                            <button
+                                key={category.docId}
+                                type="button"
+                                aria-current={active ? 'page' : undefined}
+                                onClick={() => onCategoryChange(category.docId)}
+                                className={`relative shrink-0 px-3 py-4 text-caption font-semibold transition-colors after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:transition-colors md:px-4 ${
+                                    active
+                                        ? 'text-cocoa after:bg-cocoa'
+                                        : 'text-latte after:bg-transparent hover:text-cocoa'
+                                }`}
+                            >
+                                {category.label}
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {activeCategory !== 'all' && sections.length > 0 ? (
+                    <div className="border-t border-cocoa/10 bg-white/45">
+                        <div className="flex min-w-0 items-center overflow-x-auto px-4 py-3">
+                            <ReferenceSectionButton
+                                active={activeSection === 'all'}
+                                label={allLabel}
+                                onClick={() => onSectionChange('all')}
+                            />
+                            {sections.map((section) => (
+                                <div key={section.docId} className="flex shrink-0 items-center">
+                                    <span aria-hidden className="mx-2 text-cocoa/25">
+                                        ·
+                                    </span>
+                                    <ReferenceSectionButton
+                                        active={activeSection === section.docId}
+                                        label={section.label}
+                                        onClick={() => onSectionChange(section.docId)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : null}
+            </nav>
+        );
+    }
+
+    // 3안(추천): 항목이 많은 구조에서도 한눈에 찾도록 대분류는 그리드, 소분류는 칩으로 구성합니다.
+    return (
+        <nav
+            aria-label="시술 가격 분류"
+            className="rounded-3xl border border-cocoa/10 bg-white/70 p-3 shadow-[0_8px_30px_rgba(69,54,45,0.06)] md:p-4"
+        >
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5">
+                {categoryButtons.map((category) => {
+                    const active = activeCategory === category.docId;
+                    return (
+                        <button
+                            key={category.docId}
+                            type="button"
+                            aria-current={active ? 'page' : undefined}
+                            onClick={() => onCategoryChange(category.docId)}
+                            className={`min-h-12 rounded-2xl px-3 py-2.5 text-caption font-semibold leading-snug transition-colors ${
+                                active
+                                    ? 'bg-cocoa text-cream shadow-[0_6px_18px_rgba(69,54,45,0.18)]'
+                                    : 'bg-sand/55 text-latte hover:bg-sand hover:text-cocoa'
+                            }`}
+                        >
+                            {category.label}
+                        </button>
+                    );
+                })}
+            </div>
+
+            {activeCategory !== 'all' && sections.length > 0 ? (
+                <div className="mt-3 flex min-w-0 gap-2 overflow-x-auto border-t border-cocoa/10 pt-3">
+                    <RecommendedSectionButton
+                        active={activeSection === 'all'}
+                        label={allLabel}
+                        onClick={() => onSectionChange('all')}
+                    />
+                    {sections.map((section) => (
+                        <RecommendedSectionButton
+                            key={section.docId}
+                            active={activeSection === section.docId}
+                            label={section.label}
+                            onClick={() => onSectionChange(section.docId)}
+                        />
+                    ))}
+                </div>
+            ) : null}
+        </nav>
+    );
+}
+
+function ReferenceSectionButton({
     active,
     label,
     onClick,
-    secondary = false,
 }: {
     active: boolean;
     label: string;
     onClick: () => void;
-    secondary?: boolean;
 }) {
     return (
         <button
             type="button"
+            aria-current={active ? 'page' : undefined}
             onClick={onClick}
-            className={`shrink-0 rounded-full border px-4 py-2 text-caption font-semibold ${
+            className={`shrink-0 py-1 text-caption transition-colors ${
+                active ? 'font-bold text-cocoa underline underline-offset-4' : 'font-medium text-latte hover:text-cocoa'
+            }`}
+        >
+            {label}
+        </button>
+    );
+}
+
+function RecommendedSectionButton({
+    active,
+    label,
+    onClick,
+}: {
+    active: boolean;
+    label: string;
+    onClick: () => void;
+}) {
+    return (
+        <button
+            type="button"
+            aria-current={active ? 'page' : undefined}
+            onClick={onClick}
+            className={`shrink-0 rounded-full border px-3.5 py-2 text-caption font-semibold transition-colors ${
                 active
-                    ? secondary
-                        ? 'border-cocoa/30 bg-sand/70 text-cocoa'
-                        : 'border-cocoa bg-cocoa text-cream'
-                    : 'border-cocoa/15 bg-cream text-latte'
+                    ? 'border-cocoa/25 bg-cocoa/[0.08] text-cocoa'
+                    : 'border-cocoa/10 bg-cream/80 text-latte hover:border-cocoa/20 hover:text-cocoa'
             }`}
         >
             {label}

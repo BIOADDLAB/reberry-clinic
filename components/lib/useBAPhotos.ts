@@ -4,12 +4,13 @@
 import { useSyncExternalStore } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
-import { showsOnReviews, showsOnTreatment, type BAPhoto } from './ba';
+import { resolveBASlugs, showsOnReviews, showsOnTreatment, type BAPhoto } from './ba';
 
 // Firestore 문서 원본 모양 — 관리자 화면(app/admin/(protected)/ba/page.tsx)이 저장하는 필드와 반드시 일치해야 함
 interface BAPhotoDoc {
     label: string; // 시술명
-    slug: string; // 어느 시그니처 페이지인지 pigment/lifting/booster/acne/redness
+    slug?: string; // 기존 단일 페이지 데이터 및 대표 페이지
+    slugs?: string[]; // 노출할 시술 페이지들
     before: string;
     after: string;
     order?: number; // 해당 시그니처 페이지 안에서의 순서 (관리자에서 지정)
@@ -41,9 +42,14 @@ function load() {
         .then((snap) => {
             cache = snap.docs.map((docSnap) => {
                 const data = docSnap.data() as BAPhotoDoc;
+                const slugs = Array.isArray(data.slugs)
+                    ? data.slugs.filter((slug): slug is string => typeof slug === 'string' && slug.length > 0)
+                    : [];
+                const slug = typeof data.slug === 'string' ? data.slug : (slugs[0] ?? '');
                 return {
                     id: docSnap.id,
-                    slug: data.slug,
+                    slug,
+                    ...(slugs.length > 0 ? { slugs: [...new Set(slugs)] } : {}),
                     label: data.label,
                     before: data.before,
                     after: data.after,
@@ -94,11 +100,11 @@ export function useBAPhotosLoading(): boolean {
 export const filterMainBAPhotos = (photos: BAPhoto[]) =>
     photos.filter((b): b is BAPhoto & { main: number } => typeof b.main === 'number').sort((a, b) => a.main - b.main);
 
-/* 시술 페이지(BACardSlider)용. '전후사진 페이지만' 으로 등록한 사진은 여기서 빠진다 */
+/* 시술 페이지(BACardSlider)용. 시술 페이지 노출을 끈 사진은 여기서 빠진다. */
 export const filterBAPhotosBySlug = (photos: BAPhoto[], slug: string) =>
     photos
-        .filter((b) => b.slug === slug && showsOnTreatment(b))
+        .filter((b) => resolveBASlugs(b).includes(slug) && showsOnTreatment(b))
         .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 
-/* 전후사진 페이지(/reviews)용. '시술 페이지만' 으로 등록한 사진은 여기서 빠진다 */
+/* 전후사진 페이지(/reviews)용. 전후사진 페이지 노출을 끈 사진은 여기서 빠진다. */
 export const filterReviewBAPhotos = (photos: BAPhoto[]) => photos.filter(showsOnReviews);

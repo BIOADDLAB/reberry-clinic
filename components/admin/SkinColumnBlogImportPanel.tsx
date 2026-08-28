@@ -89,7 +89,8 @@ export default function SkinColumnBlogImportPanel({
                     <h2 className="text-lead font-bold text-cocoa">네이버 블로그 수집</h2>
                     <p className="mt-1 max-w-2xl text-caption leading-6 text-latte">
                         닥터 파이톤 블로그 RSS에서 제목·요약·썸네일을 가져옵니다. 본문은 사이트에 복사하지 않고, 카드에서
-                        블로그 원문으로 이동합니다. 아래 매핑만 한 번 연결하면 이후 글은 자동 분류됩니다.
+                        블로그 원문으로 이동합니다. 아래 매핑만 한 번 연결하면 이후 글은 자동 분류되며, 사이트에서 수정한
+                        제목은 다시 수집해도 유지됩니다.
                     </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">

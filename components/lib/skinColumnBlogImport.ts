@@ -262,7 +262,9 @@ export async function syncNaverBlogSkinColumns(options?: { force?: boolean }): P
             ref,
             {
                 categorySlug,
-                title: item.title,
+                // 관리자가 사이트용 제목을 수정한 뒤 다시 수집해도 블로그 원제목으로 덮어쓰지 않는다.
+                title: canonical?.title || item.title,
+                blogTitle: item.title,
                 excerpt,
                 contentHtml: canonical?.contentHtml ?? '',
                 youtubeUrl: canonical?.youtubeUrl ?? '',

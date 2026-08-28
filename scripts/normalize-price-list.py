@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import re
+import unicodedata
 from collections import OrderedDict
 from pathlib import Path
 from typing import Any
@@ -29,56 +30,68 @@ SHEETS = [
 ]
 
 TARGET_CATEGORIES = [
-    ("botox", "보톡스"),
-    ("hair-removal", "제모"),
-    ("filler", "필러"),
-    ("thread-lifting", "실리프팅"),
-    ("lifting", "리프팅"),
+    ("lifting-laser", "리프팅 레이저"),
+    ("filler-face-volume", "필러·페이스볼륨"),
+    ("anti-aging", "안티에이징"),
     ("skin-booster", "스킨부스터"),
-    ("acne-ptt", "여드름"),
-    ("co2", "CO2"),
-    ("keloid", "켈로이드"),
-    ("pore-scar", "모공흉터"),
-    ("potenza", "포텐자"),
-    ("pigment", "색소"),
-    ("skin-care", "피부관리"),
-    ("tattoo-body-toning", "문신제거·바디토닝"),
-    ("body-contouring", "지방분해"),
-    ("iv-therapy", "수액"),
-    ("redness", "홍조"),
+    ("pigment-pore-acne", "색소·모공·여드름"),
+    ("toxin-contour", "톡신·윤곽"),
+    ("skin-care", "스킨케어"),
+    ("body-line", "바디라인"),
+    ("hair-removal", "제모"),
 ]
-TARGET_LABELS = dict(TARGET_CATEGORIES)
+
+# 원본 시트의 세부 유형은 이름 정제에 계속 사용하고, 화면에서는 위 대분류로 묶는다.
+KIND_LABELS = {
+    "botox": "보톡스",
+    "hair-removal": "제모",
+    "filler": "필러",
+    "thread-lifting": "실리프팅",
+    "lifting": "리프팅",
+    "skin-booster": "스킨부스터",
+    "acne-ptt": "여드름",
+    "co2": "CO2",
+    "keloid": "켈로이드",
+    "pore-scar": "모공흉터",
+    "potenza": "포텐자",
+    "pigment": "색소",
+    "skin-care": "피부관리",
+    "tattoo-body-toning": "문신제거·바디토닝",
+    "body-contouring": "지방분해",
+    "iv-therapy": "수액",
+    "redness": "홍조",
+}
 
 SECTION_DEFS = [
-    ("botox", "botox", "보톡스"),
+    ("lifting-laser", "titanium", "티타늄"),
+    ("lifting-laser", "onda", "온다"),
+    ("lifting-laser", "v-ro", "브이로"),
+    ("lifting-laser", "levinas", "레비나스"),
+    ("lifting-laser", "inmode", "인모드"),
+    ("lifting-laser", "shurink", "슈링크"),
+    ("filler-face-volume", "volume", "필러(볼륨)"),
+    ("filler-face-volume", "special", "특수부위 필러"),
+    ("filler-face-volume", "package", "필러 패키지"),
+    ("filler-face-volume", "nose-line", "아름다운 코라인"),
+    ("filler-face-volume", "hyalase", "히알라제"),
+    ("anti-aging", "dews", "듀스 실리프팅"),
+    ("anti-aging", "iv-therapy", "수액·주사"),
+    ("skin-booster", "skin-booster", "스킨부스터"),
+    ("pigment-pore-acne", "pigment-package", "색소·미백 패키지"),
+    ("pigment-pore-acne", "redness-package", "홍조 패키지"),
+    ("pigment-pore-acne", "acne-package", "여드름 패키지"),
+    ("pigment-pore-acne", "gold-ptt", "골드 PTT"),
+    ("pigment-pore-acne", "potenza", "포텐자"),
+    ("pigment-pore-acne", "pore-package", "모공·흉터 패키지"),
+    ("pigment-pore-acne", "co2", "CO2"),
+    ("pigment-pore-acne", "keloid", "켈로이드"),
+    ("pigment-pore-acne", "tattoo-removal", "문신제거"),
+    ("toxin-contour", "botox", "보톡스"),
+    ("skin-care", "skin-care", "피부관리"),
+    ("body-line", "body-contouring", "바디 지방분해 주사"),
+    ("body-line", "body-toning", "바디 토닝"),
     ("hair-removal", "female", "여성제모"),
     ("hair-removal", "male", "남성제모"),
-    ("filler", "volume", "필러(볼륨)"),
-    ("filler", "special", "특수부위 필러"),
-    ("filler", "package", "필러 패키지"),
-    ("filler", "nose-line", "아름다운 코라인"),
-    ("filler", "hyalase", "히알라제"),
-    ("thread-lifting", "dews", "듀스 실리프팅"),
-    ("lifting", "titanium", "티타늄"),
-    ("lifting", "onda", "온다"),
-    ("lifting", "v-ro", "브이로"),
-    ("lifting", "levinas", "레비나스"),
-    ("lifting", "inmode", "인모드"),
-    ("lifting", "shurink", "슈링크"),
-    ("skin-booster", "skin-booster", "스킨부스터"),
-    ("acne-ptt", "acne-package", "여드름 패키지"),
-    ("acne-ptt", "gold-ptt", "골드 PTT"),
-    ("co2", "co2", "CO2"),
-    ("keloid", "keloid", "켈로이드"),
-    ("pore-scar", "pore-package", "모공·흉터 패키지"),
-    ("potenza", "potenza", "포텐자"),
-    ("pigment", "pigment-package", "색소·미백 패키지"),
-    ("skin-care", "skin-care", "피부관리"),
-    ("tattoo-body-toning", "body-toning", "바디 토닝"),
-    ("tattoo-body-toning", "tattoo-removal", "문신제거"),
-    ("body-contouring", "body-contouring", "바디 지방분해 주사"),
-    ("iv-therapy", "iv-therapy", "수액"),
-    ("redness", "redness-package", "홍조 패키지"),
 ]
 SECTION_LABELS = {f"{category_id}--{slug}": label for category_id, slug, label in SECTION_DEFS}
 COUNT_LABEL_RE = re.compile(r"^\d+(?:\.\d+)?\s*(?:회|개|병)$")
@@ -195,7 +208,7 @@ def package_item(
         "docId": item_id,
         "categoryId": category_id,
         "targetCategoryId": category_id,
-        "section": TARGET_LABELS[category_id],
+        "section": KIND_LABELS[category_id],
         "name": name,
         "description": description,
         "options": [
@@ -448,7 +461,30 @@ def section_id_for(item: dict, category_id: str) -> str:
         slug = "redness-package"
     else:
         raise RuntimeError(f"missing section mapping: {category_id}")
-    return f"{category_id}--{slug}"
+
+    if category_id == "lifting":
+        group_id = "lifting-laser"
+    elif category_id == "filler":
+        group_id = "filler-face-volume"
+    elif category_id in {"thread-lifting", "iv-therapy"}:
+        group_id = "anti-aging"
+    elif category_id == "skin-booster":
+        group_id = "skin-booster"
+    elif category_id in {"pigment", "redness", "acne-ptt", "potenza", "pore-scar", "co2", "keloid"}:
+        group_id = "pigment-pore-acne"
+    elif category_id == "tattoo-body-toning":
+        group_id = "body-line" if slug == "body-toning" else "pigment-pore-acne"
+    elif category_id == "botox":
+        group_id = "toxin-contour"
+    elif category_id == "skin-care":
+        group_id = "skin-care"
+    elif category_id == "body-contouring":
+        group_id = "body-line"
+    elif category_id == "hair-removal":
+        group_id = "hair-removal"
+    else:
+        raise RuntimeError(f"missing category group mapping: {category_id}")
+    return f"{group_id}--{slug}"
 
 
 def complete_name(item: dict, category_id: str, section_id: str) -> str:
@@ -782,7 +818,7 @@ def main() -> None:
     args = parser.parse_args()
 
     workbook = openpyxl.load_workbook(args.source, data_only=True)
-    now_marker = "xlsx-seed-v3"
+    now_marker = "xlsx-seed-v4"
     categories = [
         {
             "docId": category_id,
@@ -815,6 +851,7 @@ def main() -> None:
         category_id = target_category(raw_item)
         section_id = section_id_for(raw_item, category_id)
         for item in split_patient_items(raw_item, category_id, section_id):
+            item["categoryId"] = section_id.split("--", 1)[0]
             item["seedVersion"] = now_marker
             items.append(item)
 
@@ -896,7 +933,7 @@ def main() -> None:
 
     payload = {
         "version": now_marker,
-        "source": args.source.name,
+        "source": unicodedata.normalize("NFC", args.source.name),
         "categories": categories,
         "sections": sections,
         "items": items,
