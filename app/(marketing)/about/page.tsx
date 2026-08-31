@@ -8,9 +8,14 @@ import Eyebrow from '@/components/ui/Eyebrow';
 
 export async function generateMetadata() {
     const t = await getTranslations('about');
+    const description = String(t.raw('designSub'))
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
     return {
         title: 'WE ARE RE:BERRY',
-        description: t('designSub').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+        description,
     };
 }
 
@@ -51,8 +56,14 @@ export default async function AboutPage() {
                             </p>
                         </div>
                         <div className="relative w-[180px] self-end lg:w-[380px] lg:self-auto">
-                            {/* #ISSUE SVG는 최적화 불필요, img 태그 유지 */}
-                            <img src="/images/i-sig-01.svg" alt="" className="w-full h-auto" />
+                            <Image
+                                src="/images/i-sig-01.svg"
+                                alt=""
+                                width={380}
+                                height={161}
+                                unoptimized
+                                className="h-auto w-full"
+                            />
                         </div>
                     </Reveal>
 
@@ -66,11 +77,13 @@ export default async function AboutPage() {
                                 sizes="(max-width: 1024px) 100vw, 900px"
                                 className="object-cover rounded-[10px]"
                             />
-                            {/* #ISSUE SVG 로고, img 태그 유지 */}
-                            <img
+                            <Image
                                 src="/images/logo.svg"
                                 alt=""
-                                className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[120px] lg:w-auto lg:bottom-10"
+                                width={176}
+                                height={19}
+                                unoptimized
+                                className="absolute bottom-6 left-1/2 w-[120px] -translate-x-1/2 lg:bottom-10 lg:w-auto"
                             />
                         </div>
                     </Reveal>

@@ -16,6 +16,7 @@ import { getSolutionBySlug, localizeSolution } from '@/components/lib/solutions'
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbJsonLd, medicalWebPageJsonLd } from '@/components/lib/jsonLd';
 import { AGING_LIFTING_PAGES, agingLiftingPageSlug } from '@/components/lib/adminConfig';
+import TextureBackground from '@/components/ui/TextureBackground';
 
 interface Params {
     params: Promise<{ category: string; slug: string; item: string }>;
@@ -105,14 +106,7 @@ export default async function SolutionDetailPage({ params }: Params) {
 
             {/* 소개 영역 좌: 영문/이름+서브타이틀/설명, 우: 기기·제품 사진 */}
             <section className="relative texture-paper py-20 lg:pt-40 lg:pb-25">
-                <Image
-                    src="/images/bg-texture-06.jpg"
-                    alt=""
-                    fill
-                    quality={80}
-                    sizes="100vw"
-                    className="object-cover "
-                />
+                <TextureBackground src="/images/bg-texture-06.jpg" />
                 <div className="container-site relative">
                     <div className="grid items-start gap-10 lg:grid-cols-[1fr_430px] lg:gap-20">
                         <Reveal>
@@ -157,14 +151,7 @@ export default async function SolutionDetailPage({ params }: Params) {
             {/* 원리/원칙 — principles 배열만 채우면 단락이 늘어남 */}
             {!isAgingLiftingPage && s.principles.length > 0 && (
                 <section className="relative py-20 lg:py-30">
-                    <Image
-                        src="/images/bg-texture-08.jpg"
-                        alt=""
-                        fill
-                        quality={80}
-                        sizes="100vw"
-                        className="object-cover"
-                    />
+                    <TextureBackground src="/images/bg-texture-08.jpg" />
                     <div className="container-site relative mx-auto max-w-4xl space-y-14 lg:space-y-17.5">
                         {s.principles.map((p) => (
                             <Reveal key={p.title}>

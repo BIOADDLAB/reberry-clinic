@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import Reveal from '@/components/motion/Reveal';
 import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup';
+import TextureBackground from '@/components/ui/TextureBackground';
 
 const images = ['/images/img-step-01.jpg', '/images/img-step-02.jpg', '/images/img-step-03.jpg'];
 
@@ -15,7 +16,7 @@ export default async function StepPlan() {
 
     return (
         <section className="relative texture-paper py-20 lg:pt-35 lg:pb-30">
-            <Image src="/images/bg-texture-06.jpg" alt="" fill quality={85} sizes="100vw" className="object-cover" />
+            <TextureBackground src="/images/bg-texture-06.jpg" />
             <div className="container-site relative">
                 <Reveal className="text-center">
                     <p className="font-display text-h2">3 Step Plan</p>

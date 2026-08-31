@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
 import type { Col, FirestoreCol } from './columns';
 
@@ -10,7 +10,8 @@ interface ColDoc {
     en: string;
     text: string;
     link?: string;
-    slugs: string[];
+    slug?: string;
+    slugs?: string[];
     order?: number;
     translations?: FirestoreCol['translations'];
 }
@@ -27,26 +28,40 @@ export function useColumnsBySlug(slug: string, staticFallback: Col[]): Firestore
 
         (async () => {
             try {
-                const q = query(collection(db, 'columns'), where('slugs', 'array-contains', slug), orderBy('order'));
-                const snap = await getDocs(q);
+                // 전체를 한 번 읽어 클라이언트에서 대상·순서를 정리한다.
+                // 1) array-contains + orderBy 복합 인덱스가 없어도 조회가 실패하지 않고,
+                // 2) 예전 단일 slug 문서도 관리자가 수정하기 전까지 계속 노출된다.
+                const snap = await getDocs(collection(db, 'columns'));
                 if (cancelled) return;
 
-                const fromFirestore: FirestoreCol[] = snap.docs.map((docSnap) => {
-                    const data = docSnap.data() as ColDoc;
-                    return {
-                        docId: docSnap.id,
-                        title: data.title,
-                        en: data.en,
-                        text: data.text,
-                        link: data.link,
-                        slugs: data.slugs,
-                        translations: data.translations,
-                    };
-                });
+                const fromFirestore: FirestoreCol[] = snap.docs
+                    .map((docSnap) => {
+                        const data = docSnap.data() as ColDoc;
+                        const slugs = Array.isArray(data.slugs)
+                            ? data.slugs.filter((target): target is string => typeof target === 'string' && target.length > 0)
+                            : typeof data.slug === 'string' && data.slug
+                              ? [data.slug]
+                              : [];
+                        return {
+                            item: {
+                                docId: docSnap.id,
+                                title: typeof data.title === 'string' ? data.title : '',
+                                en: typeof data.en === 'string' ? data.en : '',
+                                text: typeof data.text === 'string' ? data.text : '',
+                                link: typeof data.link === 'string' ? data.link : undefined,
+                                slugs: [...new Set(slugs)],
+                                translations: data.translations,
+                            } satisfies FirestoreCol,
+                            order: typeof data.order === 'number' ? data.order : Number.MAX_SAFE_INTEGER,
+                        };
+                    })
+                    .filter((entry) => entry.item.slugs.includes(slug))
+                    .sort((a, b) => a.order - b.order)
+                    .map((entry) => entry.item);
 
                 setItems(fromFirestore);
             } catch (err) {
-                console.error('[useColumnsBySlug] Firestore 조회 실패, 정적 데이터로 폴백:', err);
+                console.error('[useColumnsBySlug] Firestore 조회 실패:', err);
             }
         })();
 

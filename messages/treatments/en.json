@@ -18,9 +18,18 @@
       { "q": "How is Ulthera different from Thermage?", "a": "Ulthera excels at lifting by tightening the SMAS layer with ultrasound, while Thermage excels at improving elasticity by regenerating dermal collagen with radiofrequency. We diagnose the ratio of sagging to reduced elasticity and design a single or combined treatment." }
     ],
     "boosterExtra": [
-      { "q": "Won't my face look unnatural after treatment?", "a": "#TODO: actual answer needed" },
-      { "q": "Do younger patients need a volume booster too?", "a": "#TODO: actual answer needed" },
-      { "q": "Should I get lifting or a volume booster first?", "a": "#TODO: actual answer needed" }
+      { "q": "Will my face look unnatural after treatment?", "a": "Rather than overfilling one area, the treatment plan distributes the appropriate amount across selected areas after evaluating the causes of hollowing and sagging and your facial proportions. Swelling can make the face look temporarily different immediately afterward, so the final contour is assessed after it subsides." },
+      { "q": "Do younger patients need a volume booster too?", "a": "Suitability is not determined by age alone. A clinician evaluates your current facial structure and goals, including congenital volume deficiency, weight changes, and loss of elasticity, before recommending treatment." },
+      { "q": "Should lifting or a volume booster come first?", "a": "Lifting may be prioritized when sagging is the main concern, while volume correction may come first when hollowing or structural volume deficiency is more prominent. If both are present, the clinician decides whether to combine or sequence treatments based on your skin and the planned procedures." },
+      { "q": "How many treatments will I need?", "a": "The number and interval vary with the product used, treatment area, degree of hollowing, and individual response. Additional treatment is considered after reviewing your progress following the first session." },
+      { "q": "What symptoms can occur after treatment?", "a": "Temporary swelling, bruising, tenderness, or redness can occur at injection sites. Contact the clinic immediately if you develop unusual symptoms such as severe pain, a change in skin color, or any change in vision." }
+    ],
+    "underEyeExtra": [
+      { "q": "Can it improve every type of dark circle?", "a": "Structural shadows caused by under-eye bulging and hollowing may be suitable for correction. If pigmentation, visible blood vessels, or a skin condition is the main cause, another treatment may be needed, so identifying the cause comes first." },
+      { "q": "Can everyone choose this instead of surgery?", "a": "Not every under-eye concern can be corrected with a non-surgical approach. The clinician evaluates fat protrusion, skin laxity and thickness, and any previous procedures or surgery before deciding whether surgery or another treatment would be more appropriate." },
+      { "q": "Can the area look uneven or unnatural?", "a": "Because under-eye skin is thin, conservative selection of product, treatment depth, and amount is important. Temporary swelling may make the area look uneven, and persistent edema or contour irregularity can occur, so follow-up assessment is necessary." },
+      { "q": "How many treatments will I need?", "a": "This varies with the degree of bulging and hollowing, any combined procedures, and your recovery. Rather than overcorrecting in one session, the clinician reviews the result before deciding whether additional treatment is needed." },
+      { "q": "Which symptoms require attention after treatment?", "a": "Temporary swelling, bruising, tenderness, or redness can occur. Avoid pressing or rubbing the area and follow the aftercare instructions. Contact the clinic immediately if you develop severe pain, a change in skin color, or any change in vision." }
     ]
   },
   "ivItems": ["IV Therapy", "Vitamin IV", "White Glow IV", "Cinderella IV", "Vitamin C (High-Dose)", "Vitamin B IV", "Antioxidant IV", "Glycyrrhizin IV", "Garlic IV", "Vitamin D IV", "Placenta IV"],

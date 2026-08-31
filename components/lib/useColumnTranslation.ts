@@ -29,20 +29,16 @@ function isTranslatableLocale(locale: string): locale is ColumnTranslatableLocal
 export function useLocalizedColumnPost(post: SkinColumnPostItem | null): LocalizedColumnPost {
     const locale = useLocale();
     const [cache, setCache] = useState<{ docId: string; locale: string; fields: TranslatableFields } | null>(null);
-    const [isTranslating, setIsTranslating] = useState(false);
+
+    const sourceHash = post ? hashSkinColumnSource(post.title, post.excerpt, post.contentHtml) : '';
+    const stored = post && isTranslatableLocale(locale) ? post.translations?.[locale] : undefined;
+    const currentStored = stored?.sourceHash === sourceHash ? stored : undefined;
 
     useEffect(() => {
         if (!post || !isTranslatableLocale(locale)) return;
-
-        const sourceHash = hashSkinColumnSource(post.title, post.excerpt, post.contentHtml);
-        const stored = post.translations?.[locale];
-        if (stored && stored.sourceHash === sourceHash) {
-            setCache({ docId: post.docId, locale, fields: stored });
-            return;
-        }
+        if (currentStored) return;
 
         let active = true;
-        setIsTranslating(true);
 
         fetch('/api/column-translation', {
             method: 'POST',
@@ -57,9 +53,6 @@ export function useLocalizedColumnPost(post: SkinColumnPostItem | null): Localiz
             })
             .catch((error) => {
                 console.error('[useLocalizedColumnPost] translation request failed', error);
-            })
-            .finally(() => {
-                if (active) setIsTranslating(false);
             });
 
         return () => {
@@ -67,13 +60,13 @@ export function useLocalizedColumnPost(post: SkinColumnPostItem | null): Localiz
         };
         // docId/locale 변경 시점에만 다시 확인하면 충분 — 같은 세션 중 관리자가 원문을 실시간으로
         // 고치는 상황은 없으므로 title/excerpt/contentHtml 은 deps에서 뺐다.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [post?.docId, locale]);
+    }, [post, locale, currentStored]);
 
     if (!post) return { post: null, isTranslating: false };
     if (!isTranslatableLocale(locale)) return { post, isTranslating: false };
+    if (currentStored) return { post: { ...post, ...currentStored }, isTranslating: false };
     if (cache && cache.docId === post.docId && cache.locale === locale) {
-        return { post: { ...post, ...cache.fields }, isTranslating };
+        return { post: { ...post, ...cache.fields }, isTranslating: false };
     }
-    return { post, isTranslating };
+    return { post, isTranslating: true };
 }

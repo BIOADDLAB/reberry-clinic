@@ -1,10 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import Reveal from '@/components/motion/Reveal';
 import { useColumnsBySlug } from '@/components/lib/useColumns';
 import { ColumnSliderContent } from '@/components/ui/ColumnSlider';
+import TextureBackground from '@/components/ui/TextureBackground';
 
 interface Props {
     slug: string;
@@ -21,14 +21,7 @@ export default function TreatmentColumnSection({ slug, name, heading }: Props) {
 
     return (
         <section className="relative overflow-x-clip bg-cream py-20 lg:pt-32.5 lg:pb-37.5">
-            <Image
-                src="/images/bg-texture-08.jpg"
-                alt=""
-                fill
-                quality={80}
-                sizes="100vw"
-                className="object-cover"
-            />
+            <TextureBackground src="/images/bg-texture-08.jpg" />
             <div className="container-site relative">
                 <Reveal className="text-center">
                     <h2 className="font-display text-h2">Column</h2>

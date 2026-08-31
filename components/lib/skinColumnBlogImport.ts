@@ -2,24 +2,13 @@ import { doc, getDoc, setDoc, writeBatch } from 'firebase/firestore';
 import { SIGNATURE_PAGES } from './adminConfig';
 import { db } from './firebase';
 import {
-    fetchNaverBlogFeed,
-    fetchNaverBlogThumbnails,
-    toBlogExcerpt,
-    toBlogPublishedAt,
-} from './naverBlog';
-import {
     fetchAllSkinColumnPosts,
     type SkinColumnPostItem,
 } from './skinColumnPosts';
 
-export function naverBlogColumnDocId(logNo: string) {
-    return `naver-${logNo}`;
-}
-
 const SETTINGS_COLLECTION = 'skinColumnSettings';
 const SETTINGS_DOC = 'blogImport';
 const POSTS_COLLECTION = 'skinColumnPosts';
-const SYNC_INTERVAL_MS = 6 * 60 * 60 * 1000;
 
 const SITE_CATEGORY_SLUGS = new Set<string>(SIGNATURE_PAGES.map((category) => category.slug));
 
@@ -55,6 +44,8 @@ export interface BlogImportResult {
     updated: number;
     published: number;
     needsCategory: number;
+    thumbnailsStored: number;
+    thumbnailsMissing: number;
     skipped: boolean;
 }
 
@@ -162,143 +153,6 @@ export async function applyMapsToUnmappedPosts(
 
     if (applied > 0) await batch.commit();
     return applied;
-}
-
-const emptyResult = (skipped: boolean): BlogImportResult => ({
-    fetched: 0,
-    created: 0,
-    updated: 0,
-    published: 0,
-    needsCategory: 0,
-    skipped,
-});
-
-export async function maybeSyncNaverBlogSkinColumns(): Promise<BlogImportResult> {
-    return syncNaverBlogSkinColumns({ force: false });
-}
-
-export async function syncNaverBlogSkinColumns(options?: { force?: boolean }): Promise<BlogImportResult> {
-    const force = options?.force === true;
-    const settings = await fetchBlogImportSettings();
-
-    if (!force && settings.lastSyncedAt) {
-        const elapsed = Date.now() - Date.parse(settings.lastSyncedAt);
-        if (Number.isFinite(elapsed) && elapsed < SYNC_INTERVAL_MS) {
-            return emptyResult(true);
-        }
-    }
-
-    const feed = await fetchNaverBlogFeed({ fresh: force });
-    if (feed.length === 0) return emptyResult(false);
-
-    const existingPosts = await fetchAllSkinColumnPosts();
-    const copiesByLogNo = new Map<string, SkinColumnPostItem[]>();
-    existingPosts.forEach((post) => {
-        if (post.source !== 'naver-blog' || !post.blogLogNo) return;
-        const copies = copiesByLogNo.get(post.blogLogNo) ?? [];
-        copies.push(post);
-        copiesByLogNo.set(post.blogLogNo, copies);
-    });
-
-    const missingThumbnails = feed
-        .filter((item) => {
-            if (!/^\d+$/.test(item.id)) return false;
-            return !copiesByLogNo.get(item.id)?.some((post) => post.thumbnailUrl);
-        })
-        .map((item) => item.id);
-    const thumbnails = await fetchNaverBlogThumbnails(missingThumbnails);
-
-    const now = new Date().toISOString();
-    const batch = writeBatch(db);
-    let created = 0;
-    let updated = 0;
-    let published = 0;
-    let needsCategory = 0;
-    const handledLogNos = new Set<string>();
-
-    const pickCanonical = (logNo: string) => {
-        const copies = copiesByLogNo.get(logNo) ?? [];
-        const stableId = naverBlogColumnDocId(logNo);
-        return copies.find((post) => post.docId === stableId) ?? copies[0];
-    };
-
-    feed.forEach((item) => {
-        if (!item.id) return;
-        handledLogNos.add(item.id);
-
-        const excerpt = toBlogExcerpt(item.description);
-        const publishedAt = toBlogPublishedAt(item.publishedAt);
-        const canonical = pickCanonical(item.id);
-        const copies = copiesByLogNo.get(item.id) ?? [];
-        const thumbnailUrl = canonical?.thumbnailUrl || thumbnails.get(item.id) || '';
-        const resolvedSlug = resolveBlogCategorySlug(item.category, settings.maps);
-        const categorySlug = canonical?.categorySlug || resolvedSlug;
-        const isPublished = canonical?.categorySlug ? canonical.isPublished : Boolean(resolvedSlug);
-        const ref = doc(db, POSTS_COLLECTION, naverBlogColumnDocId(item.id));
-
-        batch.set(
-            ref,
-            {
-                categorySlug,
-                // 관리자가 사이트용 제목을 수정한 뒤 다시 수집해도 블로그 원제목으로 덮어쓰지 않는다.
-                title: canonical?.title || item.title,
-                blogTitle: item.title,
-                excerpt,
-                contentHtml: canonical?.contentHtml ?? '',
-                youtubeUrl: canonical?.youtubeUrl ?? '',
-                thumbnailUrl,
-                publishedAt,
-                isPublished,
-                source: 'naver-blog',
-                blogUrl: item.url,
-                blogCategory: item.category,
-                blogLogNo: item.id,
-                sort: canonical?.sort ?? (-Date.parse(publishedAt) || 0),
-                createdAt: canonical?.createdAt || now,
-                updatedAt: now,
-            },
-            { merge: true },
-        );
-
-        if (canonical && canonical.docId === ref.id) updated += 1;
-        else if (canonical) updated += 1;
-        else created += 1;
-
-        copies.forEach((post) => {
-            if (post.docId !== ref.id) batch.delete(doc(db, POSTS_COLLECTION, post.docId));
-        });
-
-        if (isPublished) published += 1;
-        else if (!categorySlug) needsCategory += 1;
-    });
-
-    copiesByLogNo.forEach((copies, logNo) => {
-        if (handledLogNos.has(logNo)) return;
-        const keep = pickCanonical(logNo);
-        copies.forEach((post) => {
-            if (keep && post.docId !== keep.docId) batch.delete(doc(db, POSTS_COLLECTION, post.docId));
-        });
-    });
-
-    await batch.commit();
-    await setDoc(
-        settingsRef,
-        {
-            maps: settings.maps,
-            lastSyncedAt: now,
-            updatedAt: now,
-        },
-        { merge: true },
-    );
-
-    return {
-        fetched: feed.length,
-        created,
-        updated,
-        published,
-        needsCategory,
-        skipped: false,
-    };
 }
 
 export function collectBlogCategories(posts: SkinColumnPostItem[]) {

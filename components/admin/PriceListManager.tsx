@@ -556,6 +556,10 @@ function PriceItemForm({
             setValidationError('횟수/수량은 1회, 3회, 1병, 20개와 같은 형식만 입력할 수 있습니다.');
             return;
         }
+        if (new Set(normalizedSessions.map((session) => session.label)).size !== normalizedSessions.length) {
+            setValidationError('같은 횟수/수량 가격 행을 두 번 등록할 수 없습니다. 중복 행을 삭제해 주세요.');
+            return;
+        }
         await onSave({
             categoryId,
             sectionId,

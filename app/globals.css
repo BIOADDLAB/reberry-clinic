@@ -324,28 +324,21 @@ html:not([data-lang='ko']) .card-fixed-h {
 }
 
 /* ───────── 로딩 스켈레톤 ─────────
-   연한 샌드색 박스가 은은하게 깜빡임. 색/속도는 여기서만 관리한다. */
+   이미지 컨테이너에도 같은 클래스가 남아 있으므로 움직이는 그라데이션을 쓰면
+   저속 기기에서 종이 텍스처와 사진이 지글거리는 것처럼 보일 수 있다.
+   레이아웃 자리는 그대로 유지하되 배경은 정적인 색으로 고정한다. */
 .skeleton {
     --sk-base: color-mix(in srgb, var(--color-sand) 50%, var(--color-cream));
     --sk-hl: color-mix(in srgb, var(--color-sand) 20%, var(--color-cream));
 
-    background-image: linear-gradient(90deg, var(--sk-base) 25%, var(--sk-hl) 37%, var(--sk-base) 63%);
-    background-size: 400% 100%;
-    animation: skeleton-shimmer 1.4s ease infinite;
+    background-color: var(--sk-base);
+    background-image: none;
+    animation: none;
 }
 .skeleton-dark {
     --sk-base: color-mix(in srgb, var(--color-sand) 26%, var(--color-deep));
     --sk-hl: color-mix(in srgb, var(--color-sand) 45%, var(--color-deep));
 }
-@keyframes skeleton-shimmer {
-    0% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0 50%;
-    }
-}
-
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;

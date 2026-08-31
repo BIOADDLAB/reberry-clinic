@@ -75,10 +75,13 @@ export default function TourSwiper() {
                                 aria-label={t('prev')}
                                 className="flex items-center justify-center p-1 transition-opacity duration-500 hover:opacity-60 md:p-0"
                             >
-                                <img
+                                <Image
                                     src="/images/i-arr-left-03.svg"
                                     alt={t('prev')}
-                                    className="h-3.5 w-3.5 md:h-4 md:w-4 object-contain"
+                                    width={15}
+                                    height={8}
+                                    unoptimized
+                                    className="h-3.5 w-3.5 object-contain md:h-4 md:w-4"
                                 />
                             </button>
                             <button
@@ -86,10 +89,13 @@ export default function TourSwiper() {
                                 aria-label={t('next')}
                                 className="flex items-center justify-center p-1 transition-opacity duration-500 hover:opacity-60 md:p-0"
                             >
-                                <img
+                                <Image
                                     src="/images/i-arr-left-03.svg"
                                     alt={t('next')}
-                                    className="h-3.5 w-3.5 md:h-4 md:w-4 rotate-180 object-contain"
+                                    width={15}
+                                    height={8}
+                                    unoptimized
+                                    className="h-3.5 w-3.5 rotate-180 object-contain md:h-4 md:w-4"
                                 />
                             </button>
                         </div>

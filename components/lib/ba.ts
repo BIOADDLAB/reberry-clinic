@@ -80,7 +80,7 @@ export function resolveBALabel(photo: Pick<BAPhoto, 'slug' | 'slugs' | 'label'>)
 export const BA_CATEGORIES = [
     { key: 'pigment', label: '색소' },
     { key: 'acne', label: '여드름' },
-    { key: 'redness', label: '홍조' },
+    { key: 'redness', label: '홍조/주사피부염' },
     { key: 'pore-scar', label: '모공/흉터' },
     { key: 'wrinkle', label: '주름' },
     { key: 'lifting', label: '리프팅/탄력' },

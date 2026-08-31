@@ -25,7 +25,14 @@ export default function SubHero({ en, title, description, image }: Props) {
                 <div className="flex h-8 w-5 md:h-10 md:w-6 items-start justify-center rounded-full border-2 border-white p-1">
                     <div className="h-1.5 w-0.5 md:h-2 md:w-0.5 rounded-full bg-white animate-wheel" />
                 </div>
-                <img src="/images/i-arr-down-03.svg" alt="scroll down" className="w-3 md:w-auto" />
+                <Image
+                    src="/images/i-arr-down-03.svg"
+                    alt="scroll down"
+                    width={9}
+                    height={6}
+                    unoptimized
+                    className="w-3 md:w-auto"
+                />
             </div>
         </section>
     );

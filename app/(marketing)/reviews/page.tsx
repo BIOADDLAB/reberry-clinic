@@ -11,6 +11,7 @@ import T from '@/components/lang/T';
 import { cn } from '@/components/lib/cn';
 import { BA_CATEGORIES, formatTreatmentDate, resolveBACategory, type BAPhoto } from '@/components/lib/ba';
 import { filterReviewBAPhotos, useBAPhotos, useBAPhotosLoading } from '@/components/lib/useBAPhotos';
+import TextureBackground from '@/components/ui/TextureBackground';
 
 const PER_PAGE = 8;
 
@@ -91,15 +92,7 @@ export default function ReviewsPage() {
             <SubHero en="Before &amp; After" image="/images/bg-sub-06.jpg" />
 
             <section className="relative py-20 lg:py-37.5">
-                <Image
-                    src="/images/bg-texture-06.jpg"
-                    alt=""
-                    fill
-                    priority
-                    quality={88}
-                    sizes="100vw"
-                    className="object-cover"
-                />
+                <TextureBackground src="/images/bg-texture-06.jpg" priority />
                 <div className="container-site relative">
                     <div ref={topRef} />
 

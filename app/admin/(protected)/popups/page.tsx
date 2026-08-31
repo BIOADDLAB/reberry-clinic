@@ -5,7 +5,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { uploadImage } from '@/components/lib/storageUpload';
 import {
     deletePopupImage,
@@ -28,6 +28,9 @@ export default function AdminPopupsPage() {
     const [busy, setBusy] = useState(false);
     /** 업로드 중인 탭 번호. 버튼을 잠그는 용도 */
     const [uploading, setUploading] = useState<number | null>(null);
+    // 저장 전에 공개 중인 원본 이미지를 지우면 취소/실패 시 팝업이 깨진다.
+    // 교체·삭제 대상은 기억만 해두고 설정 저장이 성공한 뒤 정리한다.
+    const pendingDeleteUrls = useRef(new Set<string>());
 
     useEffect(() => {
         let alive = true;
@@ -47,10 +50,10 @@ export default function AdminPopupsPage() {
 
     const addTab = () => setTabs((prev) => (prev.length >= POPUP_MAX_TABS ? prev : [...prev, emptyTab()]));
 
-    const removeTab = async (index: number) => {
+    const removeTab = (index: number) => {
         if (!confirm('이 탭을 지울까요?')) return;
         const target = tabs[index];
-        if (target.imageUrl) await deletePopupImage(target.imageUrl);
+        if (target.imageUrl) pendingDeleteUrls.current.add(target.imageUrl);
         setTabs((prev) => prev.filter((_, i) => i !== index));
     };
 
@@ -61,7 +64,7 @@ export default function AdminPopupsPage() {
             const previous = tabs[index].imageUrl;
             const url = await uploadImage(file, 'popups');
             setTab(index, { imageUrl: url });
-            if (previous) await deletePopupImage(previous);
+            if (previous && previous !== url) pendingDeleteUrls.current.add(previous);
         } catch {
             alert('이미지 업로드에 실패했습니다.');
         } finally {
@@ -76,6 +79,10 @@ export default function AdminPopupsPage() {
         setBusy(true);
         try {
             await savePopupSetting({ enabled, tabs: usable });
+            const activeUrls = new Set(usable.map((tab) => tab.imageUrl));
+            const cleanupUrls = [...pendingDeleteUrls.current].filter((url) => !activeUrls.has(url));
+            await Promise.allSettled(cleanupUrls.map((url) => deletePopupImage(url)));
+            pendingDeleteUrls.current.clear();
             setTabs(usable.length ? usable : [emptyTab()]);
             alert('저장했습니다.');
         } catch {

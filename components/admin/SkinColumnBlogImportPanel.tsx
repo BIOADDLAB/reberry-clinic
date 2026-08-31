@@ -88,9 +88,9 @@ export default function SkinColumnBlogImportPanel({
                 <div>
                     <h2 className="text-lead font-bold text-cocoa">네이버 블로그 수집</h2>
                     <p className="mt-1 max-w-2xl text-caption leading-6 text-latte">
-                        닥터 파이톤 블로그 RSS에서 제목·요약·썸네일을 가져옵니다. 본문은 사이트에 복사하지 않고, 카드에서
-                        블로그 원문으로 이동합니다. 아래 매핑만 한 번 연결하면 이후 글은 자동 분류되며, 사이트에서 수정한
-                        제목은 다시 수집해도 유지됩니다.
+                        닥터 파이톤 블로그 RSS에서 제목·요약·대표 이미지를 가져옵니다. 대표 이미지는 웹용 썸네일로 압축해
+                        저장하며, 본문은 사이트에 복사하지 않고 카드에서 블로그 원문으로 이동합니다. 아래 매핑만 한 번
+                        연결하면 이후 글은 자동 분류되며, 사이트에서 수정한 제목은 다시 수집해도 유지됩니다.
                     </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
@@ -120,6 +120,8 @@ export default function SkinColumnBlogImportPanel({
             {result && !result.skipped ? (
                 <p className="mt-2 text-caption text-cocoa">
                     RSS {result.fetched}개 · 신규 {result.created}개 · 갱신 {result.updated}개 · 공개 {result.published}개
+                    {result.thumbnailsStored > 0 ? ` · 썸네일 저장 ${result.thumbnailsStored}개` : ''}
+                    {result.thumbnailsMissing > 0 ? ` · 썸네일 없음 ${result.thumbnailsMissing}개` : ''}
                     {result.needsCategory > 0 ? ` · 분류 필요 ${result.needsCategory}개` : ''}
                 </p>
             ) : null}

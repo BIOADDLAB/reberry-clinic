@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { ADMIN_COOKIE_NAME, getAdminAuthToken } from '@/app/admin/auth';
-import { syncNaverBlogSkinColumns } from '@/components/lib/skinColumnBlogImport';
+import { syncNaverBlogSkinColumns } from '@/components/lib/skinColumnBlogSync';
 
 export async function syncBlogSkinColumnsAction() {
     const cookieStore = await cookies();
@@ -10,5 +10,5 @@ export async function syncBlogSkinColumnsAction() {
         throw new Error('관리자 권한이 필요합니다.');
     }
 
-    return syncNaverBlogSkinColumns({ force: true });
+    return syncNaverBlogSkinColumns();
 }

@@ -7,8 +7,8 @@ import {
     fetchPublishedSkinColumnPosts,
     getSkinColumnBlogUrl,
 } from '@/components/lib/skinColumnPosts';
-import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
+import TextureBackground from '@/components/ui/TextureBackground';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,14 +36,7 @@ export default async function ColumnPage() {
             />
             <SubHero en="Column" image="/images/bg-sub-07.jpg" />
             <section className="relative">
-                <Image
-                    src="/images/bg-texture-08.jpg"
-                    alt=""
-                    fill
-                    quality={80}
-                    sizes="100vw"
-                    className="object-cover"
-                />
+                <TextureBackground src="/images/bg-texture-08.jpg" />
                 <SkinColumnList />
             </section>
             <LocationSection />

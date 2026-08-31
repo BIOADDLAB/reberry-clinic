@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { syncNaverBlogSkinColumns } from '@/components/lib/skinColumnBlogImport';
+import { syncNaverBlogSkinColumns } from '@/components/lib/skinColumnBlogSync';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     }
 
     try {
-        const result = await syncNaverBlogSkinColumns({ force: true });
+        const result = await syncNaverBlogSkinColumns();
         return NextResponse.json(result);
     } catch (error) {
         console.error('[cron/sync-blog-columns] failed', error);

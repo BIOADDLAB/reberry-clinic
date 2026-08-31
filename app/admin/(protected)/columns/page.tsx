@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/components/lib/firebase';
 import { solutions } from '@/components/lib/solutions';
 import {
@@ -23,7 +23,7 @@ interface ColDoc {
     text: string;
     link: string;
     slugs: string[];
-    order: number;
+    order?: number;
 }
 
 interface PageOption {
@@ -75,19 +75,57 @@ const nextFreeOrder = (taken: number[]) => {
     return taken.length + 1;
 };
 
+const isHttpUrl = (value: string) => {
+    try {
+        const url = new URL(value);
+        return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch {
+        return false;
+    }
+};
+
 export default function AdminColumnsPage() {
     const [items, setItems] = useState<ColDoc[]>([]);
     const [form, setForm] = useState(EMPTY_FORM);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [busy, setBusy] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const [filterScope, setFilterScope] = useState<FilterScope>('all');
     const [filterTarget, setFilterTarget] = useState('all');
 
     useEffect(() => {
-        const columnsQuery = query(collection(db, 'columns'), orderBy('order'));
-        return onSnapshot(columnsQuery, (snapshot) => {
-            setItems(snapshot.docs.map((column) => ({ id: column.id, ...column.data() })) as ColDoc[]);
-        });
+        // orderBy는 order 필드가 없는 예전 문서를 목록에서 제외한다. 전체를 읽어
+        // 정규화·정렬하면 레거시 칼럼도 관리자에서 찾아 수정할 수 있다.
+        return onSnapshot(
+            collection(db, 'columns'),
+            (snapshot) => {
+                const nextItems = snapshot.docs
+                    .map((column) => {
+                        const data = column.data();
+                        const slugs = Array.isArray(data.slugs)
+                            ? data.slugs.filter((slug): slug is string => typeof slug === 'string' && slug.length > 0)
+                            : typeof data.slug === 'string' && data.slug
+                              ? [data.slug]
+                              : [];
+                        return {
+                            id: column.id,
+                            title: typeof data.title === 'string' ? data.title : '',
+                            en: typeof data.en === 'string' ? data.en : '',
+                            text: typeof data.text === 'string' ? data.text : '',
+                            link: typeof data.link === 'string' ? data.link : '',
+                            slugs: [...new Set(slugs)],
+                            ...(typeof data.order === 'number' ? { order: data.order } : {}),
+                        } satisfies ColDoc;
+                    })
+                    .sort((a, b) => (a.order ?? Number.MAX_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER));
+                setItems(nextItems);
+                setError(null);
+            },
+            (snapshotError) => {
+                console.error('[AdminColumnsPage] 블로그 연결 조회 실패:', snapshotError);
+                setError('블로그 연결 목록을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.');
+            },
+        );
     }, []);
 
     const isDevice = form.scope === 'device';
@@ -122,7 +160,9 @@ export default function AdminColumnsPage() {
                 return {
                     target,
                     count: targetItems.length,
-                    usedOrders: targetItems.map((item) => item.order),
+                    usedOrders: targetItems
+                        .map((item) => item.order)
+                        .filter((order): order is number => typeof order === 'number'),
                 };
             }),
         [selectedTargets, items, editingId],
@@ -132,7 +172,20 @@ export default function AdminColumnsPage() {
     const fullTargets = targetStats.filter((stat) => stat.count >= COUNT_LIMITS.columnPerPage);
     const isDuplicateOrder = duplicateTargets.length > 0;
     const isOverCount = fullTargets.length > 0;
-    const firstTargetOrders = targetStats[0]?.usedOrders ?? [];
+    const allTargetOrders = [...new Set(targetStats.flatMap((stat) => stat.usedOrders))];
+
+    const usedOrdersForTargets = (targets: string[]) => [
+        ...new Set(
+            items
+                .filter(
+                    (item) =>
+                        item.id !== editingId &&
+                        item.slugs.some((slug) => targets.includes(slug)) &&
+                        typeof item.order === 'number',
+                )
+                .map((item) => item.order as number),
+        ),
+    ];
 
     const visibleItems = useMemo(() => {
         const scopeSlugs =
@@ -154,7 +207,7 @@ export default function AdminColumnsPage() {
 
     const changeScope = (scope: ColumnScope) => {
         const target = PAGE_OPTIONS[scope][0].slug;
-        const taken = items.filter((item) => item.slugs.includes(target)).map((item) => item.order);
+        const taken = usedOrdersForTargets([target]);
         setForm({
             ...form,
             scope,
@@ -165,9 +218,8 @@ export default function AdminColumnsPage() {
     };
 
     const changeSingleTarget = (target: string) => {
-        const taken = items
-            .filter((item) => item.slugs.includes(target) && item.id !== editingId)
-            .map((item) => item.order);
+        const nextTargets = form.scope === 'signature' && form.alsoDevice ? [target, form.deviceTarget] : [target];
+        const taken = usedOrdersForTargets(nextTargets);
         setForm({ ...form, targets: [target], order: nextFreeOrder(taken) });
     };
 
@@ -176,16 +228,12 @@ export default function AdminColumnsPage() {
             ? [...form.targets, target]
             : form.targets.filter((selected) => selected !== target);
         const uniqueTargets = [...new Set(targets)];
-        const taken = uniqueTargets.length === 1
-            ? items
-                  .filter((item) => item.slugs.includes(uniqueTargets[0]) && item.id !== editingId)
-                  .map((item) => item.order)
-            : [];
+        const taken = usedOrdersForTargets(uniqueTargets);
 
         setForm({
             ...form,
             targets: uniqueTargets,
-            ...(uniqueTargets.length === 1 ? { order: nextFreeOrder(taken) } : {}),
+            order: uniqueTargets.length > 0 ? nextFreeOrder(taken) : form.order,
         });
     };
 
@@ -219,7 +267,7 @@ export default function AdminColumnsPage() {
             en: item.en ?? '',
             text: item.text ?? '',
             link: item.link ?? '',
-            order: item.order ?? 1,
+            order: item.order ?? nextFreeOrder(usedOrdersForTargets(item.slugs)),
             alsoDevice: scope === 'signature' && deviceTargets.length > 0,
             deviceTarget: deviceTargets[0] ?? DEVICE_OPTIONS[0].slug,
         });
@@ -232,9 +280,12 @@ export default function AdminColumnsPage() {
     };
 
     const submit = async () => {
+        setError(null);
         if (selectedTargets.length === 0) return alert('노출할 페이지를 하나 이상 선택하세요.');
         if (!form.text.trim()) return alert('제목(카드 본문)을 입력하세요.');
         if (!isDevice && !form.title.trim()) return alert('시술·기기 이름을 입력하세요.');
+        if (!isDevice && form.title.trim().length > titleLimit) return alert(`시술·기기 이름은 ${titleLimit}자 이내로 입력하세요.`);
+        if (form.link.trim() && !isHttpUrl(form.link.trim())) return alert('더보기 URL은 http:// 또는 https://로 시작해야 합니다.');
         if (isDuplicateOrder) {
             return alert(`${duplicateTargets.map((stat) => targetLabel(stat.target)).join(', ')} 페이지에 이미 ${form.order}번이 있습니다.`);
         }
@@ -259,6 +310,11 @@ export default function AdminColumnsPage() {
                 await addDoc(collection(db, 'columns'), payload);
             }
             cancelEdit();
+        } catch (submitError) {
+            console.error('[AdminColumnsPage] 블로그 연결 저장 실패:', submitError);
+            const message = submitError instanceof Error ? submitError.message : '블로그 연결 저장에 실패했습니다.';
+            setError(message);
+            alert(message);
         } finally {
             setBusy(false);
         }
@@ -267,7 +323,12 @@ export default function AdminColumnsPage() {
     const remove = async (item: ColDoc) => {
         if (!confirm(`"${item.text.split('\n')[0]}" 칼럼을 삭제할까요?`)) return;
         if (editingId === item.id) cancelEdit();
-        await deleteDoc(doc(db, 'columns', item.id));
+        try {
+            await deleteDoc(doc(db, 'columns', item.id));
+        } catch (removeError) {
+            console.error('[AdminColumnsPage] 블로그 연결 삭제 실패:', removeError);
+            setError('블로그 연결 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+        }
     };
 
     const inputClass =
@@ -278,6 +339,11 @@ export default function AdminColumnsPage() {
         <div className="mx-auto max-w-4xl">
             <h1 className="text-h2 font-bold text-cocoa">블로그 연결 관리</h1>
             <p className="mt-1 text-small text-latte">닥터 파이톤 블로그 연결 카드를 등록·수정합니다.</p>
+            {error && (
+                <p role="alert" className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-caption text-red-700">
+                    {error}
+                </p>
+            )}
 
             <div className="mt-6 rounded-2xl bg-white p-5 shadow-[0_2px_20px_rgba(69,54,45,0.06)] md:p-7">
                 {editingId && (
@@ -378,7 +444,17 @@ export default function AdminColumnsPage() {
                                     <input
                                         type="checkbox"
                                         checked={form.alsoDevice}
-                                        onChange={(event) => setForm({ ...form, alsoDevice: event.target.checked })}
+                                        onChange={(event) => {
+                                            const alsoDevice = event.target.checked;
+                                            const targets = alsoDevice
+                                                ? [...form.targets, form.deviceTarget]
+                                                : form.targets;
+                                            setForm({
+                                                ...form,
+                                                alsoDevice,
+                                                order: nextFreeOrder(usedOrdersForTargets(targets)),
+                                            });
+                                        }}
                                     />
                                     <span className="font-semibold text-cocoa">
                                         같은 칼럼을 기기·제품 상세 페이지에도 추가
@@ -387,7 +463,16 @@ export default function AdminColumnsPage() {
                                 {form.alsoDevice && (
                                     <select
                                         value={form.deviceTarget}
-                                        onChange={(event) => setForm({ ...form, deviceTarget: event.target.value })}
+                                        onChange={(event) => {
+                                            const deviceTarget = event.target.value;
+                                            setForm({
+                                                ...form,
+                                                deviceTarget,
+                                                order: nextFreeOrder(
+                                                    usedOrdersForTargets([...form.targets, deviceTarget]),
+                                                ),
+                                            });
+                                        }}
                                         className={`${inputClass} mt-2`}
                                     >
                                         {DEVICE_OPTIONS.map((device) => (
@@ -452,13 +537,13 @@ export default function AdminColumnsPage() {
                         <span className="mt-1 flex flex-wrap items-center gap-2 text-caption text-red-500">
                             {duplicateTargets.map((stat) => targetLabel(stat.target)).join(', ')} 페이지에서 이미 사용 중인
                             번호입니다.
-                            {firstTargetOrders.length > 0 && (
+                            {allTargetOrders.length > 0 && (
                                 <button
                                     type="button"
-                                    onClick={() => setForm({ ...form, order: nextFreeOrder(firstTargetOrders) })}
+                                    onClick={() => setForm({ ...form, order: nextFreeOrder(allTargetOrders) })}
                                     className="rounded border border-red-300 px-2 py-0.5 text-red-600"
                                 >
-                                    {nextFreeOrder(firstTargetOrders)}번으로 바꾸기
+                                    {nextFreeOrder(allTargetOrders)}번으로 바꾸기
                                 </button>
                             )}
                         </span>
@@ -540,7 +625,7 @@ export default function AdminColumnsPage() {
                             </p>
                             <p className="mt-0.5 whitespace-pre-line text-latte">{item.text}</p>
                             <p className="mt-1 text-caption text-latte">
-                                {item.slugs.map(targetLabel).join(' · ')} · {item.order}번
+                                {item.slugs.map(targetLabel).join(' · ')} · {item.order ?? '순서 미지정'}
                                 {!item.link && ' · URL 미입력(블로그 홈으로 연결)'}
                             </p>
                         </div>

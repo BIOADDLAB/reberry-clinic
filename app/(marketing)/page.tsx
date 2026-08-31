@@ -2,8 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getLocale, getTranslations } from 'next-intl/server';
-import Eyebrow from '@/components/ui/Eyebrow';
-import BASlider from '@/components/ui/BASlider';
 import MoreView from '@/components/ui/MoreView';
 import { zoom } from '@/components/lib/motion';
 import { site } from '@/components/lib/site';
@@ -13,6 +11,8 @@ import Reveal from '@/components/motion/Reveal';
 import TourSwiper from '@/components/ui/TourSwioer';
 import PopupModal from '@/components/home/PopupModal';
 import ManagedEventList from '@/components/events/ManagedEventList';
+import HomeBASection from '@/components/home/HomeBASection';
+import TextureBackground from '@/components/ui/TextureBackground';
 
 const HERO_IMG = '/images/bg-main-hiro.jpg';
 
@@ -61,7 +61,7 @@ export default async function Home() {
                     </h1>
                     <div className="mt-11 flex justify-center">
                         <Link
-                            href="/treatments/signature/pigment"
+                            href="/treatments/signature/booster"
                             className="text-lead min-w-[150px] border border-cream/70 px-3.75 py-1.25  transition-colors hover:bg-cocoa/50 hover:text-white hover:shadow-sm"
                         >
                             SIGNATURE
@@ -74,7 +74,15 @@ export default async function Home() {
                         <div className="flex h-8 w-5 items-start justify-center rounded-full border-[1.5px] border-white p-1">
                             <div className="h-1.5 w-0.5 rounded-full bg-white animate-wheel" />
                         </div>
-                        <img src="/images/i-arr-down-03.svg" alt="" className="w-2" aria-hidden />
+                        <Image
+                            src="/images/i-arr-down-03.svg"
+                            alt=""
+                            width={9}
+                            height={6}
+                            unoptimized
+                            className="w-2"
+                            aria-hidden
+                        />
                     </div>
                 </div>
 
@@ -84,40 +92,7 @@ export default async function Home() {
                 </div>
             </section>
 
-            {/* 전 후 사진 영역 */}
-            <section className="relative py-20 lg:py-28 bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-top">
-                <div className="container-site relative">
-                    <Reveal className="text-center">
-                        <Eyebrow>RE:BERRY</Eyebrow>
-                        <div className="flex items-center justify-center mt-7">
-                            <span className="font-display leading-[10px] text-[90px] mr-2 text-latte" aria-hidden>
-                                “
-                            </span>
-                            {/* #ISSUE: 자동 번역에 맡기면 어순이 바뀌면서 <strong class="hl-down"> 위치가 흐트러진다.
-                                → 하이라이트가 걸린 헤드라인은 messages/*.json 에 언어별로 직접 작성해둔다 */}
-                            <h2 className=" text-h2  font-medium  tracking-tighter">
-                                {t.rich('heroHeadline', {
-                                    mob: () => <br className="block md:hidden" />,
-                                    hl: (chunks) => <strong className="hl-down font-bold">{chunks}</strong>,
-                                })}
-                            </h2>
-                            <span className="font-display leading-[10px] ml-2 text-[90px] text-latte" aria-hidden>
-                                ”
-                            </span>
-                        </div>
-                        <p className="mt-9 text-lead font-medium tracking-tight">
-                            {t.rich('heroSubline', { br: () => <br /> })}
-                        </p>
-                        {/* #TODO: 시그니처-볼륨리프팅 페이지로 이동 */}
-                        <div className="mt-7">
-                            <MoreView href="/reviews" dark />
-                        </div>
-                    </Reveal>
-                    <Reveal className="mx-auto mt-14 max-w-4xl lg:mt-16">
-                        <BASlider light />
-                    </Reveal>
-                </div>
-            </section>
+            <HomeBASection />
 
             {/* 진행 중인 이벤트 영역 */}
             <section className="overflow-hidden bg-cream py-20 lg:py-32">
@@ -186,9 +161,9 @@ export default async function Home() {
                 <div className="flex w-full max-w-[1366px] flex-col lg:flex-row min-[1580px]:w-[1366px]">
                     {/* 왼쪽 영역 */}
                     <div className="relative hidden shrink-0 lg:block lg:aspect-auto lg:w-[36%] min-[1580px]:w-[497px]">
-                        <Reveal variants={zoom} className="absolute inset-0">
-                            <Image src="/images/bg-texture-01.jpg" alt="" fill quality={88} className="object-cover" />
-                        </Reveal>
+                        <div className="absolute inset-0">
+                            <TextureBackground src="/images/bg-texture-01.jpg" />
+                        </div>
                     </div>
 
                     {/* 오른쪽 영역 */}
@@ -202,18 +177,9 @@ export default async function Home() {
                                 </h2>
                             </Reveal>
 
-                            <Reveal
-                                variants={zoom}
-                                className="relative mx-auto mt-8 aspect-[3/4] w-[50%] max-w-[220px] overflow-hidden rounded-full lg:hidden"
-                            >
-                                <Image
-                                    src="/images/bg-texture-01.jpg"
-                                    alt=""
-                                    fill
-                                    quality={88}
-                                    className="object-cover"
-                                />
-                            </Reveal>
+                            <div className="relative mx-auto mt-8 aspect-[3/4] w-[50%] max-w-[220px] overflow-hidden rounded-full lg:hidden">
+                                <TextureBackground src="/images/bg-texture-01.jpg" sizes="220px" />
+                            </div>
 
                             <Reveal delay={0.07}>
                                 <span className="block mx-auto w-px h-8.5 bg-cream/80 mt-8 lg:hidden"></span>

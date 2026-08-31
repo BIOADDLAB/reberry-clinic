@@ -1,11 +1,13 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { SIGNATURE_PAGES } from '@/components/lib/adminConfig';
 import {
     getSkinColumnBlogUrl,
+    isHostedColumnThumbnail,
     subscribePublishedSkinColumnPosts,
     type SkinColumnPostItem,
 } from '@/components/lib/skinColumnPosts';
@@ -188,7 +190,7 @@ function ColumnCard({ post: rawPost }: { post: SkinColumnPostItem }) {
 
     const inner = (
         <>
-            <ColumnPlaceholder />
+            <ColumnThumbnail post={post} />
             <div className="flex flex-1 flex-col p-5 md:p-6">
                 <div className="flex items-center justify-between gap-3 text-caption-sm text-latte">
                     <span className="rounded-full bg-sand/25 px-2.5 py-1 font-semibold text-cocoa">
@@ -220,7 +222,22 @@ function ColumnCard({ post: rawPost }: { post: SkinColumnPostItem }) {
     );
 }
 
-function ColumnPlaceholder() {
+function ColumnThumbnail({ post }: { post: SkinColumnPostItem }) {
+    if (isHostedColumnThumbnail(post.thumbnailUrl) && post.thumbnailUrl) {
+        return (
+            <div className="relative aspect-[16/10] overflow-hidden bg-sand/35">
+                <Image
+                    src={post.thumbnailUrl}
+                    alt=""
+                    fill
+                    unoptimized
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                />
+            </div>
+        );
+    }
+
     return (
         <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-sand/35">
             <span className="font-display text-h3 tracking-[0.08em] text-latte/40 transition-transform duration-500 group-hover:scale-[1.04]">

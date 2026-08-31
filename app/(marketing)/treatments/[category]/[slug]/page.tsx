@@ -22,6 +22,7 @@ import TreatmentIntroSection from '@/components/ui/TreatmentIntroSection';
 import TreatmentColumnSection from '@/components/ui/TreatmentColumnSection';
 import TreatmentBASection from '@/components/ui/TreatmentBASection';
 import { AGING_LIFTING_PAGES, skinTreatmentPageSlug } from '@/components/lib/adminConfig';
+import TextureBackground from '@/components/ui/TextureBackground';
 
 /* ════════════════════════════════════════════════════════════════════
    #ISSUE: 섹션 노출 순서는 아래 배열 하나로만 정한다. 순서를 바꾸고 싶으면
@@ -51,20 +52,27 @@ interface Params {
     params: Promise<{ category: string; slug: string }>;
 }
 
-// treatments.ts 데이터에서 18개 주소를 자동 생성
+// treatments.ts 데이터에서 현재 시술 주소를 자동 생성
 export function generateStaticParams() {
     return treatments.map((t) => ({ category: t.category, slug: t.slug }));
 }
 
-// faq.sharedSignatureExtra / faq.boosterExtra 를 faq.common 과 합쳐 원본 treatments.ts 의
-// sharedSignatureFaq / boosterFaq 순서 그대로 재조립한다.
+// 번역 파일의 FAQ 묶음을 페이지별 구성에 맞게 조립한다.
 type FaqItem = { q: string; a: string };
-function buildFaq(faqRaw: { common: FaqItem[]; sharedSignatureExtra: FaqItem[]; boosterExtra: FaqItem[] }, kind: 'shared' | 'booster') {
+function buildFaq(
+    faqRaw: {
+        common: FaqItem[];
+        sharedSignatureExtra: FaqItem[];
+        boosterExtra: FaqItem[];
+        underEyeExtra: FaqItem[];
+    },
+    kind: 'shared' | 'booster' | 'underEye',
+) {
     if (kind === 'shared') {
         const [first, last] = faqRaw.sharedSignatureExtra;
         return [first, ...faqRaw.common, last];
     }
-    return [...faqRaw.boosterExtra, faqRaw.common[2], faqRaw.common[3]];
+    return kind === 'booster' ? faqRaw.boosterExtra : faqRaw.underEyeExtra;
 }
 
 export async function generateMetadata({ params }: Params) {
@@ -144,7 +152,7 @@ export default async function TreatmentPage({ params }: Params) {
         /* #TODO: 반응형 작업 조금 더 들어가야함 크림이 어색하게 떠있는 부분들이 있음 */
         story: sig ? (
             <section className="relative texture-paper py-20 lg:pt-35 lg:pb-42.5">
-                <Image src="/images/bg-texture-06.jpg" alt="" fill quality={85} sizes="100vw" className="object-cover" />
+                <TextureBackground src="/images/bg-texture-06.jpg" />
                 <div className="container-site relative">
                     <Reveal className="text-center">
                         <p className="font-display text-h2 tracking-tight">{t.en}</p>
@@ -206,14 +214,7 @@ export default async function TreatmentPage({ params }: Params) {
                 )}
             >
                 {t.category === 'signature' && (
-                    <Image
-                        src="/images/bg-texture-06.jpg"
-                        alt=""
-                        fill
-                        quality={80}
-                        sizes="100vw"
-                        className="scale-[1.02] object-cover"
-                    />
+                    <TextureBackground src="/images/bg-texture-06.jpg" />
                 )}
                 <div className="container-site relative">
                     {sig && (
@@ -271,7 +272,7 @@ export default async function TreatmentPage({ params }: Params) {
         /* 시그니처 전용 — FAQ */
         faq: faq ? (
             <section className="texture-dark relative py-20 text-cream lg:pt-30 lg:pb-25">
-                <Image src="/images/bg-texture-09.jpg" alt="" fill quality={80} sizes="100vw" className="object-cover" />
+                <TextureBackground src="/images/bg-texture-09.jpg" />
                 <div className="container-site relative">
                     <Reveal className="text-center">
                         <h2 className="font-display text-h2 tracking-[0.7em] leading-12 md:text-h2">RE:BERRY FAQ</h2>

@@ -14,12 +14,10 @@ import {
     deleteDoc,
     doc,
     onSnapshot,
-    orderBy,
-    query,
     serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '@/components/lib/firebase';
-import { uploadImage } from '@/components/lib/storageUpload';
+import { deleteStoredImage, uploadImage } from '@/components/lib/storageUpload';
 import {
     TREATMENT_PAGES,
     TREATMENT_PAGE_GROUPS,
@@ -52,7 +50,18 @@ interface BAPhotoDoc {
     category?: string; // 전후사진 페이지(/reviews) 카테고리 탭
     place?: string; // 노출 위치 treatment/reviews/both (없으면 both)
     treatmentDate?: string; // 시술일 YYYY-MM-DD
+    createdAt?: unknown; // 기존 문서에는 없을 수 있음
 }
+
+const VALID_TREATMENT_SLUGS = new Set<string>(TREATMENT_PAGES.map((page) => page.slug));
+
+const createdAtMillis = (value: unknown) => {
+    if (typeof value === 'string') return Date.parse(value) || 0;
+    if (!value || typeof value !== 'object') return 0;
+    const timestamp = value as { toMillis?: () => number; seconds?: number };
+    if (typeof timestamp.toMillis === 'function') return timestamp.toMillis();
+    return typeof timestamp.seconds === 'number' ? timestamp.seconds * 1000 : 0;
+};
 
 const EMPTY_FORM = {
     // 새로 올리는 사진은 어디에 띄울지 반드시 고르게 한다(기본값 = 시술 페이지)
@@ -75,12 +84,27 @@ export default function AdminBAPage() {
     const [afterFile, setAfterFile] = useState<File | null>(null);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [busy, setBusy] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const [filterSlug, setFilterSlug] = useState<string>('all');
     const [filterPlace, setFilterPlace] = useState<string>('all');
 
     useEffect(() => {
-        const q = query(collection(db, 'baPhotos'), orderBy('createdAt', 'desc'));
-        return onSnapshot(q, (snap) => setItems(snap.docs.map((d) => ({ id: d.id, ...d.data() })) as BAPhotoDoc[]));
+        // orderBy('createdAt')는 createdAt 필드가 없는 예전 사진을 결과에서 제외한다.
+        // 전체 문서를 읽은 뒤 클라이언트에서 정렬해 기존 사진도 빠짐없이 수정할 수 있게 한다.
+        return onSnapshot(
+            collection(db, 'baPhotos'),
+            (snap) => {
+                const nextItems = snap.docs
+                    .map((entry) => ({ id: entry.id, ...entry.data() }) as BAPhotoDoc)
+                    .sort((a, b) => createdAtMillis(b.createdAt) - createdAtMillis(a.createdAt));
+                setItems(nextItems);
+                setError(null);
+            },
+            (snapshotError) => {
+                console.error('[AdminBAPage] 전후사진 조회 실패:', snapshotError);
+                setError('전후사진 목록을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.');
+            },
+        );
     }, []);
 
     // 비어 있는 가장 빠른 순서 번호 (1,2,4 가 쓰였으면 → 3)
@@ -141,7 +165,9 @@ export default function AdminBAPage() {
 
     const startEdit = (it: BAPhotoDoc) => {
         const place = resolveBAPlace(it);
-        const slugs = resolveBASlugs(it);
+        // 삭제된 예전 시그니처(pigment/lifting) 연결값을 숨은 채로 다시 저장하지 않는다.
+        // 현재 페이지 목록에 있는 연결만 폼에 되살리고, 없으면 관리자가 새 페이지를 고르게 한다.
+        const slugs = resolveBASlugs(it).filter((slug) => VALID_TREATMENT_SLUGS.has(slug));
         const category = resolveBACategory(it) ?? BA_CATEGORIES[0].key;
         // 저장된 라벨이 자동 라벨과 다르면 '직접 입력' 상태로 되살린다
         const auto =
@@ -217,7 +243,11 @@ export default function AdminBAPage() {
     };
 
     const submit = async () => {
+        setError(null);
         if (usesTreatment && form.slugs.length === 0) return alert('노출할 시술 페이지를 한 개 이상 선택하세요.');
+        if (usesTreatment && form.slugs.some((slug) => !VALID_TREATMENT_SLUGS.has(slug))) {
+            return alert('현재 사용 중인 시술 페이지만 선택해 주세요.');
+        }
         if (!finalLabel) return alert('표시 라벨을 입력하세요.');
         if (!form.treatmentDate) return alert('시술일을 선택하세요.');
         if (!editingId && (!beforeFile || !afterFile)) return alert('전/후 사진을 모두 선택하세요.');
@@ -233,11 +263,21 @@ export default function AdminBAPage() {
         if (isOverMainCount) return alert(`메인 노출은 최대 ${COUNT_LIMITS.baMain}장까지 가능합니다.`);
 
         setBusy(true);
+        const uploadedUrls: string[] = [];
         try {
             // 수정 시 새 파일을 안 골랐으면 기존 URL 유지
             const existing = items.find((it) => it.id === editingId);
-            const beforeUrl = beforeFile ? await uploadImage(beforeFile, 'ba') : existing!.before;
-            const afterUrl = afterFile ? await uploadImage(afterFile, 'ba') : existing!.after;
+            if (editingId && !existing) throw new Error('수정할 전후사진을 찾지 못했습니다.');
+            const trackedUpload = async (file: File) => {
+                const url = await uploadImage(file, 'ba');
+                uploadedUrls.push(url);
+                return url;
+            };
+            const [beforeUrl, afterUrl] = await Promise.all([
+                beforeFile ? trackedUpload(beforeFile) : Promise.resolve(existing?.before ?? ''),
+                afterFile ? trackedUpload(afterFile) : Promise.resolve(existing?.after ?? ''),
+            ]);
+            if (!beforeUrl || !afterUrl) throw new Error('전/후 사진 URL을 만들지 못했습니다.');
             const primarySlug = form.slugs[0] ?? existing?.slug ?? TREATMENT_PAGES[0].slug;
 
             const payload = {
@@ -258,7 +298,22 @@ export default function AdminBAPage() {
             } else {
                 await addDoc(collection(db, 'baPhotos'), { ...payload, createdAt: serverTimestamp() });
             }
+
+            // Firestore 저장이 성공한 뒤에만 교체 전 파일을 지운다.
+            const replacedUrls = [
+                ...(beforeFile && existing?.before && existing.before !== beforeUrl ? [existing.before] : []),
+                ...(afterFile && existing?.after && existing.after !== afterUrl ? [existing.after] : []),
+            ];
+            await Promise.allSettled(replacedUrls.map((url) => deleteStoredImage(url)));
+            uploadedUrls.length = 0;
             cancelEdit();
+        } catch (submitError) {
+            // 문서 저장에 실패했다면 이번 시도에서 새로 생긴 고아 파일을 정리한다.
+            await Promise.allSettled(uploadedUrls.map((url) => deleteStoredImage(url)));
+            console.error('[AdminBAPage] 전후사진 저장 실패:', submitError);
+            const message = submitError instanceof Error ? submitError.message : '전후사진 저장에 실패했습니다.';
+            setError(message);
+            alert(message);
         } finally {
             setBusy(false);
         }
@@ -267,7 +322,14 @@ export default function AdminBAPage() {
     const remove = async (it: BAPhotoDoc) => {
         if (!confirm(`"${it.label}" 전후사진을 삭제할까요?`)) return;
         if (editingId === it.id) cancelEdit();
-        await deleteDoc(doc(db, 'baPhotos', it.id));
+        try {
+            await deleteDoc(doc(db, 'baPhotos', it.id));
+            // 화면 데이터부터 안전하게 삭제한 뒤 연결이 끊긴 파일을 정리한다.
+            await Promise.allSettled([deleteStoredImage(it.before), deleteStoredImage(it.after)]);
+        } catch (removeError) {
+            console.error('[AdminBAPage] 전후사진 삭제 실패:', removeError);
+            setError('전후사진 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+        }
     };
 
     const inputCls =
@@ -277,6 +339,11 @@ export default function AdminBAPage() {
         <div className="mx-auto max-w-4xl">
             <h1 className="text-h2 font-bold text-cocoa">전후사진 관리</h1>
             <p className="mt-1 text-small text-latte">시술 전/후 사진을 등록·수정합니다.</p>
+            {error && (
+                <p role="alert" className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-caption text-red-700">
+                    {error}
+                </p>
+            )}
 
             {/* ══════════ 등록/수정 폼 ══════════ */}
             <div className="mt-6 rounded-2xl bg-white p-5 shadow-[0_2px_20px_rgba(69,54,45,0.06)] md:p-7">
@@ -655,6 +722,11 @@ export default function AdminBAPage() {
                                     </span>
                                 )}
                             </p>
+                            {resolveBASlugs(it).some((slug) => !VALID_TREATMENT_SLUGS.has(slug)) && (
+                                <p className="mt-1 text-caption font-semibold text-amber-700">
+                                    현재 미사용 페이지 연결값이 있습니다. 수정에서 현재 노출 페이지를 다시 선택해 주세요.
+                                </p>
+                            )}
                             {it.treatmentDate && (
                                 <p className="mt-0.5 text-caption text-latte">
                                     시술일 {formatTreatmentDate(it.treatmentDate)}

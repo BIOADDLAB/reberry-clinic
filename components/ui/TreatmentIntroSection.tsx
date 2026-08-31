@@ -4,6 +4,7 @@ import Reveal from '@/components/motion/Reveal';
 import { zoom } from '@/components/lib/motion';
 import { cn } from '@/components/lib/cn';
 import type { Treatment } from '@/components/lib/treatments';
+import TextureBackground from '@/components/ui/TextureBackground';
 
 interface Props {
     treatment: Treatment;
@@ -23,9 +24,9 @@ export default function TreatmentIntroSection({ treatment, name, modelAlt, isKo 
                 src={modelBackground(treatment)}
                 alt=""
                 fill
-                quality={85}
+                unoptimized
                 sizes="100vw"
-                className="object-cover"
+                className="object-cover [backface-visibility:hidden]"
             />
             <div className="absolute inset-0 bg-cream/25" />
             <div className="container-site relative py-20 lg:pt-26.25 lg:pb-0">
@@ -66,13 +67,10 @@ export default function TreatmentIntroSection({ treatment, name, modelAlt, isKo 
                             isKo ? 'overflow-hidden min-[1100px]:h-[432px]' : 'min-[1100px]:min-h-[432px]',
                         )}
                     >
-                        <Image
+                        <TextureBackground
                             src="/images/bg-texture-05.jpg"
-                            alt=""
-                            fill
-                            quality={82}
                             sizes="494px"
-                            className="rounded-[10px] object-cover"
+                            className="rounded-[10px]"
                         />
                         <div
                             className={cn(

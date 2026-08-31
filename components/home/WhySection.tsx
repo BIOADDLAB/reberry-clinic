@@ -5,8 +5,8 @@ import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { EASE } from '@/components/lib/motion';
 import { cn } from '@/components/lib/cn';
-import Image from 'next/image';
 import { AnimatePresence } from 'framer-motion';
+import TextureBackground from '@/components/ui/TextureBackground';
 
 export default function WhySection() {
     const t = useTranslations('whySection');
@@ -80,14 +80,7 @@ export default function WhySection() {
                 </div>
 
                 <div className="relative flex items-center overflow-hidden -mr-6  px-35 min-[1560px]:mr-0 ">
-                    <Image
-                        src="/images/bg-texture-02.jpg"
-                        alt=""
-                        fill
-                        quality={88}
-                        sizes="800px"
-                        className="object-cover"
-                    />
+                    <TextureBackground src="/images/bg-texture-02.jpg" sizes="800px" />
 
                     <div className="relative w-full">
                         <AnimatePresence mode="wait">

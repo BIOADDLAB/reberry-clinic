@@ -10,6 +10,7 @@
     "seed:price-list": "tsx scripts/seed-price-list.ts",
     "seed:treatment-columns": "tsx scripts/seed-treatment-columns.ts",
     "check:treatment-columns": "tsx scripts/seed-treatment-columns.ts --check",
+    "check:content-links": "node --import tsx scripts/check-content-links.ts",
     "seed:events": "tsx scripts/seed-events.ts"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "next-intl": "^4.13.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "sharp": "^0.35.3",
     "swiper": "^14.0.5"
   },
   "devDependencies": {
@@ -37,7 +39,6 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
-    "sharp": "^0.35.3",
     "tailwindcss": "^4",
     "tsx": "^4.23.8",
     "typescript": "^5"

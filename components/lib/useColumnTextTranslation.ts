@@ -19,20 +19,16 @@ function isTranslatableLocale(locale: string): locale is ColumnTextTranslatableL
 export function useLocalizedColumnText(item: FirestoreCol): { text: string; isTranslating: boolean } {
     const locale = useLocale();
     const [cache, setCache] = useState<{ docId: string; locale: string; text: string } | null>(null);
-    const [isTranslating, setIsTranslating] = useState(false);
+
+    const sourceHash = hashColumnText(item.text);
+    const stored = isTranslatableLocale(locale) ? item.translations?.[locale] : undefined;
+    const currentStored = stored?.sourceHash === sourceHash ? stored : undefined;
 
     useEffect(() => {
         if (!isTranslatableLocale(locale)) return;
-
-        const sourceHash = hashColumnText(item.text);
-        const stored = item.translations?.[locale];
-        if (stored && stored.sourceHash === sourceHash) {
-            setCache({ docId: item.docId, locale, text: stored.text });
-            return;
-        }
+        if (currentStored) return;
 
         let active = true;
-        setIsTranslating(true);
 
         fetch('/api/treatment-column-translation', {
             method: 'POST',
@@ -46,20 +42,17 @@ export function useLocalizedColumnText(item: FirestoreCol): { text: string; isTr
             })
             .catch((error) => {
                 console.error('[useLocalizedColumnText] translation request failed', error);
-            })
-            .finally(() => {
-                if (active) setIsTranslating(false);
             });
 
         return () => {
             active = false;
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [item.docId, locale]);
+    }, [item.docId, locale, currentStored]);
 
     if (!isTranslatableLocale(locale)) return { text: item.text, isTranslating: false };
+    if (currentStored) return { text: currentStored.text, isTranslating: false };
     if (cache && cache.docId === item.docId && cache.locale === locale) {
-        return { text: cache.text, isTranslating };
+        return { text: cache.text, isTranslating: false };
     }
-    return { text: item.text, isTranslating };
+    return { text: item.text, isTranslating: true };
 }
