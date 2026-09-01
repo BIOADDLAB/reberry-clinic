@@ -16,6 +16,24 @@ import T from '@/components/lang/T';
 
 const PER_PAGE = 6;
 
+type PaginationItem = number | 'start-ellipsis' | 'end-ellipsis';
+
+function getPaginationItems(currentPage: number, totalPages: number): PaginationItem[] {
+    if (totalPages <= 7) {
+        return Array.from({ length: totalPages }, (_, index) => index + 1);
+    }
+
+    if (currentPage <= 4) {
+        return [1, 2, 3, 4, 5, 'end-ellipsis', totalPages];
+    }
+
+    if (currentPage >= totalPages - 3) {
+        return [1, 'start-ellipsis', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+
+    return [1, 'start-ellipsis', currentPage - 1, currentPage, currentPage + 1, 'end-ellipsis', totalPages];
+}
+
 export default function SkinColumnList() {
     const t = useTranslations('column');
     const [posts, setPosts] = useState<SkinColumnPostItem[]>([]);
@@ -49,8 +67,7 @@ export default function SkinColumnList() {
             if (activeCategory !== 'all' && post.categorySlug !== activeCategory) return false;
             if (!keyword) return true;
 
-            const categoryLabel =
-                SIGNATURE_PAGES.find((category) => category.slug === post.categorySlug)?.label ?? '';
+            const categoryLabel = SIGNATURE_PAGES.find((category) => category.slug === post.categorySlug)?.label ?? '';
             return [post.title, post.excerpt, post.blogCategory, categoryLabel].some((value) =>
                 (value ?? '').toLowerCase().includes(keyword),
             );
@@ -59,6 +76,7 @@ export default function SkinColumnList() {
     const totalPages = Math.max(1, Math.ceil(visiblePosts.length / PER_PAGE));
     const currentPage = Math.min(page, totalPages);
     const pagedPosts = visiblePosts.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+    const paginationItems = getPaginationItems(currentPage, totalPages);
 
     useEffect(() => {
         if (isFirstPageRender.current) {
@@ -83,7 +101,11 @@ export default function SkinColumnList() {
             </div>
 
             <nav aria-label={t('categoryNavAria')} className="mt-10 flex flex-wrap justify-center gap-2 md:mt-14">
-                <FilterButton active={activeCategory === 'all'} label={t('allFilter')} onClick={() => pickCategory('all')} />
+                <FilterButton
+                    active={activeCategory === 'all'}
+                    label={t('allFilter')}
+                    onClick={() => pickCategory('all')}
+                />
                 {SIGNATURE_PAGES.map((category) => (
                     <FilterButton
                         key={category.slug}
@@ -134,15 +156,23 @@ export default function SkinColumnList() {
                         ))}
                     </div>
                     {totalPages > 1 ? (
-                        <nav className="mt-14 flex items-center justify-center gap-6" aria-label={t('pagination')}>
+                        <nav
+                            className="mt-14 flex items-center justify-center gap-0.5 sm:gap-2"
+                            aria-label={t('pagination')}
+                        >
                             <button
                                 type="button"
-                                onClick={() => setPage((current) => Math.max(1, current - 1))}
+                                onClick={() => setPage(currentPage - 1)}
                                 disabled={currentPage === 1}
-                                className="mt-1 text-cocoa/60 transition-colors hover:text-cocoa disabled:opacity-30"
+                                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-cocoa/15 bg-cream text-cocoa transition-colors hover:border-cocoa/35 hover:bg-sand/25 disabled:cursor-not-allowed disabled:opacity-30 sm:h-10 sm:w-10"
                                 aria-label={t('prevPage')}
                             >
-                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg
+                                    className="h-[18px] w-[18px]"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -151,17 +181,49 @@ export default function SkinColumnList() {
                                     />
                                 </svg>
                             </button>
-                            <span className="notranslate font-display text-lead tracking-[0.15em] text-cocoa">
-                                {currentPage} / {totalPages}
-                            </span>
+                            {paginationItems.map((item) => {
+                                if (typeof item !== 'number') {
+                                    return (
+                                        <span
+                                            key={item}
+                                            aria-hidden="true"
+                                            className="inline-flex h-8 min-w-4 items-center justify-center text-caption-sm text-latte sm:h-10 sm:min-w-6 sm:text-caption"
+                                        >
+                                            …
+                                        </span>
+                                    );
+                                }
+
+                                const active = item === currentPage;
+                                return (
+                                    <button
+                                        key={item}
+                                        type="button"
+                                        onClick={() => setPage(item)}
+                                        aria-current={active ? 'page' : undefined}
+                                        className={`notranslate inline-flex h-8 min-w-8 items-center justify-center rounded-full px-1.5 text-caption-sm font-semibold transition-colors sm:h-10 sm:min-w-10 sm:px-2 sm:text-caption ${
+                                            active
+                                                ? 'bg-cocoa text-cream'
+                                                : 'border border-cocoa/15 bg-cream text-latte hover:border-cocoa/35 hover:bg-sand/25 hover:text-cocoa'
+                                        }`}
+                                    >
+                                        {item}
+                                    </button>
+                                );
+                            })}
                             <button
                                 type="button"
-                                onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+                                onClick={() => setPage(currentPage + 1)}
                                 disabled={currentPage === totalPages}
-                                className="mt-1 text-cocoa/60 transition-colors hover:text-cocoa disabled:opacity-30"
+                                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-cocoa/15 bg-cream text-cocoa transition-colors hover:border-cocoa/35 hover:bg-sand/25 disabled:cursor-not-allowed disabled:opacity-30 sm:h-10 sm:w-10"
                                 aria-label={t('nextPage')}
                             >
-                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg
+                                    className="h-[18px] w-[18px]"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -247,15 +309,7 @@ function ColumnThumbnail({ post }: { post: SkinColumnPostItem }) {
     );
 }
 
-function FilterButton({
-    active,
-    label,
-    onClick,
-}: {
-    active: boolean;
-    label: React.ReactNode;
-    onClick: () => void;
-}) {
+function FilterButton({ active, label, onClick }: { active: boolean; label: React.ReactNode; onClick: () => void }) {
     return (
         <button
             type="button"
