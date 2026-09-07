@@ -199,16 +199,15 @@ export async function updatePriceCategorySorts(items: Array<{ docId: string; sor
     await batch.commit();
 }
 
-export async function createPriceSection(input: PriceSectionInput): Promise<void> {
+/** `first` 면 맨 앞에 꽂는다 — 카드를 추가하고 곧바로 이름을 적을 수 있어야 해서. */
+export async function createPriceSection(input: PriceSectionInput, { first = false } = {}): Promise<void> {
     const snapshot = await getDocs(sectionsCollection);
-    const latestSort = Math.max(
-        -1,
-        ...snapshot.docs
-            .filter((entry) => entry.data().categoryId === input.categoryId)
-            .map((entry) => toNumber(entry.data().sort, -1)),
-    );
+    const sameCategory = snapshot.docs
+        .filter((entry) => entry.data().categoryId === input.categoryId)
+        .map((entry) => toNumber(entry.data().sort, -1));
+    const sort = first ? Math.min(0, ...sameCategory) - 1 : Math.max(-1, ...sameCategory) + 1;
     const now = new Date().toISOString();
-    await addDoc(sectionsCollection, { ...input, sort: latestSort + 1, createdAt: now, updatedAt: now });
+    await addDoc(sectionsCollection, { ...input, sort, createdAt: now, updatedAt: now });
 }
 
 export async function updatePriceSection(docId: string, input: PriceSectionInput): Promise<void> {

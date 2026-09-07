@@ -8,6 +8,7 @@ interface SeedPayload {
     categories: Array<{
         docId: string;
         label: string;
+        note?: string;
         sort: number;
         isPublished: boolean;
         seedVersion: string;
@@ -105,6 +106,7 @@ async function main() {
             ref: doc(db, CATEGORY_COLLECTION, category.docId),
             data: {
                 label: category.label,
+                note: 'note' in category ? String(category.note ?? '') : '',
                 sort: category.sort,
                 isPublished: category.isPublished,
                 seedVersion: payload.version,
