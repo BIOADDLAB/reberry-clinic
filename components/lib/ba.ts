@@ -20,6 +20,56 @@ export function formatTreatmentDate(value?: string): string {
     return matched ? `${matched[1]}.${matched[2]}.${matched[3]}` : '';
 }
 
+/** 전후 한 장. 새 데이터는 before=after, 예전 데이터는 before를 쓴다. */
+export function baPhotoUrl(photo: Pick<BAPhoto, 'before' | 'after'>): string {
+    return photo.before || photo.after;
+}
+
+/** 전·후가 한 장의 합성 컷인지. after가 비었거나 before와 같으면 한 장으로 보여 준다. */
+export function isCombinedBAPhoto(photo: Pick<BAPhoto, 'before' | 'after'>): boolean {
+    return Boolean(photo.before) && (!photo.after || photo.after === photo.before);
+}
+
+/** 관리자에서 올려 둔 준비중(test.png) 자리표시 사진 */
+export function isPlaceholderBAPhoto(photo: Pick<BAPhoto, 'before' | 'after'>): boolean {
+    const isTest = (url: string) => /-test\.png(?:$|\?)/i.test(url);
+    return isTest(photo.before) || isTest(photo.after);
+}
+
+const combinedLiftingPhoto = (
+    id: string,
+    slug: string,
+    label: string,
+    file: string,
+    order: number,
+): BAPhoto => {
+    const src = `/images/ba/${file}`;
+    return {
+        id,
+        slug,
+        slugs: [slug],
+        label,
+        before: src,
+        after: src,
+        order,
+        place: 'treatment',
+        category: 'lifting',
+    };
+};
+
+/* 관리자에 아직 등록되지 않은 안티에이징 리프팅 전후 합성 컷.
+   Firestore에 같은 시술 페이지 사진이 있으면 useBAPhotos에서 이쪽은 쓰지 않는다. */
+export const agingLiftingBAPhotos: BAPhoto[] = [
+    combinedLiftingPhoto('aging-onda-01', 'aging-onda', '온다 리프팅', 'onda-01.jpg', 1),
+    combinedLiftingPhoto('aging-onda-02', 'aging-onda', '온다 리프팅', 'onda-02.jpg', 2),
+    combinedLiftingPhoto('aging-onda-03', 'aging-onda', '온다 리프팅', 'onda-03.jpg', 3),
+    combinedLiftingPhoto('aging-onda-04', 'aging-onda', '온다 리프팅', 'onda-04.jpg', 4),
+    combinedLiftingPhoto('aging-onda-05', 'aging-onda', '온다 리프팅', 'onda-05.jpg', 5),
+    combinedLiftingPhoto('aging-ulthera-01', 'aging-ulthera', '울쎄라 리프팅', 'ulthera-01.jpg', 1),
+    combinedLiftingPhoto('aging-ulthera-02', 'aging-ulthera', '울쎄라 리프팅', 'ulthera-02.jpg', 2),
+    combinedLiftingPhoto('aging-ulthera-03', 'aging-ulthera', '울쎄라 리프팅', 'ulthera-03.jpg', 3),
+];
+
 /* ─────────────────────────────────────────────────────────────
    노출 위치 — 시술 페이지용 사진과 전후사진 페이지용 사진을 분리한다.
    #ISSUE: 예전에는 등록한 사진이 무조건 양쪽에 다 떴다.

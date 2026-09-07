@@ -85,12 +85,12 @@ export const COUNT_LIMITS = {
 } as const;
 
 // ── 전후사진 권장 이미지 규격
-// 카드에서 실제로 보이는 크기는 가로 244 × 세로 147.
-// 고화질 화면(레티나)에서 흐려 보이지 않게 2배 크기로 올리는 걸 권장
+// 전후사진 페이지 카드는 한 장을 정사각으로 보여 준다.
+// 고화질 화면에서 흐려 보이지 않게 800px 정사각을 권장
 export const BA_IMAGE_GUIDE = {
     displayWidth: 244,
-    displayHeight: 147,
-    recommendWidth: 488,
-    recommendHeight: 294,
+    displayHeight: 244,
+    recommendWidth: 800,
+    recommendHeight: 800,
     maxFileSizeMB: 5,
 } as const;

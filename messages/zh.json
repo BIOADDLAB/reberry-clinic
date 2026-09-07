@@ -8,6 +8,7 @@
   },
   "common": {
     "beforeAfter": "前后对比",
+    "comingSoon": "准备中。",
     "login": "登录",
     "more": "查看更多",
     "prev": "上一个",
@@ -270,6 +271,12 @@
     "prevPage": "上一页",
     "nextPage": "下一页",
     "categoryLabel": "项目分类",
-    "empty": "暂无照片。"
+    "empty": "暂无照片。",
+    "noticeAria": "前后对比照片说明",
+    "consent": "以上为本院实际治疗顾客的照片，并已征得刊登同意。",
+    "consentDetail": "为保护个人隐私仅裁剪照片尺寸，未做任何修图。炎症、色素沉着、发红等因人而异。",
+    "precautionsTitle": "治疗后注意事项及副作用",
+    "precautionPetit": "微整治疗后可能出现淤青、红斑、感染、疼痛、肿胀等。",
+    "precautionSkin": "皮肤治疗后可能出现色素沉着、灼伤等。"
   }
 }

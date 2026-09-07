@@ -4,7 +4,7 @@
 import { useSyncExternalStore } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
-import { resolveBASlugs, showsOnReviews, showsOnTreatment, type BAPhoto } from './ba';
+import { agingLiftingBAPhotos, isPlaceholderBAPhoto, resolveBASlugs, showsOnReviews, showsOnTreatment, type BAPhoto } from './ba';
 
 // Firestore 문서 원본 모양 — 관리자 화면(app/admin/(protected)/ba/page.tsx)이 저장하는 필드와 반드시 일치해야 함
 interface BAPhotoDoc {
@@ -41,7 +41,7 @@ function load() {
 
     getDocs(collection(db, 'baPhotos'))
         .then((snap) => {
-            cache = snap.docs.map((docSnap) => {
+            const fromDb = snap.docs.map((docSnap) => {
                 const data = docSnap.data() as BAPhotoDoc;
                 const slugs = Array.isArray(data.slugs)
                     ? data.slugs.filter((slug): slug is string => typeof slug === 'string' && slug.length > 0)
@@ -59,11 +59,21 @@ function load() {
                     ...(typeof data.category === 'string' ? { category: data.category } : {}),
                     ...(typeof data.place === 'string' ? { place: data.place } : {}),
                     ...(typeof data.treatmentDate === 'string' ? { treatmentDate: data.treatmentDate } : {}),
-                };
+                } satisfies BAPhoto;
             });
+            const slugsWithDbPhotos = new Set(
+                fromDb
+                    .filter((photo) => showsOnTreatment(photo) && !isPlaceholderBAPhoto(photo))
+                    .flatMap((photo) => resolveBASlugs(photo)),
+            );
+            const fallback = agingLiftingBAPhotos.filter(
+                (photo) => !resolveBASlugs(photo).some((slug) => slugsWithDbPhotos.has(slug)),
+            );
+            cache = fallback.length > 0 ? [...fromDb, ...fallback] : fromDb;
         })
         .catch((err) => {
             console.error('[useBAPhotos] Firestore 조회 실패:', err);
+            if (cache === EMPTY) cache = agingLiftingBAPhotos;
         })
         .finally(() => {
             isLoading = false;
@@ -79,7 +89,7 @@ function subscribe(onChange: () => void) {
     };
 }
 
-// #ISSUE: 전후사진은 100% 관리자에서 등록한 것만 씀 (정적 폴백 없음).
+// 전후사진은 관리자 등록분이 우선이고, 안티에이징 리프팅은 아직 실사진이 없으면 정적 합성 컷을 쓴다.
 // 반환 타입은 예전 그대로 BAPhoto[] — 기존 호출부를 건드리지 않는다.
 export function useBAPhotos(): BAPhoto[] {
     return useSyncExternalStore(
@@ -105,7 +115,7 @@ export const filterMainBAPhotos = (photos: BAPhoto[]) =>
 /* 시술 페이지(BACardSlider)용. 시술 페이지 노출을 끈 사진은 여기서 빠진다. */
 export const filterBAPhotosBySlug = (photos: BAPhoto[], slug: string) =>
     photos
-        .filter((b) => resolveBASlugs(b).includes(slug) && showsOnTreatment(b))
+        .filter((b) => resolveBASlugs(b).includes(slug) && showsOnTreatment(b) && !isPlaceholderBAPhoto(b))
         .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 
 /* 전후사진 페이지(/reviews)용. 전후사진 페이지 노출을 끈 사진은 여기서 빠진다. */

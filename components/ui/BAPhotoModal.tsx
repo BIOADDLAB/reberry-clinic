@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { formatTreatmentDate, resolveBALabel, type BAPhoto } from '@/components/lib/ba';
+import { baPhotoUrl, formatTreatmentDate, resolveBALabel, type BAPhoto } from '@/components/lib/ba';
 import T from '@/components/lang/T';
 
 interface Props {
@@ -13,6 +13,7 @@ interface Props {
 
 export default function BAPhotoModal({ photo, onClose }: Props) {
     const t = useTranslations('common');
+    const tReviews = useTranslations('reviews');
 
     useEffect(() => {
         if (!photo) return;
@@ -31,7 +32,7 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-deep/70 p-4" onClick={onClose}>
             <div
-                className="relative w-full max-w-[720px] rounded-[8px] bg-sand p-6 sm:p-8"
+                className="relative max-h-[calc(100dvh-2rem)] w-full max-w-[720px] overflow-y-auto rounded-[8px] bg-sand p-6 sm:p-8"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button
@@ -48,35 +49,18 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
                     <T ko={label} />
                 </h3>
 
-                <div className="mt-6 grid grid-cols-2 gap-2 sm:gap-4">
-                    {/* skeleton 클래스를 컨테이너에 두면 이미지가 늦게 와도 빈 칸 대신 샌드 박스가 깜빡인다 */}
-                    <div className="skeleton relative aspect-[4/3] overflow-hidden rounded-[4px]">
-                        <Image
-                            src={photo.before}
-                            alt={t('beforeAltWithLabel', { label })}
-                            fill
-                            quality={90}
-                            sizes="(max-width: 640px) 45vw, 320px"
-                            className="object-cover"
-                        />
-                    </div>
-                    <div className="skeleton relative aspect-[4/3] overflow-hidden rounded-[4px]">
-                        <Image
-                            src={photo.after}
-                            alt={t('afterAltWithLabel', { label })}
-                            fill
-                            quality={90}
-                            sizes="(max-width: 640px) 45vw, 320px"
-                            className="object-cover"
-                        />
-                    </div>
+                <div className="skeleton relative mt-6 aspect-square overflow-hidden rounded-[4px]">
+                    <Image
+                        src={baPhotoUrl(photo)}
+                        alt={t('beforeAltWithLabel', { label })}
+                        fill
+                        quality={90}
+                        sizes="(max-width: 720px) 90vw, 640px"
+                        className="object-contain"
+                    />
                 </div>
-
-                <p className="notranslate font-display mt-5 flex items-center justify-center gap-4 text-lead text-cream text-shadow-2xs">
-                    Before <span aria-hidden>→</span> After
-                </p>
                 {photo.treatmentDate && (
-                    <p className="mt-2 text-center text-caption text-cocoa/65">
+                    <p className="mt-5 text-center text-caption text-cocoa/65">
                         {t('treatmentDate')}{' '}
                         <time dateTime={photo.treatmentDate} className="notranslate">
                             {formatTreatmentDate(photo.treatmentDate)}
@@ -86,6 +70,17 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
                 <p className="notranslate font-display text-center text-small text-shadow-2xs tracking-[0.2em] text-cream">
                     RE:BERRY
                 </p>
+                <div className="mt-6 border-t border-cocoa/15 pt-5 text-left">
+                    <p className="break-keep text-caption leading-[22px] text-cocoa/80">{tReviews('consent')}</p>
+                    <p className="mt-2 break-keep text-caption leading-[22px] text-cocoa/80">
+                        {tReviews('consentDetail')}
+                    </p>
+                    <p className="mt-4 text-caption font-bold text-cocoa">{tReviews('precautionsTitle')}</p>
+                    <ul className="mt-1.5 list-disc space-y-1 pl-5 text-caption leading-[22px] text-cocoa/80">
+                        <li className="break-keep">{tReviews('precautionPetit')}</li>
+                        <li className="break-keep">{tReviews('precautionSkin')}</li>
+                    </ul>
+                </div>
             </div>
         </div>
     );

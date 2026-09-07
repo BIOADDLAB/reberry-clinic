@@ -7,7 +7,7 @@
 
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { resolveBALabel, type BAPhoto } from '@/components/lib/ba';
+import { isCombinedBAPhoto, resolveBALabel, type BAPhoto } from '@/components/lib/ba';
 import { useBAPhotos, useBAPhotosLoading, filterBAPhotosBySlug } from '@/components/lib/useBAPhotos';
 import { useOverflowSlider } from '@/components/lib/useOverflowSlider';
 import { cn } from '@/components/lib/cn';
@@ -21,6 +21,7 @@ const SKELETON_COUNT = 4;
 function Card({ b, overflow }: { b: BAPhoto; overflow: boolean }) {
     const t = useTranslations('common');
     const label = resolveBALabel(b);
+    const combined = isCombinedBAPhoto(b);
 
     return (
         <article
@@ -38,39 +39,78 @@ function Card({ b, overflow }: { b: BAPhoto; overflow: boolean }) {
                 <span>{t('beforeAfter')}</span>
             </h3>
 
-            <div className="skeleton relative h-[147px] w-full overflow-hidden">
-                <Image
-                    src={b.before}
-                    alt={t('beforeAltWithLabel', { label })}
-                    fill
-                    quality={85}
-                    sizes="244px"
-                    className="object-cover"
-                />
-            </div>
-
-            <div className="relative z-10 flex h-0 justify-center">
-                <span
-                    className={cn(
-                        'flex -translate-y-1/2 items-center justify-center rounded-full',
-                        overflow ? 'h-[32px] w-[32px] bg-cream/50' : 'h-[34px] w-[34px] bg-cocoa',
-                    )}
-                >
-                    <span
-                        aria-hidden
-                        className={cn(
-                            'mt-[-3px] block rotate-45 border-b-2 border-r-2',
-                            overflow ? 'h-3 w-3 border-cocoa!' : 'h-2 w-2 border-cream',
-                        )}
+            {combined ? (
+                <div className="relative min-h-0 flex-1 overflow-hidden bg-cream">
+                    <Image
+                        src={b.before}
+                        alt={t('beforeAltWithLabel', { label })}
+                        fill
+                        quality={85}
+                        sizes="244px"
+                        className="object-contain"
                     />
+                </div>
+            ) : (
+                <>
+                    <div className="skeleton relative h-[147px] w-full overflow-hidden">
+                        <Image
+                            src={b.before}
+                            alt={t('beforeAltWithLabel', { label })}
+                            fill
+                            quality={85}
+                            sizes="244px"
+                            className="object-cover"
+                        />
+                    </div>
+
+                    <div className="relative z-10 flex h-0 justify-center">
+                        <span
+                            className={cn(
+                                'flex -translate-y-1/2 items-center justify-center rounded-full',
+                                overflow ? 'h-[32px] w-[32px] bg-cream/50' : 'h-[34px] w-[34px] bg-cocoa',
+                            )}
+                        >
+                            <span
+                                aria-hidden
+                                className={cn(
+                                    'mt-[-3px] block rotate-45 border-b-2 border-r-2',
+                                    overflow ? 'h-3 w-3 border-cocoa!' : 'h-2 w-2 border-cream',
+                                )}
+                            />
+                        </span>
+                    </div>
+
+                    <div className="skeleton relative h-[147px] w-full overflow-hidden">
+                        <Image src={b.after} alt={t('afterAlt')} fill quality={85} sizes="244px" className="object-cover" />
+                    </div>
+                </>
+            )}
+
+            <div className="flex flex-col items-center justify-center px-3 pb-3.5 pt-4">
+                <p className="line-clamp-2 max-w-full rounded-[16px] bg-cocoa px-4 py-0.5 text-center text-small font-bold leading-snug text-cream">
+                    <T ko={label} />
+                </p>
+                <span className="notranslate font-display text-caption mt-1 text-cocoa/30">RE:BERRY</span>
+            </div>
+        </article>
+    );
+}
+
+function EmptyCard({ label }: { label: string }) {
+    const t = useTranslations('common');
+
+    return (
+        <article className="t-tight flex h-[464px] w-[244px] shrink-0 flex-col rounded-[10px] bg-cream text-cocoa">
+            <h3 className="flex min-h-[3lh] flex-col justify-center px-3 py-5 text-center text-lead font-bold leading-snug">
+                <span className="line-clamp-2 break-keep">
+                    <T ko={label} />
                 </span>
+                <span>{t('beforeAfter')}</span>
+            </h3>
+            <div className="flex min-h-0 flex-1 items-center justify-center bg-sand">
+                <p className="text-small font-semibold text-cream">{t('comingSoon')}</p>
             </div>
-
-            <div className="skeleton relative h-[147px] w-full overflow-hidden">
-                <Image src={b.after} alt={t('afterAlt')} fill quality={85} sizes="244px" className="object-cover" />
-            </div>
-
-            <div className="flex flex-1 flex-col items-center justify-center px-3 pb-3.5 pt-4">
+            <div className="flex flex-col items-center justify-center px-3 pb-3.5 pt-4">
                 <p className="line-clamp-2 max-w-full rounded-[16px] bg-cocoa px-4 py-0.5 text-center text-small font-bold leading-snug text-cream">
                     <T ko={label} />
                 </p>
@@ -81,14 +121,23 @@ function Card({ b, overflow }: { b: BAPhoto; overflow: boolean }) {
 }
 
 // slug 를 받아서 컴포넌트가 직접 Firestore 를 확인 — 서버 페이지(page.tsx)는 slug 문자열만 넘기면 됨
-export default function BACardSlider({ slug }: { slug: string }) {
+export default function BACardSlider({
+    slug,
+    emptyPlaceholder = false,
+    emptyLabel,
+}: {
+    slug: string;
+    emptyPlaceholder?: boolean;
+    emptyLabel?: string;
+}) {
     const t = useTranslations('common');
     const allPhotos = useBAPhotos();
     const loading = useBAPhotosLoading();
     const photos = filterBAPhotosBySlug(allPhotos, slug);
+    const showEmpty = !loading && photos.length === 0 && emptyPlaceholder && Boolean(emptyLabel);
 
     const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
-        useOverflowSlider<HTMLDivElement>(photos.length, CARD_W, GAP);
+        useOverflowSlider<HTMLDivElement>(showEmpty ? 1 : photos.length, CARD_W, GAP);
 
     if (loading) {
         return (
@@ -107,7 +156,7 @@ export default function BACardSlider({ slug }: { slug: string }) {
         );
     }
 
-    if (photos.length === 0) return null;
+    if (photos.length === 0 && !showEmpty) return null;
 
     return (
         <div className="relative mx-auto max-w-[1045px]">
@@ -156,9 +205,11 @@ export default function BACardSlider({ slug }: { slug: string }) {
                     !over && 'justify-center',
                 )}
             >
-                {photos.map((b) => (
-                    <Card key={b.id} b={b} overflow={over} />
-                ))}
+                {showEmpty ? (
+                    <EmptyCard label={emptyLabel!} />
+                ) : (
+                    photos.map((b) => <Card key={b.id} b={b} overflow={over} />)
+                )}
             </div>
 
             {/* 메인 BASlider 도트 그대로 (다크 섹션 → 크림) */}

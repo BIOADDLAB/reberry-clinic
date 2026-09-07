@@ -1,0 +1,572 @@
+{
+  "version": "reviews-excel-20260903",
+  "items": [
+    {
+      "docId": "reviews-excel-01",
+      "label": "프리미엄 진주광채 진행",
+      "category": "pigment",
+      "treatmentDate": "2026-09-01",
+      "image": "/images/ba/reviews/01.jpg"
+    },
+    {
+      "docId": "reviews-excel-02",
+      "label": "프리미엄 진주광채 진행",
+      "category": "pigment",
+      "treatmentDate": "2026-09-01",
+      "image": "/images/ba/reviews/02.jpg"
+    },
+    {
+      "docId": "reviews-excel-03",
+      "label": "브이로 하이푸 리프팅 진행",
+      "category": "lifting",
+      "treatmentDate": "2026-09-01",
+      "image": "/images/ba/reviews/03.jpg"
+    },
+    {
+      "docId": "reviews-excel-04",
+      "label": "온다+브이로 리프팅 + 턱끝필러 진행",
+      "category": "lifting",
+      "treatmentDate": "2026-08-25",
+      "image": "/images/ba/reviews/04.jpg"
+    },
+    {
+      "docId": "reviews-excel-05",
+      "label": "눈밑 브이로 진행",
+      "category": "lifting",
+      "treatmentDate": "2026-08-21",
+      "image": "/images/ba/reviews/05.jpg"
+    },
+    {
+      "docId": "reviews-excel-06",
+      "label": "온다리프팅 + 턱끝필러",
+      "category": "lifting",
+      "treatmentDate": "2026-08-21",
+      "image": "/images/ba/reviews/06.jpg"
+    },
+    {
+      "docId": "reviews-excel-07",
+      "label": "프리미엄 엑셀 홍조",
+      "category": "redness",
+      "treatmentDate": "2026-08-21",
+      "image": "/images/ba/reviews/07.jpg"
+    },
+    {
+      "docId": "reviews-excel-08",
+      "label": "물광스킨보톡스 + 인모드 Forma",
+      "category": "redness",
+      "treatmentDate": "2026-08-21",
+      "image": "/images/ba/reviews/08.jpg"
+    },
+    {
+      "docId": "reviews-excel-09",
+      "label": "프리미엄 엑셀 홍조",
+      "category": "redness",
+      "treatmentDate": "2026-08-21",
+      "image": "/images/ba/reviews/09.jpg"
+    },
+    {
+      "docId": "reviews-excel-10",
+      "label": "온다+브이로 리프팅 + 턱끝필러 진행",
+      "category": "petit",
+      "treatmentDate": "2026-08-21",
+      "image": "/images/ba/reviews/10.jpg"
+    },
+    {
+      "docId": "reviews-excel-11",
+      "label": "눈밑 볼륨부스터 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2026-07-30",
+      "image": "/images/ba/reviews/11.jpg"
+    },
+    {
+      "docId": "reviews-excel-12",
+      "label": "시그니처 안티아크네",
+      "category": "acne",
+      "treatmentDate": "2026-07-06",
+      "image": "/images/ba/reviews/12.jpg"
+    },
+    {
+      "docId": "reviews-excel-13",
+      "label": "시그니처 진주광채 색소 패키지",
+      "category": "pigment",
+      "treatmentDate": "2026-07-06",
+      "image": "/images/ba/reviews/13.jpg"
+    },
+    {
+      "docId": "reviews-excel-14",
+      "label": "눈밑 브이로 진행",
+      "category": "lifting",
+      "treatmentDate": "2026-07-06",
+      "image": "/images/ba/reviews/14.jpg"
+    },
+    {
+      "docId": "reviews-excel-15",
+      "label": "프리미엄 엑셀 홍조",
+      "category": "redness",
+      "treatmentDate": "2026-07-06",
+      "image": "/images/ba/reviews/15.jpg"
+    },
+    {
+      "docId": "reviews-excel-16",
+      "label": "프리미엄 엑셀 홍조",
+      "category": "redness",
+      "treatmentDate": "2026-07-06",
+      "image": "/images/ba/reviews/16.jpg"
+    },
+    {
+      "docId": "reviews-excel-17",
+      "label": "여드름 흉터치료",
+      "category": "pore-scar",
+      "treatmentDate": "2026-06-15",
+      "image": "/images/ba/reviews/17.jpg"
+    },
+    {
+      "docId": "reviews-excel-18",
+      "label": "시그니처 안티아크네",
+      "category": "acne",
+      "treatmentDate": "2026-06-15",
+      "image": "/images/ba/reviews/18.jpg"
+    },
+    {
+      "docId": "reviews-excel-19",
+      "label": "온다리프팅 + 관자, 턱끝필러",
+      "category": "lifting",
+      "treatmentDate": "2026-06-15",
+      "image": "/images/ba/reviews/19.jpg"
+    },
+    {
+      "docId": "reviews-excel-20",
+      "label": "프리미엄 안티아크네 진행",
+      "category": "acne",
+      "treatmentDate": "2026-05-26",
+      "image": "/images/ba/reviews/20.jpg"
+    },
+    {
+      "docId": "reviews-excel-21",
+      "label": "브이로+온다 리프팅",
+      "category": "lifting",
+      "treatmentDate": "2026-05-21",
+      "image": "/images/ba/reviews/21.jpg"
+    },
+    {
+      "docId": "reviews-excel-22",
+      "label": "시그니처 안티아크네 진행",
+      "category": "acne",
+      "treatmentDate": "2026-05-21",
+      "image": "/images/ba/reviews/22.jpg"
+    },
+    {
+      "docId": "reviews-excel-23",
+      "label": "시그니처 진주광채 색소 패키지",
+      "category": "pigment",
+      "treatmentDate": "2026-04-29",
+      "image": "/images/ba/reviews/23.jpg"
+    },
+    {
+      "docId": "reviews-excel-24",
+      "label": "풀페이스 필러",
+      "category": "petit",
+      "treatmentDate": "2026-04-29",
+      "image": "/images/ba/reviews/24.jpg"
+    },
+    {
+      "docId": "reviews-excel-25",
+      "label": "턱끝필러",
+      "category": "petit",
+      "treatmentDate": "2026-04-22",
+      "image": "/images/ba/reviews/25.jpg"
+    },
+    {
+      "docId": "reviews-excel-26",
+      "label": "울쎄라피프라임+풀페이스 필러",
+      "category": "lifting",
+      "treatmentDate": "2026-04-22",
+      "image": "/images/ba/reviews/26.jpg"
+    },
+    {
+      "docId": "reviews-excel-27",
+      "label": "비수술 눈밑지방재배치",
+      "category": "lifting",
+      "treatmentDate": "2026-04-22",
+      "image": "/images/ba/reviews/27.jpg"
+    },
+    {
+      "docId": "reviews-excel-28",
+      "label": "프리미엄 안티아크네",
+      "category": "acne",
+      "treatmentDate": "2026-04-22",
+      "image": "/images/ba/reviews/28.jpg"
+    },
+    {
+      "docId": "reviews-excel-29",
+      "label": "옆볼 볼륨부스터 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2026-04-22",
+      "image": "/images/ba/reviews/29.jpg"
+    },
+    {
+      "docId": "reviews-excel-30",
+      "label": "시그니처 진주광채 패키지",
+      "category": "pigment",
+      "treatmentDate": "2026-04-22",
+      "image": "/images/ba/reviews/30.jpg"
+    },
+    {
+      "docId": "reviews-excel-31",
+      "label": "시그니처 진주광채 패키지",
+      "category": "pigment",
+      "treatmentDate": "2026-04-22",
+      "image": "/images/ba/reviews/31.jpg"
+    },
+    {
+      "docId": "reviews-excel-32",
+      "label": "프리미엄 엑셀 홍조 패키지",
+      "category": "redness",
+      "treatmentDate": "2026-04-22",
+      "image": "/images/ba/reviews/32.jpg"
+    },
+    {
+      "docId": "reviews-excel-33",
+      "label": "프레스티지 진주광채 색소패키지",
+      "category": "pigment",
+      "treatmentDate": "2026-03-16",
+      "image": "/images/ba/reviews/33.jpg"
+    },
+    {
+      "docId": "reviews-excel-34",
+      "label": "시그니처 진주광채 색소 패키지",
+      "category": "pigment",
+      "treatmentDate": "2026-03-16",
+      "image": "/images/ba/reviews/34.jpg"
+    },
+    {
+      "docId": "reviews-excel-35",
+      "label": "울쎄라피프라임+볼륨부스터",
+      "category": "lifting",
+      "treatmentDate": "2026-03-03",
+      "image": "/images/ba/reviews/35.jpg"
+    },
+    {
+      "docId": "reviews-excel-36",
+      "label": "포텐자+쥬베룩",
+      "category": "pore-scar",
+      "treatmentDate": "2026-02-23",
+      "image": "/images/ba/reviews/36.jpg"
+    },
+    {
+      "docId": "reviews-excel-37",
+      "label": "포텐자+엑소좀",
+      "category": "redness",
+      "treatmentDate": "2026-02-23",
+      "image": "/images/ba/reviews/37.jpg"
+    },
+    {
+      "docId": "reviews-excel-38",
+      "label": "안티아크네",
+      "category": "acne",
+      "treatmentDate": "2026-02-20",
+      "image": "/images/ba/reviews/38.jpg"
+    },
+    {
+      "docId": "reviews-excel-39",
+      "label": "시그니처 도자기 패키지",
+      "category": "pore-scar",
+      "treatmentDate": "2026-02-20",
+      "image": "/images/ba/reviews/39.jpg"
+    },
+    {
+      "docId": "reviews-excel-40",
+      "label": "시그니처 안티아크네 진행",
+      "category": "acne",
+      "treatmentDate": "2026-02-02",
+      "image": "/images/ba/reviews/40.jpg"
+    },
+    {
+      "docId": "reviews-excel-41",
+      "label": "시그니처 진주광채 색소 패키지",
+      "category": "pigment",
+      "treatmentDate": "2026-01-13",
+      "image": "/images/ba/reviews/41.jpg"
+    },
+    {
+      "docId": "reviews-excel-42",
+      "label": "시그니처 안티아크네 진행",
+      "category": "acne",
+      "treatmentDate": "2026-01-13",
+      "image": "/images/ba/reviews/42.jpg"
+    },
+    {
+      "docId": "reviews-excel-43",
+      "label": "시그니처 진주광채 색소 패키지",
+      "category": "pigment",
+      "treatmentDate": "2026-01-13",
+      "image": "/images/ba/reviews/43.jpg"
+    },
+    {
+      "docId": "reviews-excel-44",
+      "label": "코 실리프팅, 울쎄라피프라임 진행",
+      "category": "lifting",
+      "treatmentDate": "2026-01-13",
+      "image": "/images/ba/reviews/44.jpg"
+    },
+    {
+      "docId": "reviews-excel-45",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/45.jpg"
+    },
+    {
+      "docId": "reviews-excel-46",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/46.jpg"
+    },
+    {
+      "docId": "reviews-excel-47",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/47.jpg"
+    },
+    {
+      "docId": "reviews-excel-48",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/48.jpg"
+    },
+    {
+      "docId": "reviews-excel-49",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/49.jpg"
+    },
+    {
+      "docId": "reviews-excel-50",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/50.jpg"
+    },
+    {
+      "docId": "reviews-excel-51",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/51.jpg"
+    },
+    {
+      "docId": "reviews-excel-52",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/52.jpg"
+    },
+    {
+      "docId": "reviews-excel-53",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/53.jpg"
+    },
+    {
+      "docId": "reviews-excel-54",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/54.jpg"
+    },
+    {
+      "docId": "reviews-excel-55",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/55.jpg"
+    },
+    {
+      "docId": "reviews-excel-56",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/56.jpg"
+    },
+    {
+      "docId": "reviews-excel-57",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/57.jpg"
+    },
+    {
+      "docId": "reviews-excel-58",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/58.jpg"
+    },
+    {
+      "docId": "reviews-excel-59",
+      "label": "볼륨부스터 풀페이스 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/59.jpg"
+    },
+    {
+      "docId": "reviews-excel-60",
+      "label": "눈밑필러 진행",
+      "category": "wrinkle",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/60.jpg"
+    },
+    {
+      "docId": "reviews-excel-61",
+      "label": "관자필러 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/61.jpg"
+    },
+    {
+      "docId": "reviews-excel-62",
+      "label": "턱끝필러 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/62.jpg"
+    },
+    {
+      "docId": "reviews-excel-63",
+      "label": "턱끝필러 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/63.jpg"
+    },
+    {
+      "docId": "reviews-excel-64",
+      "label": "코필러 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/64.jpg"
+    },
+    {
+      "docId": "reviews-excel-65",
+      "label": "코필러 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/65.jpg"
+    },
+    {
+      "docId": "reviews-excel-66",
+      "label": "코필러 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/66.jpg"
+    },
+    {
+      "docId": "reviews-excel-67",
+      "label": "입술필러 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/67.jpg"
+    },
+    {
+      "docId": "reviews-excel-68",
+      "label": "입술필러 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/68.jpg"
+    },
+    {
+      "docId": "reviews-excel-69",
+      "label": "입술필러 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/69.jpg"
+    },
+    {
+      "docId": "reviews-excel-70",
+      "label": "입술필러 진행",
+      "category": "petit",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/70.jpg"
+    },
+    {
+      "docId": "reviews-excel-71",
+      "label": "이마주름필러 진행",
+      "category": "wrinkle",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/71.jpg"
+    },
+    {
+      "docId": "reviews-excel-72",
+      "label": "이마주름필러 진행",
+      "category": "wrinkle",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/72.jpg"
+    },
+    {
+      "docId": "reviews-excel-73",
+      "label": "이마주름필러 진행",
+      "category": "wrinkle",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/73.jpg"
+    },
+    {
+      "docId": "reviews-excel-74",
+      "label": "이마주름필러 진행",
+      "category": "wrinkle",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/74.jpg"
+    },
+    {
+      "docId": "reviews-excel-75",
+      "label": "온다 시술 진행",
+      "category": "lifting",
+      "treatmentDate": "2025-11-05",
+      "image": "/images/ba/reviews/75.jpg"
+    },
+    {
+      "docId": "reviews-excel-76",
+      "label": "실리프팅 시술 진행",
+      "category": "lifting",
+      "treatmentDate": "2025-10-31",
+      "image": "/images/ba/reviews/76.jpg"
+    },
+    {
+      "docId": "reviews-excel-77",
+      "label": "실리프팅 시술 진행",
+      "category": "lifting",
+      "treatmentDate": "2025-10-31",
+      "image": "/images/ba/reviews/77.jpg"
+    },
+    {
+      "docId": "reviews-excel-78",
+      "label": "옆볼 볼륨부스터 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-10-31",
+      "image": "/images/ba/reviews/78.jpg"
+    },
+    {
+      "docId": "reviews-excel-79",
+      "label": "옆볼 볼륨부스터 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-10-31",
+      "image": "/images/ba/reviews/79.jpg"
+    },
+    {
+      "docId": "reviews-excel-80",
+      "label": "옆볼 볼륨부스터 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-10-31",
+      "image": "/images/ba/reviews/80.jpg"
+    },
+    {
+      "docId": "reviews-excel-81",
+      "label": "옆볼 볼륨부스터 시술 진행",
+      "category": "petit",
+      "treatmentDate": "2025-10-31",
+      "image": "/images/ba/reviews/81.jpg"
+    }
+  ]
+}

@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
         /* Firebase Storage 업로드 이미지(관리자 등록 전후사진 등)를 next/image 로 쓰기 위해 허용 */
         remotePatterns: [
             { protocol: 'https', hostname: 'firebasestorage.googleapis.com' },
+            { protocol: 'https', hostname: 'reberryclinic-a8dcd.firebasestorage.app' },
             { protocol: 'https', hostname: 'i.ytimg.com' },
             { protocol: 'https', hostname: 'blogthumb.pstatic.net' },
         ],

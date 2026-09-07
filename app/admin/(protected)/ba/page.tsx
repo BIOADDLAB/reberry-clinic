@@ -43,8 +43,8 @@ interface BAPhotoDoc {
     slug: string; // 기존 단일 페이지 데이터 및 대표 페이지
     slugs?: string[]; // 실제 노출할 시술 페이지들
     label: string; // 사진 아래 알약 모양 글자
-    before: string; // Storage 이미지 URL
-    after: string;
+    before: string; // 전후 합성 컷 URL (한 장)
+    after: string; // 예전 전/후 분리 데이터 호환. 새 등록은 before와 같은 값
     main?: number; // 메인페이지 노출 순서 (없으면 메인 미노출)
     order?: number; // 그 시그니처 페이지 안에서의 순서
     category?: string; // 전후사진 페이지(/reviews) 카테고리 탭
@@ -80,8 +80,7 @@ const EMPTY_FORM = {
 export default function AdminBAPage() {
     const [items, setItems] = useState<BAPhotoDoc[]>([]);
     const [form, setForm] = useState(EMPTY_FORM);
-    const [beforeFile, setBeforeFile] = useState<File | null>(null);
-    const [afterFile, setAfterFile] = useState<File | null>(null);
+    const [imageFile, setImageFile] = useState<File | null>(null);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -187,26 +186,26 @@ export default function AdminBAPage() {
             showMain: typeof it.main === 'number',
             mainOrder: it.main ?? 1,
         });
-        setBeforeFile(null);
-        setAfterFile(null);
+        setImageFile(null);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const cancelEdit = () => {
         setEditingId(null);
         setForm(EMPTY_FORM);
-        setBeforeFile(null);
-        setAfterFile(null);
+        setImageFile(null);
     };
 
     // 파일 용량 체크 — 너무 큰 사진은 업로드도 느리고 사이트도 느려짐
-    const pickFile = (file: File | null, setter: (f: File | null) => void) => {
+    const pickFile = (file: File | null) => {
         if (file && file.size > BA_IMAGE_GUIDE.maxFileSizeMB * 1024 * 1024) {
             alert(`이미지 용량은 ${BA_IMAGE_GUIDE.maxFileSizeMB}MB 이하로 올려주세요.`);
             return;
         }
-        setter(file);
+        setImageFile(file);
     };
+
+    const photoUrl = (it: Pick<BAPhotoDoc, 'before' | 'after'>) => it.before || it.after;
 
     const treatmentPageName = (slug: string) => {
         const page = TREATMENT_PAGES.find((item) => item.slug === slug);
@@ -250,7 +249,7 @@ export default function AdminBAPage() {
         }
         if (!finalLabel) return alert('표시 라벨을 입력하세요.');
         if (!form.treatmentDate) return alert('시술일을 선택하세요.');
-        if (!editingId && (!beforeFile || !afterFile)) return alert('전/후 사진을 모두 선택하세요.');
+        if (!editingId && !imageFile) return alert('전후 사진을 선택하세요.');
         if (isDuplicateOrder)
             return alert(
                 `${duplicateTargets.map((target) => treatmentPageName(target.slug)).join(', ')}에 이미 ${form.order}번이 있습니다.`,
@@ -273,11 +272,10 @@ export default function AdminBAPage() {
                 uploadedUrls.push(url);
                 return url;
             };
-            const [beforeUrl, afterUrl] = await Promise.all([
-                beforeFile ? trackedUpload(beforeFile) : Promise.resolve(existing?.before ?? ''),
-                afterFile ? trackedUpload(afterFile) : Promise.resolve(existing?.after ?? ''),
-            ]);
-            if (!beforeUrl || !afterUrl) throw new Error('전/후 사진 URL을 만들지 못했습니다.');
+            const imageUrl = imageFile
+                ? await trackedUpload(imageFile)
+                : photoUrl(existing ?? { before: '', after: '' });
+            if (!imageUrl) throw new Error('전후 사진 URL을 만들지 못했습니다.');
             const primarySlug = form.slugs[0] ?? existing?.slug ?? TREATMENT_PAGES[0].slug;
 
             const payload = {
@@ -287,8 +285,8 @@ export default function AdminBAPage() {
                 category: form.category,
                 label: finalLabel,
                 treatmentDate: form.treatmentDate,
-                before: beforeUrl,
-                after: afterUrl,
+                before: imageUrl,
+                after: imageUrl,
                 order: form.order,
                 ...(form.showMain ? { main: form.mainOrder } : { main: null }), // null 로 지워야 기존 값이 사라짐
             };
@@ -300,10 +298,9 @@ export default function AdminBAPage() {
             }
 
             // Firestore 저장이 성공한 뒤에만 교체 전 파일을 지운다.
-            const replacedUrls = [
-                ...(beforeFile && existing?.before && existing.before !== beforeUrl ? [existing.before] : []),
-                ...(afterFile && existing?.after && existing.after !== afterUrl ? [existing.after] : []),
-            ];
+            const replacedUrls = [...new Set([existing?.before, existing?.after].filter(Boolean))].filter(
+                (url) => url !== imageUrl,
+            );
             await Promise.allSettled(replacedUrls.map((url) => deleteStoredImage(url)));
             uploadedUrls.length = 0;
             cancelEdit();
@@ -325,7 +322,9 @@ export default function AdminBAPage() {
         try {
             await deleteDoc(doc(db, 'baPhotos', it.id));
             // 화면 데이터부터 안전하게 삭제한 뒤 연결이 끊긴 파일을 정리한다.
-            await Promise.allSettled([deleteStoredImage(it.before), deleteStoredImage(it.after)]);
+            await Promise.allSettled(
+                [...new Set([it.before, it.after].filter(Boolean))].map((url) => deleteStoredImage(url)),
+            );
         } catch (removeError) {
             console.error('[AdminBAPage] 전후사진 삭제 실패:', removeError);
             setError('전후사진 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.');
@@ -334,11 +333,13 @@ export default function AdminBAPage() {
 
     const inputCls =
         'w-full rounded-lg border border-cocoa/15 px-3 py-2.5 text-small outline-none focus:border-cocoa/40';
+    const editingItem = items.find((it) => it.id === editingId);
+    const editingPreviewUrl = editingItem ? photoUrl(editingItem) : '';
 
     return (
         <div className="mx-auto max-w-4xl">
             <h1 className="text-h2 font-bold text-cocoa">전후사진 관리</h1>
-            <p className="mt-1 text-small text-latte">시술 전/후 사진을 등록·수정합니다.</p>
+            <p className="mt-1 text-small text-latte">전후 사진 한 장을 등록·수정합니다.</p>
             {error && (
                 <p role="alert" className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-caption text-red-700">
                     {error}
@@ -498,34 +499,35 @@ export default function AdminBAPage() {
                 <div className="mt-5 rounded-lg bg-cocoa/[0.03] p-4">
                     <p className="text-small font-semibold text-cocoa">사진 업로드</p>
                     <p className="mt-1 text-caption text-latte">
-                        화면에 보이는 크기는 가로 {BA_IMAGE_GUIDE.displayWidth} × 세로 {BA_IMAGE_GUIDE.displayHeight}px
-                        입니다. 선명하게 보이려면{' '}
+                        전·후가 한 장에 들어간 사진을 올립니다. 화면에 보이는 크기는 가로 {BA_IMAGE_GUIDE.displayWidth}{' '}
+                        × 세로 {BA_IMAGE_GUIDE.displayHeight}px 입니다. 선명하게 보이려면{' '}
                         <b>
-                            2배 크기({BA_IMAGE_GUIDE.recommendWidth} × {BA_IMAGE_GUIDE.recommendHeight}px)
+                            {BA_IMAGE_GUIDE.recommendWidth} × {BA_IMAGE_GUIDE.recommendHeight}px
                         </b>{' '}
-                        로 올려주세요. 비율이 다르면 가운데 기준으로 잘려 보입니다. (최대 {BA_IMAGE_GUIDE.maxFileSizeMB}
-                        MB)
+                        정사각으로 올려주세요. 비율이 다르면 여백이 생길 수 있습니다. (최대{' '}
+                        {BA_IMAGE_GUIDE.maxFileSizeMB}MB)
                     </p>
-                    <div className="mt-3 flex flex-col gap-4 sm:flex-row">
-                        <label className="flex-1 text-small">
-                            <span className="font-semibold text-cocoa">전(Before)</span>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => pickFile(e.target.files?.[0] ?? null, setBeforeFile)}
-                                className="mt-1.5 block w-full text-small"
-                            />
-                        </label>
-                        <label className="flex-1 text-small">
-                            <span className="font-semibold text-cocoa">후(After)</span>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => pickFile(e.target.files?.[0] ?? null, setAfterFile)}
-                                className="mt-1.5 block w-full text-small"
-                            />
-                        </label>
-                    </div>
+                    <label className="mt-3 block text-small">
+                        <span className="font-semibold text-cocoa">전후 사진</span>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
+                            className="mt-1.5 block w-full text-small"
+                        />
+                    </label>
+                    {(editingPreviewUrl || imageFile) && (
+                        <div className="relative mt-3 h-36 w-36 overflow-hidden rounded-lg bg-cocoa/5">
+                            {editingPreviewUrl && !imageFile && (
+                                <Image src={editingPreviewUrl} alt="" fill sizes="144px" className="object-contain" />
+                            )}
+                            {imageFile && (
+                                <p className="flex h-full items-center justify-center px-3 text-center text-caption text-cocoa">
+                                    {imageFile.name}
+                                </p>
+                            )}
+                        </div>
+                    )}
                     {editingId && (
                         <p className="mt-2 text-caption text-latte">
                             수정 시 사진을 새로 고르지 않으면 <b>기존 사진이 그대로 유지</b>됩니다.
@@ -694,13 +696,10 @@ export default function AdminBAPage() {
                         key={it.id}
                         className="flex flex-col gap-3 rounded-xl bg-white p-3 shadow-[0_1px_8px_rgba(69,54,45,0.05)] sm:flex-row sm:items-center"
                     >
-                        <div className="flex gap-2">
-                            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg">
-                                <Image src={it.before} alt="" fill sizes="64px" className="object-cover" />
-                            </div>
-                            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg">
-                                <Image src={it.after} alt="" fill sizes="64px" className="object-cover" />
-                            </div>
+                        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-cocoa/5">
+                            {photoUrl(it) && (
+                                <Image src={photoUrl(it)} alt="" fill sizes="64px" className="object-cover" />
+                            )}
                         </div>
                         <div className="min-w-0 flex-1 text-small">
                             <p className="flex flex-wrap items-center gap-2 font-semibold text-cocoa">

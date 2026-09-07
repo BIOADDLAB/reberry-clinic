@@ -37,7 +37,6 @@ function getPaginationItems(currentPage: number, totalPages: number): Pagination
 export default function SkinColumnList() {
     const t = useTranslations('column');
     const [posts, setPosts] = useState<SkinColumnPostItem[]>([]);
-    const [activeCategory, setActiveCategory] = useState('all');
     const [searchInput, setSearchInput] = useState('');
     const [query, setQuery] = useState('');
     const [page, setPage] = useState(1);
@@ -63,16 +62,15 @@ export default function SkinColumnList() {
 
     const visiblePosts = useMemo(() => {
         const keyword = query.trim().toLowerCase();
-        return posts.filter((post) => {
-            if (activeCategory !== 'all' && post.categorySlug !== activeCategory) return false;
-            if (!keyword) return true;
+        if (!keyword) return posts;
 
+        return posts.filter((post) => {
             const categoryLabel = SIGNATURE_PAGES.find((category) => category.slug === post.categorySlug)?.label ?? '';
             return [post.title, post.excerpt, post.blogCategory, categoryLabel].some((value) =>
                 (value ?? '').toLowerCase().includes(keyword),
             );
         });
-    }, [activeCategory, posts, query]);
+    }, [posts, query]);
     const totalPages = Math.max(1, Math.ceil(visiblePosts.length / PER_PAGE));
     const currentPage = Math.min(page, totalPages);
     const pagedPosts = visiblePosts.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
@@ -84,13 +82,7 @@ export default function SkinColumnList() {
             return;
         }
         listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, [currentPage, activeCategory]);
-
-    const pickCategory = (slug: string) => {
-        if (slug === activeCategory) return;
-        setActiveCategory(slug);
-        setPage(1);
-    };
+    }, [currentPage]);
 
     return (
         <div ref={listRef} className="container-site relative scroll-mt-24 py-20 md:py-28 lg:py-36">
@@ -100,24 +92,8 @@ export default function SkinColumnList() {
                 <p className="mx-auto mt-4 max-w-2xl text-small leading-7 text-latte">{t('subtitle')}</p>
             </div>
 
-            <nav aria-label={t('categoryNavAria')} className="mt-10 flex flex-wrap justify-center gap-2 md:mt-14">
-                <FilterButton
-                    active={activeCategory === 'all'}
-                    label={t('allFilter')}
-                    onClick={() => pickCategory('all')}
-                />
-                {SIGNATURE_PAGES.map((category) => (
-                    <FilterButton
-                        key={category.slug}
-                        active={activeCategory === category.slug}
-                        label={<T ko={category.label} />}
-                        onClick={() => pickCategory(category.slug)}
-                    />
-                ))}
-            </nav>
-
             <form
-                className="mx-auto mt-8 flex w-full max-w-xl gap-2"
+                className="mx-auto mt-10 flex w-full max-w-xl gap-2 md:mt-14"
                 onSubmit={(event) => {
                     event.preventDefault();
                     setQuery(searchInput.trim());
@@ -306,23 +282,6 @@ function ColumnThumbnail({ post }: { post: SkinColumnPostItem }) {
                 RE:BERRY
             </span>
         </div>
-    );
-}
-
-function FilterButton({ active, label, onClick }: { active: boolean; label: React.ReactNode; onClick: () => void }) {
-    return (
-        <button
-            type="button"
-            aria-pressed={active}
-            onClick={onClick}
-            className={`rounded-full border px-4 py-2 text-caption font-semibold transition-colors md:px-5 ${
-                active
-                    ? 'border-cocoa bg-cocoa text-cream'
-                    : 'border-cocoa/15 bg-cream/80 text-latte hover:border-cocoa/35 hover:text-cocoa'
-            }`}
-        >
-            {label}
-        </button>
     );
 }
 

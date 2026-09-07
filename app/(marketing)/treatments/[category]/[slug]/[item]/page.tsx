@@ -8,6 +8,7 @@ import StepPlan from '@/components/ui/StepPlan';
 import TreatmentIntroSection from '@/components/ui/TreatmentIntroSection';
 import TreatmentColumnSection from '@/components/ui/TreatmentColumnSection';
 import TreatmentBASection from '@/components/ui/TreatmentBASection';
+import SolutionPrincipleCards from '@/components/ui/SolutionPrincipleCards';
 import { columns } from '@/components/lib/columns';
 import Reveal from '@/components/motion/Reveal';
 import { zoom } from '@/components/lib/motion';
@@ -148,32 +149,11 @@ export default async function SolutionDetailPage({ params }: Params) {
                 </div>
             </section>
 
-            {/* 원리/원칙 — principles 배열만 채우면 단락이 늘어남 */}
-            {!isAgingLiftingPage && s.principles.length > 0 && (
-                <section className="relative py-20 lg:py-30">
-                    <TextureBackground src="/images/bg-texture-08.jpg" />
-                    <div className="container-site relative mx-auto max-w-4xl space-y-14 lg:space-y-17.5">
-                        {s.principles.map((p) => (
-                            <Reveal key={p.title}>
-                                <h3 className="flex items-center gap-2 text-h3 font-bold">
-                                    <span
-                                        aria-hidden
-                                        className=" inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-cocoa"
-                                    />
-                                    {p.title}
-                                </h3>
-                                <p className="mt-5 whitespace-pre-line pl-3 text-small leading-[30px] lg:mt-8">
-                                    {p.content}
-                                </p>
-                            </Reveal>
-                        ))}
-                    </div>
-                </section>
-            )}
+            <SolutionPrincipleCards principles={s.principles} />
 
             {isAgingLiftingPage && contentSlug && (
                 <>
-                    <TreatmentBASection slug={contentSlug} />
+                    <TreatmentBASection slug={contentSlug} emptyPlaceholder />
 
                     <TreatmentColumnSection slug={contentSlug} name={itemName} />
                     <StepPlan />

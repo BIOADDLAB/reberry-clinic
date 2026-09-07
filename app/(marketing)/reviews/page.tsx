@@ -9,7 +9,7 @@ import BAPhotoModal from '@/components/ui/BAPhotoModal';
 import Skeleton from '@/components/ui/Skeleton';
 import T from '@/components/lang/T';
 import { cn } from '@/components/lib/cn';
-import { BA_CATEGORIES, formatTreatmentDate, resolveBACategory, type BAPhoto } from '@/components/lib/ba';
+import { BA_CATEGORIES, baPhotoUrl, formatTreatmentDate, resolveBACategory, type BAPhoto } from '@/components/lib/ba';
 import { filterReviewBAPhotos, useBAPhotos, useBAPhotosLoading } from '@/components/lib/useBAPhotos';
 import TextureBackground from '@/components/ui/TextureBackground';
 
@@ -137,10 +137,7 @@ export default function ReviewsPage() {
                         {loading
                             ? Array.from({ length: PER_PAGE }).map((_, i) => (
                                   <div key={i} className="rounded-[4px] bg-sand p-2.5 shadow-sm">
-                                      <div className="grid grid-cols-2 gap-1">
-                                          <Skeleton className="aspect-[4/3]" />
-                                          <Skeleton className="aspect-[4/3]" />
-                                      </div>
+                                      <Skeleton className="aspect-square" />
                                       <Skeleton className="mx-auto mt-3 h-4 w-32 rounded-full" />
                                       <Skeleton className="mx-auto mt-2 h-3 w-20 rounded-full" />
                                   </div>
@@ -151,32 +148,17 @@ export default function ReviewsPage() {
                                           onClick={() => setSelectedPhoto(r)}
                                           className="cursor-pointer transition-transform hover:scale-[1.02]"
                                       >
-                                          <div className="grid grid-cols-2 gap-1">
-                                              <div className="skeleton relative aspect-[4/3] overflow-hidden">
-                                                  <Image
-                                                      src={r.before}
-                                                      alt={tReviews('beforeAlt')}
-                                                      fill
-                                                      quality={85}
-                                                      sizes="(max-width: 768px) 160px, 220px"
-                                                      className="object-cover"
-                                                  />
-                                              </div>
-                                              <div className="skeleton relative aspect-[4/3]">
-                                                  <Image
-                                                      src={r.after}
-                                                      alt={tReviews('afterAlt')}
-                                                      fill
-                                                      quality={85}
-                                                      sizes="(max-width: 768px) 160px, 220px"
-                                                      className="object-cover"
-                                                  />
-                                              </div>
+                                          <div className="skeleton relative aspect-square overflow-hidden">
+                                              <Image
+                                                  src={baPhotoUrl(r)}
+                                                  alt={tReviews('beforeAlt')}
+                                                  fill
+                                                  quality={85}
+                                                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 220px"
+                                                  className="object-contain"
+                                              />
                                           </div>
-                                          <p className="notranslate font-display flex items-center justify-center gap-6 pt-3 text-lead text-cream/90">
-                                              Before <span aria-hidden>→</span> After
-                                          </p>
-                                          <p className="notranslate font-display text-center text-small tracking-[0.2em] text-cream/40">
+                                          <p className="notranslate font-display pt-3 text-center text-small tracking-[0.2em] text-cream/40">
                                               RE:BERRY
                                           </p>
                                           {r.treatmentDate && (

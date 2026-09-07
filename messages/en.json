@@ -8,6 +8,7 @@
   },
   "common": {
     "beforeAfter": "Before & After",
+    "comingSoon": "Coming soon.",
     "login": "Login",
     "more": "See more",
     "prev": "Previous",
@@ -270,6 +271,12 @@
     "prevPage": "Previous page",
     "nextPage": "Next page",
     "categoryLabel": "Treatment category",
-    "empty": "No photos yet."
+    "empty": "No photos yet.",
+    "noticeAria": "Before and after photo notice",
+    "consent": "These photos show patients actually treated at this clinic, and we obtained consent before posting.",
+    "consentDetail": "Photos were cropped only for privacy and were not retouched. Results such as inflammation, pigmentation, or redness can vary from person to person.",
+    "precautionsTitle": "Aftercare and possible side effects",
+    "precautionPetit": "After petit procedures, bruising, redness, infection, pain, or swelling may occur.",
+    "precautionSkin": "After skin procedures, pigmentation or burns may occur."
   }
 }

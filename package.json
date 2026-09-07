@@ -11,7 +11,8 @@
     "seed:treatment-columns": "tsx scripts/seed-treatment-columns.ts",
     "check:treatment-columns": "tsx scripts/seed-treatment-columns.ts --check",
     "check:content-links": "node --import tsx scripts/check-content-links.ts",
-    "seed:events": "tsx scripts/seed-events.ts"
+    "seed:events": "tsx scripts/seed-events.ts",
+    "seed:reviews-ba": "tsx scripts/seed-reviews-ba.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
