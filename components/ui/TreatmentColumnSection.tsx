@@ -8,6 +8,7 @@
 'use client';
 
 import Reveal from '@/components/motion/Reveal';
+import { cn } from '@/components/lib/cn';
 import { useColumnsBySlug } from '@/components/lib/useColumns';
 import { useTreatmentColumnHeading } from '@/components/lib/useTreatmentColumnHeading';
 import { ColumnListContent } from '@/components/ui/ColumnSlider';
@@ -19,12 +20,17 @@ interface Props {
     /** 페이지에서 넘긴 기본 문구(시그니처). 관리자 저장값이 우선한다 */
     heading?: string;
     variant?: 'card' | 'list';
+    /** #ISSUE: 안티에이징 기기 상세 페이지는 바로 위 StepPlan(tone="sand")와 이 섹션이
+        똑같은 texture-08 이미지를 써서 두 섹션이 한 덩어리로 겹쳐 보였다.
+        다른 결(texture-06)로 바꿔도 결이 있는 채로는 여전히 붙어 보인다는 피드백.
+        → "flat" 은 디엘브처럼 결 이미지 없이 살짝 다른 톤의 단색만 깐다. */
+    tone?: 'default' | 'flat';
 }
 
 /** 관리자에 저장된 값이 없을 때 쓰는 기본 제목 */
 export const defaultColumnHeading = (name: string) => `논문으로 검증하고, 임상으로 증명한 ${name} 이야기`;
 
-export default function TreatmentColumnSection({ slug, name, heading }: Props) {
+export default function TreatmentColumnSection({ slug, name, heading, tone = 'default' }: Props) {
     const items = useColumnsBySlug(slug, []);
     const managedHeading = useTreatmentColumnHeading(slug, heading || defaultColumnHeading(name));
 
@@ -34,8 +40,13 @@ export default function TreatmentColumnSection({ slug, name, heading }: Props) {
     const parts = managedHeading.match(/^(.+?[,、，])\s*(.+)$/);
 
     return (
-        <section className="relative overflow-x-clip bg-cream py-20 lg:pt-32.5 lg:pb-37.5">
-            <TextureBackground src="/images/bg-texture-08.jpg" />
+        <section
+            className={cn(
+                'relative overflow-x-clip py-20 lg:pt-32.5 lg:pb-37.5',
+                tone === 'flat' ? 'bg-[#F3EEE5]' : 'bg-cream',
+            )}
+        >
+            {tone !== 'flat' && <TextureBackground src="/images/bg-texture-08.jpg" />}
             <div className="container-site relative">
                 <Reveal className="text-center">
                     <p className="notranslate font-display text-h2">Column</p>

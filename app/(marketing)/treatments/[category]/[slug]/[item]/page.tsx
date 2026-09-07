@@ -164,7 +164,9 @@ export default async function SolutionDetailPage({ params }: Params) {
                 <>
                     <TreatmentBASection slug={contentSlug} />
                     <StepPlan tone="sand" />
-                    <TreatmentColumnSection slug={contentSlug} name={itemName} />
+                    {/* #FIX: 바로 위 StepPlan(tone="sand")과 결(texture-08)이 같아서 두 섹션이
+                        겹쳐 보이던 문제 → 이 페이지에서만 tone="flat" 으로 결 없는 단색 배경을 준다 */}
+                    <TreatmentColumnSection slug={contentSlug} name={itemName} tone="flat" />
                     <TreatmentIntroSection treatment={t} name={t.name} />
                 </>
             )}

@@ -165,9 +165,9 @@ export default function ColumnLinkManager() {
                 let order = 1;
                 while (used.includes(order)) order += 1;
                 await addDoc(collection(db, 'columns'), {
-                    title: scope === 'device' ? '' : '새 칼럼',
+                    title: '',
                     en: '',
-                    text: '제목을 입력하세요',
+                    text: '',
                     link: '',
                     slugs: [currentPage.slug],
                     order,
@@ -268,35 +268,45 @@ export default function ColumnLinkManager() {
                             key={item.id}
                             className="flex min-h-[220px] flex-col rounded-[16px] border border-cocoa/[0.1] bg-cream p-5"
                         >
+                            {/* #ISSUE: 이 칸(title)을 맨 위 큰 글씨에 놓았더니 다들 "시술 이름" 을
+                                제목처럼 적어서, 홈페이지 카드마다 "색소"·"온다리프팅" 만 반복되고
+                                진짜 제목(text)은 안 보이는 문제가 있었다.
+                                → 큰 제목 칸은 text 하나로 통일하고, 이름표(title·en)는 아래 작은 칸으로 내린다. */}
                             <div className="flex items-start justify-between gap-2">
                                 <Field
-                                    value={shown(fieldKey(item.id, 'title'), item.title)}
-                                    dirty={fieldKey(item.id, 'title') in edits}
-                                    onChange={(value) => setEdit(fieldKey(item.id, 'title'), value.slice(0, titleLimit), item.title)}
-                                    placeholder="시술 이름"
-                                    className="min-w-0 flex-1 text-medium font-bold text-cocoa"
+                                    multiline
+                                    value={shown(fieldKey(item.id, 'text'), item.text)}
+                                    dirty={fieldKey(item.id, 'text') in edits}
+                                    onChange={(value) =>
+                                        setEdit(fieldKey(item.id, 'text'), value.slice(0, LIMITS.columnText + 20), item.text)
+                                    }
+                                    placeholder="제목을 입력하세요 (카드에 크게 보입니다)"
+                                    className="min-w-0 flex-1 text-medium font-bold leading-7 text-cocoa"
                                 />
                                 <span className="font-display shrink-0 pt-2 text-caption text-cocoa/25">
                                     {String(index + 1).padStart(2, '0')}
                                 </span>
                             </div>
-                            {scope !== 'device' && (
+
+                            <div className="mt-3 flex items-center gap-2 rounded-lg bg-cocoa/[0.03] px-2.5 py-2">
+                                <span className="shrink-0 text-caption-sm text-cocoa/40">이름표(선택)</span>
                                 <Field
-                                    value={shown(fieldKey(item.id, 'en'), item.en)}
-                                    dirty={fieldKey(item.id, 'en') in edits}
-                                    onChange={(value) => setEdit(fieldKey(item.id, 'en'), value.slice(0, LIMITS.columnEn), item.en)}
-                                    placeholder="영문 이름 (없어도 됩니다)"
-                                    className="text-caption text-latte"
+                                    value={shown(fieldKey(item.id, 'title'), item.title)}
+                                    dirty={fieldKey(item.id, 'title') in edits}
+                                    onChange={(value) => setEdit(fieldKey(item.id, 'title'), value.slice(0, titleLimit), item.title)}
+                                    placeholder="시술·기기 이름"
+                                    className="min-w-0 flex-1 text-caption text-latte"
                                 />
-                            )}
-                            <Field
-                                multiline
-                                value={shown(fieldKey(item.id, 'text'), item.text)}
-                                dirty={fieldKey(item.id, 'text') in edits}
-                                onChange={(value) => setEdit(fieldKey(item.id, 'text'), value.slice(0, LIMITS.columnText + 20), item.text)}
-                                placeholder="카드에 보이는 제목"
-                                className="mt-2 text-small leading-7 text-cocoa/75"
-                            />
+                                {scope !== 'device' && (
+                                    <Field
+                                        value={shown(fieldKey(item.id, 'en'), item.en)}
+                                        dirty={fieldKey(item.id, 'en') in edits}
+                                        onChange={(value) => setEdit(fieldKey(item.id, 'en'), value.slice(0, LIMITS.columnEn), item.en)}
+                                        placeholder="영문(선택)"
+                                        className="w-24 shrink-0 text-caption text-latte"
+                                    />
+                                )}
+                            </div>
                             <Field
                                 value={shown(fieldKey(item.id, 'link'), item.link)}
                                 dirty={fieldKey(item.id, 'link') in edits}
