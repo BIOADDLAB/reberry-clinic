@@ -26,18 +26,18 @@ export const site = {
         { label: '평 일', value: '10:30 - 20:30' },
         { label: '토요일', value: '09:00 - 15:30' },
     ],
-    // 평일 점심시간(휴게시간). 예약 화면에서도 이 시간대는 슬롯에서 빠진다 → components/lib/reservationSchedule.ts
+    // 평일 점심시간(휴게시간)
     lunch: '14:00 - 15:00',
     saturdayNote: '토요일 점심시간 없이 진료',
 };
 
 export const nav = [
     {
-        label: '리베리의원',
+        label: '병원소개',
         en: 'ABOUT',
         href: '/about',
         children: [
-            { label: 'WE ARE RE:BERRY', en: 'WE ARE RE:BERRY', href: '/about' },
+            { label: '병원소개', en: 'ABOUT CLINIC', href: '/about' },
             { label: '의료진 소개', en: 'Doctors', href: '/doctors' },
         ],
     },

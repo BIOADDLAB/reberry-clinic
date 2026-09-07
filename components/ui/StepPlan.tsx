@@ -6,7 +6,9 @@ import TextureBackground from '@/components/ui/TextureBackground';
 
 const images = ['/images/img-step-01.jpg', '/images/img-step-02.jpg', '/images/img-step-03.jpg'];
 
-export default async function StepPlan() {
+/* #ISSUE: 안티에이징 리프팅 상세는 바로 위 "시술 기기 소개" 섹션과 배경이 똑같아
+   두 섹션이 한 덩어리로 붙어 보였다. → 그 페이지들만 tone="sand" 로 배경을 한 톤 낮춘다. */
+export default async function StepPlan({ tone = 'paper' }: { tone?: 'paper' | 'sand' } = {}) {
     const t = await getTranslations('stepPlan');
     const steps = (t.raw('steps') as { title: string; desc: string }[]).map((s, i) => ({
         ...s,
@@ -15,8 +17,10 @@ export default async function StepPlan() {
     }));
 
     return (
-        <section className="relative texture-paper py-20 lg:pt-35 lg:pb-30">
-            <TextureBackground src="/images/bg-texture-06.jpg" />
+        <section
+            className={`relative py-20 lg:pt-35 lg:pb-30 ${tone === 'sand' ? 'bg-[#EDE6DA]' : 'texture-paper'}`}
+        >
+            <TextureBackground src={tone === 'sand' ? '/images/bg-texture-08.jpg' : '/images/bg-texture-06.jpg'} />
             <div className="container-site relative">
                 <Reveal className="text-center">
                     <p className="font-display text-h2">3 Step Plan</p>

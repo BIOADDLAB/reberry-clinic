@@ -27,7 +27,7 @@ export default async function DoctorsPage() {
 
     return (
         <>
-            <SubHero en="RE:BERRY Specialist" image="/images/bg-sub-01.jpg" />
+            <SubHero en="MEDICAL TEAM" image="/images/bg-sub-01.jpg" />
 
             {/* 원장 소개 상단 — 인물과 소개글을 나란히 배치 */}
             <section className="overflow-hidden bg-cream pt-20 md:pt-24 lg:pt-28">
@@ -47,7 +47,7 @@ export default async function DoctorsPage() {
                     </Reveal>
 
                     <Reveal delay={0.1} className="pb-14 text-center lg:pb-20 lg:text-left">
-                        <p className="font-display text-h2 tracking-[0.05em]">RE:BERRY Specialist</p>
+                        <p className="font-display text-h2 tracking-[0.05em]">REPRESENTATIVE DIRECTOR</p>
                         <div className="mt-5 inline-flex flex-col">
                             <span className="h-px w-full bg-cocoa/35" />
                             <h1 className="font-display px-1 py-2 text-h3">Academic Background &amp; License</h1>
@@ -96,7 +96,7 @@ export default async function DoctorsPage() {
                             <div className="flex items-end justify-between gap-4">
                                 <div>
                                     <h2 className="text-h3 font-bold text-cocoa">마포피부왕 닥터파이톤</h2>
-                                    <p className="mt-1 font-display text-caption text-latte">RE:BERRY YouTube</p>
+                                    <p className="mt-1 font-display text-caption text-latte">YouTube</p>
                                 </div>
                                 <a
                                     href={site.youtube}
@@ -143,7 +143,7 @@ export default async function DoctorsPage() {
                         <Reveal delay={0.15} className="py-2">
                             <div className="flex items-end justify-between gap-4">
                                 <div>
-                                    <h2 className="font-display text-h3 text-cocoa">RE:BERRY Blog</h2>
+                                    <h2 className="font-display text-h3 text-cocoa">Doctor&apos;s Blog</h2>
                                     <p className="mt-1 text-caption text-latte">Naver Blog</p>
                                 </div>
                                 <a
@@ -177,7 +177,7 @@ export default async function DoctorsPage() {
                                                     />
                                                 ) : (
                                                     <div className="grid h-full place-items-center text-caption text-latte/50">
-                                                        RE:BERRY
+                                                        Doctor&apos;s Note
                                                     </div>
                                                 )}
                                             </div>
@@ -204,7 +204,7 @@ export default async function DoctorsPage() {
                 <div className="container-site lg:px-0! text-center border-r-0 lg:border-r border-cream py-20 lg:py-30">
                     <Reveal>
                         <h2 className="font-display text-h2 leading-[48px] text-cream tracking-[3.24em]">
-                            RE:BERRY PROMISE
+                            OUR PROMISE
                         </h2>
                         <p className="mt-2.25 text-h2 leading-[51px] font-light ">
                             {t.rich('promiseHeadline', {

@@ -20,6 +20,7 @@ const getTagValue = (source: string, tag: string) => {
 };
 
 export async function fetchLatestYouTubeVideos(channelId: string, count = 3): Promise<YouTubeVideo[]> {
+    if (process.env.SKIP_REMOTE_CONTENT === '1') return [];
     try {
         const response = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`, {
             next: { revalidate: 60 * 60 },

@@ -5,10 +5,10 @@ import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import DeviceColumnSlider from '@/components/ui/DeviceColumnSlider';
 import StepPlan from '@/components/ui/StepPlan';
-import TreatmentIntroSection from '@/components/ui/TreatmentIntroSection';
 import TreatmentColumnSection from '@/components/ui/TreatmentColumnSection';
 import TreatmentBASection from '@/components/ui/TreatmentBASection';
 import SolutionPrincipleCards from '@/components/ui/SolutionPrincipleCards';
+import TreatmentIntroSection from '@/components/ui/TreatmentIntroSection';
 import { columns } from '@/components/lib/columns';
 import Reveal from '@/components/motion/Reveal';
 import { zoom } from '@/components/lib/motion';
@@ -77,7 +77,6 @@ export default async function SolutionDetailPage({ params }: Params) {
     const itemColumns = columns.filter((c) => c.slugs.includes(item));
     const path = `/treatments/${category}/${slug}/${item}`;
     const itemName = liftingPage ? (isKo ? liftingPage.label : `${s.engName} Lifting`) : isKo ? s.name : s.engName;
-    const treatmentName = isKo ? t.name : t.en;
     const description = s.introDescription || s.desc.join(' ');
     const categoryHub: Record<string, string> = {
         signature: '/treatments/signature/booster',
@@ -103,6 +102,7 @@ export default async function SolutionDetailPage({ params }: Params) {
                 en={isAgingLiftingPage ? `${s.engName} Lifting` : t.en}
                 title={isKo ? (isAgingLiftingPage ? itemName : t.name) : undefined}
                 image={heroImage[t.category]}
+                preserveHeight={category === 'signature'}
             />
 
             {/* 소개 영역 좌: 영문/이름+서브타이틀/설명, 우: 기기·제품 사진 */}
@@ -145,24 +145,27 @@ export default async function SolutionDetailPage({ params }: Params) {
     그러면 정적 데이터에 없는 기기(예: 쥬베룩)는 관리자에 칼럼을 등록해도
     컴포넌트 자체가 안 만들어져서 Firestore 를 읽어볼 기회조차 없었음.
     → 항상 렌더하고, 보여줄 게 하나도 없으면 컴포넌트 안에서 스스로 사라지게 함 */}
-                    {!isAgingLiftingPage && <DeviceColumnSlider items={itemColumns} slug={item} />}
+                    {!isAgingLiftingPage && (
+                        <DeviceColumnSlider
+                            items={itemColumns}
+                            slug={item}
+                            variant={category === 'signature' ? 'card' : 'list'}
+                        />
+                    )}
                 </div>
             </section>
 
-            <SolutionPrincipleCards principles={s.principles} />
+            {!isAgingLiftingPage && <SolutionPrincipleCards principles={s.principles} />}
 
+            {/* 안티에이징 리프팅 상세 — 전후사진 → STEP → 칼럼 순서는 2026.09.03 미팅 요청대로.
+                #ISSUE: 원래 페이지에 있던 마지막 “Laser lifting — 피부 속부터 탄력을 촘촘하게 채우다”
+                        소개 섹션(TreatmentIntroSection)이 통째로 빠져 있었다 → 원래 자리(오시는 길 바로 위)에 복구 */}
             {isAgingLiftingPage && contentSlug && (
                 <>
-                    <TreatmentBASection slug={contentSlug} emptyPlaceholder />
-
+                    <TreatmentBASection slug={contentSlug} />
+                    <StepPlan tone="sand" />
                     <TreatmentColumnSection slug={contentSlug} name={itemName} />
-                    <StepPlan />
-                    <TreatmentIntroSection
-                        treatment={t}
-                        name={treatmentName}
-                        modelAlt={tTreatments('chrome.modelAlt', { name: treatmentName })}
-                        isKo={isKo}
-                    />
+                    <TreatmentIntroSection treatment={t} name={t.name} />
                 </>
             )}
 

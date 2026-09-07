@@ -8,13 +8,23 @@ import {
     SIGNATURE_PAGES,
     SKIN_TREATMENT_PAGES,
     AGING_LIFTING_PAGES,
+    TREATMENT_PAGES,
     LIMITS,
     COUNT_LIMITS,
 } from '@/components/lib/adminConfig';
 import { site } from '@/components/lib/site';
+import {
+    saveTreatmentColumnHeading,
+    subscribeTreatmentColumnHeadings,
+    type TreatmentColumnHeadings,
+} from '@/components/lib/treatmentColumnHeadings';
 
 type ColumnScope = 'signature' | 'skin' | 'aging' | 'device';
 type FilterScope = 'all' | ColumnScope;
+/* #ISSUE: 시그니처 페이지 칼럼 제목만 코드에 박혀 있어 병원에서 못 고쳤다.
+   → 고객 화면(TreatmentColumnSection)이 모든 시술 페이지에서 저장된 제목을 쓰도록 바뀌었으므로
+     여기 목록도 시그니처를 포함한 전체 시술 페이지로 넓힌다. */
+const EDITORIAL_PAGES = TREATMENT_PAGES;
 
 interface ColDoc {
     id: string;
@@ -92,6 +102,10 @@ export default function AdminColumnsPage() {
     const [error, setError] = useState<string | null>(null);
     const [filterScope, setFilterScope] = useState<FilterScope>('all');
     const [filterTarget, setFilterTarget] = useState('all');
+    const [columnHeadings, setColumnHeadings] = useState<TreatmentColumnHeadings>({});
+    const [headingTarget, setHeadingTarget] = useState<string>(EDITORIAL_PAGES[0].slug);
+    const [headingDraft, setHeadingDraft] = useState(`논문으로 검증하고, 임상으로 증명한 ${EDITORIAL_PAGES[0].label} 이야기`);
+    const [headingBusy, setHeadingBusy] = useState(false);
 
     useEffect(() => {
         // orderBy는 order 필드가 없는 예전 문서를 목록에서 제외한다. 전체를 읽어
@@ -127,6 +141,43 @@ export default function AdminColumnsPage() {
             },
         );
     }, []);
+
+    useEffect(
+        () =>
+            subscribeTreatmentColumnHeadings(
+                (headings) => {
+                    setColumnHeadings(headings);
+                    setHeadingDraft(
+                        headings[headingTarget] ||
+                            `논문으로 검증하고, 임상으로 증명한 ${EDITORIAL_PAGES.find((page) => page.slug === headingTarget)?.label ?? ''} 이야기`,
+                    );
+                },
+                (headingError) => console.error('[AdminColumnsPage] 칼럼 타이틀 조회 실패:', headingError),
+            ),
+        [headingTarget],
+    );
+
+    const changeHeadingTarget = (slug: string) => {
+        const page = EDITORIAL_PAGES.find((candidate) => candidate.slug === slug);
+        setHeadingTarget(slug);
+        setHeadingDraft(columnHeadings[slug] || `논문으로 검증하고, 임상으로 증명한 ${page?.label ?? ''} 이야기`);
+    };
+
+    const saveHeading = async () => {
+        const value = headingDraft.trim();
+        if (!value) return alert('페이지 타이틀을 입력하세요.');
+        setHeadingBusy(true);
+        try {
+            await saveTreatmentColumnHeading(headingTarget, value);
+            setColumnHeadings((current) => ({ ...current, [headingTarget]: value }));
+            alert('페이지 타이틀을 저장했습니다.');
+        } catch (headingError) {
+            console.error('[AdminColumnsPage] 칼럼 타이틀 저장 실패:', headingError);
+            alert('페이지 타이틀 저장에 실패했습니다.');
+        } finally {
+            setHeadingBusy(false);
+        }
+    };
 
     const isDevice = form.scope === 'device';
     const titleLimit = form.en.trim() ? LIMITS.columnTitle : LIMITS.columnTitleNoEn;
@@ -344,6 +395,46 @@ export default function AdminColumnsPage() {
                     {error}
                 </p>
             )}
+
+            <section className="mt-6 rounded-2xl bg-white p-5 shadow-[0_2px_20px_rgba(69,54,45,0.06)] md:p-7">
+                <h2 className="text-lead font-bold text-cocoa">페이지별 에디토리얼 타이틀</h2>
+                <p className="mt-1 text-caption text-latte">
+                    시술 페이지 칼럼 영역의 큰 제목(“논문으로 검증하고, 임상으로 증명한 OO 이야기”)을 페이지별로 수정합니다.
+                </p>
+                <div className="mt-4 grid gap-3 md:grid-cols-[230px_1fr_auto] md:items-end">
+                    <label className="text-small">
+                        <span className="font-semibold text-cocoa">페이지</span>
+                        <select
+                            value={headingTarget}
+                            onChange={(event) => changeHeadingTarget(event.target.value)}
+                            className={`${inputClass} mt-1.5`}
+                        >
+                            {EDITORIAL_PAGES.map((page) => (
+                                <option key={page.slug} value={page.slug}>
+                                    {page.group} · {page.label}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                    <label className="text-small">
+                        <span className="font-semibold text-cocoa">타이틀</span>
+                        <input
+                            value={headingDraft}
+                            maxLength={60}
+                            onChange={(event) => setHeadingDraft(event.target.value)}
+                            className={`${inputClass} mt-1.5`}
+                        />
+                    </label>
+                    <button
+                        type="button"
+                        disabled={headingBusy || !headingDraft.trim()}
+                        onClick={() => void saveHeading()}
+                        className="h-[46px] rounded-xl bg-cocoa px-5 text-small font-semibold text-cream disabled:opacity-40"
+                    >
+                        {headingBusy ? '저장 중…' : '타이틀 저장'}
+                    </button>
+                </div>
+            </section>
 
             <div className="mt-6 rounded-2xl bg-white p-5 shadow-[0_2px_20px_rgba(69,54,45,0.06)] md:p-7">
                 {editingId && (

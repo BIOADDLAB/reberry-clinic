@@ -42,10 +42,13 @@ import TextureBackground from '@/components/ui/TextureBackground';
 const SECTION_ORDER = {
     // 시그니처: 서브히어로 → 스토리(정점에 서다) → 전후사진 → 시술/기기 → 칼럼 → FAQ → 오시는 길  (원래 순서)
     signature: ['story', 'ba', 'solution', 'column', 'faq'],
-    // 피부교정: 서브히어로 → 전후사진 → 칼럼 → 시술/기기 → STEP → 시술소개 → 오시는 길
-    skin: ['ba', 'column', 'solution', 'step', 'intro'],
-    // 나머지 안티에이징: 기존 구성 유지
-    other: ['solution', 'step', 'intro'],
+    /* 피부교정: 전후사진 → STEP → 칼럼 → 시술·기기 → 시술 소개
+       #ISSUE: intro(“Pigmentation — 결점 없이 빛나는 미백의 정점에 서다”)가 맨 위로 올라가 있었는데,
+               원래 페이지에서는 오시는 길 바로 위 마지막 섹션이었다. 원래 자리로 되돌린다.
+               BA→STEP→칼럼 순서는 2026.09.03 미팅 요청(전후사진-스텝-칼럼-시술기기)대로 유지 */
+    skin: ['ba', 'step', 'column', 'solution', 'intro'],
+    // 나머지 안티에이징: STEP → 시술·기기 → 시술 소개 (intro 위치는 피부교정과 동일하게 맨 아래)
+    other: ['step', 'solution', 'intro'],
 } as const;
 
 interface Params {
@@ -143,8 +146,6 @@ export default async function TreatmentPage({ params }: Params) {
             <TreatmentIntroSection
                 treatment={t}
                 name={name}
-                modelAlt={tTreatments('chrome.modelAlt', { name })}
-                isKo={isKo}
             />
         ),
 
@@ -238,7 +239,9 @@ export default async function TreatmentPage({ params }: Params) {
                         <TwoDots light={t.category === 'aging'} />
                     </div>
                     <Reveal className="mt-[100px] text-center">
-                        <h2 className="font-display text-h2 tracking-[0.08em]">RE:BERRY SOLUTION</h2>
+                        <h2 className="font-display text-h2 tracking-[0.08em]">
+                            {sig ? 'RE:BERRY SOLUTION' : 'PERSONALIZED SOLUTION'}
+                        </h2>
                         <p className="mt-4 text-h2 font-light">
                             {t.solution.light} <strong className="font-bold">{t.solution.strong}</strong>
                         </p>
@@ -264,7 +267,7 @@ export default async function TreatmentPage({ params }: Params) {
 
         /* 시그니처 기존 칼럼 + 피부교정 관리자 연결 칼럼 */
         column: sig ? (
-                <TreatmentColumnSection slug={t.slug} name={name} heading={sig.columnHeading} />
+                <TreatmentColumnSection slug={t.slug} name={name} heading={sig.columnHeading} variant="card" />
             ) : t.category === 'skin' ? (
                 <TreatmentColumnSection slug={pageContentSlug} name={name} />
             ) : null,
@@ -317,6 +320,7 @@ export default async function TreatmentPage({ params }: Params) {
                 title={isKo ? t.name : undefined}
                 description={t.heroDescription}
                 image={heroImage[t.category]}
+                preserveHeight={Boolean(sig)}
             />
 
             {order.map((key) => (

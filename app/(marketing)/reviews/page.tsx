@@ -7,9 +7,10 @@ import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import BAPhotoModal from '@/components/ui/BAPhotoModal';
 import Skeleton from '@/components/ui/Skeleton';
+import Pagination from '@/components/ui/Pagination';
 import T from '@/components/lang/T';
 import { cn } from '@/components/lib/cn';
-import { BA_CATEGORIES, baPhotoUrl, formatTreatmentDate, resolveBACategory, type BAPhoto } from '@/components/lib/ba';
+import { BA_CATEGORIES, baCategoryLabel, baPhotoUrl, resolveBACategory, type BAPhoto } from '@/components/lib/ba';
 import { filterReviewBAPhotos, useBAPhotos, useBAPhotosLoading } from '@/components/lib/useBAPhotos';
 import TextureBackground from '@/components/ui/TextureBackground';
 
@@ -29,7 +30,6 @@ const shuffle = (arr: BAPhoto[]) => {
 
 export default function ReviewsPage() {
     const tReviews = useTranslations('reviews');
-    const tCommon = useTranslations('common');
     const [page, setPage] = useState(1);
     const [category, setCategory] = useState<string>(ALL);
     const allPhotos = useBAPhotos();
@@ -83,9 +83,6 @@ export default function ReviewsPage() {
         setCategory(key);
         setPage(1);
     };
-
-    const goPrev = () => setPage((p) => Math.max(1, p - 1));
-    const goNext = () => setPage((p) => Math.min(totalPages, p + 1));
 
     return (
         <>
@@ -142,78 +139,60 @@ export default function ReviewsPage() {
                                       <Skeleton className="mx-auto mt-2 h-3 w-20 rounded-full" />
                                   </div>
                               ))
-                            : currentPhotos.map((r) => (
-                                  <div key={r.id} className="bg-sand p-2.5 rounded-[4px] shadow-sm">
-                                      <div
+                            : currentPhotos.map((r) => {
+                                  /* #ISSUE: 예전 카드는 사진 안에 이미 시술일이 박혀 있는데 카드에도 또 찍혀 중복이었다.
+                                     → 시술일은 빼고, 카테고리 칩 + 흰 카드로 정리 (타 병원 전후사진 페이지 표준형) */
+                                  const categoryKey = resolveBACategory(r);
+
+                                  return (
+                                      <button
+                                          key={r.id}
+                                          type="button"
                                           onClick={() => setSelectedPhoto(r)}
-                                          className="cursor-pointer transition-transform hover:scale-[1.02]"
+                                          className="group block overflow-hidden rounded-[6px] bg-white text-left shadow-[0_4px_18px_rgba(69,54,45,0.06)] ring-1 ring-cocoa/[0.06] transition-transform duration-300 hover:-translate-y-1"
                                       >
-                                          <div className="skeleton relative aspect-square overflow-hidden">
+                                          <div className="flex items-center justify-between gap-2 px-3.5 pb-2 pt-3.5">
+                                              {categoryKey ? (
+                                                  <span className="rounded-full bg-sand/70 px-2.5 py-1 text-caption-sm font-semibold text-cocoa/70">
+                                                      <T ko={baCategoryLabel(categoryKey)} />
+                                                  </span>
+                                              ) : (
+                                                  <span aria-hidden />
+                                              )}
+                                              <span className="notranslate font-display text-caption-sm tracking-[0.2em] text-cocoa/30">
+                                                  RE:BERRY
+                                              </span>
+                                          </div>
+                                          <div className="skeleton relative aspect-square overflow-hidden bg-white">
                                               <Image
                                                   src={baPhotoUrl(r)}
                                                   alt={tReviews('beforeAlt')}
                                                   fill
                                                   quality={85}
                                                   sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 220px"
-                                                  className="object-contain"
+                                                  className="object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                                               />
                                           </div>
-                                          <p className="notranslate font-display pt-3 text-center text-small tracking-[0.2em] text-cream/40">
-                                              RE:BERRY
-                                          </p>
-                                          {r.treatmentDate && (
-                                              <p className="mt-2 text-center text-caption text-cocoa/60">
-                                                  {tCommon('treatmentDate')}{' '}
-                                                  <time dateTime={r.treatmentDate} className="notranslate">
-                                                      {formatTreatmentDate(r.treatmentDate)}
-                                                  </time>
-                                              </p>
-                                          )}
-                                      </div>
-                                  </div>
-                              ))}
+                                      </button>
+                                  );
+                              })}
                     </div>
 
                     {!loading && filtered.length === 0 && (
                         <p className="mt-16 text-center text-small text-latte">{tReviews('empty')}</p>
                     )}
 
-                    {!loading && totalPages > 1 && (
-                        <div className="mt-21 flex items-center justify-center gap-6">
-                            <button
-                                onClick={goPrev}
-                                disabled={page === 1}
-                                className="text-cocoa/60 mt-1 hover:text-cocoa transition-colors disabled:opacity-30"
-                                aria-label={tReviews('prevPage')}
-                            >
-                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M15 19l-7-7 7-7"
-                                    />
-                                </svg>
-                            </button>
-                            <span className="notranslate font-display text-lead tracking-[0.15em] text-cocoa">
-                                {page} / {totalPages}
-                            </span>
-                            <button
-                                onClick={goNext}
-                                disabled={page === totalPages}
-                                className="text-cocoa/60 mt-1 hover:text-cocoa transition-colors disabled:opacity-30"
-                                aria-label={tReviews('nextPage')}
-                            >
-                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M9 5l7 7-7 7"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
+                    {/* 페이지네이션 — 피부칼럼(SkinColumnList)과 같은 숫자형으로 통일 */}
+                    {!loading && (
+                        <Pagination
+                            currentPage={page}
+                            totalPages={totalPages}
+                            onChange={setPage}
+                            label={tReviews('pagination')}
+                            prevLabel={tReviews('prevPage')}
+                            nextLabel={tReviews('nextPage')}
+                            className="mt-16 lg:mt-21"
+                        />
                     )}
                 </div>
             </section>

@@ -4,7 +4,7 @@
 import { useSyncExternalStore } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
-import { agingLiftingBAPhotos, isPlaceholderBAPhoto, resolveBASlugs, showsOnReviews, showsOnTreatment, type BAPhoto } from './ba';
+import { isPlaceholderBAPhoto, resolveBASlugs, showsOnReviews, showsOnTreatment, type BAPhoto } from './ba';
 
 // Firestore 문서 원본 모양 — 관리자 화면(app/admin/(protected)/ba/page.tsx)이 저장하는 필드와 반드시 일치해야 함
 interface BAPhotoDoc {
@@ -41,7 +41,7 @@ function load() {
 
     getDocs(collection(db, 'baPhotos'))
         .then((snap) => {
-            const fromDb = snap.docs.map((docSnap) => {
+            cache = snap.docs.map((docSnap) => {
                 const data = docSnap.data() as BAPhotoDoc;
                 const slugs = Array.isArray(data.slugs)
                     ? data.slugs.filter((slug): slug is string => typeof slug === 'string' && slug.length > 0)
@@ -61,19 +61,9 @@ function load() {
                     ...(typeof data.treatmentDate === 'string' ? { treatmentDate: data.treatmentDate } : {}),
                 } satisfies BAPhoto;
             });
-            const slugsWithDbPhotos = new Set(
-                fromDb
-                    .filter((photo) => showsOnTreatment(photo) && !isPlaceholderBAPhoto(photo))
-                    .flatMap((photo) => resolveBASlugs(photo)),
-            );
-            const fallback = agingLiftingBAPhotos.filter(
-                (photo) => !resolveBASlugs(photo).some((slug) => slugsWithDbPhotos.has(slug)),
-            );
-            cache = fallback.length > 0 ? [...fromDb, ...fallback] : fromDb;
         })
         .catch((err) => {
             console.error('[useBAPhotos] Firestore 조회 실패:', err);
-            if (cache === EMPTY) cache = agingLiftingBAPhotos;
         })
         .finally(() => {
             isLoading = false;
@@ -89,7 +79,7 @@ function subscribe(onChange: () => void) {
     };
 }
 
-// 전후사진은 관리자 등록분이 우선이고, 안티에이징 리프팅은 아직 실사진이 없으면 정적 합성 컷을 쓴다.
+// 전후사진은 관리자에서 등록한 자료만 노출한다. 정적 합성·AI 폴백은 사용하지 않는다.
 // 반환 타입은 예전 그대로 BAPhoto[] — 기존 호출부를 건드리지 않는다.
 export function useBAPhotos(): BAPhoto[] {
     return useSyncExternalStore(

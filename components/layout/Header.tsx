@@ -99,21 +99,32 @@ export default function Header() {
                 <div className="relative z-10 flex shrink-0 items-center gap-2">
                     <div className="relative">
                         <LanguageToggle solid={solid} />
-                        {pathname === '/' && (
-                            <Link
-                                href="/reservation"
-                                className="absolute right-0 top-full mt-3 hidden w-max items-center gap-2 rounded-full border border-cocoa/15 bg-cream px-4 py-2.5 text-caption font-semibold text-cocoa shadow-[0_5px_20px_rgba(69,54,45,0.16)] transition-transform hover:-translate-y-0.5 xl:flex"
+                        <Link
+                            href="/reservation"
+                            className="absolute right-0 top-full mt-3 hidden w-max items-center gap-2 rounded-full border border-cocoa/15 bg-cream px-4 py-2.5 text-caption font-semibold text-cocoa shadow-[0_5px_20px_rgba(69,54,45,0.16)] transition-transform hover:-translate-y-0.5 xl:flex"
+                        >
+                            {/* #STYLE: 카카오 노랑 K → 브랜드 R 로 교체. 헤더 톤(코코아/크림)에 맞춘 원형 뱃지 */}
+                            <span
+                                className="notranslate font-display grid size-5 place-items-center rounded-full bg-cocoa text-[11px] font-bold leading-none text-cream"
+                                aria-hidden="true"
                             >
-                                <span
-                                    className="grid size-5 place-items-center rounded-full bg-cocoa text-[11px] text-cream"
-                                    aria-hidden="true"
-                                >
-                                    R
-                                </span>
-                                {reservationT('title')}
-                            </Link>
-                        )}
+                                R
+                            </span>
+                            {reservationT('title')}
+                        </Link>
                     </div>
+                    <Link
+                        href="/reservation"
+                        onClick={close}
+                        className={cn(
+                            'inline-flex h-9 items-center rounded-full border px-3 text-caption-sm font-bold transition-colors xl:hidden',
+                            solid
+                                ? 'border-cocoa/15 bg-cocoa text-cream'
+                                : 'border-cream/70 bg-deep/25 text-cream backdrop-blur-sm',
+                        )}
+                    >
+                        {reservationT('title')}
+                    </Link>
                     <button
                         onClick={() => setOpen(!open)}
                         aria-label={t('openMenu')}
@@ -139,14 +150,6 @@ export default function Header() {
             {open && (
                 <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-cocoa/10 bg-cream text-cocoa xl:hidden">
                     <nav className="container-site py-6">
-                        <Link
-                            href="/reservation"
-                            onClick={close}
-                            className="mb-3 flex w-full items-center justify-between rounded-xl bg-cocoa px-5 py-4 text-small font-bold text-cream"
-                        >
-                            <span>{reservationT('title')}</span>
-                            <span aria-hidden="true">→</span>
-                        </Link>
                         {nav.map((item) => (
                             <div key={item.label} className="border-b border-cocoa/10 py-4">
                                 <Link href={item.href} onClick={close} className="notranslate text-h3 font-medium">

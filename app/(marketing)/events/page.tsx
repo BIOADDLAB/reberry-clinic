@@ -1,7 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
-import Reveal from '@/components/motion/Reveal';
 import ManagedEventList from '@/components/events/ManagedEventList';
 
 export async function generateMetadata() {
@@ -10,15 +9,14 @@ export async function generateMetadata() {
 }
 
 export default async function EventsPage() {
+    const t = await getTranslations('events');
+
     return (
         <>
-            <SubHero en="RE:BERRY EVENT" image="/images/bg-sub-06.jpg" />
+            <SubHero en="EVENT" title={t('pageTitle')} image="/images/bg-sub-06.jpg" />
 
-            <section className="texture-paper overflow-x-clip py-20 lg:py-33 bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-top bg-cream">
+            <section className="overflow-x-clip bg-[#F5F1EA] py-16 lg:py-24">
                 <div className="container-site">
-                    <Reveal className="text-center">
-                        <h2 className="font-display text-h2 tracking-[0.06em]">RE:BERRY Event</h2>
-                    </Reveal>
                     <ManagedEventList />
                 </div>
             </section>

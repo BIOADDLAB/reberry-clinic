@@ -58,10 +58,25 @@ async function main() {
         getDocs(collection(db, SECTION_COLLECTION)),
         getDocs(collection(db, ITEM_COLLECTION)),
     ]);
+    /* --reset : 기존 수가표를 전부 지우고 새로 넣는다.
+       기본 동작은 "이전 시드가 남긴 문서 중 이번 시드에 없는 것"만 지우기라,
+       관리자에서 손으로 만든 문서(seedVersion 없음)는 그대로 남는다.
+       수가표를 통째로 교체할 때는 이 플래그를 붙여야 옛날 데이터가 섞이지 않는다. */
+    const resetAll = process.argv.includes('--reset');
+    if (resetAll) {
+        const everything = [...existingCategories.docs, ...existingSections.docs, ...existingItems.docs];
+        for (let offset = 0; offset < everything.length; offset += 450) {
+            const batch = writeBatch(db);
+            everything.slice(offset, offset + 450).forEach((entry) => batch.delete(entry.ref));
+            await batch.commit();
+        }
+        console.log(`[reset] 기존 수가표 문서 ${everything.length}건 삭제`);
+    }
+
     const targetCategoryIds = new Set(payload.categories.map((category) => category.docId));
     const targetSectionIds = new Set(payload.sections.map((section) => section.docId));
     const targetItemIds = new Set(payload.items.map((item) => item.docId));
-    const staleSeedDocs = [
+    const staleSeedDocs = resetAll ? [] : [
         ...existingCategories.docs.filter(
             (entry) =>
                 String(entry.data().seedVersion ?? '').startsWith('xlsx-seed-') &&

@@ -19,7 +19,7 @@ export default function HomeBASection() {
         <section className="relative bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-top py-20 lg:py-28">
             <div className="container-site relative">
                 <Reveal className="text-center">
-                    <Eyebrow>RE:BERRY</Eyebrow>
+                    <Eyebrow>BEFORE &amp; AFTER</Eyebrow>
                     <div className="mt-7 flex items-center justify-center">
                         <span className="mr-2 font-display text-[90px] leading-[10px] text-latte" aria-hidden>
                             “

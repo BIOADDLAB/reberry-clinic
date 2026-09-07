@@ -298,9 +298,9 @@ export default function AdminBAPage() {
             }
 
             // Firestore 저장이 성공한 뒤에만 교체 전 파일을 지운다.
-            const replacedUrls = [...new Set([existing?.before, existing?.after].filter(Boolean))].filter(
-                (url) => url !== imageUrl,
-            );
+            const replacedUrls = [existing?.before, existing?.after]
+                .filter((url): url is string => Boolean(url))
+                .filter((url, index, urls) => urls.indexOf(url) === index && url !== imageUrl);
             await Promise.allSettled(replacedUrls.map((url) => deleteStoredImage(url)));
             uploadedUrls.length = 0;
             cancelEdit();

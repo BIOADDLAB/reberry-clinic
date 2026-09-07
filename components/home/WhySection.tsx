@@ -35,9 +35,7 @@ export default function WhySection() {
                     Core Value
                 </span>
                 <h2 className="mb-20 text-center font-display text-h2 leading-10 text-deep">
-                    WHY
-                    <br />
-                    RE:BERRY
+                    WHY US
                 </h2>
 
                 <ul className="border-y border-deep/15">
@@ -73,9 +71,7 @@ export default function WhySection() {
             <div className="hidden lg:sticky lg:top-[100px] lg:grid lg:h-[calc(100dvh-100px)] container-site lg:grid-cols-[1fr_1.6fr]">
                 <div className="flex items-center justify-center">
                     <h2 className="font-display text-center text-h2 leading-12">
-                        WHY
-                        <br />
-                        RE:BERRY
+                        WHY US
                     </h2>
                 </div>
 

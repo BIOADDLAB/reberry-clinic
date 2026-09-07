@@ -8,7 +8,7 @@ import { site } from '@/components/lib/site';
 import { EASE } from '@/components/lib/motion';
 
 const buttons = [
-    { icon: '/images/i-flo-01.svg', label: '상담예약', href: site.reservation },
+    { icon: '/images/i-flo-01.svg', label: '예약하기', href: site.reservation },
     { icon: '/images/i-flo-02.svg', label: '유투브', href: site.youtube },
     { icon: '/images/i-flo-03.svg', label: '문의하기', href: site.kakao },
     { icon: '/images/i-flo-04.svg', label: '네이버', href: site.naver },
@@ -81,7 +81,7 @@ export default function FloatingButtons() {
                         className="w-6 h-6 lg:w-7 lg:h-7 xl:w-[34px] xl:h-[34px]"
                     />
                     {/* #ISSUE: 지름 56px 원 안에 들어가야 하는 자리다.
-                        구글 번역이 "상담예약 → Consultation Reservation" 처럼 풀어버리면 원 밖으로 넘친다.
+                        구글 번역이 예약 문구를 길게 풀어버리면 원 밖으로 넘친다.
                         → 사전(dict.ts)에서 짧은 표기로 고정하고 t-1line 으로 한 줄 보장 */}
                     <span className="t-1line mt-0.5 w-full px-0.5 text-center text-[10px] font-semibold leading-none text-cocoa">
                         <T ko={b.label} />

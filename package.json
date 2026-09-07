@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed:price-list": "tsx scripts/seed-price-list.ts",
+    "seed:price-list:reset": "tsx scripts/seed-price-list.ts --reset",
     "seed:treatment-columns": "tsx scripts/seed-treatment-columns.ts",
     "check:treatment-columns": "tsx scripts/seed-treatment-columns.ts --check",
     "check:content-links": "node --import tsx scripts/check-content-links.ts",

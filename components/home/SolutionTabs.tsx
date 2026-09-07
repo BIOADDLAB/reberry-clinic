@@ -16,7 +16,7 @@ export default function SolutionTabs() {
         <section className="bg-cream overflow-hidden py-28 lg:pt-35.5 lg:pb-37.5">
             <div className="container-site">
                 <Reveal className="text-center">
-                    <h2 className="font-display text-h2 tracking-[1em] mr-[-1em]">RE:BERRY SOLUTION</h2>
+                    <h2 className="font-display text-h2 tracking-[0.2em]">PERSONALIZED SOLUTION</h2>
                 </Reveal>
 
                 <div

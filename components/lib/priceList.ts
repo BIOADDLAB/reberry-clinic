@@ -25,6 +25,9 @@ export interface PriceSession {
 
 export interface PriceCategoryInput {
     label: string;
+    /* 탭 아래에 나오는 안내 박스 문구 (예: 주름 보톡스 가능 부위).
+       줄바꿈으로 여러 줄을 쓸 수 있다. 비우면 박스가 안 나온다. */
+    note?: string;
     isPublished: boolean;
 }
 
@@ -65,18 +68,6 @@ export interface PriceListItem extends PriceListItemInput {
     updatedAt: string;
 }
 
-export interface PriceCartItem {
-    itemId: string;
-    optionId: string;
-    categoryLabel: string;
-    itemName: string;
-    optionLabel: string;
-    unitPrice: number;
-    quantity: number;
-}
-
-export const PRICE_CART_STORAGE_KEY = 'reberry-price-cart';
-
 const categoriesCollection = collection(db, CATEGORY_COLLECTION);
 const sectionsCollection = collection(db, SECTION_COLLECTION);
 const itemsCollection = collection(db, ITEM_COLLECTION);
@@ -102,6 +93,7 @@ const normalizeSessions = (value: unknown): PriceSession[] => {
 const normalizeCategory = (docId: string, data: Record<string, unknown>): PriceCategory => ({
     docId,
     label: toString(data.label),
+    note: toString(data.note),
     isPublished: data.isPublished !== false,
     sort: toNumber(data.sort, Number.MAX_SAFE_INTEGER),
     createdAt: toString(data.createdAt),
@@ -197,6 +189,14 @@ export async function deletePriceCategory(docId: string): Promise<void> {
         throw new Error('소제목 또는 시술 항목이 남아 있는 카테고리는 삭제할 수 없습니다.');
     }
     await deleteDoc(doc(db, CATEGORY_COLLECTION, docId));
+}
+
+/** 대분류(카테고리) 노출 순서 저장. 소제목·항목과 같은 방식으로 sort 값만 갈아끼운다. */
+export async function updatePriceCategorySorts(items: Array<{ docId: string; sort: number }>): Promise<void> {
+    const batch = writeBatch(db);
+    const updatedAt = new Date().toISOString();
+    items.forEach(({ docId, sort }) => batch.update(doc(db, CATEGORY_COLLECTION, docId), { sort, updatedAt }));
+    await batch.commit();
 }
 
 export async function createPriceSection(input: PriceSectionInput): Promise<void> {

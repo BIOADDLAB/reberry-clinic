@@ -14,7 +14,7 @@ export async function generateMetadata() {
         .trim();
 
     return {
-        title: 'WE ARE RE:BERRY',
+        title: '병원소개',
         description,
     };
 }
@@ -28,7 +28,7 @@ export default async function AboutPage() {
 
     return (
         <>
-            <SubHero en="WE ARE RE:BERRY" image="/images/bg-sub-01.jpg" />
+            <SubHero en="ABOUT CLINIC" image="/images/bg-sub-01.jpg" />
 
             <section className="bg-cream py-20 lg:py-33 bg-[url('/images/bg-texture-06.jpg')] bg-cover bg-top">
                 <div className="container-site">
@@ -37,7 +37,7 @@ export default async function AboutPage() {
                             <div className="flex w-fit flex-col">
                                 <div className="h-[2px] w-full bg-cocoa rounded-[50%]" />
                                 <Eyebrow className="inline-flex py-1 px-4.5 text-h2 tracking-[0.15em]">
-                                    RE:BERRY
+                                    CLINIC PHILOSOPHY
                                 </Eyebrow>
                                 <div className="h-[2px] w-full bg-cocoa rounded-[50%]" />
                             </div>
@@ -93,7 +93,7 @@ export default async function AboutPage() {
             <section className="py-20 text-cream bg-[url('/images/bg-about-card.jpg')] bg-cover bg-top lg:py-28 lg:py-50">
                 <div className="container-site">
                     <Reveal className="text-center">
-                        <h2 className="font-display text-h2 tracking-[0.08em] ">RE:BERRY PROMISE</h2>
+                        <h2 className="font-display text-h2 tracking-[0.08em] ">OUR PROMISE</h2>
                     </Reveal>
                     <RevealGroup className="mx-auto mt-12 grid max-w-[957px] gap-6 md:grid-cols-2 lg:gap-[37px] lg:mt-18.75">
                         {promises.map((p) => (

@@ -13,30 +13,14 @@ import {
 } from '@/components/lib/skinColumnPosts';
 import { useLocalizedColumnPost } from '@/components/lib/useColumnTranslation';
 import T from '@/components/lang/T';
+import Pagination from '@/components/ui/Pagination';
 
 const PER_PAGE = 6;
-
-type PaginationItem = number | 'start-ellipsis' | 'end-ellipsis';
-
-function getPaginationItems(currentPage: number, totalPages: number): PaginationItem[] {
-    if (totalPages <= 7) {
-        return Array.from({ length: totalPages }, (_, index) => index + 1);
-    }
-
-    if (currentPage <= 4) {
-        return [1, 2, 3, 4, 5, 'end-ellipsis', totalPages];
-    }
-
-    if (currentPage >= totalPages - 3) {
-        return [1, 'start-ellipsis', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
-    }
-
-    return [1, 'start-ellipsis', currentPage - 1, currentPage, currentPage + 1, 'end-ellipsis', totalPages];
-}
 
 export default function SkinColumnList() {
     const t = useTranslations('column');
     const [posts, setPosts] = useState<SkinColumnPostItem[]>([]);
+    const [activeCategory, setActiveCategory] = useState('all');
     const [searchInput, setSearchInput] = useState('');
     const [query, setQuery] = useState('');
     const [page, setPage] = useState(1);
@@ -62,19 +46,19 @@ export default function SkinColumnList() {
 
     const visiblePosts = useMemo(() => {
         const keyword = query.trim().toLowerCase();
-        if (!keyword) return posts;
-
         return posts.filter((post) => {
+            if (activeCategory !== 'all' && post.categorySlug !== activeCategory) return false;
+            if (!keyword) return true;
+
             const categoryLabel = SIGNATURE_PAGES.find((category) => category.slug === post.categorySlug)?.label ?? '';
             return [post.title, post.excerpt, post.blogCategory, categoryLabel].some((value) =>
                 (value ?? '').toLowerCase().includes(keyword),
             );
         });
-    }, [posts, query]);
+    }, [activeCategory, posts, query]);
     const totalPages = Math.max(1, Math.ceil(visiblePosts.length / PER_PAGE));
     const currentPage = Math.min(page, totalPages);
     const pagedPosts = visiblePosts.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
-    const paginationItems = getPaginationItems(currentPage, totalPages);
 
     useEffect(() => {
         if (isFirstPageRender.current) {
@@ -82,7 +66,13 @@ export default function SkinColumnList() {
             return;
         }
         listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, [currentPage]);
+    }, [currentPage, activeCategory]);
+
+    const pickCategory = (slug: string) => {
+        if (slug === activeCategory) return;
+        setActiveCategory(slug);
+        setPage(1);
+    };
 
     return (
         <div ref={listRef} className="container-site relative scroll-mt-24 py-20 md:py-28 lg:py-36">
@@ -92,8 +82,24 @@ export default function SkinColumnList() {
                 <p className="mx-auto mt-4 max-w-2xl text-small leading-7 text-latte">{t('subtitle')}</p>
             </div>
 
+            <nav aria-label={t('categoryNavAria')} className="mt-10 flex flex-wrap justify-center gap-2 md:mt-14">
+                <FilterButton
+                    active={activeCategory === 'all'}
+                    label={t('allFilter')}
+                    onClick={() => pickCategory('all')}
+                />
+                {SIGNATURE_PAGES.map((category) => (
+                    <FilterButton
+                        key={category.slug}
+                        active={activeCategory === category.slug}
+                        label={<T ko={category.label} />}
+                        onClick={() => pickCategory(category.slug)}
+                    />
+                ))}
+            </nav>
+
             <form
-                className="mx-auto mt-10 flex w-full max-w-xl gap-2 md:mt-14"
+                className="mx-auto mt-8 flex w-full max-w-xl gap-2"
                 onSubmit={(event) => {
                     event.preventDefault();
                     setQuery(searchInput.trim());
@@ -131,85 +137,14 @@ export default function SkinColumnList() {
                             <ColumnCard key={post.docId} post={post} />
                         ))}
                     </div>
-                    {totalPages > 1 ? (
-                        <nav
-                            className="mt-14 flex items-center justify-center gap-0.5 sm:gap-2"
-                            aria-label={t('pagination')}
-                        >
-                            <button
-                                type="button"
-                                onClick={() => setPage(currentPage - 1)}
-                                disabled={currentPage === 1}
-                                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-cocoa/15 bg-cream text-cocoa transition-colors hover:border-cocoa/35 hover:bg-sand/25 disabled:cursor-not-allowed disabled:opacity-30 sm:h-10 sm:w-10"
-                                aria-label={t('prevPage')}
-                            >
-                                <svg
-                                    className="h-[18px] w-[18px]"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M15 19l-7-7 7-7"
-                                    />
-                                </svg>
-                            </button>
-                            {paginationItems.map((item) => {
-                                if (typeof item !== 'number') {
-                                    return (
-                                        <span
-                                            key={item}
-                                            aria-hidden="true"
-                                            className="inline-flex h-8 min-w-4 items-center justify-center text-caption-sm text-latte sm:h-10 sm:min-w-6 sm:text-caption"
-                                        >
-                                            …
-                                        </span>
-                                    );
-                                }
-
-                                const active = item === currentPage;
-                                return (
-                                    <button
-                                        key={item}
-                                        type="button"
-                                        onClick={() => setPage(item)}
-                                        aria-current={active ? 'page' : undefined}
-                                        className={`notranslate inline-flex h-8 min-w-8 items-center justify-center rounded-full px-1.5 text-caption-sm font-semibold transition-colors sm:h-10 sm:min-w-10 sm:px-2 sm:text-caption ${
-                                            active
-                                                ? 'bg-cocoa text-cream'
-                                                : 'border border-cocoa/15 bg-cream text-latte hover:border-cocoa/35 hover:bg-sand/25 hover:text-cocoa'
-                                        }`}
-                                    >
-                                        {item}
-                                    </button>
-                                );
-                            })}
-                            <button
-                                type="button"
-                                onClick={() => setPage(currentPage + 1)}
-                                disabled={currentPage === totalPages}
-                                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-cocoa/15 bg-cream text-cocoa transition-colors hover:border-cocoa/35 hover:bg-sand/25 disabled:cursor-not-allowed disabled:opacity-30 sm:h-10 sm:w-10"
-                                aria-label={t('nextPage')}
-                            >
-                                <svg
-                                    className="h-[18px] w-[18px]"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M9 5l7 7-7 7"
-                                    />
-                                </svg>
-                            </button>
-                        </nav>
-                    ) : null}
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onChange={setPage}
+                        label={t('pagination')}
+                        prevLabel={t('prevPage')}
+                        nextLabel={t('nextPage')}
+                    />
                 </>
             )}
         </div>
@@ -282,6 +217,23 @@ function ColumnThumbnail({ post }: { post: SkinColumnPostItem }) {
                 RE:BERRY
             </span>
         </div>
+    );
+}
+
+function FilterButton({ active, label, onClick }: { active: boolean; label: React.ReactNode; onClick: () => void }) {
+    return (
+        <button
+            type="button"
+            aria-pressed={active}
+            onClick={onClick}
+            className={`rounded-full border px-4 py-2 text-caption font-semibold transition-colors md:px-5 ${
+                active
+                    ? 'border-cocoa bg-cocoa text-cream'
+                    : 'border-cocoa/15 bg-cream/80 text-latte hover:border-cocoa/35 hover:text-cocoa'
+            }`}
+        >
+            {label}
+        </button>
     );
 }
 

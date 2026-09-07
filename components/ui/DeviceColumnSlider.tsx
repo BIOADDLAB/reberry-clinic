@@ -42,7 +42,35 @@ function DeviceColumnCard({ c }: { c: FirestoreCol }) {
     );
 }
 
-export default function DeviceColumnSlider({ items, slug }: { items: Col[]; slug: string }) {
+function DeviceColumnListItem({ item }: { item: FirestoreCol }) {
+    const t = useTranslations('common');
+    const { text } = useLocalizedColumnText(item);
+
+    return (
+        <a
+            href={item.link ?? site.blog}
+            target="_blank"
+            rel="noreferrer"
+            className="group flex min-h-24 items-center justify-between gap-5 border-b border-cocoa/[0.12] py-6 last:border-b-0 md:min-h-28"
+        >
+            <h3 className="whitespace-pre-line text-small font-bold leading-7 text-cocoa md:text-lead">{text}</h3>
+            <span className="flex shrink-0 items-center gap-3 text-caption font-semibold text-latte transition-colors group-hover:text-cocoa">
+                <span className="hidden sm:inline">{t('more')}</span>
+                <span aria-hidden className="text-lead">↗</span>
+            </span>
+        </a>
+    );
+}
+
+export default function DeviceColumnSlider({
+    items,
+    slug,
+    variant = 'list',
+}: {
+    items: Col[];
+    slug: string;
+    variant?: 'card' | 'list';
+}) {
     const t = useTranslations('common');
     const resolvedItems = useColumnsBySlug(slug, items);
 
@@ -51,6 +79,26 @@ export default function DeviceColumnSlider({ items, slug }: { items: Col[]; slug
 
     // 정적/DB 어느 쪽에도 칼럼이 없으면 이 영역 전체를 숨김 (훅 호출 이후에 있어야 함)
     if (resolvedItems.length === 0) return null;
+
+    if (variant === 'list') {
+        return (
+            <div className="mt-10 overflow-hidden rounded-[20px] border border-cocoa/[0.12] bg-cream/70 px-5 md:px-8">
+                {resolvedItems.map((item, index) => (
+                    <DeviceColumnListItem key={`${item.docId}-${index}`} item={item} />
+                ))}
+
+                {/* 이전 가로 카드형 레이아웃 보관
+                <div className="no-scrollbar flex snap-x gap-5 overflow-x-auto">
+                    {resolvedItems.map((item) => (
+                        <article className="w-[336px] rounded-[20px] border bg-cream p-6">
+                            칼럼 내용, 더보기
+                        </article>
+                    ))}
+                </div>
+                */}
+            </div>
+        );
+    }
 
     return (
         <div className="mt-10">

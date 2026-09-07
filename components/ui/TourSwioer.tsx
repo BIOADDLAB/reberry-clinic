@@ -67,7 +67,7 @@ export default function TourSwiper() {
 
             <div className="absolute inset-x-0 bottom-6 z-10 border-y border-cream/50 text-cream md:bottom-18">
                 <div className="container-site flex items-center justify-between py-3 px-5! md:py-4 md:px-10!">
-                    <p className="font-display text-[18px] md:text-[30px]">RE:BERRY Mood</p>
+                    <p className="font-display text-[18px] md:text-[30px]">CLINIC MOOD</p>
                     <div className="notranslate flex items-center gap-4 md:gap-6.5">
                         <div className="flex gap-2 md:gap-2">
                             <button

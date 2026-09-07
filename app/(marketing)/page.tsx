@@ -98,10 +98,10 @@ export default async function Home() {
             <section className="overflow-hidden bg-cream py-20 lg:py-32">
                 <div className="container-site">
                     <Reveal className="text-center">
-                        <h2 className="font-display text-h2 tracking-[0.08em]">RE:BERRY EVENT</h2>
+                        <h2 className="font-display text-h2 tracking-[0.08em]">CURRENT EVENT</h2>
                         <p className="mt-3 text-lead font-semibold text-cocoa">{tEvents('currentTitle')}</p>
                     </Reveal>
-                    <ManagedEventList limit={3} />
+                    <ManagedEventList limit={3} showHeader={false} />
                     <div className="mt-10 text-center">
                         <MoreView href="/events" dark />
                     </div>
@@ -130,7 +130,7 @@ export default async function Home() {
                     </Reveal>
 
                     <Reveal delay={0.1} className="flex flex-col text-center lg:text-left">
-                        <p className="font-display text-h2 order-1">RE:BERRY</p>
+                        <p className="font-display text-h2 order-1">MEDICAL TEAM</p>
 
                         <p className="order-2 mt-2 text-[22px] font-extrabold lg:order-3 lg:mt-9 lg:!text-[30px]">
                             {directorName} <span className="ml-1 text-lead font-normal">{t('directorTitle')}</span>
@@ -202,7 +202,7 @@ export default async function Home() {
                                     href="/about"
                                     className="text-small flex h-[46px] w-[147px] items-center justify-center border border-cream tracking-wide transition-colors hover:bg-cream hover:text-cocoa"
                                 >
-                                    VISIT RE:BERRY
+                                    VISIT THE CLINIC
                                 </Link>
                             </Reveal>
                         </div>

@@ -120,6 +120,7 @@ export async function fetchNaverBlogThumbnails(
 }
 
 export async function fetchLatestNaverBlogPosts(count = 2): Promise<NaverBlogPost[]> {
+    if (process.env.SKIP_REMOTE_CONTENT === '1') return [];
     try {
         const items = (await fetchNaverBlogFeed()).slice(0, count);
         const thumbnails = await fetchNaverBlogThumbnails(items.map((item) => item.id));
