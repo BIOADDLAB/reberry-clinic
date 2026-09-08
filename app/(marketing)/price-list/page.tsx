@@ -17,7 +17,7 @@ export default async function PriceListPage() {
                 <div className="container-site">
                     <div className="mb-10 text-center">
                         <h1 className="text-h2 font-bold text-cocoa">{t('title')}</h1>
-                        <p className="mx-auto mt-4 max-w-2xl text-small leading-7 text-latte">{t('description')}</p>
+                        <p className="mx-auto mt-4 max-w-2xl text-small whitespace-pre-line lg:wh leading-7 text-latte">{t('description')}</p>
                     </div>
                     <PriceListClient />
                 </div>

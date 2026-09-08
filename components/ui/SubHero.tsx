@@ -15,9 +15,7 @@ export default function SubHero({ en, title, description, image, preserveHeight 
     return (
         <section
             className={`relative flex items-center justify-center overflow-hidden text-center text-cream ${
-                preserveHeight
-                    ? 'h-[420px] md:h-[466px] lg:h-[566px]'
-                    : 'h-[280px] md:h-[320px] lg:h-[360px]'
+                preserveHeight ? 'h-[420px] md:h-[466px] lg:h-[566px]' : 'h-[280px] md:h-[320px] lg:h-[360px]'
             }`}
         >
             <Image src={image} alt="" fill priority quality={85} sizes="100vw" className="object-cover" />

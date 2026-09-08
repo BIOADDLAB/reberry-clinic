@@ -192,7 +192,7 @@
     "priceList": {
         "metaTitle": "비급여 수가표",
         "title": "시술 가격 안내",
-        "description": "카테고리와 시술명을 선택해 항목별 가격을 확인해 주세요.",
+        "description": "카테고리와 시술명을 선택해 항목별 \n가격을 확인해 주세요.",
         "categories": {
             "toxin": "톡신·윤곽",
             "filler": "필러·페이스볼륨",
