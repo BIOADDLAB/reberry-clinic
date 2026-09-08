@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { SIGNATURE_PAGES } from '@/components/lib/adminConfig';
 import {
     fetchPublishedSkinColumnPost,
     getSkinColumnBlogUrl,
@@ -14,7 +13,6 @@ import {
     type SkinColumnPostItem,
 } from '@/components/lib/skinColumnPosts';
 import { useLocalizedColumnPost } from '@/components/lib/useColumnTranslation';
-import T from '@/components/lang/T';
 
 export default function SkinColumnDetail({ docId }: { docId: string }) {
     const t = useTranslations('column');
@@ -54,10 +52,6 @@ export default function SkinColumnDetail({ docId }: { docId: string }) {
         });
     }, [post]);
 
-    const categoryLabel = useMemo(
-        () => SIGNATURE_PAGES.find((category) => category.slug === post?.categorySlug)?.label,
-        [post?.categorySlug],
-    );
     const youtubeEmbedUrl = useMemo(() => getYoutubeEmbedUrl(post?.youtubeUrl), [post?.youtubeUrl]);
     const isBlogPost = Boolean(post && isNaverBlogColumnPost(post));
     const blogUrl = post ? getSkinColumnBlogUrl(post) : null;
@@ -73,11 +67,9 @@ export default function SkinColumnDetail({ docId }: { docId: string }) {
                     {t('backToList')}
                 </Link>
 
+                {/* 분류 알약을 걷어낸 자리 — 제목부터 시작한다 */}
                 <header className="mt-8 border-b border-cocoa/10 pb-8 text-center md:pb-12">
-                    <span className="inline-flex rounded-full bg-sand/25 px-3 py-1 text-caption font-semibold text-cocoa">
-                        {categoryLabel ? <T ko={categoryLabel} /> : t('fallbackCategoryLabel')}
-                    </span>
-                    <h1 className="mt-5 text-h2 font-bold leading-tight tracking-tight text-cocoa">{post.title}</h1>
+                    <h1 className="text-h2 font-bold leading-tight tracking-tight text-cocoa">{post.title}</h1>
                     {post.excerpt ? (
                         <p className="mx-auto mt-5 max-w-2xl text-small leading-7 text-latte">{post.excerpt}</p>
                     ) : null}

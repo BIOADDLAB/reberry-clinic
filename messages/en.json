@@ -247,9 +247,10 @@
     "column": {
         "title": "Dr. Pytone's Skin Column",
         "subtitle": "Accurate information for healthy skin and RE:BERRY's treatment principles.",
-        "categoryNavAria": "Skin column categories",
-        "allFilter": "All",
-        "fallbackCategoryLabel": "Skin Column",
+        "sortAria": "Sort skin column",
+        "sortNewest": "Newest",
+        "sortOldest": "Oldest",
+        "resultCount": "{count} posts",
         "loading": "Loading skin column posts...",
         "loadError": "Couldn't load the skin column. Please try again shortly.",
         "empty": "No skin column posts yet.",

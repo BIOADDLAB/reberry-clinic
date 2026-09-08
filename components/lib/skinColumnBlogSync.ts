@@ -101,7 +101,10 @@ export async function syncNaverBlogSkinColumns(): Promise<BlogImportResult> {
         const thumbnailUrl = existingHostedThumbnail || storedThumbnails.get(item.id) || '';
         const resolvedSlug = resolveBlogCategorySlug(item.category, settings.maps);
         const categorySlug = canonical?.categorySlug || resolvedSlug;
-        const isPublished = canonical?.categorySlug ? canonical.isPublished : Boolean(resolvedSlug);
+        /* #ISSUE: 예전에는 "블로그 카테고리가 사이트 분류로 매핑되면 공개, 아니면 비공개" 였다.
+           블로그 카테고리는 18종이 넘는데 매핑표에는 5줄뿐이라 대부분의 글이 안 보인 채 쌓였다.
+           → 분류를 걷어냈으므로 새 글은 그냥 공개하고, 이미 있는 글은 관리자가 정한 상태를 따른다. */
+        const isPublished = canonical ? canonical.isPublished : true;
         const postRef = doc(db, POSTS_COLLECTION, naverBlogColumnDocId(item.id));
 
         batch.set(

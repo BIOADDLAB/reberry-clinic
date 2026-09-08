@@ -247,9 +247,10 @@
     "column": {
         "title": "닥터파이톤의 피부칼럼",
         "subtitle": "건강한 피부를 위한 정확한 정보와 진료 원칙을 전합니다.",
-        "categoryNavAria": "피부칼럼 카테고리",
-        "allFilter": "전체",
-        "fallbackCategoryLabel": "피부칼럼",
+        "sortAria": "피부칼럼 정렬",
+        "sortNewest": "최신순",
+        "sortOldest": "오래된순",
+        "resultCount": "총 {count}개",
         "loading": "피부칼럼을 불러오는 중입니다.",
         "loadError": "피부칼럼을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
         "empty": "등록된 피부칼럼이 없습니다.",

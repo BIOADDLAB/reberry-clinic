@@ -247,9 +247,10 @@
     "column": {
         "title": "ドクターパイトンのスキンコラム",
         "subtitle": "健康な肌のための正確な情報とリベリの診療原則をお伝えします。",
-        "categoryNavAria": "スキンコラムカテゴリー",
-        "allFilter": "すべて",
-        "fallbackCategoryLabel": "スキンコラム",
+        "sortAria": "スキンコラムの並び替え",
+        "sortNewest": "新しい順",
+        "sortOldest": "古い順",
+        "resultCount": "全{count}件",
         "loading": "スキンコラムを読み込んでいます。",
         "loadError": "スキンコラムを読み込めませんでした。しばらくしてから再度お試しください。",
         "empty": "登録されたスキンコラムがありません。",

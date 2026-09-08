@@ -247,9 +247,10 @@
     "column": {
         "title": "Dr. Pytone 皮肤专栏",
         "subtitle": "为您传递健康肌肤的准确信息与 RE:BERRY 的诊疗原则。",
-        "categoryNavAria": "皮肤专栏分类",
-        "allFilter": "全部",
-        "fallbackCategoryLabel": "皮肤专栏",
+        "sortAria": "皮肤专栏排序",
+        "sortNewest": "最新优先",
+        "sortOldest": "最早优先",
+        "resultCount": "共 {count} 篇",
         "loading": "正在加载皮肤专栏。",
         "loadError": "无法加载皮肤专栏，请稍后再试。",
         "empty": "暂无已发布的皮肤专栏。",

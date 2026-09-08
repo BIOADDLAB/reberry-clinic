@@ -1,4 +1,7 @@
-import 'server-only';
+/* #ISSUE: 여기에 'server-only' 를 달아 두면 Next 밖(스크립트)에서 못 불러온다.
+   server-only 는 Next 가 번들할 때만 있는 것이라 tsx 로 돌리면 모듈을 못 찾고 죽는다.
+   → 뺀다. 이 파일을 쓰는 skinColumnBlogSync 가 이미 'server-only' 를 달고 있고,
+     sharp(네이티브 모듈)를 들고 있어서 클라이언트로 딸려 들어가면 어차피 빌드가 깨진다. */
 
 import sharp from 'sharp';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';

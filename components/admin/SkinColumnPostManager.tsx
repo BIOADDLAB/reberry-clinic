@@ -11,8 +11,7 @@ import {
 import { arrayMove, rectSortingStrategy, SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import Image from 'next/image';
-import { useEffect, useMemo, useState, type CSSProperties, type FormEvent, type ReactNode } from 'react';
-import { SIGNATURE_PAGES } from '@/components/lib/adminConfig';
+import { useEffect, useState, type CSSProperties, type FormEvent, type ReactNode } from 'react';
 import {
     createSkinColumnPost,
     deleteSkinColumnPost,
@@ -66,6 +65,10 @@ const validateYoutubeUrl = (value: string) => {
     }
 };
 
+const CARD_CLASS = 'group flex min-w-0 flex-col overflow-hidden rounded-2xl bg-cream shadow-[0_8px_30px_rgba(69,54,45,0.08)]';
+
+/* 고정한 글에만 붙는다. 227편 전체를 끌어다 옮기는 건 쓸 수 없는 조작이고,
+   공개 페이지가 작성일 순으로 세우기 때문에 어차피 반영되지도 않는다. */
 function SortablePostCard({
     post,
     disabled,
@@ -90,9 +93,7 @@ function SortablePostCard({
         <article
             ref={setNodeRef}
             style={style}
-            className={`group flex min-w-0 flex-col overflow-hidden rounded-2xl bg-cream shadow-[0_8px_30px_rgba(69,54,45,0.08)] ${
-                isDragging ? 'shadow-lg ring-1 ring-cocoa/30' : ''
-            }`}
+            className={`${CARD_CLASS} ${isDragging ? 'shadow-lg ring-1 ring-cocoa/30' : ''}`}
         >
             <button
                 type="button"
@@ -116,6 +117,84 @@ function SortablePostCard({
     );
 }
 
+interface CardActions {
+    disabled: boolean;
+    onEdit: (post: SkinColumnPostItem) => void;
+    onTogglePublished: (post: SkinColumnPostItem) => void;
+    onTogglePin: (post: SkinColumnPostItem) => void;
+    onDelete: (post: SkinColumnPostItem) => void;
+}
+
+/** 고정 목록과 전체 목록이 같은 카드를 쓴다 */
+function PostCardBody({
+    post,
+    disabled,
+    onEdit,
+    onTogglePublished,
+    onTogglePin,
+    onDelete,
+}: CardActions & { post: SkinColumnPostItem }) {
+    return (
+        <>
+            <div className="relative aspect-[16/10] w-full overflow-hidden bg-sand/35">
+                {isHostedColumnThumbnail(post.thumbnailUrl) && post.thumbnailUrl ? (
+                    <Image
+                        src={post.thumbnailUrl}
+                        alt=""
+                        fill
+                        unoptimized
+                        sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                        className="object-cover"
+                    />
+                ) : (
+                    <div className="flex h-full items-center justify-center font-display text-lead tracking-[0.08em] text-latte/40">
+                        RE:BERRY
+                    </div>
+                )}
+            </div>
+            <div className="flex flex-1 flex-col p-5">
+                <div className="flex items-center justify-between gap-3 text-caption-sm text-latte">
+                    {/* 분류 알약이 있던 자리. 블로그 카테고리를 참고용으로 보여 준다. */}
+                    <span className="truncate font-semibold text-latte/70">{post.blogCategory || ''}</span>
+                    <time className="shrink-0">
+                        {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('ko-KR') : '작성일 없음'}
+                    </time>
+                </div>
+                <h3 className="clamp-2 mt-4 text-lead font-bold leading-snug text-cocoa">{post.title || '제목 없음'}</h3>
+                {post.excerpt ? <p className="clamp-2 mt-3 text-caption leading-6 text-latte">{post.excerpt}</p> : null}
+                <div className="mt-auto flex flex-col gap-2 pt-6">
+                    <VisibilitySwitch
+                        visible={post.isPublished}
+                        disabled={disabled}
+                        onChange={() => onTogglePublished(post)}
+                    />
+                    <div className="flex flex-wrap gap-2">
+                        <TextAction disabled={disabled} onClick={() => onTogglePin(post)}>
+                            {post.isPinned ? '고정 해제' : '맨 위에 고정'}
+                        </TextAction>
+                        <TextAction disabled={disabled} onClick={() => onEdit(post)}>
+                            고치기
+                        </TextAction>
+                        {isNaverBlogColumnPost(post) && post.blogUrl ? (
+                            <a
+                                href={post.blogUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex min-h-11 items-center rounded-full border border-cocoa/15 px-4 text-small font-semibold text-cocoa"
+                            >
+                                원문 보기
+                            </a>
+                        ) : null}
+                        <TextAction tone="danger" disabled={disabled} onClick={() => onDelete(post)}>
+                            삭제
+                        </TextAction>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}
+
 export default function SkinColumnPostManager() {
     const [posts, setPosts] = useState<SkinColumnPostItem[]>([]);
     const [loading, setLoading] = useState(true);
@@ -125,7 +204,7 @@ export default function SkinColumnPostManager() {
     const [saving, setSaving] = useState(false);
     const [formUploading, setFormUploading] = useState(false);
     const [reorderSaving, setReorderSaving] = useState(false);
-    const [activeCategory, setActiveCategory] = useState('all');
+    const [search, setSearch] = useState('');
     const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
 
     useEffect(
@@ -143,21 +222,20 @@ export default function SkinColumnPostManager() {
         [],
     );
 
-    const categoryLabelBySlug = useMemo(
-        () => new Map<string, string>(SIGNATURE_PAGES.map((category) => [category.slug, category.label])),
-        [],
-    );
-    const visiblePosts = useMemo(() => {
-        if (activeCategory === 'all') return posts;
-        if (activeCategory === 'unmapped') {
-            return posts.filter((post) => post.source === 'naver-blog' && !post.categorySlug);
-        }
-        return posts.filter((post) => post.categorySlug === activeCategory);
-    }, [activeCategory, posts]);
-    const unmappedCount = useMemo(
-        () => posts.filter((post) => post.source === 'naver-blog' && !post.categorySlug).length,
-        [posts],
-    );
+    /* 분류를 걷어냈다. 예전에는 여기서 글마다 사이트 분류를 골라 줘야 했고
+       고르지 않으면 공개가 안 됐는데, 블로그 카테고리는 18종이 넘고 사이트 분류는 3개뿐이라
+       대부분의 글이 "분류 필요" 로 남아 안 보인 채 쌓였다. 이제 전부 그냥 공개된다.
+
+       대신 글이 227편이라 목록에서 원하는 글을 눈으로 찾는 게 불가능해졌다 → 검색으로 좁힌다. */
+    const pinnedPosts = posts.filter((post) => post.isPinned);
+    const keyword = search.trim().toLowerCase();
+    const listedPosts = posts.filter((post) => {
+        if (post.isPinned) return false; // 위쪽 고정 목록에 이미 있다
+        if (!keyword) return true;
+        return [post.title, post.excerpt, post.blogCategory].some((value) =>
+            (value ?? '').toLowerCase().includes(keyword),
+        );
+    });
 
     const handleCreate = async (input: SkinColumnPostInput) => {
         setSaving(true);
@@ -199,26 +277,7 @@ export default function SkinColumnPostManager() {
         }
     };
 
-    const handleAssignCategory = async (post: SkinColumnPostItem, categorySlug: string) => {
-        setSaving(true);
-        setError(null);
-        try {
-            await patchSkinColumnPost(post.docId, {
-                categorySlug,
-                isPublished: Boolean(categorySlug),
-            });
-        } catch (assignError) {
-            setError(assignError instanceof Error ? assignError.message : '카테고리 지정에 실패했습니다.');
-        } finally {
-            setSaving(false);
-        }
-    };
-
     const handleTogglePublished = async (post: SkinColumnPostItem) => {
-        if (!post.categorySlug && !post.isPublished) {
-            setError('공개하려면 먼저 카테고리를 지정해 주세요.');
-            return;
-        }
         setSaving(true);
         setError(null);
         try {
@@ -230,28 +289,42 @@ export default function SkinColumnPostManager() {
         }
     };
 
+    /* 고정한 글을 새로 집으면 고정 목록 맨 끝에 붙인다.
+       sort 는 고정된 글끼리의 순서로만 쓰므로 나머지 글은 건드리지 않는다. */
+    const handleTogglePin = async (post: SkinColumnPostItem) => {
+        setSaving(true);
+        setError(null);
+        try {
+            const lastSort = pinnedPosts.reduce((max, pinned) => Math.max(max, pinned.sort), -1);
+            await patchSkinColumnPost(post.docId, {
+                isPinned: !post.isPinned,
+                ...(post.isPinned ? {} : { sort: lastSort + 1 }),
+            });
+        } catch (pinError) {
+            setError(pinError instanceof Error ? pinError.message : '고정 상태 변경에 실패했습니다.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
     const handleDragEnd = async ({ active, over }: DragEndEvent) => {
         if (!over || active.id === over.id || reorderSaving) return;
-        const oldIndex = visiblePosts.findIndex((post) => post.docId === String(active.id));
-        const newIndex = visiblePosts.findIndex((post) => post.docId === String(over.id));
+        const oldIndex = pinnedPosts.findIndex((post) => post.docId === String(active.id));
+        const newIndex = pinnedPosts.findIndex((post) => post.docId === String(over.id));
         if (oldIndex < 0 || newIndex < 0) return;
 
         const previousPosts = posts;
-        const movedVisiblePosts = arrayMove(visiblePosts, oldIndex, newIndex);
-        const visibleIds = new Set(movedVisiblePosts.map((post) => post.docId));
-        let visibleIndex = 0;
-        const sortedPosts = posts
-            .map((post) => (visibleIds.has(post.docId) ? movedVisiblePosts[visibleIndex++] : post))
-            .map((post, sort) => ({ ...post, sort }));
+        const reordered = arrayMove(pinnedPosts, oldIndex, newIndex).map((post, sort) => ({ ...post, sort }));
+        const sortByDocId = new Map(reordered.map((post) => [post.docId, post.sort]));
 
-        setPosts(sortedPosts);
+        setPosts(posts.map((post) => (sortByDocId.has(post.docId) ? { ...post, sort: sortByDocId.get(post.docId)! } : post)));
         setReorderSaving(true);
         setError(null);
         try {
-            await updateSkinColumnPostSorts(sortedPosts.map(({ docId, sort }) => ({ docId, sort })));
+            await updateSkinColumnPostSorts(reordered.map(({ docId, sort }) => ({ docId, sort })));
         } catch (sortError) {
             setPosts(previousPosts);
-            setError(sortError instanceof Error ? sortError.message : '노출 순서 저장에 실패했습니다.');
+            setError(sortError instanceof Error ? sortError.message : '고정 순서 저장에 실패했습니다.');
         } finally {
             setReorderSaving(false);
         }
@@ -261,6 +334,18 @@ export default function SkinColumnPostManager() {
         setFormUploading(false);
         setShowForm(false);
         setEditing(null);
+    };
+
+    const cardActions: CardActions = {
+        disabled: saving || reorderSaving,
+        onEdit: (post) => {
+            setShowForm(false);
+            setEditing(post);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+        onTogglePublished: (post) => void handleTogglePublished(post),
+        onTogglePin: (post) => void handleTogglePin(post),
+        onDelete: (post) => void handleDelete(post),
     };
 
     return (
@@ -287,10 +372,12 @@ export default function SkinColumnPostManager() {
             <HelpBanner>
                 <b className="text-cocoa">사용법</b> · 홈페이지와 같은 카드가 아래에 있습니다.{' '}
                 <b className="text-cocoa">초록 버튼</b>은 홈페이지에 보임, <b className="text-cocoa">주황 버튼</b>은
-                숨김입니다. 새 글은 오른쪽 위 [+ 피부칼럼 작성]을 누르세요.
+                숨김입니다. 홈페이지는 작성일이 최신인 글부터 보여 주며, 위에 띄우고 싶은 글은{' '}
+                <b className="text-cocoa">[맨 위에 고정]</b>을 누르면 방문자가 어떤 정렬을 골라도 맨 앞에 남습니다. 새
+                글은 오른쪽 위 [+ 피부칼럼 작성]을 누르세요.
             </HelpBanner>
 
-            <SkinColumnBlogImportPanel posts={posts} onError={setError} />
+            <SkinColumnBlogImportPanel onError={setError} />
 
             {showForm || editing ? (
                 <SkinColumnPostForm
@@ -308,7 +395,10 @@ export default function SkinColumnPostManager() {
                 <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                         <h2 className="text-lead font-bold text-cocoa">홈페이지에 나오는 카드</h2>
-                        <p className="mt-1 text-small text-latte">카드를 잡고 옮기면 순서가 바뀝니다.</p>
+                        <p className="mt-1 text-small text-latte">
+                            홈페이지는 작성일이 최신인 글부터 보여 줍니다. 위에 띄우고 싶은 글은 [맨 위에 고정]을
+                            누르세요.
+                        </p>
                     </div>
                     <div className="flex items-center gap-2">
                         {reorderSaving ? (
@@ -321,167 +411,80 @@ export default function SkinColumnPostManager() {
                         </span>
                     </div>
                 </div>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                    <CategoryFilterButton
-                        active={activeCategory === 'all'}
-                        label="전체"
-                        onClick={() => setActiveCategory('all')}
-                    />
-                    <CategoryFilterButton
-                        active={activeCategory === 'unmapped'}
-                        label={unmappedCount > 0 ? `분류 필요 (${unmappedCount})` : '분류 필요'}
-                        onClick={() => setActiveCategory('unmapped')}
-                    />
-                    {SIGNATURE_PAGES.map((category) => (
-                        <CategoryFilterButton
-                            key={category.slug}
-                            active={activeCategory === category.slug}
-                            label={category.label}
-                            onClick={() => setActiveCategory(category.slug)}
-                        />
-                    ))}
-                </div>
             </section>
 
             {loading ? (
                 <EmptyState message="피부칼럼 목록을 불러오는 중…" />
             ) : posts.length === 0 ? (
                 <EmptyState message="등록된 피부칼럼이 없습니다. 블로그에서 글을 가져오거나 직접 작성하세요." />
-            ) : visiblePosts.length === 0 ? (
-                <EmptyState
-                    message={
-                        activeCategory === 'unmapped'
-                            ? '분류가 필요한 블로그 글이 없습니다.'
-                            : '선택한 카테고리에 등록된 피부칼럼이 없습니다.'
-                    }
-                />
             ) : (
-                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                    <SortableContext items={visiblePosts.map((post) => post.docId)} strategy={rectSortingStrategy}>
-                        <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                            {visiblePosts.map((post) => (
-                                <SortablePostCard
-                                    key={post.docId}
-                                    post={post}
-                                    disabled={saving || reorderSaving}
+                <>
+                    {pinnedPosts.length > 0 ? (
+                        <section className="mt-6">
+                            <h3 className="text-small font-bold text-cocoa">
+                                맨 위에 고정한 글 {pinnedPosts.length}개
+                                <span className="ml-2 font-normal text-latte">
+                                    카드를 잡고 옮기면 이 안에서 순서가 바뀝니다.
+                                </span>
+                            </h3>
+                            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                                <SortableContext
+                                    items={pinnedPosts.map((post) => post.docId)}
+                                    strategy={rectSortingStrategy}
                                 >
-                                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-sand/35">
-                                        {isHostedColumnThumbnail(post.thumbnailUrl) && post.thumbnailUrl ? (
-                                            <Image
-                                                src={post.thumbnailUrl}
-                                                alt=""
-                                                fill
-                                                unoptimized
-                                                sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                                                className="object-cover"
-                                            />
-                                        ) : (
-                                            <div className="flex h-full items-center justify-center font-display text-lead tracking-[0.08em] text-latte/40">
-                                                RE:BERRY
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="flex flex-1 flex-col p-5">
-                                        <div className="flex items-center justify-between gap-3 text-caption-sm text-latte">
-                                            <span className="rounded-full bg-sand/25 px-2.5 py-1 font-semibold text-cocoa">
-                                                {categoryLabelBySlug.get(post.categorySlug) ?? '분류 없음'}
-                                            </span>
-                                            <time>
-                                                {post.publishedAt
-                                                    ? new Date(post.publishedAt).toLocaleDateString('ko-KR')
-                                                    : '작성일 없음'}
-                                            </time>
-                                        </div>
-                                        <h3 className="clamp-2 mt-4 text-lead font-bold leading-snug text-cocoa">
-                                            {post.title || '제목 없음'}
-                                        </h3>
-                                        {post.excerpt ? (
-                                            <p className="clamp-2 mt-3 text-caption leading-6 text-latte">{post.excerpt}</p>
-                                        ) : null}
-                                        <div className="mt-auto flex flex-col gap-2 pt-6">
-                                            {isNaverBlogColumnPost(post) ? (
-                                                <select
-                                                    className="min-h-11 rounded-lg border border-cocoa/15 bg-white px-3 text-small text-cocoa outline-none disabled:opacity-40"
-                                                    value={post.categorySlug}
-                                                    disabled={saving || reorderSaving}
-                                                    onChange={(event) =>
-                                                        void handleAssignCategory(post, event.target.value)
-                                                    }
-                                                >
-                                                    <option value="">어느 분류에 넣을까요?</option>
-                                                    {SIGNATURE_PAGES.map((category) => (
-                                                        <option key={category.slug} value={category.slug}>
-                                                            {category.label}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            ) : null}
-                                            <VisibilitySwitch
-                                                visible={post.isPublished}
+                                    <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                                        {pinnedPosts.map((post) => (
+                                            <SortablePostCard
+                                                key={post.docId}
+                                                post={post}
                                                 disabled={saving || reorderSaving}
-                                                onChange={() => void handleTogglePublished(post)}
-                                            />
-                                            <div className="flex flex-wrap gap-2">
-                                                <TextAction
-                                                    disabled={saving || reorderSaving}
-                                                    onClick={() => {
-                                                        setShowForm(false);
-                                                        setEditing(post);
-                                                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                                                    }}
-                                                >
-                                                    고치기
-                                                </TextAction>
-                                                {isNaverBlogColumnPost(post) && post.blogUrl ? (
-                                                    <a
-                                                        href={post.blogUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="inline-flex min-h-11 items-center rounded-full border border-cocoa/15 px-4 text-small font-semibold text-cocoa"
-                                                    >
-                                                        원문 보기
-                                                    </a>
-                                                ) : null}
-                                                <TextAction
-                                                    tone="danger"
-                                                    disabled={saving || reorderSaving}
-                                                    onClick={() => void handleDelete(post)}
-                                                >
-                                                    삭제
-                                                </TextAction>
-                                            </div>
-                                        </div>
+                                            >
+                                                <PostCardBody post={post} {...cardActions} />
+                                            </SortablePostCard>
+                                        ))}
                                     </div>
-                                </SortablePostCard>
-                            ))}
+                                </SortableContext>
+                            </DndContext>
+                        </section>
+                    ) : null}
+
+                    <section className="mt-8">
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                            <h3 className="text-small font-bold text-cocoa">
+                                {pinnedPosts.length > 0 ? '나머지 글' : '전체 글'} {listedPosts.length}개
+                                <span className="ml-2 font-normal text-latte">최신순</span>
+                            </h3>
+                            {/* 글이 227편이라 눈으로 찾을 수 없다 → 제목·요약·블로그 카테고리로 좁힌다 */}
+                            <input
+                                type="search"
+                                value={search}
+                                onChange={(event) => setSearch(event.target.value)}
+                                placeholder="제목으로 찾기"
+                                className="min-h-11 w-full rounded-full border border-cocoa/15 bg-white px-4 text-small text-cocoa outline-none placeholder:text-latte/60 focus:border-cocoa/40 sm:w-64"
+                            />
                         </div>
-                    </SortableContext>
-                </DndContext>
+
+                        {listedPosts.length === 0 ? (
+                            <EmptyState
+                                message={
+                                    keyword
+                                        ? '찾는 글이 없습니다. 검색어를 지우거나 다르게 입력해 보세요.'
+                                        : '고정하지 않은 글이 없습니다.'
+                                }
+                            />
+                        ) : (
+                            <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                                {listedPosts.map((post) => (
+                                    <article key={post.docId} className={CARD_CLASS}>
+                                        <PostCardBody post={post} {...cardActions} />
+                                    </article>
+                                ))}
+                            </div>
+                        )}
+                    </section>
+                </>
             )}
         </div>
-    );
-}
-
-function CategoryFilterButton({
-    active,
-    label,
-    onClick,
-}: {
-    active: boolean;
-    label: string;
-    onClick: () => void;
-}) {
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            className={`rounded-full px-3.5 py-1.5 text-caption font-semibold transition-colors ${
-                active ? 'bg-cocoa text-cream' : 'bg-[#F5F2EC] text-latte hover:text-cocoa'
-            }`}
-        >
-            {label}
-        </button>
     );
 }
 
@@ -508,7 +511,6 @@ function SkinColumnPostForm({
     onError: (message: string | null) => void;
     onUploadingChange: (uploading: boolean) => void;
 }) {
-    const [categorySlug, setCategorySlug] = useState(initial?.categorySlug ?? SIGNATURE_PAGES[0].slug);
     const [title, setTitle] = useState(initial?.title ?? '');
     const [excerpt, setExcerpt] = useState(initial?.excerpt ?? '');
     const [contentHtml, setContentHtml] = useState(initial?.contentHtml ?? '');
@@ -530,7 +532,7 @@ function SkinColumnPostForm({
         if (!publishedAt || Number.isNaN(new Date(publishedAt).getTime())) return onError('작성일을 확인하세요.');
 
         await onSave({
-            categorySlug,
+            categorySlug: initial?.categorySlug ?? '',
             title: title.trim(),
             excerpt: excerpt.trim(),
             contentHtml: contentHtml.trim(),
@@ -571,39 +573,20 @@ function SkinColumnPostForm({
                 <VisibilitySwitch visible={isPublished} disabled={saving} onChange={setIsPublished} />
             </div>
 
-            <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                <div>
-                    <label htmlFor="skin-column-category" className={labelClass}>
-                        카테고리 *
-                    </label>
-                    <select
-                        id="skin-column-category"
-                        value={categorySlug}
-                        disabled={saving}
-                        onChange={(event) => setCategorySlug(event.target.value)}
-                        className={inputClass}
-                    >
-                        {SIGNATURE_PAGES.map((category) => (
-                            <option key={category.slug} value={category.slug}>
-                                {category.label}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div>
-                    <label htmlFor="skin-column-date" className={labelClass}>
-                        작성일 *
-                    </label>
-                    <input
-                        id="skin-column-date"
-                        type="datetime-local"
-                        required
-                        value={publishedAt}
-                        disabled={saving}
-                        onChange={(event) => setPublishedAt(event.target.value)}
-                        className={inputClass}
-                    />
-                </div>
+            {/* 카테고리 선택이 있던 자리 — 분류를 없애서 작성일만 남는다 */}
+            <div className="mt-5">
+                <label htmlFor="skin-column-date" className={labelClass}>
+                    작성일 *
+                </label>
+                <input
+                    id="skin-column-date"
+                    type="datetime-local"
+                    required
+                    value={publishedAt}
+                    disabled={saving}
+                    onChange={(event) => setPublishedAt(event.target.value)}
+                    className={inputClass}
+                />
             </div>
 
             <div className="mt-4">

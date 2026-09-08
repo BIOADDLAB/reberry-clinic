@@ -4,15 +4,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { SIGNATURE_PAGES } from '@/components/lib/adminConfig';
 import {
     getSkinColumnBlogUrl,
     isHostedColumnThumbnail,
+    sortSkinColumnPosts,
     subscribePublishedSkinColumnPosts,
     type SkinColumnPostItem,
+    type SkinColumnSortOrder,
 } from '@/components/lib/skinColumnPosts';
 import { useLocalizedColumnPost } from '@/components/lib/useColumnTranslation';
-import T from '@/components/lang/T';
 import Pagination from '@/components/ui/Pagination';
 
 const PER_PAGE = 6;
@@ -20,9 +20,9 @@ const PER_PAGE = 6;
 export default function SkinColumnList() {
     const t = useTranslations('column');
     const [posts, setPosts] = useState<SkinColumnPostItem[]>([]);
-    const [activeCategory, setActiveCategory] = useState('all');
     const [searchInput, setSearchInput] = useState('');
     const [query, setQuery] = useState('');
+    const [order, setOrder] = useState<SkinColumnSortOrder>('newest');
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -44,18 +44,23 @@ export default function SkinColumnList() {
         [t],
     );
 
+    /* #ISSUE: 분류 탭이 시그니처 시술 페이지 목록(SIGNATURE_PAGES)을 빌려 쓰고 있었다.
+       블로그 카테고리는 18종이 넘는데 사이트 분류는 3개뿐이라 대부분의 글이 어느 탭에도 못 걸렸고,
+       분류가 안 잡히면 아예 비공개로 들어와 안 보인 채 쌓였다.
+       → 분류를 걷어내고 전체를 한 줄로 보여 준다. 걸러내는 건 검색어 하나뿐이다.
+         블로그 카테고리(blogCategory)는 검색 대상으로 남겨 둬서 "여드름" 같은 말로 찾을 수 있다. */
     const visiblePosts = useMemo(() => {
         const keyword = query.trim().toLowerCase();
-        return posts.filter((post) => {
-            if (activeCategory !== 'all' && post.categorySlug !== activeCategory) return false;
-            if (!keyword) return true;
-
-            const categoryLabel = SIGNATURE_PAGES.find((category) => category.slug === post.categorySlug)?.label ?? '';
-            return [post.title, post.excerpt, post.blogCategory, categoryLabel].some((value) =>
-                (value ?? '').toLowerCase().includes(keyword),
-            );
-        });
-    }, [activeCategory, posts, query]);
+        const matched = keyword
+            ? posts.filter((post) =>
+                  [post.title, post.excerpt, post.blogCategory].some((value) =>
+                      (value ?? '').toLowerCase().includes(keyword),
+                  ),
+              )
+            : posts;
+        // 227편이 전부 브라우저에 들어와 있어서 정렬을 바꿔도 다시 불러올 필요가 없다
+        return sortSkinColumnPosts(matched, order);
+    }, [order, posts, query]);
     const totalPages = Math.max(1, Math.ceil(visiblePosts.length / PER_PAGE));
     const currentPage = Math.min(page, totalPages);
     const pagedPosts = visiblePosts.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
@@ -66,11 +71,11 @@ export default function SkinColumnList() {
             return;
         }
         listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, [currentPage, activeCategory]);
+    }, [currentPage]);
 
-    const pickCategory = (slug: string) => {
-        if (slug === activeCategory) return;
-        setActiveCategory(slug);
+    const pickOrder = (next: SkinColumnSortOrder) => {
+        if (next === order) return;
+        setOrder(next);
         setPage(1);
     };
 
@@ -82,24 +87,8 @@ export default function SkinColumnList() {
                 <p className="mx-auto mt-4 max-w-2xl text-small leading-7 text-latte">{t('subtitle')}</p>
             </div>
 
-            <nav aria-label={t('categoryNavAria')} className="mt-10 flex flex-wrap justify-center gap-2 md:mt-14">
-                <FilterButton
-                    active={activeCategory === 'all'}
-                    label={t('allFilter')}
-                    onClick={() => pickCategory('all')}
-                />
-                {SIGNATURE_PAGES.map((category) => (
-                    <FilterButton
-                        key={category.slug}
-                        active={activeCategory === category.slug}
-                        label={<T ko={category.label} />}
-                        onClick={() => pickCategory(category.slug)}
-                    />
-                ))}
-            </nav>
-
             <form
-                className="mx-auto mt-8 flex w-full max-w-xl gap-2"
+                className="mx-auto mt-10 flex w-full max-w-xl gap-2 md:mt-14"
                 onSubmit={(event) => {
                     event.preventDefault();
                     setQuery(searchInput.trim());
@@ -132,7 +121,23 @@ export default function SkinColumnList() {
                 <ColumnMessage message={query ? t('emptySearch') : t('empty')} />
             ) : (
                 <>
-                    <div className="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+                    <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
+                        <p className="text-caption text-latte">{t('resultCount', { count: visiblePosts.length })}</p>
+                        <div className="flex gap-1.5" role="group" aria-label={t('sortAria')}>
+                            <SortButton
+                                active={order === 'newest'}
+                                label={t('sortNewest')}
+                                onClick={() => pickOrder('newest')}
+                            />
+                            <SortButton
+                                active={order === 'oldest'}
+                                label={t('sortOldest')}
+                                onClick={() => pickOrder('oldest')}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:mt-10 lg:grid-cols-3">
                         {pagedPosts.map((post) => (
                             <ColumnCard key={post.docId} post={post} />
                         ))}
@@ -151,12 +156,28 @@ export default function SkinColumnList() {
     );
 }
 
+function SortButton({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) {
+    return (
+        <button
+            type="button"
+            aria-pressed={active}
+            onClick={onClick}
+            className={`rounded-full border px-4 py-1.5 text-caption font-semibold transition-colors ${
+                active
+                    ? 'border-cocoa bg-cocoa text-cream'
+                    : 'border-cocoa/15 bg-cream/80 text-latte hover:border-cocoa/35 hover:text-cocoa'
+            }`}
+        >
+            {label}
+        </button>
+    );
+}
+
 function ColumnCard({ post: rawPost }: { post: SkinColumnPostItem }) {
     const t = useTranslations('column');
     const { post } = useLocalizedColumnPost(rawPost);
     if (!post) return null;
 
-    const categoryLabel = SIGNATURE_PAGES.find((category) => category.slug === post.categorySlug)?.label;
     const blogUrl = getSkinColumnBlogUrl(post);
     const className =
         'group flex min-w-0 flex-col overflow-hidden rounded-2xl bg-cream shadow-[0_8px_30px_rgba(69,54,45,0.08)] transition-transform duration-300 hover:-translate-y-1';
@@ -165,10 +186,8 @@ function ColumnCard({ post: rawPost }: { post: SkinColumnPostItem }) {
         <>
             <ColumnThumbnail post={post} />
             <div className="flex flex-1 flex-col p-5 md:p-6">
-                <div className="flex items-center justify-between gap-3 text-caption-sm text-latte">
-                    <span className="rounded-full bg-sand/25 px-2.5 py-1 font-semibold text-cocoa">
-                        {categoryLabel ? <T ko={categoryLabel} /> : t('fallbackCategoryLabel')}
-                    </span>
+                {/* 분류 알약을 걷어낸 자리 — 날짜만 남긴다 */}
+                <div className="flex items-center justify-end gap-3 text-caption-sm text-latte">
                     <time dateTime={post.publishedAt}>{new Date(post.publishedAt).toLocaleDateString('ko-KR')}</time>
                 </div>
                 <h2 className="clamp-2 mt-4 text-lead font-bold leading-snug text-cocoa">{post.title}</h2>
@@ -217,23 +236,6 @@ function ColumnThumbnail({ post }: { post: SkinColumnPostItem }) {
                 RE:BERRY
             </span>
         </div>
-    );
-}
-
-function FilterButton({ active, label, onClick }: { active: boolean; label: React.ReactNode; onClick: () => void }) {
-    return (
-        <button
-            type="button"
-            aria-pressed={active}
-            onClick={onClick}
-            className={`rounded-full border px-4 py-2 text-caption font-semibold transition-colors md:px-5 ${
-                active
-                    ? 'border-cocoa bg-cocoa text-cream'
-                    : 'border-cocoa/15 bg-cream/80 text-latte hover:border-cocoa/35 hover:text-cocoa'
-            }`}
-        >
-            {label}
-        </button>
     );
 }
 
