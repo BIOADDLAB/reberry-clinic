@@ -5,116 +5,23 @@
 
 'use client';
 
-import Image from 'next/image';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { isCombinedBAPhoto, resolveBALabel, type BAPhoto } from '@/components/lib/ba';
+import type { BAPhoto } from '@/components/lib/ba';
 import { useBAPhotos, useBAPhotosLoading, filterBAPhotosBySlug } from '@/components/lib/useBAPhotos';
 import { useOverflowSlider } from '@/components/lib/useOverflowSlider';
 import { cn } from '@/components/lib/cn';
-import T from '@/components/lang/T';
 import Skeleton from '@/components/ui/Skeleton';
+import BAPhotoModal from '@/components/ui/BAPhotoModal';
+import BAPhotoCard, { BAPhotoCardEmpty, BAPhotoCardSkeleton } from '@/components/ui/BAPhotoCard';
 
 const CARD_W = 244;
 const GAP = 23;
 const SKELETON_COUNT = 4;
 
-function Card({ b, overflow }: { b: BAPhoto; overflow: boolean }) {
-    const t = useTranslations('common');
-    const label = resolveBALabel(b);
-    const combined = isCombinedBAPhoto(b);
-
-    return (
-        <article
-            className="card-fixed-h t-tight flex h-[438px] w-[244px] shrink-0 snap-start flex-col rounded-[10px] bg-cream text-cocoa"
-            style={{ '--card-h': '438px' } as React.CSSProperties}
-        >
-            {/* 시술명은 messages/*.json 의 labels 네임스페이스로 교체, "전후 사진"은 common 네임스페이스로 교체.
-                #ISSUE: "시술명 전후 사진" 을 한 줄로 흘리면 이름 길이에 따라 줄 수가 갈려 헤더 높이가 제각각이었다
-                        → 시술명 / 전후 사진 두 덩이로 쪼개고 헤더를 3줄 높이(min-h-[3lh])로 고정.
-                        헤더가 한 줄분 늘어난 만큼 카드 높이도 439 → 464px(화살표 top 은 그 절반) */}
-            {/* #ISSUE: 헤더에도 시술명, 아래 알약에도 시술명이 찍혀 "색소 … 색소" 로 반복됐다.
-                → 헤더는 "전후 사진" 한 줄만, 시술명은 카드 아래 알약 한 곳에만 둔다 */}
-            <h3 className="flex min-h-[2lh] items-center justify-center px-3 py-4 text-center text-lead font-bold leading-snug">
-                {t('beforeAfter')}
-            </h3>
-
-            {combined ? (
-                <div className="relative min-h-0 flex-1 overflow-hidden bg-cream">
-                    <Image
-                        src={b.before}
-                        alt={t('beforeAltWithLabel', { label })}
-                        fill
-                        quality={85}
-                        sizes="244px"
-                        className="object-contain"
-                    />
-                </div>
-            ) : (
-                <>
-                    <div className="skeleton relative h-[147px] w-full overflow-hidden">
-                        <Image
-                            src={b.before}
-                            alt={t('beforeAltWithLabel', { label })}
-                            fill
-                            quality={85}
-                            sizes="244px"
-                            className="object-cover"
-                        />
-                    </div>
-
-                    <div className="relative z-10 flex h-0 justify-center">
-                        <span
-                            className={cn(
-                                'flex -translate-y-1/2 items-center justify-center rounded-full',
-                                overflow ? 'h-[32px] w-[32px] bg-cream/50' : 'h-[34px] w-[34px] bg-cocoa',
-                            )}
-                        >
-                            <span
-                                aria-hidden
-                                className={cn(
-                                    'mt-[-3px] block rotate-45 border-b-2 border-r-2',
-                                    overflow ? 'h-3 w-3 border-cocoa!' : 'h-2 w-2 border-cream',
-                                )}
-                            />
-                        </span>
-                    </div>
-
-                    <div className="skeleton relative h-[147px] w-full overflow-hidden">
-                        <Image src={b.after} alt={t('afterAlt')} fill quality={85} sizes="244px" className="object-cover" />
-                    </div>
-                </>
-            )}
-
-            <div className="flex flex-col items-center justify-center px-3 pb-3.5 pt-4">
-                <p className="line-clamp-2 max-w-full rounded-[16px] bg-cocoa px-4 py-0.5 text-center text-small font-bold leading-snug text-cream">
-                    <T ko={label} />
-                </p>
-                <span className="notranslate font-display text-caption mt-1 text-cocoa/30">RE:BERRY</span>
-            </div>
-        </article>
-    );
-}
-
-function EmptyCard({ label }: { label: string }) {
-    const t = useTranslations('common');
-
-    return (
-        <article className="t-tight flex h-[438px] w-[244px] shrink-0 flex-col rounded-[10px] bg-cream text-cocoa">
-            <h3 className="flex min-h-[2lh] items-center justify-center px-3 py-4 text-center text-lead font-bold leading-snug">
-                {t('beforeAfter')}
-            </h3>
-            <div className="flex min-h-0 flex-1 items-center justify-center bg-sand">
-                <p className="text-small font-semibold text-cream">{t('comingSoon')}</p>
-            </div>
-            <div className="flex flex-col items-center justify-center px-3 pb-3.5 pt-4">
-                <p className="line-clamp-2 max-w-full rounded-[16px] bg-cocoa px-4 py-0.5 text-center text-small font-bold leading-snug text-cream">
-                    <T ko={label} />
-                </p>
-                <span className="notranslate font-display text-caption mt-1 text-cocoa/30">RE:BERRY</span>
-            </div>
-        </article>
-    );
-}
+// 카드 모양은 전후사진 페이지와 같은 BAPhotoCard 를 쓰고, 여기서는 슬라이더에 필요한 폭만 정한다
+const CARD = 'w-[244px] shrink-0 snap-start';
+const CARD_SIZES = '244px';
 
 // slug 를 받아서 컴포넌트가 직접 Firestore 를 확인 — 서버 페이지(page.tsx)는 slug 문자열만 넘기면 됨
 export default function BACardSlider({
@@ -131,6 +38,7 @@ export default function BACardSlider({
     const loading = useBAPhotosLoading();
     const photos = filterBAPhotosBySlug(allPhotos, slug);
     const showEmpty = !loading && photos.length === 0 && emptyPlaceholder && Boolean(emptyLabel);
+    const [selectedPhoto, setSelectedPhoto] = useState<BAPhoto | null>(null);
 
     const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
         useOverflowSlider<HTMLDivElement>(showEmpty ? 1 : photos.length, CARD_W, GAP);
@@ -140,7 +48,7 @@ export default function BACardSlider({
             <div className="relative mx-auto max-w-[1045px]">
                 <div className="flex justify-center gap-[23px] overflow-hidden">
                     {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
-                        <Skeleton key={i} className="h-[438px] w-[244px] shrink-0 rounded-[10px]" />
+                        <BAPhotoCardSkeleton key={i} className={CARD} />
                     ))}
                 </div>
                 <div className="mt-6 flex justify-center gap-2 lg:mt-[58px]">
@@ -156,56 +64,68 @@ export default function BACardSlider({
 
     return (
         <div className="relative mx-auto max-w-[1045px]">
-            {/* 메인 BASlider 화살표 그대로 — 배경 없음(border만), 넘길 방향이 있으면 진하게 */}
-            {over && (
-                <>
-                    <button
-                        onClick={() => move(-1)}
-                        aria-label={t('prev')}
-                        className={cn(
-                            'absolute -left-16 top-[219px] z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border border-cream bg-transparent transition-all duration-500 hover:scale-105 min-[1240px]:flex min-[1440px]:-left-24',
-                            canPrev ? 'opacity-100' : 'opacity-30',
-                        )}
-                    >
-                        <span
-                            aria-hidden
-                            className="mr-[-3px] block h-3 w-3 rotate-45 border-b-2 border-l-2 border-cream"
-                        />
-                    </button>
-                    <button
-                        onClick={() => move(1)}
-                        aria-label={t('next')}
-                        className={cn(
-                            'absolute -right-16 top-[219px] z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border border-cream bg-transparent transition-all duration-500 hover:scale-105 min-[1240px]:flex min-[1440px]:-right-24',
-                            canNext ? 'opacity-100' : 'opacity-30',
-                        )}
-                    >
-                        <span
-                            aria-hidden
-                            className="ml-[-3px] block h-3 w-3 rotate-45 border-r-2 border-t-2 border-cream"
-                        />
-                    </button>
-                </>
-            )}
+            {/* #ISSUE: 화살표 위치가 옛 카드 높이(438px)의 절반인 top-[219px] 로 박혀 있어 카드 모양을 바꾸면 같이 틀어졌다.
+                → 화살표와 트랙을 한 상자로 묶고 세로 가운데(top-1/2)로 잡아 카드 높이와 무관하게 만든다 */}
+            <div className="relative">
+                {/* 메인 BASlider 화살표 그대로 — 배경 없음(border만), 넘길 방향이 있으면 진하게 */}
+                {over && (
+                    <>
+                        <button
+                            onClick={() => move(-1)}
+                            aria-label={t('prev')}
+                            className={cn(
+                                'absolute -left-16 top-1/2 z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border border-cream bg-transparent transition-all duration-500 hover:scale-105 min-[1240px]:flex min-[1440px]:-left-24',
+                                canPrev ? 'opacity-100' : 'opacity-30',
+                            )}
+                        >
+                            <span
+                                aria-hidden
+                                className="mr-[-3px] block h-3 w-3 rotate-45 border-b-2 border-l-2 border-cream"
+                            />
+                        </button>
+                        <button
+                            onClick={() => move(1)}
+                            aria-label={t('next')}
+                            className={cn(
+                                'absolute -right-16 top-1/2 z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border border-cream bg-transparent transition-all duration-500 hover:scale-105 min-[1240px]:flex min-[1440px]:-right-24',
+                                canNext ? 'opacity-100' : 'opacity-30',
+                            )}
+                        >
+                            <span
+                                aria-hidden
+                                className="ml-[-3px] block h-3 w-3 rotate-45 border-r-2 border-t-2 border-cream"
+                            />
+                        </button>
+                    </>
+                )}
 
-            <div
-                ref={ref}
-                {...(over ? dragProps : {})}
-                onScroll={onScroll}
-                className={cn(
-                    'flex gap-[23px]',
-                    over && 'no-scrollbar snap-x overflow-x-auto scroll-smooth pb-1',
-                    // 풀블리드는 창(1045)이 화면에 안 들어가는 반응형 구간에서만 — 1140 이상은 창 안 스크롤(시안: 4개 노출)
-                    over && 'mr-[calc(50%-50vw-2px)] pr-[calc(50vw-50%+40px)] min-[1140px]:mr-0 min-[1140px]:pr-0',
-                    over && dragClass,
-                    !over && 'justify-center',
-                )}
-            >
-                {showEmpty ? (
-                    <EmptyCard label={emptyLabel!} />
-                ) : (
-                    photos.map((b) => <Card key={b.id} b={b} overflow={over} />)
-                )}
+                <div
+                    ref={ref}
+                    {...(over ? dragProps : {})}
+                    onScroll={onScroll}
+                    className={cn(
+                        'flex gap-[23px]',
+                        over && 'no-scrollbar snap-x overflow-x-auto scroll-smooth pb-1',
+                        // 풀블리드는 창(1045)이 화면에 안 들어가는 반응형 구간에서만 — 1140 이상은 창 안 스크롤(시안: 4개 노출)
+                        over && 'mr-[calc(50%-50vw-2px)] pr-[calc(50vw-50%+40px)] min-[1140px]:mr-0 min-[1140px]:pr-0',
+                        over && dragClass,
+                        !over && 'justify-center',
+                    )}
+                >
+                    {showEmpty ? (
+                        <BAPhotoCardEmpty label={emptyLabel!} className={CARD} />
+                    ) : (
+                        photos.map((b) => (
+                            <BAPhotoCard
+                                key={b.id}
+                                photo={b}
+                                sizes={CARD_SIZES}
+                                className={CARD}
+                                onSelect={setSelectedPhoto}
+                            />
+                        ))
+                    )}
+                </div>
             </div>
 
             {/* 메인 BASlider 도트 그대로 (다크 섹션 → 크림) */}
@@ -220,6 +140,8 @@ export default function BACardSlider({
                     />
                 ))}
             </div>
+
+            <BAPhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />
         </div>
     );
 }

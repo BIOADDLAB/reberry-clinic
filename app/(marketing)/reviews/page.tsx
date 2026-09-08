@@ -1,16 +1,15 @@
 'use client';
 
 import { useState, useEffect, useMemo, useRef } from 'react';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import BAPhotoModal from '@/components/ui/BAPhotoModal';
-import Skeleton from '@/components/ui/Skeleton';
+import BAPhotoCard, { BAPhotoCardSkeleton } from '@/components/ui/BAPhotoCard';
 import Pagination from '@/components/ui/Pagination';
 import T from '@/components/lang/T';
 import { cn } from '@/components/lib/cn';
-import { BA_CATEGORIES, baCategoryLabel, baPhotoUrl, resolveBACategory, resolveBALabel, type BAPhoto } from '@/components/lib/ba';
+import { BA_CATEGORIES, resolveBACategory, type BAPhoto } from '@/components/lib/ba';
 import { filterReviewBAPhotos, useBAPhotos, useBAPhotosLoading } from '@/components/lib/useBAPhotos';
 import TextureBackground from '@/components/ui/TextureBackground';
 
@@ -131,58 +130,18 @@ export default function ReviewsPage() {
 
                     <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:mt-16 lg:grid-cols-4">
                         {/* Firestore 응답 대기 중 — 한 페이지 분량(8개)만큼 스켈레톤 카드 */}
+                        {/* 카드 모양은 메인·시술 페이지 슬라이더와 같은 BAPhotoCard 하나로 맞춘다 */}
                         {loading
-                            ? Array.from({ length: PER_PAGE }).map((_, i) => (
-                                  <div key={i} className="rounded-[4px] bg-sand p-2.5 shadow-sm">
-                                      <Skeleton className="aspect-square" />
-                                      <Skeleton className="mx-auto mt-3 h-4 w-32 rounded-full" />
-                                      <Skeleton className="mx-auto mt-2 h-3 w-20 rounded-full" />
-                                  </div>
-                              ))
-                            : currentPhotos.map((r) => {
-                                  /* #ISSUE: 예전 카드는 사진 안에 이미 시술일이 박혀 있는데 카드에도 또 찍혀 중복이었다.
-                                     → 시술일은 빼고, 카테고리 칩 + 흰 카드로 정리 (타 병원 전후사진 페이지 표준형) */
-                                  const categoryKey = resolveBACategory(r);
-                                  const label = resolveBALabel(r);
-
-                                  return (
-                                      <button
-                                          key={r.id}
-                                          type="button"
-                                          onClick={() => setSelectedPhoto(r)}
-                                          className="group block overflow-hidden rounded-[6px] bg-white text-left shadow-[0_4px_18px_rgba(69,54,45,0.06)] ring-1 ring-cocoa/[0.06] transition-transform duration-300 hover:-translate-y-1"
-                                      >
-                                          <div className="flex items-center justify-between gap-2 px-3.5 pb-2 pt-3.5">
-                                              {categoryKey ? (
-                                                  <span className="rounded-full bg-sand/70 px-2.5 py-1 text-caption-sm font-semibold text-cocoa/70">
-                                                      <T ko={baCategoryLabel(categoryKey)} />
-                                                  </span>
-                                              ) : (
-                                                  <span aria-hidden />
-                                              )}
-                                              <span className="notranslate font-display text-caption-sm tracking-[0.2em] text-cocoa/30">
-                                                  RE:BERRY
-                                              </span>
-                                          </div>
-                                          <div className="skeleton relative aspect-square overflow-hidden bg-white">
-                                              <Image
-                                                  src={baPhotoUrl(r)}
-                                                  alt={tReviews('beforeAlt')}
-                                                  fill
-                                                  quality={85}
-                                                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 220px"
-                                                  className="object-contain transition-transform duration-500 group-hover:scale-[1.02]"
-                                              />
-                                          </div>
-                                          {/* 클릭(상세보기) 전에도 무슨 시술인지 바로 보이도록 사진 아래 시술명 알약 표기 */}
-                                          <div className="flex justify-center px-3.5 py-3">
-                                              <span className="line-clamp-1 max-w-full rounded-full bg-cocoa px-4 py-1 text-center text-caption-sm font-bold leading-snug text-cream">
-                                                  <T ko={label} />
-                                              </span>
-                                          </div>
-                                      </button>
-                                  );
-                              })}
+                            ? Array.from({ length: PER_PAGE }).map((_, i) => <BAPhotoCardSkeleton key={i} />)
+                            : currentPhotos.map((r) => (
+                                  <BAPhotoCard
+                                      key={r.id}
+                                      photo={r}
+                                      sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 220px"
+                                      className="hover:-translate-y-1"
+                                      onSelect={setSelectedPhoto}
+                                  />
+                              ))}
                     </div>
 
                     {!loading && filtered.length === 0 && (

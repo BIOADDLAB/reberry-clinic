@@ -9,7 +9,14 @@
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { baCategoryLabel, baPhotoUrl, resolveBACategory, resolveBALabel, type BAPhoto } from '@/components/lib/ba';
+import {
+    baCategoryLabel,
+    baPhotoUrl,
+    isCombinedBAPhoto,
+    resolveBACategory,
+    resolveBALabel,
+    type BAPhoto,
+} from '@/components/lib/ba';
 import T from '@/components/lang/T';
 
 interface Props {
@@ -36,6 +43,7 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
 
     const label = resolveBALabel(photo);
     const categoryKey = resolveBACategory(photo);
+    const combined = isCombinedBAPhoto(photo);
 
     return (
         <div
@@ -74,20 +82,46 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
                     </button>
                 </div>
 
-                {/* 사진 — 남는 높이를 다 쓰되 넘치지 않게(min-h-0 필수) */}
-                <div className="relative min-h-0 flex-1 bg-white">
-                    <Image
-                        src={baPhotoUrl(photo)}
-                        alt={t('beforeAltWithLabel', { label })}
-                        fill
-                        quality={90}
-                        sizes="(max-width: 640px) 92vw, 640px"
-                        className="object-contain p-3"
-                    />
-                    <span className="notranslate font-display pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 text-caption-sm tracking-[0.2em] text-cocoa/25">
-                        RE:BERRY
-                    </span>
-                </div>
+                {/* 사진 — 남는 높이를 다 쓰되 넘치지 않게(min-h-0 필수).
+                    #ISSUE: 전·후가 한 장에 붙은 합성본만 있다고 보고 한 장만 그렸더니, 시술 페이지에서
+                            예전 사진(전·후 두 장)을 누르면 "시술 전"만 보였다 → 두 장짜리는 위아래로 나눠 보여 준다.
+                    RE:BERRY 는 합성본 안에 이미 찍혀 있어서 두 장짜리에만 덧붙인다. */}
+                {combined ? (
+                    <div className="relative min-h-0 flex-1 bg-white">
+                        <Image
+                            src={baPhotoUrl(photo)}
+                            alt={t('beforeAltWithLabel', { label })}
+                            fill
+                            quality={90}
+                            sizes="(max-width: 640px) 92vw, 640px"
+                            className="object-contain p-3"
+                        />
+                    </div>
+                ) : (
+                    <div className="relative flex min-h-0 flex-1 flex-col bg-white">
+                        {[
+                            { key: 'Before', src: photo.before, alt: t('beforeAltWithLabel', { label }) },
+                            { key: 'After', src: photo.after, alt: t('afterAltWithLabel', { label }) },
+                        ].map((shot) => (
+                            <div key={shot.key} className="relative min-h-0 flex-1">
+                                <Image
+                                    src={shot.src}
+                                    alt={shot.alt}
+                                    fill
+                                    quality={90}
+                                    sizes="(max-width: 640px) 92vw, 640px"
+                                    className="object-contain p-3"
+                                />
+                                <span className="notranslate font-display pointer-events-none absolute left-4 top-2.5 text-caption-sm tracking-[0.15em] text-cocoa/40">
+                                    {shot.key}
+                                </span>
+                            </div>
+                        ))}
+                        <span className="notranslate font-display pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 text-caption-sm tracking-[0.2em] text-cocoa/25">
+                            RE:BERRY
+                        </span>
+                    </div>
+                )}
 
                 {/* 안내문 — 고정, 한 화면에 들어가도록 압축 */}
                 <div className="shrink-0 border-t border-cocoa/[0.08] bg-sand/30 px-5 py-3.5">

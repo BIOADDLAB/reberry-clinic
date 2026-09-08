@@ -13,7 +13,8 @@
     "check:treatment-columns": "tsx scripts/seed-treatment-columns.ts --check",
     "check:content-links": "node --import tsx scripts/check-content-links.ts",
     "seed:events": "tsx scripts/seed-events.ts",
-    "seed:reviews-ba": "tsx scripts/seed-reviews-ba.ts"
+    "seed:reviews-ba": "tsx scripts/seed-reviews-ba.ts",
+    "ba:assign-pages": "tsx scripts/assign-ba-pages.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
