@@ -239,7 +239,6 @@ function ColumnListItem({ item, moreLabel }: { item: FirestoreCol; moreLabel: st
              → 패딩을 줄이고 제목을 1줄로 고정(말줄임)해서 목록을 더 촘촘하게 뺐다. */
 function ColumnLayoutD({ items }: { items: FirestoreCol[] }) {
     const t = useTranslations('common');
-    const isKo = useIsKo();
 
     return (
         <div className="mx-auto max-w-4xl overflow-hidden rounded-[24px] border border-cocoa/[0.1] bg-cream px-5 shadow-[0_10px_34px_rgba(69,54,45,0.06)] md:px-8">
@@ -249,7 +248,6 @@ function ColumnLayoutD({ items }: { items: FirestoreCol[] }) {
                         key={`${item.docId}-${index}`}
                         item={item}
                         index={index}
-                        isKo={isKo}
                         moreLabel={t('more')}
                     />
                 ))}
@@ -261,19 +259,15 @@ function ColumnLayoutD({ items }: { items: FirestoreCol[] }) {
 function ColumnIndexRow({
     item,
     index,
-    isKo,
     moreLabel,
 }: {
     item: FirestoreCol;
     index: number;
-    isKo: boolean;
     moreLabel: string;
 }) {
-    /* #ISSUE: title(+en) 은 "시술·기기 이름" 이름표(최대 7~12자)일 뿐이라 카드 큰 제목 자리에
-       두면 "색소"·"온다리프팅" 처럼 시술명만 반복돼 보인다. 진짜 카드 제목은 text(최대 34자,
-       관리자에도 "카드에 보이는 제목"이라 적힌 그 필드) → 제목은 text, 이름표는 위에 작게. */
+    /* 제목은 text(관리자의 "카드에 보이는 제목") 하나만 쓴다.
+       위에 작게 붙이던 시술 이름표(title)는 목록 전체가 같은 시술이라 줄마다 "여드름"만 반복돼 지웠다. */
     const { text } = useLocalizedColumnText(item);
-    const tag = isKo ? item.title : item.en || item.title;
 
     return (
         <RevealItem>
@@ -288,11 +282,6 @@ function ColumnIndexRow({
                 </span>
                 <span className="hidden h-8 w-px shrink-0 bg-cocoa/15 md:block" aria-hidden />
                 <span className="min-w-0 flex-1">
-                    {tag && (
-                        <span className="notranslate font-display block truncate text-caption-sm tracking-[0.1em] text-latte/60 uppercase">
-                            {tag}
-                        </span>
-                    )}
                     <h3 className="truncate text-small font-bold leading-6 text-cocoa md:text-medium" title={text}>
                         {text}
                     </h3>

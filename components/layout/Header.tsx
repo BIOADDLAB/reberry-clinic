@@ -101,7 +101,15 @@ export default function Header() {
                         <LanguageToggle solid={solid} />
                         <Link
                             href="/reservation"
-                            className="absolute right-0 top-full mt-3 hidden w-max items-center gap-2 rounded-full border border-cocoa/15 bg-cream px-4 py-2.5 text-caption font-semibold text-cocoa shadow-[0_5px_20px_rgba(69,54,45,0.16)] transition-transform hover:-translate-y-0.5 xl:flex"
+                            onClick={close}
+                            className={cn(
+                                /* #ISSUE: xl 전용이라 모바일·태블릿에는 헤더 줄 안에 작은 예약 버튼이 따로 하나 더 있었다.
+                                   → 이 알약 하나로 합친다. 모바일은 오른쪽에 햄버거(40px)+gap(8px)이 더 붙으므로
+                                     그만큼(-48px) 밀어야 알약 오른쪽 끝이 컨테이너 오른쪽 끝과 맞는다. */
+                                'absolute -right-12 top-full mt-3 flex w-max items-center gap-2 rounded-full border border-cocoa/15 bg-cream px-3.5 py-2 text-caption-sm font-semibold text-cocoa shadow-[0_5px_20px_rgba(69,54,45,0.16)] transition-transform hover:-translate-y-0.5 xl:right-0 xl:px-4 xl:py-2.5 xl:text-caption',
+                                /* 모바일 메뉴가 펼쳐지면 메뉴 첫 항목 위에 겹쳐 앉는다 → 열려 있는 동안만 감춘다 */
+                                open && 'hidden xl:flex',
+                            )}
                         >
                             {/* #STYLE: 카카오 노랑 K → 브랜드 R 로 교체. 헤더 톤(코코아/크림)에 맞춘 원형 뱃지 */}
                             <span
@@ -113,18 +121,6 @@ export default function Header() {
                             {reservationT('title')}
                         </Link>
                     </div>
-                    <Link
-                        href="/reservation"
-                        onClick={close}
-                        className={cn(
-                            'inline-flex h-9 items-center rounded-full border px-3 text-caption-sm font-bold transition-colors xl:hidden',
-                            solid
-                                ? 'border-cocoa/15 bg-cocoa text-cream'
-                                : 'border-cream/70 bg-deep/25 text-cream backdrop-blur-sm',
-                        )}
-                    >
-                        {reservationT('title')}
-                    </Link>
                     <button
                         onClick={() => setOpen(!open)}
                         aria-label={t('openMenu')}

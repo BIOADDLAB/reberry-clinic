@@ -198,9 +198,12 @@ export default async function Home() {
                             {/* #STYLE flex, border, transition */}
                             {/* #ISSUE 모바일 padding-top: 40px(pt-10), padding-bottom: 56px(pb-[14px]) 적용 */}
                             <Reveal delay={0.15}>
+                                {/* #ISSUE: w-[147px] 로 폭을 박아 두니 글자가 테두리에 거의 붙었고,
+                                    번역 모드에서 문구가 길어지면 그대로 넘쳤다.
+                                    → 폭 고정을 빼고 좌우 패딩으로 글자 길이에 맞춰 늘어나게 한다. */}
                                 <Link
                                     href="/about"
-                                    className="text-small flex h-[46px] w-[147px] items-center justify-center border border-cream tracking-wide transition-colors hover:bg-cream hover:text-cocoa"
+                                    className="text-small inline-flex h-[46px] items-center justify-center whitespace-nowrap border border-cream px-7 tracking-wide transition-colors hover:bg-cream hover:text-cocoa"
                                 >
                                     VISIT THE CLINIC
                                 </Link>
