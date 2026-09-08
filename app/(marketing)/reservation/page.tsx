@@ -21,17 +21,23 @@ export default async function ReservationPage() {
                             K
                         </span>
                         <p className="mt-7 text-caption font-semibold tracking-[0.18em] text-latte">KAKAO TALK</p>
-                        <h1 className="mt-2 text-h2 font-bold text-cocoa">{t('kakaoTitle')}</h1>
-                        <p className="mx-auto mt-4 max-w-xl text-small leading-7 text-latte">{t('description')}</p>
+                        <h1 className="mt-2 whitespace-pre-line text-h2 font-bold text-cocoa lg:whitespace-normal!">
+                            {t('kakaoTitle')}
+                        </h1>
+                        <p className="mx-auto mt-4 max-w-xl text-small leading-7 whitespace-pre-line  text-latte">
+                            {t('description')}
+                        </p>
                         <a
                             href={site.kakao}
                             target="_blank"
                             rel="noreferrer"
-                            className="mt-9 inline-flex min-h-13 items-center justify-center rounded-full bg-[#FEE500] px-8 py-3 text-small font-bold text-[#191919] transition-transform hover:-translate-y-0.5"
+                            className="mt-9 inline-flex min-h-13  items-center justify-center rounded-full bg-[#FEE500] px-8 py-3 text-small font-bold text-[#191919] transition-transform hover:-translate-y-0.5"
                         >
                             {t('kakaoButton')}
                         </a>
-                        <p className="mt-4 text-caption text-latte">{t('kakaoNotice')}</p>
+                        <p className="mt-4 text-caption whitespace-pre-line lg:whitespace-normal! text-latte">
+                            {t('kakaoNotice')}
+                        </p>
                     </div>
                 </div>
             </section>
