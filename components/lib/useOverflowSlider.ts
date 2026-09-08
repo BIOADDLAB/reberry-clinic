@@ -2,11 +2,15 @@
 // 컬럼 슬라이더 방식(useDragScroll)을 모든 카드 슬라이더가 공유. 화살표 활성 상태(canPrev/canNext)까지 제공
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDragScroll } from './useDragScroll';
 
 export function useOverflowSlider<T extends HTMLElement>(count: number, itemW: number, gap: number, allowWide = false) {
     const { ref, dragProps, dragClass } = useDragScroll<T>();
+    // #ISSUE: 카드 폭을 인자로 받은 상수로만 쓰니, 카드가 반응형(모바일 280 / 데스크톱 320)이면
+    //         모바일에서 한 칸 이동량과 도트 개수가 데스크톱 기준으로 계산돼 어긋났다.
+    //         → 실제 그려진 카드에서 폭과 간격을 재고, 아직 못 잰 첫 순간에만 인자를 쓴다.
+    const stepRef = useRef(itemW + gap);
     const [over, setOver] = useState(true); // 첫 페인트는 슬라이더로 시작(잘림 방지) 후 측정
     const [wide, setWide] = useState(false); // 컨테이너보다 넓지만 화면엔 다 들어감 → 화면 폭으로 펼쳐 중앙
     const [canPrev, setCanPrev] = useState(false);
@@ -18,7 +22,12 @@ export function useOverflowSlider<T extends HTMLElement>(count: number, itemW: n
         const el = ref.current;
         if (!el) return;
         const host = el.parentElement;
-        const need = count * itemW + (count - 1) * gap;
+        const first = el.children[0] as HTMLElement | undefined;
+        const second = el.children[1] as HTMLElement | undefined;
+        // offsetLeft 는 스크롤이 아니라 배치 위치라서, 슬라이더를 넘긴 뒤에 재도 값이 변하지 않는다
+        const cardW = first?.offsetWidth || itemW;
+        const cardGap = first && second ? Math.max(0, second.offsetLeft - first.offsetLeft - cardW) : gap;
+        const need = count * cardW + (count - 1) * cardGap;
         const hostW = host?.clientWidth ?? el.clientWidth;
         const screenW = document.documentElement.clientWidth - 48; // 좌우 여백 최소치
         const fitsHost = need <= hostW + 2;
@@ -31,7 +40,8 @@ export function useOverflowSlider<T extends HTMLElement>(count: number, itemW: n
         const max = el.scrollWidth - el.clientWidth;
         setCanPrev(el.scrollLeft > 4);
         setCanNext(el.scrollLeft < max - 4);
-        const step = itemW + gap;
+        const step = cardW + cardGap;
+        stepRef.current = step;
         setTotal(Math.max(1, Math.round(max / step) + 1));
         setPage(Math.min(Math.max(1, Math.round(el.scrollLeft / step) + 1), Math.round(max / step) + 1));
     }, [count, itemW, gap, allowWide, ref]);
@@ -45,7 +55,7 @@ export function useOverflowSlider<T extends HTMLElement>(count: number, itemW: n
         };
     }, [sync]);
 
-    const move = (dir: -1 | 1) => ref.current?.scrollBy({ left: dir * (itemW + gap), behavior: 'smooth' });
+    const move = (dir: -1 | 1) => ref.current?.scrollBy({ left: dir * stepRef.current, behavior: 'smooth' });
 
     return { ref, dragProps, dragClass, over, wide, canPrev, canNext, page, total, move, onScroll: sync };
 }

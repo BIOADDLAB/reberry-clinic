@@ -15,13 +15,17 @@ import Skeleton from '@/components/ui/Skeleton';
 import BAPhotoModal from '@/components/ui/BAPhotoModal';
 import BAPhotoCard, { BAPhotoCardEmpty, BAPhotoCardSkeleton } from '@/components/ui/BAPhotoCard';
 
-const CARD_W = 244;
-const GAP = 23;
-const SKELETON_COUNT = 4;
+const CARD_W = 320;
+const GAP = 20;
+const SKELETON_COUNT = 3;
 
 // 카드 모양은 전후사진 페이지와 같은 BAPhotoCard 를 쓰고, 여기서는 슬라이더에 필요한 폭만 정한다
-const CARD = 'w-[244px] shrink-0 snap-start';
-const CARD_SIZES = '244px';
+// #ISSUE: 244px 카드에 전·후가 나란히 붙은 합성본을 넣으니 사진 한 장이 110px 남짓이라 너무 작았다.
+//         → 카드를 320px 로 키웠다. 4장을 유지하면 창이 1269px 이 돼 화살표가 화면 밖으로 나가므로
+//           노출은 3장으로 줄이고 창을 320*3 + 20*2 = 1000px 로 다시 계산했다(기존 1045px 보다 오히려 좁다).
+const CARD = 'w-[280px] shrink-0 snap-start md:w-[300px] lg:w-[320px]';
+const CARD_SIZES = '(max-width: 768px) 280px, (max-width: 1024px) 300px, 320px';
+const TRACK = 'md:max-w-[940px] lg:max-w-[1000px]'; // md 는 카드 300 기준, lg 부터 320 기준
 
 // slug 를 받아서 컴포넌트가 직접 Firestore 를 확인 — 서버 페이지(page.tsx)는 slug 문자열만 넘기면 됨
 export default function BACardSlider({
@@ -45,8 +49,8 @@ export default function BACardSlider({
 
     if (loading) {
         return (
-            <div className="relative mx-auto max-w-[1045px]">
-                <div className="flex justify-center gap-[23px] overflow-hidden">
+            <div className={cn('relative mx-auto w-full', TRACK)}>
+                <div className="flex justify-center gap-4 overflow-hidden md:gap-5">
                     {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
                         <BAPhotoCardSkeleton key={i} className={CARD} />
                     ))}
@@ -63,7 +67,7 @@ export default function BACardSlider({
     if (photos.length === 0 && !showEmpty) return null;
 
     return (
-        <div className="relative mx-auto max-w-[1045px]">
+        <div className={cn('relative mx-auto w-full', TRACK)}>
             {/* #ISSUE: 화살표 위치가 옛 카드 높이(438px)의 절반인 top-[219px] 로 박혀 있어 카드 모양을 바꾸면 같이 틀어졌다.
                 → 화살표와 트랙을 한 상자로 묶고 세로 가운데(top-1/2)로 잡아 카드 높이와 무관하게 만든다 */}
             <div className="relative">
@@ -104,10 +108,10 @@ export default function BACardSlider({
                     {...(over ? dragProps : {})}
                     onScroll={onScroll}
                     className={cn(
-                        'flex gap-[23px]',
+                        'flex gap-4 md:gap-5',
                         over && 'no-scrollbar snap-x overflow-x-auto scroll-smooth pb-1',
-                        // 풀블리드는 창(1045)이 화면에 안 들어가는 반응형 구간에서만 — 1140 이상은 창 안 스크롤(시안: 4개 노출)
-                        over && 'mr-[calc(50%-50vw-2px)] pr-[calc(50vw-50%+40px)] min-[1140px]:mr-0 min-[1140px]:pr-0',
+                        // 풀블리드는 창(1000)이 화면에 안 들어가는 반응형 구간에서만 — 1080 이상은 창 안 스크롤(3개 노출)
+                        over && 'mr-[calc(50%-50vw-2px)] pr-[calc(50vw-50%+40px)] min-[1080px]:mr-0 min-[1080px]:pr-0',
                         over && dragClass,
                         !over && 'justify-center',
                     )}

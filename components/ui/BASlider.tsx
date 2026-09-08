@@ -18,8 +18,11 @@ interface Props {
 const SKELETON_COUNT = 3;
 
 // 카드 모양은 전후사진 페이지와 같은 BAPhotoCard 를 쓰고, 여기서는 슬라이더에 필요한 폭만 정한다
-const CARD = 'w-[240px] shrink-0 snap-start md:w-[244px]';
-const CARD_SIZES = '(max-width: 768px) 240px, 244px';
+// #ISSUE: 244px 카드에 전·후가 나란히 붙은 합성본을 넣으니 사진 한 장이 110px 남짓이라 너무 작았다.
+//         → 카드를 320px 로 키우고, 노출 창(3장)도 320*3 + 20*2 = 1000px 로 다시 계산했다.
+const CARD = 'w-[280px] shrink-0 snap-start md:w-[300px] lg:w-[320px]';
+const CARD_SIZES = '(max-width: 768px) 280px, (max-width: 1024px) 300px, 320px';
+const TRACK = 'md:max-w-[940px] lg:max-w-[1000px]'; // md 는 카드 300 기준, lg 부터 320 기준
 
 // #PAGE: 메인페이지 - 전,후 슬라이더
 export default function BASlider({ light }: Props) {
@@ -30,12 +33,12 @@ export default function BASlider({ light }: Props) {
     const [selectedPhoto, setSelectedPhoto] = useState<BAPhoto | null>(null);
 
     const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
-        useOverflowSlider<HTMLDivElement>(photos.length, 244, 20);
+        useOverflowSlider<HTMLDivElement>(photos.length, 320, 20);
 
     // Firestore 응답 대기 중 — 카드 자리를 스켈레톤으로 잡아둔다 (레이아웃 점프 방지)
     if (loading) {
         return (
-            <div className="relative mx-auto w-full px-0 md:max-w-[772px]">
+            <div className={cn('relative mx-auto w-full px-0', TRACK)}>
                 <div className="no-scrollbar flex justify-center gap-4 overflow-hidden md:gap-5">
                     {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
                         <BAPhotoCardSkeleton key={i} className={CARD} />
@@ -53,12 +56,14 @@ export default function BASlider({ light }: Props) {
     if (photos.length === 0) return null;
 
     return (
-        <div className="relative w-full md:max-w-[772px] mx-auto px-0">
+        <div className={cn('relative mx-auto w-full px-0', TRACK)}>
             <button
                 onClick={() => move(-1)}
                 aria-label={t('prev')}
                 className={cn(
-                    'absolute -left-28 top-1/2 z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border transition-all duration-500 hover:scale-105 min-[1040px]:flex',
+                    // #ISSUE: 창이 772 → 1000 으로 넓어져 -left-28(112px) 자리는 1040px 화면에서 밖으로 밀려났다.
+                    //         → 시술 페이지 슬라이더와 같은 간격·같은 등장 시점으로 맞춘다
+                    'absolute -left-16 top-1/2 z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border transition-all duration-500 hover:scale-105 min-[1240px]:flex min-[1440px]:-left-24',
                     canPrev ? 'opacity-100' : 'opacity-30',
                     light ? 'border-cocoa bg-cream' : 'border-cream/20 bg-deep/40 backdrop-blur-sm',
                 )}
@@ -91,7 +96,7 @@ export default function BASlider({ light }: Props) {
                 onClick={() => move(1)}
                 aria-label={t('next')}
                 className={cn(
-                    'absolute -right-28 top-1/2 z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border transition-all duration-500 hover:scale-105 min-[1040px]:flex',
+                    'absolute -right-16 top-1/2 z-10 hidden h-[50px] w-[50px] -translate-y-1/2 items-center justify-center rounded-full border transition-all duration-500 hover:scale-105 min-[1240px]:flex min-[1440px]:-right-24',
                     canNext ? 'opacity-100' : 'opacity-30',
                     light ? 'border-cocoa bg-cream' : 'border-cream bg-deep/40 backdrop-blur-sm',
                 )}

@@ -55,8 +55,11 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
             <div
                 /* #ISSUE: max-h 만 주면 flex 컨테이너에 확정 높이가 없어서
                    가운데 사진 영역(flex-1 + min-h-0)이 0px 로 접혀 사진이 아예 안 보였다.
-                   → 높이를 확정값으로 준다. 화면이 크면 720px, 작으면 화면 높이에 맞춘다. */
-                className="flex h-[min(calc(100dvh-2rem),720px)] w-full max-w-[640px] flex-col overflow-hidden rounded-[10px] bg-white shadow-[0_24px_60px_rgba(28,20,16,0.35)]"
+                   → 높이를 확정값으로 준다. 화면이 크면 690px, 작으면 화면 높이에 맞춘다.
+                   #ISSUE: 폭이 640px 이던 때는 정사각 사진이 높이에 맞춰 줄어들면서 좌우로 77px 씩 남았다.
+                   → 폭을 480px 로 줄여 [높이 690 − 머리말·안내문] ≒ 사진 폭이 되게 맞췄다.
+                     정사각 사진이 팝업 폭을 꽉 채워서 기존 홈페이지 팝업처럼 보인다. */
+                className="flex h-[min(calc(100dvh-2rem),690px)] w-full max-w-[480px] flex-col overflow-hidden rounded-[10px] bg-white shadow-[0_24px_60px_rgba(28,20,16,0.35)]"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 헤더 — 고정 */}
@@ -87,14 +90,15 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
                             예전 사진(전·후 두 장)을 누르면 "시술 전"만 보였다 → 두 장짜리는 위아래로 나눠 보여 준다.
                     RE:BERRY 는 합성본 안에 이미 찍혀 있어서 두 장짜리에만 덧붙인다. */}
                 {combined ? (
+                    /* 합성본은 사진 안에 이미 여백이 잡혀 있어 덧대는 여백 없이 폭을 꽉 채운다 */
                     <div className="relative min-h-0 flex-1 bg-white">
                         <Image
                             src={baPhotoUrl(photo)}
                             alt={t('beforeAltWithLabel', { label })}
                             fill
                             quality={90}
-                            sizes="(max-width: 640px) 92vw, 640px"
-                            className="object-contain p-3"
+                            sizes="(max-width: 480px) 92vw, 480px"
+                            className="object-contain"
                         />
                     </div>
                 ) : (
@@ -109,8 +113,8 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
                                     alt={shot.alt}
                                     fill
                                     quality={90}
-                                    sizes="(max-width: 640px) 92vw, 640px"
-                                    className="object-contain p-3"
+                                    sizes="(max-width: 480px) 92vw, 480px"
+                                    className="object-contain p-2"
                                 />
                                 <span className="notranslate font-display pointer-events-none absolute left-4 top-2.5 text-caption-sm tracking-[0.15em] text-cocoa/40">
                                     {shot.key}

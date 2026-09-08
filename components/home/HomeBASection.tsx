@@ -41,7 +41,8 @@ export default function HomeBASection() {
                         <MoreView href="/reviews" dark />
                     </div>
                 </Reveal>
-                <Reveal className="mx-auto mt-14 max-w-4xl lg:mt-16">
+                {/* 폭은 BASlider 가 정한다 — 여기서 max-w-4xl(896px) 로 조이면 카드 3장 창(1000px)이 잘린다 */}
+                <Reveal className="mx-auto mt-14 max-w-[1000px] lg:mt-16">
                     <BASlider light />
                 </Reveal>
             </div>
