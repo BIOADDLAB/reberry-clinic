@@ -45,7 +45,10 @@ export default function BAPhotoCard({
             aria-label={`${label} ${t('beforeAfter')}`}
             className={cn('group block cursor-pointer text-left transition-transform duration-300', FRAME, className)}
         >
-            <div className="flex items-center justify-between gap-2 px-3.5 pb-2 pt-3.5">
+            {/* #ISSUE: 합성본에는 사진 안에 이미 RE:BERRY 가 찍혀 있어 머리말에도 넣으면 한 카드에 같은 글자가 두 번 나온다.
+                → 로고가 안 박힌 예전 두 장짜리에만 남긴다.
+                  min-h 는 시술 분류 알약이 없는 사진에서 머리말 줄이 납작해져 카드 높이가 튀는 걸 막는 자리다. */}
+            <div className="flex min-h-[29px] items-center justify-between gap-2 px-3.5 pb-2 pt-3.5">
                 {categoryKey ? (
                     <span className="rounded-full bg-sand/70 px-2.5 py-1 text-caption-sm font-semibold text-cocoa/70">
                         <T ko={baCategoryLabel(categoryKey)} />
@@ -53,7 +56,11 @@ export default function BAPhotoCard({
                 ) : (
                     <span aria-hidden />
                 )}
-                <span className="notranslate font-display text-caption-sm tracking-[0.2em] text-cocoa/30">RE:BERRY</span>
+                {!combined && (
+                    <span className="notranslate font-display text-caption-sm tracking-[0.2em] text-cocoa/30">
+                        RE:BERRY
+                    </span>
+                )}
             </div>
 
             {/* 합성본은 한 칸 그대로, 예전 두 장짜리는 같은 정사각을 위아래로 반씩 나눠 쓴다.
@@ -111,9 +118,8 @@ export default function BAPhotoCard({
 export function BAPhotoCardSkeleton({ className }: { className?: string }) {
     return (
         <div className={cn(FRAME, className)}>
-            <div className="flex items-center justify-between gap-2 px-3.5 pb-2 pt-3.5">
+            <div className="flex min-h-[29px] items-center justify-between gap-2 px-3.5 pb-2 pt-3.5">
                 <Skeleton className="h-[26px] w-20 rounded-full" />
-                <Skeleton className="h-[18px] w-16 rounded-full" />
             </div>
             <Skeleton className="aspect-square w-full rounded-none" />
             <div className="flex justify-center px-3.5 py-3">
@@ -129,7 +135,8 @@ export function BAPhotoCardEmpty({ label, className }: { label: string; classNam
 
     return (
         <div className={cn(FRAME, className)}>
-            <div className="flex items-center justify-between gap-2 px-3.5 pb-2 pt-3.5">
+            {/* 준비중 카드는 사진 자체가 없어 로고가 박힐 자리도 없다 → 여기서는 RE:BERRY 를 남긴다 */}
+            <div className="flex min-h-[29px] items-center justify-between gap-2 px-3.5 pb-2 pt-3.5">
                 <span aria-hidden />
                 <span className="notranslate font-display text-caption-sm tracking-[0.2em] text-cocoa/30">RE:BERRY</span>
             </div>
