@@ -10,7 +10,7 @@ import Skeleton from '@/components/ui/Skeleton';
 import Pagination from '@/components/ui/Pagination';
 import T from '@/components/lang/T';
 import { cn } from '@/components/lib/cn';
-import { BA_CATEGORIES, baCategoryLabel, baPhotoUrl, resolveBACategory, type BAPhoto } from '@/components/lib/ba';
+import { BA_CATEGORIES, baCategoryLabel, baPhotoUrl, resolveBACategory, resolveBALabel, type BAPhoto } from '@/components/lib/ba';
 import { filterReviewBAPhotos, useBAPhotos, useBAPhotosLoading } from '@/components/lib/useBAPhotos';
 import TextureBackground from '@/components/ui/TextureBackground';
 
@@ -143,6 +143,7 @@ export default function ReviewsPage() {
                                   /* #ISSUE: 예전 카드는 사진 안에 이미 시술일이 박혀 있는데 카드에도 또 찍혀 중복이었다.
                                      → 시술일은 빼고, 카테고리 칩 + 흰 카드로 정리 (타 병원 전후사진 페이지 표준형) */
                                   const categoryKey = resolveBACategory(r);
+                                  const label = resolveBALabel(r);
 
                                   return (
                                       <button
@@ -172,6 +173,12 @@ export default function ReviewsPage() {
                                                   sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 220px"
                                                   className="object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                                               />
+                                          </div>
+                                          {/* 클릭(상세보기) 전에도 무슨 시술인지 바로 보이도록 사진 아래 시술명 알약 표기 */}
+                                          <div className="flex justify-center px-3.5 py-3">
+                                              <span className="line-clamp-1 max-w-full rounded-full bg-cocoa px-4 py-1 text-center text-caption-sm font-bold leading-snug text-cream">
+                                                  <T ko={label} />
+                                              </span>
                                           </div>
                                       </button>
                                   );
