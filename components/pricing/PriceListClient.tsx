@@ -13,7 +13,11 @@
            접힌 카드 때문에 가격 비교가 안 된다는 피드백을 받아 한동안 아코디언을 완전히 없앴다.
    → 다시 확인해 보니 요청은 "아코디언 자체가 아니라 처음 진입했을 때 전부 펼쳐져 있어야 한다" 는 것.
      그래서 접고 펼치는 기능은 되살리고, 기본값만 "전부 펼침" 으로 둔다.
-     탭을 바꾸거나 검색을 지우면 다시 전부 펼쳐진 상태로 돌아간다. */
+     탭을 바꾸거나 검색을 지우면 다시 전부 펼쳐진 상태로 돌아간다.
+
+   #ISSUE: 2026.09.16 — "묶을 수 있는 건 다 묶어 달라".
+   → 회차·용량이 여러 개인 카드는 그것을 표의 열로 세운다 (하이톡스 | 1부위 · 3부위 · 올인원).
+     어떤 카드를 표로 만들지는 priceBoard 가 정하고(card.layout), 여기서는 그리기만 한다. */
 
 'use client';
 
@@ -32,9 +36,25 @@ import {
 import { buildPriceBoard, type PriceBoardCard } from '@/components/lib/priceBoard';
 import SearchIcon from '@/components/ui/SearchIcon';
 
-/* 탭 안내 문구를 부위 알약으로 보여 주기 위한 해석.
+/* ─────────────────────────────────────────────────────────────────────────
+   시술 부위 안내 박스 디자인 — 1~5안
+   2026.09.16 병원 피드백 ① "시술 부위 부분 디자인이 마음에 안 든다, 다른 걸로."
+                        ② "부위 사이 간격이 넓다."
+   ②는 부위를 칸 너비가 똑같은 격자에 넣어서 생긴 문제였다. "이마 · 미간" 처럼 짧은 낱말이
+   6칸 격자에 하나씩 앉으니 칸마다 빈자리가 남았다. → 5안 모두 격자를 버리고 글처럼 흘려 쓴다.
+
+   아래 숫자만 1~5 로 바꿔 저장하면 화면에서 바로 비교할 수 있다.
+     1안 · 인라인   : 왼쪽에 시술 이름, 오른쪽에 부위를 가운뎃점으로 촘촘히  ← 추천
+     2안 · 카드형   : 시술마다 카드를 나란히, 부위는 점 마커 목록으로
+     3안 · 탭형     : 시술 이름을 눌러 그 시술 부위만 크게
+     4안 · 문장형   : 테두리 없이 옅은 바탕에 안내문처럼 한 문단
+     5안 · 접이식   : 한 줄로 접어 두고 눌러서 펼침 (가격표가 위로 올라온다)
+   ───────────────────────────────────────────────────────────────────────── */
+const AREA_NOTE_DESIGN: 1 | 2 | 3 | 4 | 5 = 2;
+
+/* 탭 안내 문구를 부위 목록으로 보여 주기 위한 해석.
    관리자에서는 그냥 여러 줄 글로 적는다.
-     "주름 보톡스 : 이마 · 미간 · 눈가"  → 제목 + 알약
+     "주름 보톡스 : 이마 · 미간 · 눈가"  → 제목 + 부위 목록
      "용량은 상담 후 안내합니다."         → 아래 각주 한 줄 */
 interface NoteChipGroup {
     label: string;
@@ -178,31 +198,14 @@ export default function PriceListClient() {
                 </div>
             </nav>
 
-            {/* 탭 안내 박스 — 관리자에서 탭마다 적어 두는 문구 (예: 주름 보톡스 가능 부위).
-                #ISSUE: 그룹마다 py-5 + 제목을 md:text-medium(20px) 으로 키워서 박스가 카드보다도 커 보였다.
-                → 디엘브처럼 제목은 작은 라벨, 알약은 한 줄에 촘촘히, 그룹 사이는 얇은 선 하나로만 나눈다. */}
+            {/* 탭마다 관리자에서 적어 두는 안내 문구 (예: 주름 보톡스 가능 부위) */}
             {(note.groups.length > 0 || note.footnotes.length > 0) && (
-                <div className="mt-8 divide-y divide-cocoa/[0.08] rounded-2xl border border-cocoa/[0.1] bg-cream px-5 py-1 md:px-6">
-                    {note.groups.map((group) => (
-                        <div key={group.label} className="flex flex-wrap items-baseline gap-x-3 gap-y-2 py-3">
-                            <p className="shrink-0 text-caption font-bold text-cocoa">{group.label}</p>
-                            <ul className="flex flex-wrap gap-1.5">
-                                {group.chips.map((chip) => (
-                                    <li
-                                        key={chip}
-                                        className="rounded-full border border-sand/70 bg-sand/25 px-2.5 py-0.5 text-caption-sm font-medium text-cocoa"
-                                    >
-                                        {chip}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                    {note.footnotes.map((line) => (
-                        <p key={line} className="py-3 text-caption-sm leading-5 text-latte">
-                            {line}
-                        </p>
-                    ))}
+                <div className="mt-8">
+                    {AREA_NOTE_DESIGN === 1 && <AreaNoteInline groups={note.groups} footnotes={note.footnotes} />}
+                    {AREA_NOTE_DESIGN === 2 && <AreaNoteCards groups={note.groups} footnotes={note.footnotes} />}
+                    {AREA_NOTE_DESIGN === 3 && <AreaNoteTabs groups={note.groups} footnotes={note.footnotes} />}
+                    {AREA_NOTE_DESIGN === 4 && <AreaNoteSentence groups={note.groups} footnotes={note.footnotes} />}
+                    {AREA_NOTE_DESIGN === 5 && <AreaNoteFold groups={note.groups} footnotes={note.footnotes} />}
                 </div>
             )}
 
@@ -231,19 +234,23 @@ export default function PriceListClient() {
                             </button>
                             {open && (
                                 <div className="px-5 pb-2 md:px-7">
-                                    {card.rows.map((row) => (
-                                        <div
-                                            key={row.id}
-                                            className="flex items-start justify-between gap-5 border-t border-cocoa/[0.07] py-3.5"
-                                        >
-                                            <span className="min-w-0 text-caption leading-6 text-latte md:text-small">
-                                                {row.label}
-                                            </span>
-                                            <strong className="shrink-0 text-caption font-medium text-cocoa md:text-small">
-                                                {formatPrice(row.price, moneyLocale)}
-                                            </strong>
-                                        </div>
-                                    ))}
+                                    {card.layout === 'table' ? (
+                                        <PriceTable card={card} moneyLocale={moneyLocale} itemHeading={t('columnItem')} />
+                                    ) : (
+                                        card.rows.map((row) => (
+                                            <div
+                                                key={row.id}
+                                                className="flex items-start justify-between gap-5 border-t border-cocoa/[0.07] py-3.5"
+                                            >
+                                                <span className="min-w-0 text-caption leading-6 text-latte md:text-small">
+                                                    {row.label}
+                                                </span>
+                                                <strong className="shrink-0 text-caption font-medium text-cocoa md:text-small">
+                                                    {formatPrice(row.cells[0]?.price ?? 0, moneyLocale)}
+                                                </strong>
+                                            </div>
+                                        ))
+                                    )}
                                 </div>
                             )}
                         </article>
@@ -262,6 +269,259 @@ export default function PriceListClient() {
                     {t('kakaoCta')}
                 </Link>
             </div>
+        </div>
+    );
+}
+
+/* 회차·용량을 열로 세운 가격 표.
+   #ISSUE: 처음에는 열 너비를 브라우저에 맡겼는데(table-auto), 남는 폭을 열 수대로 나눠 갖는 바람에
+           열이 둘인 카드는 가격 사이가 휑하고 넷인 카드는 촘촘해서 카드마다 간격이 달라 보였다.
+   → table-fixed 로 가격 열을 모두 같은 너비(PRICE_COLUMN)로 고정하고 시술명 칸이 남는 폭을 다 먹는다.
+     그러면 열이 하나든 넷이든 가격이 오른쪽 끝에 같은 간격으로 붙는다.
+        1열              ·                    1개가격
+        2열              ·        2개가격  2개가격
+     열이 넷까지 늘 수 있어서 좁은 화면에서는 카드 안에서만 옆으로 밀리게 둔다.
+     아래 두 값은 그 "밀리기 시작하는 폭" 이라 모바일 칸 너비(w-[84px])와 맞춰 둔다. */
+const PRICE_COLUMN = 84;
+const NAME_COLUMN_MIN = 116;
+
+function PriceTable({
+    card,
+    moneyLocale,
+    itemHeading,
+}: {
+    card: PriceBoardCard;
+    moneyLocale: string;
+    itemHeading: string;
+}) {
+    return (
+        <div className="-mx-1 overflow-x-auto px-1">
+            <table
+                className="w-full table-fixed border-collapse text-left"
+                style={{ minWidth: NAME_COLUMN_MIN + card.columns.length * PRICE_COLUMN }}
+            >
+                <thead>
+                    <tr>
+                        <th
+                            scope="col"
+                            className="border-t border-cocoa/[0.07] py-2.5 pr-3 text-caption-sm font-semibold text-latte/70"
+                        >
+                            {itemHeading}
+                        </th>
+                        {card.columns.map((column) => (
+                            <th
+                                key={column}
+                                scope="col"
+                                className="w-[84px] border-t border-cocoa/[0.07] py-2.5 pl-1.5 text-right text-caption-sm font-semibold text-latte/70 md:w-28 md:pl-3"
+                            >
+                                {column}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {card.rows.map((row) => (
+                        <tr key={row.id}>
+                            <th
+                                scope="row"
+                                className="border-t border-cocoa/[0.07] py-3.5 pr-3 text-caption font-normal leading-6 text-latte md:text-small"
+                            >
+                                {row.label}
+                            </th>
+                            {row.cells.map((cell, index) => (
+                                <td
+                                    key={card.columns[index]}
+                                    className="whitespace-nowrap border-t border-cocoa/[0.07] py-3.5 pl-1.5 text-right md:pl-3"
+                                >
+                                    {cell ? (
+                                        <strong className="text-caption font-medium text-cocoa md:text-small">
+                                            {formatPrice(cell.price, moneyLocale)}
+                                        </strong>
+                                    ) : (
+                                        <span aria-label="해당 없음" className="text-caption text-sand">
+                                            –
+                                        </span>
+                                    )}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+interface AreaNoteProps {
+    groups: NoteChipGroup[];
+    footnotes: string[];
+}
+
+/** 부위를 격자 대신 글줄처럼 흘려 쓴다. 낱말 사이에만 가운뎃점이 들어가 간격이 일정하다. */
+function AreaChips({ chips, className = 'text-caption leading-6 text-latte md:text-small' }: { chips: string[]; className?: string }) {
+    return (
+        <ul className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+            {chips.map((chip, index) => (
+                <li key={chip} className={`flex items-baseline gap-2 ${className}`}>
+                    {index > 0 && (
+                        <span aria-hidden className="text-sand">
+                            ·
+                        </span>
+                    )}
+                    {chip}
+                </li>
+            ))}
+        </ul>
+    );
+}
+
+function AreaFootnotes({ lines, className = '' }: { lines: string[]; className?: string }) {
+    return lines.map((line) => (
+        <p key={line} className={`text-caption-sm leading-5 text-latte ${className}`}>
+            {line}
+        </p>
+    ));
+}
+
+/* 1안 · 인라인 — 왼쪽에 시술 이름, 오른쪽에 부위를 촘촘히 흘려 쓴다.
+   아래 가격 표와 같은 "왼쪽 이름 / 오른쪽 내용" 구조라 페이지 전체가 한 덩어리로 읽힌다. */
+function AreaNoteInline({ groups, footnotes }: AreaNoteProps) {
+    return (
+        <div className="overflow-hidden rounded-2xl border border-cocoa/[0.1] bg-cream">
+            {groups.map((group, index) => (
+                <div
+                    key={group.label}
+                    className={`flex flex-col gap-1 px-5 py-3.5 md:flex-row md:items-baseline md:gap-5 md:px-6 ${
+                        index > 0 ? 'border-t border-cocoa/[0.08]' : ''
+                    }`}
+                >
+                    <p className="flex shrink-0 items-baseline gap-2 text-caption font-bold text-cocoa md:w-44 md:text-small">
+                        <span aria-hidden className="h-3 w-[3px] shrink-0 translate-y-[-1px] rounded-full bg-sand" />
+                        {group.label}
+                    </p>
+                    <AreaChips chips={group.chips} />
+                </div>
+            ))}
+            {footnotes.length > 0 && (
+                <div className="border-t border-cocoa/[0.08] bg-sand/10 px-5 py-3 md:px-6">
+                    <AreaFootnotes lines={footnotes} />
+                </div>
+            )}
+        </div>
+    );
+}
+
+/* 2안 · 카드형 — 시술마다 카드를 하나씩 나란히 세운다.
+   시술이 두세 개일 때 좌우로 갈려서 "이 부위는 어느 시술인지" 가 가장 또렷하다. */
+function AreaNoteCards({ groups, footnotes }: AreaNoteProps) {
+    return (
+        <div>
+            <div className="grid gap-3 md:grid-cols-2">
+                {groups.map((group) => (
+                    <section key={group.label} className="rounded-2xl border border-cocoa/[0.1] bg-cream px-5 py-4">
+                        <h3 className="text-caption font-bold text-cocoa md:text-small">{group.label}</h3>
+                        <ul className="mt-2.5 flex flex-wrap gap-x-2 gap-y-1">
+                            {group.chips.map((chip) => (
+                                <li key={chip} className="flex items-center gap-1.5 text-caption leading-6 text-latte">
+                                    <span aria-hidden className="h-1 w-1 shrink-0 rounded-full bg-sand" />
+                                    {chip}
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                ))}
+            </div>
+            <AreaFootnotes lines={footnotes} className="mt-3 px-1" />
+        </div>
+    );
+}
+
+/* 3안 · 탭형 — 시술 이름을 눌러 그 시술 부위만 크게 보여 준다.
+   부위가 더 늘어나도 안내 박스 높이가 그대로라, 가격 표가 화면 아래로 밀리지 않는다. */
+function AreaNoteTabs({ groups, footnotes }: AreaNoteProps) {
+    const [openLabel, setOpenLabel] = useState(groups[0]?.label ?? '');
+    const current = groups.find((group) => group.label === openLabel) ?? groups[0];
+
+    return (
+        <div className="rounded-2xl border border-cocoa/[0.1] bg-cream px-5 py-4 md:px-6">
+            {groups.length > 1 && (
+                <div className="flex flex-wrap gap-2">
+                    {groups.map((group) => {
+                        const active = group.label === current?.label;
+                        return (
+                            <button
+                                key={group.label}
+                                type="button"
+                                aria-pressed={active}
+                                onClick={() => setOpenLabel(group.label)}
+                                className={`rounded-full border px-3.5 py-1.5 text-caption font-semibold transition-colors ${
+                                    active
+                                        ? 'border-cocoa/25 bg-sand/30 text-cocoa'
+                                        : 'border-cocoa/10 text-latte hover:border-cocoa/25 hover:text-cocoa'
+                                }`}
+                            >
+                                {group.label}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
+            {current && (
+                <div className={groups.length > 1 ? 'mt-3.5' : ''}>
+                    <AreaChips chips={current.chips} className="text-small font-medium leading-6 text-cocoa" />
+                </div>
+            )}
+            <AreaFootnotes lines={footnotes} className="mt-3 border-t border-cocoa/[0.08] pt-3" />
+        </div>
+    );
+}
+
+/* 4안 · 문장형 — 테두리를 없애고 옅은 바탕에 안내문처럼 한 문단으로 적는다.
+   가장 조용해서 가격 카드가 주인공으로 남는다. 부위가 많아도 줄만 늘어난다. */
+function AreaNoteSentence({ groups, footnotes }: AreaNoteProps) {
+    return (
+        <div className="rounded-2xl bg-sand/15 px-5 py-4 md:px-6">
+            {groups.map((group) => (
+                <p key={group.label} className="text-caption leading-7 text-latte md:text-small">
+                    <b className="font-bold text-cocoa">{group.label}</b>
+                    <span aria-hidden className="mx-2 text-sand">
+                        |
+                    </span>
+                    {group.chips.join(' · ')}
+                </p>
+            ))}
+            <AreaFootnotes lines={footnotes} className="mt-2" />
+        </div>
+    );
+}
+
+/* 5안 · 접이식 — 한 줄로 접어 두고 눌러서 펼친다.
+   부위는 가격을 정한 다음에 확인하는 정보라, 접어 두면 가격 카드가 화면 위로 올라온다. */
+function AreaNoteFold({ groups, footnotes }: AreaNoteProps) {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <div className="overflow-hidden rounded-2xl border border-cocoa/[0.1] bg-cream">
+            <button
+                type="button"
+                onClick={() => setOpen(!open)}
+                aria-expanded={open}
+                className="flex w-full items-center justify-between gap-3 px-5 py-3.5 text-left md:px-6"
+            >
+                <span className="text-caption font-bold text-cocoa md:text-small">시술 가능 부위 안내</span>
+                <ChevronIcon open={open} />
+            </button>
+            {open && (
+                <div className="border-t border-cocoa/[0.08] px-5 pb-4 pt-1 md:px-6">
+                    {groups.map((group) => (
+                        <div key={group.label} className="flex flex-col gap-1 py-2.5 md:flex-row md:items-baseline md:gap-5">
+                            <p className="shrink-0 text-caption font-bold text-cocoa md:w-44">{group.label}</p>
+                            <AreaChips chips={group.chips} />
+                        </div>
+                    ))}
+                    <AreaFootnotes lines={footnotes} className="mt-1" />
+                </div>
+            )}
         </div>
     );
 }

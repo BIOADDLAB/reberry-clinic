@@ -203,6 +203,7 @@
             "body": "바디·기타레이저",
             "hairRemoval": "제모"
         },
+        "columnItem": "구분",
         "vatNotice": "표시된 가격은 VAT 별도이며, 시술 부위와 용량에 따라 달라질 수 있습니다.",
         "kakaoCta": "카카오톡으로 예약 문의하기",
         "search": "시술 검색",

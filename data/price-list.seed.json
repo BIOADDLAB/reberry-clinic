@@ -1,5 +1,5 @@
 {
-  "version": "reberry-price-2026-09-07",
+  "version": "reberry-price-2026-09-16",
   "source": "리베리_수가표_미팅반영.numbers (04_원본 데이터) + 2026-09-03 카톡 피드백",
   "categories": [
     {
@@ -8,7 +8,7 @@
       "note": "주름 보톡스 시술 부위 : 이마 · 미간 · 눈썹 위 · 눈가 · 자갈턱 · 콧등\n특수부위 보톡스 시술 부위 : 팔자 · 치마주름 · 입꼬리 · 콧볼 · 눈밑",
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "filler-face-volume",
@@ -16,7 +16,7 @@
       "note": "특수부위 필러 시술 부위 : 이마 · 미간 · 눈가 · 마리오네트 · 목주름",
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster",
@@ -24,7 +24,7 @@
       "note": "",
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging",
@@ -32,7 +32,7 @@
       "note": "",
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne",
@@ -40,7 +40,7 @@
       "note": "",
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care",
@@ -48,7 +48,7 @@
       "note": "",
       "sort": 5,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser",
@@ -56,7 +56,7 @@
       "note": "",
       "sort": 6,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal",
@@ -64,161 +64,121 @@
       "note": "",
       "sort": 7,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     }
   ],
   "sections": [
     {
-      "docId": "toxin-contour--wrinkle-1",
+      "docId": "toxin-contour--wrinkle",
       "categoryId": "toxin-contour",
-      "label": "주름 보톡스 1부위",
+      "label": "주름 보톡스",
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--wrinkle-3",
-      "categoryId": "toxin-contour",
-      "label": "주름 보톡스 3부위",
-      "sort": 1,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--wrinkle-all",
-      "categoryId": "toxin-contour",
-      "label": "주름 보톡스 올인원",
-      "sort": 2,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--wrinkle-touch",
-      "categoryId": "toxin-contour",
-      "label": "주름 보톡스 리터치",
-      "sort": 3,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--special",
       "categoryId": "toxin-contour",
       "label": "특수부위 보톡스 1부위",
-      "sort": 4,
+      "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--jaw",
       "categoryId": "toxin-contour",
       "label": "사각턱 보톡스",
-      "sort": 5,
+      "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--saliva",
       "categoryId": "toxin-contour",
       "label": "침샘 보톡스",
-      "sort": 6,
+      "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--temple",
       "categoryId": "toxin-contour",
       "label": "관자 보톡스 50U",
-      "sort": 7,
+      "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--body",
       "categoryId": "toxin-contour",
       "label": "바디 보톡스",
-      "sort": 8,
+      "sort": 5,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--sweat",
       "categoryId": "toxin-contour",
       "label": "다한증 보톡스 100U",
-      "sort": 9,
+      "sort": 6,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--skin",
       "categoryId": "toxin-contour",
       "label": "스킨보톡스",
-      "sort": 10,
+      "sort": 7,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--calf",
       "categoryId": "toxin-contour",
       "label": "원데이 종아리 알빼기",
-      "sort": 11,
+      "sort": 8,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--lipolysis",
       "categoryId": "toxin-contour",
       "label": "지방분해주사",
-      "sort": 12,
+      "sort": 9,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "filler-face-volume--lena-attier",
+      "docId": "filler-face-volume--volume",
       "categoryId": "filler-face-volume",
-      "label": "국산 필러 (레나 · 아띠에르)",
+      "label": "볼륨 필러",
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "filler-face-volume--renefil-rejuviel",
+      "docId": "filler-face-volume--special",
       "categoryId": "filler-face-volume",
-      "label": "국산 프리미엄 필러 (르네필 · 리쥬비엘C)",
+      "label": "특수부위 필러 1cc",
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "filler-face-volume--belotero-restylane",
+      "docId": "filler-face-volume--full-face",
       "categoryId": "filler-face-volume",
-      "label": "수입 필러 (벨로테로 · 레스틸렌)",
+      "label": "풀페이스 필러 10cc",
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--package",
-      "categoryId": "filler-face-volume",
-      "label": "필러 패키지",
-      "sort": 3,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "filler-face-volume--nose-line",
       "categoryId": "filler-face-volume",
       "label": "아름다운 코라인",
-      "sort": 4,
+      "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--hyalase",
-      "categoryId": "filler-face-volume",
-      "label": "히알라제",
-      "sort": 5,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--rejuran",
@@ -226,7 +186,7 @@
       "label": "리쥬란",
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--juvelook",
@@ -234,7 +194,7 @@
       "label": "쥬베룩스킨",
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--rejublook",
@@ -242,7 +202,7 @@
       "label": "리쥬베룩",
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--lituo",
@@ -250,7 +210,7 @@
       "label": "리투오",
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--hilo-wave",
@@ -258,7 +218,7 @@
       "label": "힐로웨이브",
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--reberry-signature",
@@ -266,7 +226,7 @@
       "label": "리베리 시그니처 스킨",
       "sort": 5,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--new-arty",
@@ -274,7 +234,7 @@
       "label": "뉴아티",
       "sort": 6,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--lilyid",
@@ -282,7 +242,7 @@
       "label": "릴리이드",
       "sort": 7,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--titanium",
@@ -290,7 +250,7 @@
       "label": "티타늄",
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--onda",
@@ -298,7 +258,7 @@
       "label": "온다",
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--vro",
@@ -306,7 +266,7 @@
       "label": "브이로",
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--levinas",
@@ -314,7 +274,7 @@
       "label": "레비나스",
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--inmode",
@@ -322,7 +282,7 @@
       "label": "인모드",
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--shurink",
@@ -330,7 +290,7 @@
       "label": "슈링크 유니버스",
       "sort": 5,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--deuce",
@@ -338,7 +298,7 @@
       "label": "듀스 실리프팅",
       "sort": 6,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--whitening",
@@ -346,7 +306,7 @@
       "label": "색소·미백",
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--redness",
@@ -354,7 +314,7 @@
       "label": "홍조",
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--acne",
@@ -362,7 +322,7 @@
       "label": "여드름",
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--potenza",
@@ -370,7 +330,7 @@
       "label": "포텐자",
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--pore-scar",
@@ -378,7 +338,7 @@
       "label": "모공·흉터",
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--care",
@@ -386,7 +346,7 @@
       "label": "피부관리",
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--iv",
@@ -394,7 +354,7 @@
       "label": "수액·주사",
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--body-lipolysis",
@@ -402,7 +362,7 @@
       "label": "바디 지방분해 주사",
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--body-toning",
@@ -410,7 +370,7 @@
       "label": "바디 토닝",
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--co2",
@@ -418,7 +378,7 @@
       "label": "CO2",
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--keloid",
@@ -426,7 +386,7 @@
       "label": "켈로이드 (비급여)",
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--tattoo",
@@ -434,7 +394,7 @@
       "label": "문신제거",
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-face",
@@ -442,7 +402,7 @@
       "label": "여성 얼굴",
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-face",
@@ -450,7 +410,7 @@
       "label": "남성 얼굴",
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-body",
@@ -458,7 +418,7 @@
       "label": "여성 바디",
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-body",
@@ -466,225 +426,93 @@
       "label": "남성 바디",
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     }
   ],
   "items": [
     {
-      "docId": "toxin-contour--wrinkle-1--00",
+      "docId": "toxin-contour--wrinkle--00",
       "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--wrinkle-1",
+      "sectionId": "toxin-contour--wrinkle",
       "name": "하이톡스",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "1부위",
           "price": 19000
-        }
-      ],
-      "sort": 0,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--wrinkle-1--01",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--wrinkle-1",
-      "name": "코어톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
+        },
         {
-          "id": "option-0",
-          "label": "1회",
-          "price": 39000
-        }
-      ],
-      "sort": 1,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--wrinkle-1--02",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--wrinkle-1",
-      "name": "제오민",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 59000
-        }
-      ],
-      "sort": 2,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--wrinkle-3--00",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--wrinkle-3",
-      "name": "하이톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
+          "id": "option-1",
+          "label": "3부위",
           "price": 51000
-        }
-      ],
-      "sort": 0,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--wrinkle-3--01",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--wrinkle-3",
-      "name": "코어톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
+        },
         {
-          "id": "option-0",
-          "label": "1회",
-          "price": 105000
-        }
-      ],
-      "sort": 1,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--wrinkle-3--02",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--wrinkle-3",
-      "name": "제오민",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 159000
-        }
-      ],
-      "sort": 2,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--wrinkle-all--00",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--wrinkle-all",
-      "name": "하이톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
+          "id": "option-2",
+          "label": "올인원",
           "price": 89000
         }
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "toxin-contour--wrinkle-all--01",
+      "docId": "toxin-contour--wrinkle--01",
       "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--wrinkle-all",
+      "sectionId": "toxin-contour--wrinkle",
       "name": "코어톡스",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "1부위",
+          "price": 39000
+        },
+        {
+          "id": "option-1",
+          "label": "3부위",
+          "price": 105000
+        },
+        {
+          "id": "option-2",
+          "label": "올인원",
           "price": 190000
         }
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "toxin-contour--wrinkle-all--02",
+      "docId": "toxin-contour--wrinkle--02",
       "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--wrinkle-all",
+      "sectionId": "toxin-contour--wrinkle",
       "name": "제오민",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "1부위",
+          "price": 59000
+        },
+        {
+          "id": "option-1",
+          "label": "3부위",
+          "price": 159000
+        },
+        {
+          "id": "option-2",
+          "label": "올인원",
           "price": 289000
         }
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--wrinkle-touch--00",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--wrinkle-touch",
-      "name": "하이톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 9000
-        }
-      ],
-      "sort": 0,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--wrinkle-touch--01",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--wrinkle-touch",
-      "name": "코어톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 19000
-        }
-      ],
-      "sort": 1,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--wrinkle-touch--02",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--wrinkle-touch",
-      "name": "제오민",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 29000
-        }
-      ],
-      "sort": 2,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--special--00",
@@ -702,7 +530,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--special--01",
@@ -720,7 +548,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--special--02",
@@ -738,439 +566,175 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--jaw--00",
       "categoryId": "toxin-contour",
       "sectionId": "toxin-contour--jaw",
-      "name": "50U · 하이톡스",
+      "name": "하이톡스",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "50U",
           "price": 29000
+        },
+        {
+          "id": "option-1",
+          "label": "75U",
+          "price": 44000
+        },
+        {
+          "id": "option-2",
+          "label": "100U",
+          "price": 55000
         }
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--jaw--01",
       "categoryId": "toxin-contour",
       "sectionId": "toxin-contour--jaw",
-      "name": "50U · 코어톡스",
+      "name": "코어톡스",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "50U",
           "price": 59000
+        },
+        {
+          "id": "option-1",
+          "label": "75U",
+          "price": 79000
+        },
+        {
+          "id": "option-2",
+          "label": "100U",
+          "price": 99000
         }
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--jaw--02",
       "categoryId": "toxin-contour",
       "sectionId": "toxin-contour--jaw",
-      "name": "50U · 제오민",
+      "name": "제오민",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "50U",
           "price": 129000
+        },
+        {
+          "id": "option-1",
+          "label": "75U",
+          "price": 179000
+        },
+        {
+          "id": "option-2",
+          "label": "100U",
+          "price": 229000
         }
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--jaw--03",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--jaw",
-      "name": "75U · 하이톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 44000
-        }
-      ],
-      "sort": 3,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--jaw--04",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--jaw",
-      "name": "75U · 코어톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 79000
-        }
-      ],
-      "sort": 4,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--jaw--05",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--jaw",
-      "name": "75U · 제오민",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 179000
-        }
-      ],
-      "sort": 5,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--jaw--06",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--jaw",
-      "name": "100U · 하이톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 55000
-        }
-      ],
-      "sort": 6,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--jaw--07",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--jaw",
-      "name": "100U · 코어톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 99000
-        }
-      ],
-      "sort": 7,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--jaw--08",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--jaw",
-      "name": "100U · 제오민",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 229000
-        }
-      ],
-      "sort": 8,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--jaw--09",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--jaw",
-      "name": "리터치 · 하이톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 15000
-        }
-      ],
-      "sort": 9,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--jaw--10",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--jaw",
-      "name": "리터치 · 코어톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 29000
-        }
-      ],
-      "sort": 10,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--jaw--11",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--jaw",
-      "name": "리터치 · 제오민",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 65000
-        }
-      ],
-      "sort": 11,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--saliva--00",
       "categoryId": "toxin-contour",
       "sectionId": "toxin-contour--saliva",
-      "name": "50U · 하이톡스",
+      "name": "하이톡스",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "50U",
           "price": 59000
+        },
+        {
+          "id": "option-1",
+          "label": "75U",
+          "price": 89000
+        },
+        {
+          "id": "option-2",
+          "label": "100U",
+          "price": 119000
         }
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--saliva--01",
       "categoryId": "toxin-contour",
       "sectionId": "toxin-contour--saliva",
-      "name": "50U · 코어톡스",
+      "name": "코어톡스",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "50U",
           "price": 89000
+        },
+        {
+          "id": "option-1",
+          "label": "75U",
+          "price": 109000
+        },
+        {
+          "id": "option-2",
+          "label": "100U",
+          "price": 129000
         }
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--saliva--02",
       "categoryId": "toxin-contour",
       "sectionId": "toxin-contour--saliva",
-      "name": "50U · 제오민",
+      "name": "제오민",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "50U",
           "price": 159000
+        },
+        {
+          "id": "option-1",
+          "label": "75U",
+          "price": 219000
+        },
+        {
+          "id": "option-2",
+          "label": "100U",
+          "price": 279000
         }
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--saliva--03",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--saliva",
-      "name": "75U · 하이톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 89000
-        }
-      ],
-      "sort": 3,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--saliva--04",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--saliva",
-      "name": "75U · 코어톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 109000
-        }
-      ],
-      "sort": 4,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--saliva--05",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--saliva",
-      "name": "75U · 제오민",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 219000
-        }
-      ],
-      "sort": 5,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--saliva--06",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--saliva",
-      "name": "100U · 하이톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 119000
-        }
-      ],
-      "sort": 6,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--saliva--07",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--saliva",
-      "name": "100U · 코어톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 129000
-        }
-      ],
-      "sort": 7,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--saliva--08",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--saliva",
-      "name": "100U · 제오민",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 279000
-        }
-      ],
-      "sort": 8,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--saliva--09",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--saliva",
-      "name": "25U 추가 · 하이톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 30000
-        }
-      ],
-      "sort": 9,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--saliva--10",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--saliva",
-      "name": "25U 추가 · 코어톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 20000
-        }
-      ],
-      "sort": 10,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--saliva--11",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--saliva",
-      "name": "25U 추가 · 제오민",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 60000
-        }
-      ],
-      "sort": 11,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--temple--00",
@@ -1188,7 +752,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--temple--01",
@@ -1206,7 +770,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--temple--02",
@@ -1224,169 +788,91 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--body--00",
       "categoryId": "toxin-contour",
       "sectionId": "toxin-contour--body",
-      "name": "100U · 하이톡스",
+      "name": "하이톡스",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "100U",
           "price": 79000
+        },
+        {
+          "id": "option-1",
+          "label": "200U",
+          "price": 149000
+        },
+        {
+          "id": "option-2",
+          "label": "300U",
+          "price": 219000
         }
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--body--01",
       "categoryId": "toxin-contour",
       "sectionId": "toxin-contour--body",
-      "name": "100U · 코어톡스",
+      "name": "코어톡스",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "100U",
           "price": 129000
+        },
+        {
+          "id": "option-1",
+          "label": "200U",
+          "price": 209000
+        },
+        {
+          "id": "option-2",
+          "label": "300U",
+          "price": 279000
         }
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--body--02",
       "categoryId": "toxin-contour",
       "sectionId": "toxin-contour--body",
-      "name": "100U · 제오민",
+      "name": "제오민",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "100U",
           "price": 279000
+        },
+        {
+          "id": "option-1",
+          "label": "200U",
+          "price": 499000
+        },
+        {
+          "id": "option-2",
+          "label": "300U",
+          "price": 699000
         }
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--body--03",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--body",
-      "name": "200U · 하이톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 149000
-        }
-      ],
-      "sort": 3,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--body--04",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--body",
-      "name": "200U · 코어톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 209000
-        }
-      ],
-      "sort": 4,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--body--05",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--body",
-      "name": "200U · 제오민",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 499000
-        }
-      ],
-      "sort": 5,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--body--06",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--body",
-      "name": "300U · 하이톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 219000
-        }
-      ],
-      "sort": 6,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--body--07",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--body",
-      "name": "300U · 코어톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 279000
-        }
-      ],
-      "sort": 7,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--body--08",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--body",
-      "name": "300U · 제오민",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 699000
-        }
-      ],
-      "sort": 8,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--sweat--00",
@@ -1404,7 +890,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--sweat--01",
@@ -1422,7 +908,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--sweat--02",
@@ -1440,115 +926,76 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--skin--00",
       "categoryId": "toxin-contour",
       "sectionId": "toxin-contour--skin",
-      "name": "1CC · 하이톡스",
+      "name": "하이톡스",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "1CC",
           "price": 39000
+        },
+        {
+          "id": "option-1",
+          "label": "3CC",
+          "price": 109000
         }
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--skin--01",
       "categoryId": "toxin-contour",
       "sectionId": "toxin-contour--skin",
-      "name": "1CC · 코어톡스",
+      "name": "코어톡스",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "1CC",
           "price": 59000
+        },
+        {
+          "id": "option-1",
+          "label": "3CC",
+          "price": 159000
         }
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--skin--02",
       "categoryId": "toxin-contour",
       "sectionId": "toxin-contour--skin",
-      "name": "1CC · 제오민",
+      "name": "제오민",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "1CC",
           "price": 99000
+        },
+        {
+          "id": "option-1",
+          "label": "3CC",
+          "price": 249000
         }
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--skin--03",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--skin",
-      "name": "3CC · 하이톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 109000
-        }
-      ],
-      "sort": 3,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--skin--04",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--skin",
-      "name": "3CC · 코어톡스",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 159000
-        }
-      ],
-      "sort": 4,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "toxin-contour--skin--05",
-      "categoryId": "toxin-contour",
-      "sectionId": "toxin-contour--skin",
-      "name": "3CC · 제오민",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 249000
-        }
-      ],
-      "sort": 5,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--calf--00",
@@ -1566,7 +1013,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--lipolysis--00",
@@ -1589,7 +1036,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--lipolysis--01",
@@ -1612,7 +1059,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "toxin-contour--lipolysis--02",
@@ -1635,157 +1082,82 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "filler-face-volume--lena-attier--00",
+      "docId": "filler-face-volume--volume--00",
       "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--lena-attier",
-      "name": "볼륨 필러 1cc",
+      "sectionId": "filler-face-volume--volume",
+      "name": "국산 (레나 · 아띠에르)",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
+          "label": "1cc",
           "price": 129000
-        }
-      ],
-      "sort": 0,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--lena-attier--01",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--lena-attier",
-      "name": "볼륨 필러 3cc",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
+        },
         {
-          "id": "option-0",
-          "label": "1회",
-          "price": 299000
-        }
-      ],
-      "sort": 1,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--lena-attier--02",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--lena-attier",
-      "name": "볼륨 필러 5cc",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
+          "id": "option-1",
+          "label": "5cc",
           "price": 519000
         }
       ],
-      "sort": 2,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--lena-attier--03",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--lena-attier",
-      "name": "풀페이스 필러 10cc",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 890000
-        }
-      ],
-      "sort": 3,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--lena-attier--04",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--lena-attier",
-      "name": "풀페이스 필러 20cc",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 1650000
-        }
-      ],
-      "sort": 4,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--renefil-rejuviel--00",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--renefil-rejuviel",
-      "name": "볼륨 필러 1cc",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 199000
-        }
-      ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "filler-face-volume--renefil-rejuviel--01",
+      "docId": "filler-face-volume--volume--01",
       "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--renefil-rejuviel",
-      "name": "볼륨 필러 3cc",
+      "sectionId": "filler-face-volume--volume",
+      "name": "국산 프리미엄 (르네필 · 리쥬비엘C)",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
-          "price": 479000
+          "label": "1cc",
+          "price": 199000
+        },
+        {
+          "id": "option-1",
+          "label": "5cc",
+          "price": 759000
         }
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "filler-face-volume--renefil-rejuviel--02",
+      "docId": "filler-face-volume--volume--02",
       "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--renefil-rejuviel",
-      "name": "볼륨 필러 5cc",
+      "sectionId": "filler-face-volume--volume",
+      "name": "수입 (벨로테로 · 레스틸렌)",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "1회",
-          "price": 759000
+          "label": "1cc",
+          "price": 319000
+        },
+        {
+          "id": "option-1",
+          "label": "5cc",
+          "price": 1290000
         }
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "filler-face-volume--renefil-rejuviel--03",
+      "docId": "filler-face-volume--special--00",
       "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--renefil-rejuviel",
-      "name": "특수부위 필러 1cc",
+      "sectionId": "filler-face-volume--special",
+      "name": "국산 프리미엄 (르네필 · 리쥬비엘C)",
       "productLabel": "",
       "description": "",
       "sessions": [
@@ -1795,15 +1167,15 @@
           "price": 259000
         }
       ],
-      "sort": 3,
+      "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "filler-face-volume--renefil-rejuviel--04",
+      "docId": "filler-face-volume--special--01",
       "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--renefil-rejuviel",
-      "name": "특수부위 필러 2cc",
+      "sectionId": "filler-face-volume--special",
+      "name": "수입 (벨로테로 · 레스틸렌)",
       "productLabel": "",
       "description": "",
       "sessions": [
@@ -1813,15 +1185,33 @@
           "price": 429000
         }
       ],
-      "sort": 4,
+      "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "filler-face-volume--renefil-rejuviel--05",
+      "docId": "filler-face-volume--full-face--00",
       "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--renefil-rejuviel",
-      "name": "풀페이스 필러 10cc",
+      "sectionId": "filler-face-volume--full-face",
+      "name": "국산 (레나 · 아띠에르)",
+      "productLabel": "",
+      "description": "",
+      "sessions": [
+        {
+          "id": "option-0",
+          "label": "1회",
+          "price": 890000
+        }
+      ],
+      "sort": 0,
+      "isPublished": true,
+      "seedVersion": "reberry-price-2026-09-16"
+    },
+    {
+      "docId": "filler-face-volume--full-face--01",
+      "categoryId": "filler-face-volume",
+      "sectionId": "filler-face-volume--full-face",
+      "name": "국산 프리미엄 (르네필 · 리쥬비엘C)",
       "productLabel": "",
       "description": "",
       "sessions": [
@@ -1831,15 +1221,15 @@
           "price": 1500000
         }
       ],
-      "sort": 5,
+      "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "filler-face-volume--renefil-rejuviel--06",
+      "docId": "filler-face-volume--full-face--02",
       "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--renefil-rejuviel",
-      "name": "풀페이스 필러 20cc",
+      "sectionId": "filler-face-volume--full-face",
+      "name": "수입 (벨로테로 · 레스틸렌)",
       "productLabel": "",
       "description": "",
       "sessions": [
@@ -1849,189 +1239,9 @@
           "price": 2500000
         }
       ],
-      "sort": 6,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--belotero-restylane--00",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--belotero-restylane",
-      "name": "볼륨 필러 1cc",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 319000
-        }
-      ],
-      "sort": 0,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--belotero-restylane--01",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--belotero-restylane",
-      "name": "볼륨 필러 3cc",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 819000
-        }
-      ],
-      "sort": 1,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--belotero-restylane--02",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--belotero-restylane",
-      "name": "볼륨 필러 5cc",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 1290000
-        }
-      ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--belotero-restylane--03",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--belotero-restylane",
-      "name": "특수부위 필러 1cc",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 429000
-        }
-      ],
-      "sort": 3,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--belotero-restylane--04",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--belotero-restylane",
-      "name": "특수부위 필러 2cc",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 699000
-        }
-      ],
-      "sort": 4,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--belotero-restylane--05",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--belotero-restylane",
-      "name": "풀페이스 필러 10cc",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 2500000
-        }
-      ],
-      "sort": 5,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--belotero-restylane--06",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--belotero-restylane",
-      "name": "풀페이스 필러 20cc",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 4400000
-        }
-      ],
-      "sort": 6,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--package--00",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--package",
-      "name": "원데이 목주름",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 590000
-        }
-      ],
-      "sort": 0,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--package--01",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--package",
-      "name": "원데이 팔자주름",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 390000
-        }
-      ],
-      "sort": 1,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--package--02",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--package",
-      "name": "원데이 팔자주름 스페셜",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 690000
-        }
-      ],
-      "sort": 2,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "filler-face-volume--nose-line--00",
@@ -2049,7 +1259,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "filler-face-volume--nose-line--01",
@@ -2067,7 +1277,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "filler-face-volume--nose-line--02",
@@ -2085,7 +1295,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "filler-face-volume--nose-line--03",
@@ -2103,43 +1313,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--hyalase--00",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--hyalase",
-      "name": "본원",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 79000
-        }
-      ],
-      "sort": 0,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
-    },
-    {
-      "docId": "filler-face-volume--hyalase--01",
-      "categoryId": "filler-face-volume",
-      "sectionId": "filler-face-volume--hyalase",
-      "name": "타원",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 99000
-        }
-      ],
-      "sort": 1,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--rejuran--00",
@@ -2162,7 +1336,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--rejuran--01",
@@ -2185,7 +1359,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--rejuran--02",
@@ -2208,7 +1382,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--rejuran--03",
@@ -2231,7 +1405,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--juvelook--00",
@@ -2254,7 +1428,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--juvelook--01",
@@ -2277,7 +1451,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--juvelook--02",
@@ -2300,7 +1474,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--juvelook--03",
@@ -2323,7 +1497,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--rejublook--00",
@@ -2346,7 +1520,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--lituo--00",
@@ -2369,7 +1543,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--hilo-wave--00",
@@ -2387,7 +1561,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--hilo-wave--01",
@@ -2405,7 +1579,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--hilo-wave--02",
@@ -2423,7 +1597,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--reberry-signature--00",
@@ -2446,7 +1620,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--reberry-signature--01",
@@ -2469,7 +1643,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--new-arty--00",
@@ -2492,7 +1666,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-booster--lilyid--00",
@@ -2515,7 +1689,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--titanium--00",
@@ -2538,7 +1712,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--titanium--01",
@@ -2561,7 +1735,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--titanium--02",
@@ -2584,7 +1758,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--titanium--03",
@@ -2602,7 +1776,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--titanium--04",
@@ -2620,7 +1794,7 @@
       ],
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--titanium--05",
@@ -2638,7 +1812,7 @@
       ],
       "sort": 5,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--onda--00",
@@ -2661,7 +1835,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--onda--01",
@@ -2684,7 +1858,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--onda--02",
@@ -2707,7 +1881,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--vro--00",
@@ -2730,7 +1904,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--vro--01",
@@ -2753,7 +1927,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--vro--02",
@@ -2776,7 +1950,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--vro--03",
@@ -2799,7 +1973,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--vro--04",
@@ -2822,7 +1996,7 @@
       ],
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--vro--05",
@@ -2845,7 +2019,7 @@
       ],
       "sort": 5,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--levinas--00",
@@ -2863,7 +2037,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--levinas--01",
@@ -2886,7 +2060,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--inmode--00",
@@ -2909,7 +2083,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--inmode--01",
@@ -2932,7 +2106,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--inmode--02",
@@ -2955,7 +2129,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--inmode--03",
@@ -2978,7 +2152,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--shurink--00",
@@ -3001,7 +2175,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--shurink--01",
@@ -3024,7 +2198,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--shurink--02",
@@ -3047,7 +2221,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--deuce--00",
@@ -3065,7 +2239,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--deuce--01",
@@ -3083,7 +2257,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--deuce--02",
@@ -3101,7 +2275,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--deuce--03",
@@ -3119,7 +2293,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "lifting-anti-aging--deuce--04",
@@ -3137,7 +2311,7 @@
       ],
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--whitening--00",
@@ -3155,7 +2329,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--whitening--01",
@@ -3173,7 +2347,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--whitening--02",
@@ -3191,7 +2365,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--whitening--03",
@@ -3209,7 +2383,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--whitening--04",
@@ -3227,7 +2401,7 @@
       ],
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--redness--00",
@@ -3250,7 +2424,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--redness--01",
@@ -3273,7 +2447,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--redness--02",
@@ -3301,7 +2475,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--acne--00",
@@ -3324,7 +2498,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--acne--01",
@@ -3342,7 +2516,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--acne--02",
@@ -3360,7 +2534,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--acne--03",
@@ -3378,7 +2552,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--potenza--00",
@@ -3401,7 +2575,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--potenza--01",
@@ -3429,7 +2603,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--potenza--02",
@@ -3457,7 +2631,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--pore-scar--00",
@@ -3480,7 +2654,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--pore-scar--01",
@@ -3498,7 +2672,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "pigment-pore-acne--pore-scar--02",
@@ -3516,7 +2690,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--care--00",
@@ -3534,7 +2708,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--care--01",
@@ -3557,7 +2731,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--care--02",
@@ -3575,7 +2749,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--care--03",
@@ -3593,7 +2767,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--care--04",
@@ -3611,7 +2785,7 @@
       ],
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--care--05",
@@ -3629,7 +2803,7 @@
       ],
       "sort": 5,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--care--06",
@@ -3652,7 +2826,7 @@
       ],
       "sort": 6,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--care--07",
@@ -3675,7 +2849,7 @@
       ],
       "sort": 7,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--iv--00",
@@ -3698,7 +2872,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--iv--01",
@@ -3721,7 +2895,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--iv--02",
@@ -3749,7 +2923,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "skin-care--iv--03",
@@ -3777,7 +2951,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--body-lipolysis--00",
@@ -3800,7 +2974,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--body-lipolysis--01",
@@ -3823,7 +2997,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--body-lipolysis--02",
@@ -3846,7 +3020,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--body-lipolysis--03",
@@ -3874,7 +3048,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--body-toning--00",
@@ -3897,7 +3071,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--body-toning--01",
@@ -3915,7 +3089,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--co2--00",
@@ -3933,7 +3107,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--keloid--00",
@@ -3951,7 +3125,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--keloid--01",
@@ -3969,7 +3143,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--keloid--02",
@@ -3987,7 +3161,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--keloid--03",
@@ -4005,7 +3179,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--keloid--04",
@@ -4023,7 +3197,7 @@
       ],
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--tattoo--00",
@@ -4046,7 +3220,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--tattoo--01",
@@ -4069,7 +3243,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "body-etc-laser--tattoo--02",
@@ -4092,7 +3266,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-face--00",
@@ -4120,7 +3294,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-face--01",
@@ -4148,7 +3322,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-face--02",
@@ -4176,7 +3350,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-face--03",
@@ -4204,7 +3378,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-face--04",
@@ -4232,7 +3406,7 @@
       ],
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-face--00",
@@ -4260,7 +3434,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-face--01",
@@ -4288,7 +3462,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-face--02",
@@ -4316,7 +3490,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-face--03",
@@ -4344,7 +3518,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-face--04",
@@ -4372,7 +3546,7 @@
       ],
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-face--05",
@@ -4400,7 +3574,7 @@
       ],
       "sort": 5,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-face--06",
@@ -4428,7 +3602,7 @@
       ],
       "sort": 6,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-body--00",
@@ -4456,7 +3630,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-body--01",
@@ -4484,7 +3658,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-body--02",
@@ -4512,7 +3686,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-body--03",
@@ -4540,7 +3714,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-body--04",
@@ -4568,7 +3742,7 @@
       ],
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-body--05",
@@ -4596,7 +3770,7 @@
       ],
       "sort": 5,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-body--06",
@@ -4624,7 +3798,7 @@
       ],
       "sort": 6,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-body--07",
@@ -4652,7 +3826,7 @@
       ],
       "sort": 7,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--female-body--08",
@@ -4680,7 +3854,7 @@
       ],
       "sort": 8,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-body--00",
@@ -4708,7 +3882,7 @@
       ],
       "sort": 0,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-body--01",
@@ -4736,7 +3910,7 @@
       ],
       "sort": 1,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-body--02",
@@ -4764,7 +3938,7 @@
       ],
       "sort": 2,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-body--03",
@@ -4792,7 +3966,7 @@
       ],
       "sort": 3,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-body--04",
@@ -4820,7 +3994,7 @@
       ],
       "sort": 4,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-body--05",
@@ -4848,7 +4022,7 @@
       ],
       "sort": 5,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-body--06",
@@ -4876,7 +4050,7 @@
       ],
       "sort": 6,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     },
     {
       "docId": "hair-removal--male-body--07",
@@ -4904,7 +4078,7 @@
       ],
       "sort": 7,
       "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-07"
+      "seedVersion": "reberry-price-2026-09-16"
     }
   ]
 }

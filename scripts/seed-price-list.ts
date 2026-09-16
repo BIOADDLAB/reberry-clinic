@@ -42,12 +42,15 @@ const seedPath = resolve(process.cwd(), 'data/price-list.seed.json');
 
 async function main() {
     const payload = JSON.parse(await readFile(seedPath, 'utf8')) as SeedPayload;
+    /* 회차 이름은 예전에는 "3회 / 8개 / 2병" 뿐이었지만, 2026.09.16 개편으로
+       용량·부위도 열 이름이 된다 (50U · 1cc · 1부위 · 올인원). 표 머리글에 들어가니 짧게만 제한한다. */
     const invalidItem = payload.items.find(
         (item) =>
             item.sessions.length === 0 ||
             item.sessions.some(
                 (session) =>
-                    !/^\d+(?:\.\d+)?(?:회|개|병)$/.test(session.label) ||
+                    session.label.trim().length === 0 ||
+                    session.label.trim().length > 10 ||
                     !Number.isInteger(session.price) ||
                     session.price <= 0,
             ),
@@ -77,22 +80,16 @@ async function main() {
     const targetCategoryIds = new Set(payload.categories.map((category) => category.docId));
     const targetSectionIds = new Set(payload.sections.map((section) => section.docId));
     const targetItemIds = new Set(payload.items.map((item) => item.docId));
+    /* #ISSUE: 지울 대상을 'xlsx-seed-' 로 시작하는 옛 시드로만 한정해 놨더니,
+               2026.09.16 개편에서 없앤 카드(히알라제·필러 패키지·주름 보톡스 리터치)가
+               --reset 없이는 홈페이지에 그대로 남았다.
+       → 시드가 만든 문서(seedVersion 이 있는 문서) 중 이번 시드에 없는 것을 지운다.
+         관리자에서 손으로 만든 문서는 seedVersion 이 없어 그대로 남는다. */
+    const seeded = (entry: { data: () => Record<string, unknown> }) => String(entry.data().seedVersion ?? '').length > 0;
     const staleSeedDocs = resetAll ? [] : [
-        ...existingCategories.docs.filter(
-            (entry) =>
-                String(entry.data().seedVersion ?? '').startsWith('xlsx-seed-') &&
-                !targetCategoryIds.has(entry.id),
-        ),
-        ...existingSections.docs.filter(
-            (entry) =>
-                String(entry.data().seedVersion ?? '').startsWith('xlsx-seed-') &&
-                !targetSectionIds.has(entry.id),
-        ),
-        ...existingItems.docs.filter(
-            (entry) =>
-                String(entry.data().seedVersion ?? '').startsWith('xlsx-seed-') &&
-                !targetItemIds.has(entry.id),
-        ),
+        ...existingCategories.docs.filter((entry) => seeded(entry) && !targetCategoryIds.has(entry.id)),
+        ...existingSections.docs.filter((entry) => seeded(entry) && !targetSectionIds.has(entry.id)),
+        ...existingItems.docs.filter((entry) => seeded(entry) && !targetItemIds.has(entry.id)),
     ];
     for (let offset = 0; offset < staleSeedDocs.length; offset += 450) {
         const batch = writeBatch(db);

@@ -76,18 +76,19 @@ const toString = (value: unknown) => (typeof value === 'string' ? value : '');
 const toNumber = (value: unknown, fallback = 0) =>
     typeof value === 'number' && Number.isFinite(value) ? value : fallback;
 
+/* #ISSUE: 여기서 0원 회차를 걸러 버려서, 관리자에서 [항목 추가] 로 만든 줄(가격 0원)이
+           sessions 없는 항목이 되고 → 가격을 적어도 저장이 안 됐다.
+   → 0원도 그대로 들고 온다. 홈페이지에 안 내는 일은 priceBoard 가 맡는다. */
 const normalizeSessions = (value: unknown): PriceSession[] => {
     if (!Array.isArray(value)) return [];
-    return value
-        .map((entry, index) => {
-            const option = entry && typeof entry === 'object' ? (entry as Record<string, unknown>) : {};
-            return {
-                id: toString(option.id) || `option-${index}`,
-                label: toString(option.label) || '1회',
-                price: Math.max(0, Math.round(toNumber(option.price))),
-            };
-        })
-        .filter((session) => session.price > 0);
+    return value.map((entry, index) => {
+        const option = entry && typeof entry === 'object' ? (entry as Record<string, unknown>) : {};
+        return {
+            id: toString(option.id) || `option-${index}`,
+            label: toString(option.label) || '1회',
+            price: Math.max(0, Math.round(toNumber(option.price))),
+        };
+    });
 };
 
 const normalizeCategory = (docId: string, data: Record<string, unknown>): PriceCategory => ({

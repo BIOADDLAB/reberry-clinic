@@ -219,6 +219,7 @@
             "body": "Body & Other Lasers",
             "hairRemoval": "Hair Removal"
         },
+        "columnItem": "Item",
         "vatNotice": "Prices exclude VAT and may vary by treatment area and dosage.",
         "kakaoCta": "Ask about a reservation",
         "search": "Search treatments",

@@ -219,6 +219,7 @@
             "body": "ボディ・その他レーザー",
             "hairRemoval": "脱毛"
         },
+        "columnItem": "区分",
         "vatNotice": "表示価格はVAT別で、施術部位や容量により異なる場合があります。",
         "kakaoCta": "カカオトークで予約相談",
         "search": "施術検索",

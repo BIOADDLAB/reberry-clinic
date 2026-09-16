@@ -1,5 +1,11 @@
 /* 수가표 관리 — 홈페이지 수가표와 같은 탭·카드 표에서 이름과 가격을 눌러 고친다.
-   카드는 어느 탭에서든 기본으로 전부 펼쳐 둔다(고객 화면과 같은 상태로 보고 고치게). */
+   카드는 어느 탭에서든 기본으로 전부 펼쳐 둔다(고객 화면과 같은 상태로 보고 고치게).
+
+   #ISSUE: 2026.09.16 수가표를 "회차·용량을 열로 세운 표" 로 묶었는데(priceBoard.ts),
+           관리자는 한 줄에 가격 한 칸(sessions[0])만 고칠 수 있어서
+           주름 보톡스 3부위·올인원처럼 두 번째 열부터는 아예 손댈 수가 없었다.
+   → 홈페이지와 같은 열을 그려 놓고 칸마다 가격을 고치게 한다.
+     열 이름은 카드 단위로 한 번 고치면 그 카드 모든 줄에 같이 반영된다. */
 
 'use client';
 
@@ -23,6 +29,7 @@ import {
     updatePriceSectionSorts,
     type PriceCategory,
     type PriceListItem,
+    type PriceListItemInput,
     type PriceSection,
 } from '@/components/lib/priceList';
 import { buildPriceBoard } from '@/components/lib/priceBoard';
@@ -47,8 +54,32 @@ import {
 } from '@/components/admin/AdminUI';
 import SearchIcon from '@/components/ui/SearchIcon';
 
-const key = (kind: 'cat' | 'sec' | 'item', id: string, field: string) => `${kind}:${id}:${field}`;
+const key = (kind: 'cat' | 'sec' | 'item' | 'col', id: string, field: string) => `${kind}:${id}:${field}`;
 const digits = (value: string) => Number(value.replace(/[^0-9]/g, '')) || 0;
+
+/** 카드에 놓을 가격 열. 홈페이지와 같은 순서(줄에 처음 나온 순)로 모은다. 빈 카드는 1회 한 칸. */
+function columnLabels(cardItems: PriceListItem[]): string[] {
+    const labels: string[] = [];
+    for (const item of cardItems) {
+        for (const session of item.sessions) {
+            const label = session.label.trim();
+            if (label && !labels.includes(label)) labels.push(label);
+        }
+    }
+    return labels.length > 0 ? labels : ['1회'];
+}
+
+/** 항목 저장용 형태. docId·sort 처럼 건드리면 안 되는 값이 섞여 들어가지 않게 한 곳에서 만든다. */
+const itemInput = (item: PriceListItem, patch: Partial<PriceListItemInput> = {}): PriceListItemInput => ({
+    categoryId: item.categoryId,
+    sectionId: item.sectionId,
+    name: item.name,
+    productLabel: item.productLabel,
+    description: item.description,
+    sessions: item.sessions,
+    isPublished: item.isPublished,
+    ...patch,
+});
 
 export default function PriceListManager() {
     const [categories, setCategories] = useState<PriceCategory[]>([]);
@@ -101,24 +132,34 @@ export default function PriceListManager() {
                         isPublished: section.isPublished,
                     });
                 }
+                /* 열 이름은 카드 하나에 하나지만 실제 값은 줄마다 들고 있다(sessions).
+                   → 어떤 이름을 어떤 이름으로 바꿀지 먼저 모아 두고, 항목은 아래에서 한 번만 저장한다. */
+                const renames = new Map<string, Map<string, string>>();
+                for (const section of sections) {
+                    for (const column of columnLabels(items.filter((item) => item.sectionId === section.docId))) {
+                        const next = edits[key('col', section.docId, column)]?.trim();
+                        if (!next || next === column) continue;
+                        renames.set(section.docId, (renames.get(section.docId) ?? new Map()).set(column, next));
+                    }
+                }
+
                 for (const item of items) {
                     const name = edits[key('item', item.docId, 'name')];
-                    const price = edits[key('item', item.docId, 'price')];
-                    if (name === undefined && price === undefined) continue;
-                    await updatePriceListItem(item.docId, {
-                        categoryId: item.categoryId,
-                        sectionId: item.sectionId,
-                        name: name ?? item.name,
-                        productLabel: item.productLabel,
-                        description: item.description,
-                        sessions:
-                            price === undefined
-                                ? item.sessions
-                                : item.sessions.map((session, index) =>
-                                      index === 0 ? { ...session, price: digits(price) } : session,
-                                  ),
-                        isPublished: item.isPublished,
+                    const rename = renames.get(item.sectionId);
+                    const sessions = item.sessions.map((session) => {
+                        const price = edits[key('item', item.docId, `price:${session.id}`)];
+                        return {
+                            ...session,
+                            label: rename?.get(session.label.trim()) ?? session.label,
+                            price: price === undefined ? session.price : digits(price),
+                        };
                     });
+                    const touched = sessions.some(
+                        (session, index) =>
+                            session.label !== item.sessions[index].label || session.price !== item.sessions[index].price,
+                    );
+                    if (name === undefined && !touched) continue;
+                    await updatePriceListItem(item.docId, itemInput(item, { name: name ?? item.name, sessions }));
                 }
                 clearEdits();
             },
@@ -170,6 +211,49 @@ export default function PriceListManager() {
     const categoryIds = categories.map((category) => category.docId);
     const cardIds = cards.map((card) => card.section.docId);
     const activeIndex = activeCategory ? categoryIds.indexOf(activeCategory.docId) : -1;
+    /* 맨 아래 안내 줄에 쓰는 최저가. 방금 만든 0원 칸은 값이 아니라 빈칸이므로 뺀다. */
+    const lowestPrice = Math.min(
+        ...items.flatMap((item) => item.sessions.map((session) => session.price)).filter((price) => price > 0),
+    );
+
+    /* ── 가격 열 ─────────────────────────────────────────────────────
+       열은 카드에 저장되는 값이 아니라 "줄들이 들고 있는 회차·용량 이름" 을 모은 것이다.
+       그래서 열을 더하고 지우는 일은 그 카드 모든 줄을 같이 고치는 것과 같다. */
+    const setSessions = async (cardItems: PriceListItem[], make: (item: PriceListItem) => PriceListItem['sessions']) => {
+        await Promise.all(cardItems.map((item) => updatePriceListItem(item.docId, itemInput(item, { sessions: make(item) }))));
+    };
+
+    const addColumn = (cardItems: PriceListItem[], label: string) =>
+        run(
+            () =>
+                setSessions(cardItems, (item) => [
+                    ...item.sessions,
+                    { id: `option-${item.sessions.length}-${Date.now()}`, label, price: 0 },
+                ]),
+            '열 추가 실패',
+            `"${label}" 열을 만들었습니다`,
+        );
+
+    const removeColumn = (cardItems: PriceListItem[], label: string) =>
+        run(
+            () => setSessions(cardItems, (item) => item.sessions.filter((session) => session.label.trim() !== label)),
+            '열 삭제 실패',
+            `"${label}" 열을 지웠습니다`,
+        );
+
+    /** 그 줄에만 없는 칸 하나 만들기 (예: 레비나스 3000샷에 3회 가격을 새로 넣을 때) */
+    const addCell = (item: PriceListItem, label: string) =>
+        run(
+            () =>
+                updatePriceListItem(
+                    item.docId,
+                    itemInput(item, {
+                        sessions: [...item.sessions, { id: `option-${item.sessions.length}-${Date.now()}`, label, price: 0 }],
+                    }),
+                ),
+            '칸 추가 실패',
+            `"${label}" 칸을 만들었습니다`,
+        );
 
     if (loading) {
         return <div className="rounded-2xl bg-white py-20 text-center text-small text-latte">수가표를 불러오는 중입니다.</div>;
@@ -187,6 +271,9 @@ export default function PriceListManager() {
                 <b className="text-cocoa">사용법</b> · 표 안의 글자나 가격을 눌러 고칩니다. 고친 칸은{' '}
                 <span className="rounded bg-[#FFF6D6] px-1 py-0.5 text-cocoa">노란색</span>이 됩니다. 다 고친 뒤 아래{' '}
                 <b className="text-cocoa">[저장하기]</b>를 눌러야 홈페이지에 나갑니다.
+                <br />
+                가격이 여러 개인 카드는 <b className="text-cocoa">가격 열</b>(1부위·3부위·올인원, 50U·75U·100U 처럼)로
+                나뉩니다. 카드 맨 윗줄에서 열 이름을 고치면 그 카드 모든 줄에 함께 반영됩니다.
                 <br />
                 순서는 왼쪽 <b className="text-cocoa">점 여섯 개(⠿)</b>를 잡고 끌거나 <b className="text-cocoa">화살표</b>로
                 한 칸씩 옮깁니다. 추가·삭제·순서·숨기기는 누르는 즉시 반영됩니다.
@@ -333,6 +420,8 @@ export default function PriceListManager() {
                     {cards.map((card, index) => {
                         const open = openKeys.includes(card.key);
                         const sectionId = card.section.docId;
+                        const itemIds = card.items.map((entry) => entry.docId);
+                        const columns = columnLabels(card.items);
                         return (
                             <article
                                 key={card.key}
@@ -372,9 +461,30 @@ export default function PriceListManager() {
 
                                 {open && (
                                     <div className="px-3 pb-3 md:px-5">
-                                        {(() => {
-                                            const itemIds = card.items.map((entry) => entry.docId);
-                                            return card.items.map((item, itemIndex) => (
+                                        {/* 열 이름 줄 — 홈페이지 표 머리글과 같다. 여기서 고치면 이 카드 모든 줄에 반영된다.
+                                            열이 하나뿐이면 홈페이지에도 머리글이 안 나오므로 이 줄도 감춘다. */}
+                                        {columns.length > 1 && (
+                                            <div className="flex items-center gap-2 border-t border-cocoa/[0.07] py-2">
+                                                <span aria-hidden className="w-5 shrink-0" />
+                                                <p className="min-w-0 flex-1 px-1.5 text-caption-sm font-semibold text-latte">
+                                                    가격 열 (회차 · 용량 · 부위)
+                                                </p>
+                                                {columns.map((column) => (
+                                                    <div key={column} className="w-24 shrink-0 md:w-28">
+                                                        <Field
+                                                            value={shown(key('col', sectionId, column), column)}
+                                                            dirty={key('col', sectionId, column) in edits}
+                                                            onChange={(value) => setEdit(key('col', sectionId, column), value, column)}
+                                                            align="right"
+                                                            className="text-caption-sm font-semibold text-cocoa"
+                                                        />
+                                                    </div>
+                                                ))}
+                                                <span className="w-24 shrink-0" />
+                                            </div>
+                                        )}
+
+                                        {card.items.map((item, itemIndex) => (
                                             <div
                                                 key={item.docId}
                                                 {...(locked ? {} : itemDrag.rowProps(item.docId, itemIds))}
@@ -389,21 +499,28 @@ export default function PriceListManager() {
                                                     onChange={(value) => setEdit(key('item', item.docId, 'name'), value, item.name)}
                                                     className="min-w-0 flex-1 text-caption text-latte md:text-small"
                                                 />
-                                                <div className="w-[20%] min-w-24 shrink-0">
-                                                    <MoneyField
-                                                        value={shown(key('item', item.docId, 'price'), String(item.sessions[0]?.price ?? 0))}
-                                                        dirty={key('item', item.docId, 'price') in edits}
-                                                        onChange={(value) =>
-                                                            setEdit(
-                                                                key('item', item.docId, 'price'),
-                                                                value,
-                                                                String(item.sessions[0]?.price ?? 0),
-                                                            )
-                                                        }
-                                                        className="text-caption font-medium text-cocoa md:text-small"
-                                                    />
-                                                </div>
-                                                <span className="flex shrink-0 items-center gap-1">
+                                                {columns.map((column) => {
+                                                    const session = item.sessions.find((entry) => entry.label.trim() === column);
+                                                    const priceKey = key('item', item.docId, `price:${session?.id ?? column}`);
+                                                    return (
+                                                        <div key={column} className="w-24 shrink-0 md:w-28">
+                                                            {session ? (
+                                                                <MoneyField
+                                                                    value={shown(priceKey, String(session.price))}
+                                                                    dirty={priceKey in edits}
+                                                                    onChange={(value) => setEdit(priceKey, value, String(session.price))}
+                                                                    className="text-caption font-medium text-cocoa md:text-small"
+                                                                />
+                                                            ) : (
+                                                                /* 이 줄에는 없는 열 — 홈페이지에서 "–" 로 나오는 칸 */
+                                                                <TextAction disabled={busy} onClick={() => void addCell(item, column)}>
+                                                                    + 가격 넣기
+                                                                </TextAction>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })}
+                                                <span className="flex w-24 shrink-0 items-center justify-end gap-1">
                                                     <MoveButton
                                                         dir="up"
                                                         disabled={locked || itemIndex === 0}
@@ -426,8 +543,7 @@ export default function PriceListManager() {
                                                     </TextAction>
                                                 </span>
                                             </div>
-                                            ));
-                                        })()}
+                                        ))}
 
                                         <div className="mt-3">
                                             <AddRowButton
@@ -441,7 +557,12 @@ export default function PriceListManager() {
                                                                 name: '새 항목',
                                                                 productLabel: '',
                                                                 description: '',
-                                                                sessions: [{ id: 'option-0', label: '1회', price: 0 }],
+                                                                // 새 줄도 이 카드와 같은 열을 갖게 만든다
+                                                                sessions: columns.map((label, columnIndex) => ({
+                                                                    id: `option-${columnIndex}`,
+                                                                    label,
+                                                                    price: 0,
+                                                                })),
                                                                 isPublished: true,
                                                             }),
                                                         '추가 실패',
@@ -471,6 +592,37 @@ export default function PriceListManager() {
                                                 }
                                             />
                                             <TextAction
+                                                disabled={busy || card.items.length === 0}
+                                                onClick={() => {
+                                                    const label = window.prompt(
+                                                        '새로 만들 가격 열 이름을 적어 주세요. (예: 3회, 100U, 올인원)',
+                                                        '3회',
+                                                    );
+                                                    if (!label?.trim() || columns.includes(label.trim())) return;
+                                                    void addColumn(card.items, label.trim());
+                                                }}
+                                            >
+                                                + 가격 열 추가
+                                            </TextAction>
+                                            {columns.length > 1 && (
+                                                <span className="flex flex-wrap items-center gap-1 text-caption-sm text-latte">
+                                                    열 지우기
+                                                    {columns.map((column) => (
+                                                        <TextAction
+                                                            key={column}
+                                                            tone="danger"
+                                                            disabled={busy}
+                                                            onClick={() => {
+                                                                if (!confirmDelete(`${card.section.label} 의 ${column} 열`)) return;
+                                                                void removeColumn(card.items, column);
+                                                            }}
+                                                        >
+                                                            {column}
+                                                        </TextAction>
+                                                    ))}
+                                                </span>
+                                            )}
+                                            <TextAction
                                                 tone="danger"
                                                 disabled={busy}
                                                 onClick={() => {
@@ -491,7 +643,7 @@ export default function PriceListManager() {
 
                 <p className="mt-10 text-center text-caption text-latte">
                     표시된 가격은 부가세 별도입니다.
-                    {items.length > 0 && ` · 최저 ${formatPrice(Math.min(...items.map((item) => item.sessions[0]?.price ?? 0)))}`}
+                    {Number.isFinite(lowestPrice) && ` · 최저 ${formatPrice(lowestPrice)}`}
                 </p>
             </div>
 
