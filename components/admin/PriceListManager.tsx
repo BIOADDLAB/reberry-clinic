@@ -18,6 +18,7 @@ import {
     deletePriceListItem,
     deletePriceSection,
     formatPrice,
+    isConsultPrice,
     subscribePriceCategories,
     subscribePriceListItems,
     subscribePriceSections,
@@ -505,9 +506,15 @@ export default function PriceListManager() {
                                                     return (
                                                         <div key={column} className="w-24 shrink-0 md:w-28">
                                                             {session ? (
+                                                                /* 상담 문의 칸은 금액이 없으니 빈 칸으로 두고 흐린 글씨로 알려 준다.
+                                                                   숫자를 적으면 그대로 금액이 된다. */
                                                                 <MoneyField
-                                                                    value={shown(priceKey, String(session.price))}
+                                                                    value={shown(
+                                                                        priceKey,
+                                                                        isConsultPrice(session.price) ? '' : String(session.price),
+                                                                    )}
                                                                     dirty={priceKey in edits}
+                                                                    placeholder={isConsultPrice(session.price) ? '상담 문의' : '0'}
                                                                     onChange={(value) => setEdit(priceKey, value, String(session.price))}
                                                                     className="text-caption font-medium text-cocoa md:text-small"
                                                                 />

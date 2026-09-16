@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { collection, doc, getDocs, terminate, writeBatch } from 'firebase/firestore';
 import { db } from '../components/lib/firebase';
+import { CONSULT_PRICE } from '../components/lib/priceList';
 
 interface SeedPayload {
     version: string;
@@ -52,7 +53,8 @@ async function main() {
                     session.label.trim().length === 0 ||
                     session.label.trim().length > 10 ||
                     !Number.isInteger(session.price) ||
-                    session.price <= 0,
+                    /* 0원은 값을 빠뜨린 것이니 막고, 상담 문의는 통과시킨다 */
+                    (session.price <= 0 && session.price !== CONSULT_PRICE),
             ),
     );
     if (invalidItem) throw new Error(`Invalid seed item: ${invalidItem.name}`);

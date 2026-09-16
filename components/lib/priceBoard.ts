@@ -15,7 +15,7 @@
      다만 줄마다 회차가 다른 카드(색소·미백처럼 4·8·10·12회가 섞인 곳)를 표로 만들면
      빈칸이 절반을 넘어 오히려 못 읽는다 → 그런 카드는 예전처럼 한 줄에 가격 하나로 둔다. */
 
-import type { PriceCategory, PriceListItem, PriceSection } from './priceList';
+import { isConsultPrice, type PriceCategory, type PriceListItem, type PriceSection } from './priceList';
 
 export interface PriceBoardCell {
     sessionId: string;
@@ -59,8 +59,10 @@ const compact = (value: string) => value.replace(/\s+/g, ' ').trim();
 const MAX_TABLE_COLUMNS = 4;
 const MIN_TABLE_FILL = 0.65;
 
-/** 가격이 적힌 회차·용량만. 0원은 관리자에서 아직 안 채운 칸이라 홈페이지에 내지 않는다. */
-const pricedSessions = (item: PriceListItem) => item.sessions.filter((session) => session.price > 0);
+/** 홈페이지에 낼 회차·용량만. 0원은 관리자에서 아직 안 채운 칸이라 내지 않고,
+    상담 문의(음수)는 금액 대신 문구로 나가야 하니 남긴다. */
+const pricedSessions = (item: PriceListItem) =>
+    item.sessions.filter((session) => session.price > 0 || isConsultPrice(session.price));
 
 /** 1회 · 3회 · 10회처럼 숫자와 단위가 같은 열끼리는 숫자 순으로 세운다 (엑셀 순서가 뒤섞여 있어서) */
 function sortColumns(columns: string[]): string[] {

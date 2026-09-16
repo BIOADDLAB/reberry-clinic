@@ -317,10 +317,18 @@
       "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "pigment-pore-acne--acne",
+      "docId": "pigment-pore-acne--acne-ptt",
       "categoryId": "pigment-pore-acne",
-      "label": "여드름",
+      "label": "여드름 골드 PTT",
       "sort": 2,
+      "isPublished": true,
+      "seedVersion": "reberry-price-2026-09-16"
+    },
+    {
+      "docId": "pigment-pore-acne--acne-program",
+      "categoryId": "pigment-pore-acne",
+      "label": "여드름 치료 프로그램",
+      "sort": 3,
       "isPublished": true,
       "seedVersion": "reberry-price-2026-09-16"
     },
@@ -328,7 +336,7 @@
       "docId": "pigment-pore-acne--potenza",
       "categoryId": "pigment-pore-acne",
       "label": "포텐자",
-      "sort": 3,
+      "sort": 4,
       "isPublished": true,
       "seedVersion": "reberry-price-2026-09-16"
     },
@@ -336,7 +344,7 @@
       "docId": "pigment-pore-acne--pore-scar",
       "categoryId": "pigment-pore-acne",
       "label": "모공·흉터",
-      "sort": 4,
+      "sort": 5,
       "isPublished": true,
       "seedVersion": "reberry-price-2026-09-16"
     },
@@ -2317,14 +2325,14 @@
       "docId": "pigment-pore-acne--whitening--00",
       "categoryId": "pigment-pore-acne",
       "sectionId": "pigment-pore-acne--whitening",
-      "name": "진주광채 피코 & 헐리우드 토닝",
+      "name": "헐리우드 토닝 체험가",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "4회",
-          "price": 1290000
+          "label": "1회",
+          "price": -1
         }
       ],
       "sort": 0,
@@ -2335,13 +2343,13 @@
       "docId": "pigment-pore-acne--whitening--01",
       "categoryId": "pigment-pore-acne",
       "sectionId": "pigment-pore-acne--whitening",
-      "name": "프리미엄 진주광채",
+      "name": "프리미엄 진주광채 프로그램 (기미/잡티/주근깨/흑자/검버섯/점 일괄치료)",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "8회",
+          "label": "1회",
           "price": 1990000
         }
       ],
@@ -2353,13 +2361,13 @@
       "docId": "pigment-pore-acne--whitening--02",
       "categoryId": "pigment-pore-acne",
       "sectionId": "pigment-pore-acne--whitening",
-      "name": "시그니처 진주광채",
+      "name": "시그니처 진주광채 프로그램 (기미/잡티/주근깨/흑자/검버섯/점 일괄치료 및 안티에이징)",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "8회",
+          "label": "1회",
           "price": 2490000
         }
       ],
@@ -2368,58 +2376,17 @@
       "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "pigment-pore-acne--whitening--03",
-      "categoryId": "pigment-pore-acne",
-      "sectionId": "pigment-pore-acne--whitening",
-      "name": "프레스티지 진주광채",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "10회",
-          "price": 2790000
-        }
-      ],
-      "sort": 3,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-16"
-    },
-    {
-      "docId": "pigment-pore-acne--whitening--04",
-      "categoryId": "pigment-pore-acne",
-      "sectionId": "pigment-pore-acne--whitening",
-      "name": "플래티넘 진주광채",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "12회",
-          "price": 3190000
-        }
-      ],
-      "sort": 4,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-16"
-    },
-    {
       "docId": "pigment-pore-acne--redness--00",
       "categoryId": "pigment-pore-acne",
       "sectionId": "pigment-pore-acne--redness",
-      "name": "엑셀 홍조",
+      "name": "혈관성 홍조치료 프로그램",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
           "label": "1회",
-          "price": 299000
-        },
-        {
-          "id": "option-1",
-          "label": "4회",
-          "price": 990000
+          "price": 1690000
         }
       ],
       "sort": 0,
@@ -2430,19 +2397,14 @@
       "docId": "pigment-pore-acne--redness--01",
       "categoryId": "pigment-pore-acne",
       "sectionId": "pigment-pore-acne--redness",
-      "name": "프리미엄 엑셀 홍조",
+      "name": "염증성 홍조치료 프로그램",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "4회",
-          "price": 1690000
-        },
-        {
-          "id": "option-1",
-          "label": "8회",
-          "price": 2690000
+          "label": "1회",
+          "price": 1490000
         }
       ],
       "sort": 1,
@@ -2450,37 +2412,9 @@
       "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "pigment-pore-acne--redness--02",
+      "docId": "pigment-pore-acne--acne-ptt--00",
       "categoryId": "pigment-pore-acne",
-      "sectionId": "pigment-pore-acne--redness",
-      "name": "프리미엄 재생 홍조",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 319000
-        },
-        {
-          "id": "option-1",
-          "label": "4회",
-          "price": 1490000
-        },
-        {
-          "id": "option-2",
-          "label": "8회",
-          "price": 2290000
-        }
-      ],
-      "sort": 2,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-16"
-    },
-    {
-      "docId": "pigment-pore-acne--acne--00",
-      "categoryId": "pigment-pore-acne",
-      "sectionId": "pigment-pore-acne--acne",
+      "sectionId": "pigment-pore-acne--acne-ptt",
       "name": "골드 PTT",
       "productLabel": "",
       "description": "",
@@ -2501,10 +2435,10 @@
       "seedVersion": "reberry-price-2026-09-16"
     },
     {
-      "docId": "pigment-pore-acne--acne--01",
+      "docId": "pigment-pore-acne--acne-program--00",
       "categoryId": "pigment-pore-acne",
-      "sectionId": "pigment-pore-acne--acne",
-      "name": "안티아크네 8주",
+      "sectionId": "pigment-pore-acne--acne-program",
+      "name": "피지선치료 · 필링 · 압출",
       "productLabel": "",
       "description": "",
       "sessions": [
@@ -2514,43 +2448,7 @@
           "price": 1190000
         }
       ],
-      "sort": 1,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-16"
-    },
-    {
-      "docId": "pigment-pore-acne--acne--02",
-      "categoryId": "pigment-pore-acne",
-      "sectionId": "pigment-pore-acne--acne",
-      "name": "프리미엄 안티아크네 8주",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 1490000
-        }
-      ],
-      "sort": 2,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-16"
-    },
-    {
-      "docId": "pigment-pore-acne--acne--03",
-      "categoryId": "pigment-pore-acne",
-      "sectionId": "pigment-pore-acne--acne",
-      "name": "시그니처 안티아크네 12주",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 2590000
-        }
-      ],
-      "sort": 3,
+      "sort": 0,
       "isPublished": true,
       "seedVersion": "reberry-price-2026-09-16"
     },
@@ -2558,7 +2456,7 @@
       "docId": "pigment-pore-acne--potenza--00",
       "categoryId": "pigment-pore-acne",
       "sectionId": "pigment-pore-acne--potenza",
-      "name": "물광",
+      "name": "물광포텐자",
       "productLabel": "",
       "description": "",
       "sessions": [
@@ -2581,35 +2479,7 @@
       "docId": "pigment-pore-acne--potenza--01",
       "categoryId": "pigment-pore-acne",
       "sectionId": "pigment-pore-acne--potenza",
-      "name": "쥬베룩",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "1회",
-          "price": 449000
-        },
-        {
-          "id": "option-1",
-          "label": "3회",
-          "price": 1190000
-        },
-        {
-          "id": "option-2",
-          "label": "4회",
-          "price": 1490000
-        }
-      ],
-      "sort": 1,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-16"
-    },
-    {
-      "docId": "pigment-pore-acne--potenza--02",
-      "categoryId": "pigment-pore-acne",
-      "sectionId": "pigment-pore-acne--potenza",
-      "name": "엑소좀",
+      "name": "포텐자엑소좀",
       "productLabel": "",
       "description": "",
       "sessions": [
@@ -2622,11 +2492,29 @@
           "id": "option-1",
           "label": "3회",
           "price": 900000
+        }
+      ],
+      "sort": 1,
+      "isPublished": true,
+      "seedVersion": "reberry-price-2026-09-16"
+    },
+    {
+      "docId": "pigment-pore-acne--potenza--02",
+      "categoryId": "pigment-pore-acne",
+      "sectionId": "pigment-pore-acne--potenza",
+      "name": "포텐자쥬베룩",
+      "productLabel": "",
+      "description": "",
+      "sessions": [
+        {
+          "id": "option-0",
+          "label": "1회",
+          "price": 449000
         },
         {
-          "id": "option-2",
-          "label": "5회",
-          "price": 1400000
+          "id": "option-1",
+          "label": "3회",
+          "price": 1190000
         }
       ],
       "sort": 2,
@@ -2637,58 +2525,17 @@
       "docId": "pigment-pore-acne--pore-scar--00",
       "categoryId": "pigment-pore-acne",
       "sectionId": "pigment-pore-acne--pore-scar",
-      "name": "도자기 피부",
+      "name": "도자기 피부 프로그램 (착색 흉터, 여드름 패인흉터 종합 치료)",
       "productLabel": "",
       "description": "",
       "sessions": [
         {
           "id": "option-0",
-          "label": "4회",
+          "label": "1회",
           "price": 1590000
-        },
-        {
-          "id": "option-1",
-          "label": "8회",
-          "price": 2490000
         }
       ],
       "sort": 0,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-16"
-    },
-    {
-      "docId": "pigment-pore-acne--pore-scar--01",
-      "categoryId": "pigment-pore-acne",
-      "sectionId": "pigment-pore-acne--pore-scar",
-      "name": "프리미엄 도자기",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "8회",
-          "price": 2990000
-        }
-      ],
-      "sort": 1,
-      "isPublished": true,
-      "seedVersion": "reberry-price-2026-09-16"
-    },
-    {
-      "docId": "pigment-pore-acne--pore-scar--02",
-      "categoryId": "pigment-pore-acne",
-      "sectionId": "pigment-pore-acne--pore-scar",
-      "name": "시그니처 도자기",
-      "productLabel": "",
-      "description": "",
-      "sessions": [
-        {
-          "id": "option-0",
-          "label": "8회",
-          "price": 3490000
-        }
-      ],
-      "sort": 2,
       "isPublished": true,
       "seedVersion": "reberry-price-2026-09-16"
     },

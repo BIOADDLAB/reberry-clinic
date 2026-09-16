@@ -26,6 +26,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import {
     formatPrice,
+    isConsultPrice,
     subscribePriceCategories,
     subscribePriceListItems,
     subscribePriceSections,
@@ -36,7 +37,7 @@ import {
 import { buildPriceBoard, type PriceBoardCard } from '@/components/lib/priceBoard';
 import SearchIcon from '@/components/ui/SearchIcon';
 
-const AREA_NOTE_DESIGN: 1 | 2 | 3 | 4 | 5 = 4;
+const AREA_NOTE_DESIGN: 1 | 2 | 3 | 4 | 5 = 1;
 
 /* 탭 안내 문구를 부위 목록으로 보여 주기 위한 해석.
    관리자에서는 그냥 여러 줄 글로 적는다.
@@ -221,7 +222,12 @@ export default function PriceListClient() {
                             {open && (
                                 <div className="px-5 pb-2 md:px-7">
                                     {card.layout === 'table' ? (
-                                        <PriceTable card={card} moneyLocale={moneyLocale} itemHeading={t('columnItem')} />
+                                        <PriceTable
+                                            card={card}
+                                            moneyLocale={moneyLocale}
+                                            itemHeading={t('columnItem')}
+                                            consultLabel={t('consultPrice')}
+                                        />
                                     ) : (
                                         card.rows.map((row) => (
                                             <div
@@ -232,7 +238,11 @@ export default function PriceListClient() {
                                                     {row.label}
                                                 </span>
                                                 <strong className="shrink-0 text-caption font-medium text-cocoa md:text-small">
-                                                    {formatPrice(row.cells[0]?.price ?? 0, moneyLocale)}
+                                                    <PriceCell
+                                                        price={row.cells[0]?.price ?? 0}
+                                                        moneyLocale={moneyLocale}
+                                                        consultLabel={t('consultPrice')}
+                                                    />
                                                 </strong>
                                             </div>
                                         ))
@@ -271,14 +281,30 @@ export default function PriceListClient() {
 const PRICE_COLUMN = 84;
 const NAME_COLUMN_MIN = 116;
 
+/** 금액 한 칸. 가격이 아직 없는 시술은 숫자 자리에 "상담 문의" 가 들어간다 (CONSULT_PRICE). */
+function PriceCell({
+    price,
+    moneyLocale,
+    consultLabel,
+}: {
+    price: number;
+    moneyLocale: string;
+    consultLabel: string;
+}) {
+    if (isConsultPrice(price)) return <>{consultLabel}</>;
+    return <>{formatPrice(price, moneyLocale)}</>;
+}
+
 function PriceTable({
     card,
     moneyLocale,
     itemHeading,
+    consultLabel,
 }: {
     card: PriceBoardCard;
     moneyLocale: string;
     itemHeading: string;
+    consultLabel: string;
 }) {
     return (
         <div className="-mx-1 overflow-x-auto px-1">
@@ -321,7 +347,11 @@ function PriceTable({
                                 >
                                     {cell ? (
                                         <strong className="text-caption font-medium text-cocoa md:text-small">
-                                            {formatPrice(cell.price, moneyLocale)}
+                                            <PriceCell
+                                                price={cell.price}
+                                                moneyLocale={moneyLocale}
+                                                consultLabel={consultLabel}
+                                            />
                                         </strong>
                                     ) : (
                                         <span aria-label="해당 없음" className="text-caption text-sand">

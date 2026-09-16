@@ -220,6 +220,7 @@
             "hairRemoval": "Hair Removal"
         },
         "columnItem": "Item",
+        "consultPrice": "Ask us",
         "vatNotice": "Prices exclude VAT and may vary by treatment area and dosage.",
         "kakaoCta": "Ask about a reservation",
         "search": "Search treatments",

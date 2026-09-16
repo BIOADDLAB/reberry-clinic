@@ -108,10 +108,10 @@ async function main() {
     assert(showsOnReviews(sharedPhoto));
 
     // 수가표 구조와 모든 참조·옵션을 함께 검사한다.
-    assert.equal(price.categories.length, 9);
-    assert.equal(price.sections.length, 29);
-    assert.equal(price.items.length, 240);
-    assert.equal(price.items.reduce((sum, item) => sum + item.sessions.length, 0), 363);
+    assert.equal(price.categories.length, 8);
+    assert.equal(price.sections.length, 46);
+    assert.equal(price.items.length, 153);
+    assert.equal(price.items.reduce((sum, item) => sum + item.sessions.length, 0), 300);
     assertUnique(price.categories.map((category) => category.docId), '수가표 대분류 ID');
     assertUnique(price.sections.map((section) => section.docId), '수가표 소분류 ID');
     assertUnique(price.items.map((item) => item.docId), '수가표 시술 ID');
@@ -125,7 +125,11 @@ async function main() {
         assert(item.sessions.length > 0, `가격 옵션 없음: ${item.docId}`);
         assertUnique(item.sessions.map((session) => session.id), `${item.docId} 가격 옵션 ID`);
         assertUnique(item.sessions.map((session) => session.label.trim()), `${item.docId} 가격 옵션명`);
-        item.sessions.forEach((session) => assert(session.price > 0, `가격 오류: ${item.docId}/${session.id}`));
+        /* 음수 하나는 "상담 문의" 표시라 허용한다 (components/lib/priceList.ts 의 CONSULT_PRICE).
+           0원은 값을 빠뜨린 것이라 그대로 막는다. */
+        item.sessions.forEach((session) =>
+            assert(session.price > 0 || session.price === -1, `가격 오류: ${item.docId}/${session.id}`),
+        );
     });
 
     console.log(

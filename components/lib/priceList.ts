@@ -23,6 +23,16 @@ export interface PriceSession {
     price: number;
 }
 
+/* 금액 대신 "상담 문의" 로 낼 때 쓰는 값 (헐리우드 토닝 체험가처럼 가격이 아직 없는 시술).
+   0원을 쓰면 안 된다 — 0원은 관리자에서 [항목 추가]·[가격 열 추가] 로 만든 빈 칸이라
+   홈페이지에 안 내는 값이다. 세 가지 상태를 구분해야 해서 따로 둔다.
+     0원  : 아직 안 채운 칸 → 홈페이지에 안 나온다
+     음수 : 상담 문의       → 홈페이지에 "상담 문의" 로 나온다
+     양수 : 금액 */
+export const CONSULT_PRICE = -1;
+
+export const isConsultPrice = (price: number) => price < 0;
+
 export interface PriceCategoryInput {
     label: string;
     /* 탭 아래에 나오는 안내 박스 문구 (예: 주름 보톡스 가능 부위).
@@ -78,15 +88,17 @@ const toNumber = (value: unknown, fallback = 0) =>
 
 /* #ISSUE: 여기서 0원 회차를 걸러 버려서, 관리자에서 [항목 추가] 로 만든 줄(가격 0원)이
            sessions 없는 항목이 되고 → 가격을 적어도 저장이 안 됐다.
-   → 0원도 그대로 들고 온다. 홈페이지에 안 내는 일은 priceBoard 가 맡는다. */
+   → 0원도 그대로 들고 온다. 홈페이지에 안 내는 일은 priceBoard 가 맡는다.
+     음수도 0원으로 깎지 않는다 — 상담 문의 표시라서 그대로 살려야 한다 (CONSULT_PRICE). */
 const normalizeSessions = (value: unknown): PriceSession[] => {
     if (!Array.isArray(value)) return [];
     return value.map((entry, index) => {
         const option = entry && typeof entry === 'object' ? (entry as Record<string, unknown>) : {};
+        const price = Math.round(toNumber(option.price));
         return {
             id: toString(option.id) || `option-${index}`,
             label: toString(option.label) || '1회',
-            price: Math.max(0, Math.round(toNumber(option.price))),
+            price: isConsultPrice(price) ? CONSULT_PRICE : price,
         };
     });
 };
