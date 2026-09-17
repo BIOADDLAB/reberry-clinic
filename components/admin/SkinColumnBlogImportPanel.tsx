@@ -36,6 +36,11 @@ export default function SkinColumnBlogImportPanel({ onError }: { onError: (messa
         }
     };
 
+    /** 마지막 수집이 며칠 전인지. 기록이 없으면 null */
+    const staleDays = lastSyncedAt
+        ? Math.floor((Date.now() - new Date(lastSyncedAt).getTime()) / 86_400_000)
+        : null;
+
     return (
         <section className="mt-6 rounded-2xl bg-white p-5 shadow-[0_2px_20px_rgba(69,54,45,0.06)] md:p-7">
             <div className="flex flex-wrap items-start justify-between gap-3">
@@ -64,6 +69,16 @@ export default function SkinColumnBlogImportPanel({ onError }: { onError: (messa
                     ? `마지막 수집: ${new Date(lastSyncedAt).toLocaleString('ko-KR')}`
                     : '아직 수집한 기록이 없습니다. 먼저 블로그 글을 가져오세요.'}
             </p>
+
+            {/* #ISSUE: 2026.09.17 — 매일 도는 자동 수집이 9월 8일에 멈췄는데 화면에 아무 표시가 없어
+                9일 동안 아무도 몰랐다. 9월 15일 글이 안 올라온 것도 이걸로 드러났다.
+                → 자동 수집은 하루 한 번이니, 사흘 넘게 소식이 없으면 눈에 보이게 알린다. */}
+            {staleDays !== null && staleDays >= 3 && (
+                <p className="mt-2 rounded-xl bg-[#FFF6D6] px-3 py-2 text-caption text-[#8A5A12]">
+                    자동 수집이 {staleDays}일째 멈춰 있습니다. 위 [블로그에서 가져오기]를 눌러 보시고, 그래도 안 되면
+                    알려 주세요.
+                </p>
+            )}
 
             {/* 블로그 카테고리 ↔ 사이트 분류 매핑표가 있던 자리.
                 분류를 없앴으므로 연결할 것이 없다. */}

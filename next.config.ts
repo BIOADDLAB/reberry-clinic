@@ -4,6 +4,9 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const nextConfig: NextConfig = {
+    /* sharp 는 OS별 바이너리를 들고 있는 네이티브 모듈이다. 번들에 밀어 넣으면 배포판에서
+       바이너리를 못 찾고 죽는다 (블로그 썸네일 압축이 여기서 끊겼다). 통째로 밖에 두고 부른다. */
+    serverExternalPackages: ['sharp'],
     images: {
         /* ★ 지글지글(입자) 해결 핵심:
            Next 16은 여기 등록된 quality 값만 허용하고, 미등록 값은 전부 75로 강제(클램프)함.
