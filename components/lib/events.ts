@@ -62,7 +62,9 @@ export async function saveEventSettings(settings: Partial<EventSettings>): Promi
 /* ── 이벤트 항목 ─────────────────────────────────────────────────────────── */
 
 export interface EventInput {
-    /** 이벤트 이름. 고객 화면에서 포스터 아래 작은 글씨로 나오고, 사진 대체글로도 쓰인다 */
+    /** 이벤트 이름. 고객 화면에서 포스터 아래 작은 글씨(캡션)로 나온다.
+        #ISSUE: 한동안 빈 이름을 막았는데, 포스터 그림에 이미 이름이 박혀 있으면 아래에 또 적을
+                까닭이 없다 → 비워 두면 캡션 없이 사진만 나온다. 사진 대체글은 따로 채운다. */
     title: string;
     /** 포스터 사진 주소 (Firebase Storage). 비어 있으면 고객 화면에서 빠진다 */
     imageUrl: string;
@@ -141,17 +143,10 @@ export function subscribeEvents(
     );
 }
 
-/* 쓰기 직전 한 곳에서만 검사한다. 관리자 화면은 이 오류 문구를 그대로 띄우니
-   "무엇을 고쳐야 하는지" 가 그대로 읽히게 적는다. */
-function assertValidEvent(input: EventInput): void {
-    if (!input.title.trim()) throw new Error('이벤트 이름이 비어 있습니다. 이름을 적은 뒤 저장해 주세요.');
-}
-
 /* 새 칸은 목록 맨 앞에 만든다. [+ 이벤트 칸 추가] 버튼이 목록 위에 있어서, 뒤에 붙이면
    누른 자리에서는 아무 일도 안 일어난 것처럼 보이고 한참 내려가야 새 칸이 나온다.
    새로 만드는 이벤트가 보통 최신 프로모션이라 앞자리가 맞기도 하다. */
 export async function createEvent(input: EventInput): Promise<string> {
-    assertValidEvent(input);
     const snapshot = await getDocs(eventsCollection);
     const sorts = snapshot.docs.map((entry) => (typeof entry.data().sort === 'number' ? entry.data().sort : 0));
     const sort = sorts.length ? Math.min(...sorts) - 1 : 0;
@@ -161,7 +156,6 @@ export async function createEvent(input: EventInput): Promise<string> {
 }
 
 export async function updateEvent(docId: string, input: EventInput): Promise<void> {
-    assertValidEvent(input);
     await updateDoc(doc(db, COLLECTION_NAME, docId), { ...input, updatedAt: new Date().toISOString() });
 }
 

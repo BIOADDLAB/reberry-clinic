@@ -117,7 +117,8 @@ export default function EventManager() {
         run(
             async () => {
                 const id = await createEvent({
-                    title: '새 이벤트',
+                    // 이름은 비워 둔 채 만든다. 넣어 두면 안 지운 사람의 포스터 아래에 그 글씨가 그대로 나간다
+                    title: '',
                     imageUrl: '',
                     isPublished: false,
                     showOnMain: false,
@@ -196,8 +197,11 @@ export default function EventManager() {
                 메인에서 나오는 <b className="text-cocoa">순서</b>는 위쪽 [메인(첫 화면)에 나오는 순서] 줄에서 화살표로
                 바꿉니다. 메인 순서와 이벤트 페이지 순서는 따로 저장되니 한쪽을 바꿔도 다른 쪽은 그대로입니다.
                 <br />
-                <b className="text-cocoa">사진 · 보임 · 순서 · 삭제</b>는 누르는 즉시 저장됩니다. 이름을 고쳤을 때만
-                아래 [저장하기]를 누르세요. 이름은 홈페이지에서 포스터 아래에 작게 나옵니다.
+                <b className="text-cocoa">사진 · 보임 · 순서 · 삭제</b>는 누르는 즉시 저장됩니다. 글씨를 고쳤을 때만
+                아래 [저장하기]를 누르세요.
+                <br />
+                사진 아래 칸에 적은 글씨는 홈페이지에서 <b className="text-cocoa">포스터 아래에 작게</b> 나옵니다.
+                포스터 그림에 이미 이름이 들어 있으면 <b className="text-cocoa">비워 두세요</b> — 비우면 사진만 나옵니다.
                 <br />
                 끝난 이벤트는 [보임]을 끄면 홈페이지에서 내려갑니다. 사진을 안 올린 칸은 켜 두어도 나오지 않습니다.
             </HelpBanner>
@@ -308,8 +312,14 @@ function MainOrder({
                                 {index + 1}
                             </span>
                         </div>
-                        <p className="mt-1.5 truncate text-caption-sm font-semibold text-cocoa" title={event.title}>
-                            {event.title}
+                        {/* 이름은 비워 둘 수 있다 → 빈 줄만 남기지 않고 자리 표시를 흐리게 둔다 */}
+                        <p
+                            className={`mt-1.5 truncate text-caption-sm font-semibold ${
+                                event.title ? 'text-cocoa' : 'text-latte'
+                            }`}
+                            title={event.title}
+                        >
+                            {event.title || '글씨 없음'}
                         </p>
                         <div className="mt-1 flex justify-center gap-1">
                             <MoveButton dir="left" disabled={busy || index === 0} onClick={() => onMove(index, -1)} />
@@ -454,7 +464,8 @@ function EventCard({
                         value={title}
                         dirty={titleKey(id) in edits}
                         onChange={(value) => setEdit(titleKey(id), value, event.title)}
-                        placeholder="이벤트 이름 (예: 9월 첫방문 이벤트)"
+                        /* 비워 둬도 되는 칸이라는 것을 여기서 바로 알려 준다 */
+                        placeholder="포스터 아래 글씨 (없으면 비워 두세요)"
                         className="min-w-0 flex-1 text-small font-bold text-cocoa"
                     />
                 </div>

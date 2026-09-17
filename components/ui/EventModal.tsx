@@ -94,7 +94,9 @@ export default function EventModal({ events }: { events: PosterItem[] }) {
                                 >
                                     <Image
                                         src={e.image}
-                                        alt={e.title}
+                                        /* 캡션은 비워 둘 수 있다 → 대체글까지 비면 사진을 못 보는
+                                           사람에게 아무 설명이 없다. 그럴 때만 일반 이름을 쓴다 */
+                                        alt={e.title || t('eventPoster')}
                                         fill
                                         quality={88}
                                         sizes="(max-width: 768px) 100vw, 360px"
@@ -136,7 +138,7 @@ export default function EventModal({ events }: { events: PosterItem[] }) {
                 <div
                     role="dialog"
                     aria-modal="true"
-                    aria-label={active.title}
+                    aria-label={active.title || t('eventPoster')}
                     className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain bg-deep/80"
                     onClick={() => setActive(null)}
                 >
@@ -147,7 +149,7 @@ export default function EventModal({ events }: { events: PosterItem[] }) {
                             <div className="skeleton relative aspect-[210/297] w-full overflow-hidden rounded-[4px] bg-cream">
                                 <Image
                                     src={active.image}
-                                    alt={active.title}
+                                    alt={active.title || t('eventPoster')}
                                     fill
                                     quality={90}
                                     sizes="(max-width: 860px) 100vw, 794px"
