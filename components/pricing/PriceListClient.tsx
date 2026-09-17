@@ -35,39 +35,8 @@ import {
     type PriceSection,
 } from '@/components/lib/priceList';
 import { buildPriceBoard, type PriceBoardCard } from '@/components/lib/priceBoard';
+import AreaNote from '@/components/pricing/AreaNote';
 import SearchIcon from '@/components/ui/SearchIcon';
-
-const AREA_NOTE_DESIGN: 1 | 2 | 3 | 4 | 5 = 1;
-
-/* 탭 안내 문구를 부위 목록으로 보여 주기 위한 해석.
-   관리자에서는 그냥 여러 줄 글로 적는다.
-     "주름 보톡스 : 이마 · 미간 · 눈가"  → 제목 + 부위 목록
-     "용량은 상담 후 안내합니다."         → 아래 각주 한 줄 */
-interface NoteChipGroup {
-    label: string;
-    chips: string[];
-}
-
-function parseNote(note: string): { groups: NoteChipGroup[]; footnotes: string[] } {
-    const groups: NoteChipGroup[] = [];
-    const footnotes: string[] = [];
-
-    for (const line of note.split('\n').map((entry) => entry.trim()).filter(Boolean)) {
-        const divider = line.indexOf(':');
-        const chips =
-            divider > 0
-                ? line
-                      .slice(divider + 1)
-                      .split('·')
-                      .map((chip) => chip.trim())
-                      .filter(Boolean)
-                : [];
-        if (chips.length > 1) groups.push({ label: line.slice(0, divider).trim(), chips });
-        else footnotes.push(line);
-    }
-
-    return { groups, footnotes };
-}
 
 export default function PriceListClient() {
     const t = useTranslations('priceList');
@@ -129,7 +98,8 @@ export default function PriceListClient() {
         return found;
     }, [board, activeGroup, keyword]);
 
-    const note = keyword ? { groups: [], footnotes: [] } : parseNote(activeGroup?.category.note ?? '');
+    /* 검색 중에는 안내 문구를 접는다 — 찾은 카드가 화면 위에 바로 보여야 한다. */
+    const note = keyword ? '' : activeGroup?.category.note ?? '';
     const moneyLocale = locale === 'ko' ? 'ko-KR' : locale;
 
     /* 기본값(openCards === null)은 "전부 펼침". 검색 중에는 찾은 카드가 안 보이면 안 되니 항상 편다. */
@@ -186,13 +156,9 @@ export default function PriceListClient() {
             </nav>
 
             {/* 탭마다 관리자에서 적어 두는 안내 문구 (예: 주름 보톡스 가능 부위) */}
-            {(note.groups.length > 0 || note.footnotes.length > 0) && (
+            {note && (
                 <div className="mt-8">
-                    {AREA_NOTE_DESIGN === 1 && <AreaNoteInline groups={note.groups} footnotes={note.footnotes} />}
-                    {AREA_NOTE_DESIGN === 2 && <AreaNoteCards groups={note.groups} footnotes={note.footnotes} />}
-                    {AREA_NOTE_DESIGN === 3 && <AreaNoteTabs groups={note.groups} footnotes={note.footnotes} />}
-                    {AREA_NOTE_DESIGN === 4 && <AreaNoteSentence groups={note.groups} footnotes={note.footnotes} />}
-                    {AREA_NOTE_DESIGN === 5 && <AreaNoteFold groups={note.groups} footnotes={note.footnotes} />}
+                    <AreaNote note={note} />
                 </div>
             )}
 
@@ -364,180 +330,6 @@ function PriceTable({
                     ))}
                 </tbody>
             </table>
-        </div>
-    );
-}
-
-interface AreaNoteProps {
-    groups: NoteChipGroup[];
-    footnotes: string[];
-}
-
-/** 부위를 격자 대신 글줄처럼 흘려 쓴다. 낱말 사이에만 가운뎃점이 들어가 간격이 일정하다. */
-function AreaChips({ chips, className = 'text-caption leading-6 text-latte md:text-small' }: { chips: string[]; className?: string }) {
-    return (
-        <ul className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-            {chips.map((chip, index) => (
-                <li key={chip} className={`flex items-baseline gap-2 ${className}`}>
-                    {index > 0 && (
-                        <span aria-hidden className="text-sand">
-                            ·
-                        </span>
-                    )}
-                    {chip}
-                </li>
-            ))}
-        </ul>
-    );
-}
-
-function AreaFootnotes({ lines, className = '' }: { lines: string[]; className?: string }) {
-    return lines.map((line) => (
-        <p key={line} className={`text-caption-sm leading-5 text-latte ${className}`}>
-            {line}
-        </p>
-    ));
-}
-
-/* 1안 · 인라인 — 왼쪽에 시술 이름, 오른쪽에 부위를 촘촘히 흘려 쓴다.
-   아래 가격 표와 같은 "왼쪽 이름 / 오른쪽 내용" 구조라 페이지 전체가 한 덩어리로 읽힌다. */
-function AreaNoteInline({ groups, footnotes }: AreaNoteProps) {
-    return (
-        <div className="overflow-hidden rounded-2xl border border-cocoa/[0.1] bg-cream">
-            {groups.map((group, index) => (
-                <div
-                    key={group.label}
-                    className={`flex flex-col gap-1 px-5 py-3.5 md:flex-row md:items-baseline md:gap-5 md:px-6 ${
-                        index > 0 ? 'border-t border-cocoa/[0.08]' : ''
-                    }`}
-                >
-                    <p className="flex shrink-0 items-baseline gap-2 text-caption font-bold text-cocoa md:w-44 md:text-small">
-                        <span aria-hidden className="h-3 w-[3px] shrink-0 translate-y-[-1px] rounded-full bg-sand" />
-                        {group.label}
-                    </p>
-                    <AreaChips chips={group.chips} />
-                </div>
-            ))}
-            {footnotes.length > 0 && (
-                <div className="border-t border-cocoa/[0.08] bg-sand/10 px-5 py-3 md:px-6">
-                    <AreaFootnotes lines={footnotes} />
-                </div>
-            )}
-        </div>
-    );
-}
-
-/* 2안 · 카드형 — 시술마다 카드를 하나씩 나란히 세운다.
-   시술이 두세 개일 때 좌우로 갈려서 "이 부위는 어느 시술인지" 가 가장 또렷하다. */
-function AreaNoteCards({ groups, footnotes }: AreaNoteProps) {
-    return (
-        <div>
-            <div className="grid gap-3 md:grid-cols-2">
-                {groups.map((group) => (
-                    <section key={group.label} className="rounded-2xl border border-cocoa/[0.1] bg-cream px-5 py-4">
-                        <h3 className="text-caption font-bold text-cocoa md:text-small">{group.label}</h3>
-                        <ul className="mt-2.5 flex flex-wrap gap-x-2 gap-y-1">
-                            {group.chips.map((chip) => (
-                                <li key={chip} className="flex items-center gap-1.5 text-caption leading-6 text-latte">
-                                    <span aria-hidden className="h-1 w-1 shrink-0 rounded-full bg-sand" />
-                                    {chip}
-                                </li>
-                            ))}
-                        </ul>
-                    </section>
-                ))}
-            </div>
-            <AreaFootnotes lines={footnotes} className="mt-3 px-1" />
-        </div>
-    );
-}
-
-/* 3안 · 탭형 — 시술 이름을 눌러 그 시술 부위만 크게 보여 준다.
-   부위가 더 늘어나도 안내 박스 높이가 그대로라, 가격 표가 화면 아래로 밀리지 않는다. */
-function AreaNoteTabs({ groups, footnotes }: AreaNoteProps) {
-    const [openLabel, setOpenLabel] = useState(groups[0]?.label ?? '');
-    const current = groups.find((group) => group.label === openLabel) ?? groups[0];
-
-    return (
-        <div className="rounded-2xl border border-cocoa/[0.1] bg-cream px-5 py-4 md:px-6">
-            {groups.length > 1 && (
-                <div className="flex flex-wrap gap-2">
-                    {groups.map((group) => {
-                        const active = group.label === current?.label;
-                        return (
-                            <button
-                                key={group.label}
-                                type="button"
-                                aria-pressed={active}
-                                onClick={() => setOpenLabel(group.label)}
-                                className={`rounded-full border px-3.5 py-1.5 text-caption font-semibold transition-colors ${
-                                    active
-                                        ? 'border-cocoa/25 bg-sand/30 text-cocoa'
-                                        : 'border-cocoa/10 text-latte hover:border-cocoa/25 hover:text-cocoa'
-                                }`}
-                            >
-                                {group.label}
-                            </button>
-                        );
-                    })}
-                </div>
-            )}
-            {current && (
-                <div className={groups.length > 1 ? 'mt-3.5' : ''}>
-                    <AreaChips chips={current.chips} className="text-small font-medium leading-6 text-cocoa" />
-                </div>
-            )}
-            <AreaFootnotes lines={footnotes} className="mt-3 border-t border-cocoa/[0.08] pt-3" />
-        </div>
-    );
-}
-
-/* 4안 · 문장형 — 테두리를 없애고 옅은 바탕에 안내문처럼 한 문단으로 적는다.
-   가장 조용해서 가격 카드가 주인공으로 남는다. 부위가 많아도 줄만 늘어난다. */
-function AreaNoteSentence({ groups, footnotes }: AreaNoteProps) {
-    return (
-        <div className="rounded-2xl bg-sand/15 px-5 py-4 md:px-6">
-            {groups.map((group) => (
-                <p key={group.label} className="text-caption leading-7 text-latte md:text-small">
-                    <b className="font-bold text-cocoa">{group.label}</b>
-                    <span aria-hidden className="mx-2 text-sand">
-                        |
-                    </span>
-                    {group.chips.join(' · ')}
-                </p>
-            ))}
-            <AreaFootnotes lines={footnotes} className="mt-2" />
-        </div>
-    );
-}
-
-/* 5안 · 접이식 — 한 줄로 접어 두고 눌러서 펼친다.
-   부위는 가격을 정한 다음에 확인하는 정보라, 접어 두면 가격 카드가 화면 위로 올라온다. */
-function AreaNoteFold({ groups, footnotes }: AreaNoteProps) {
-    const [open, setOpen] = useState(false);
-
-    return (
-        <div className="overflow-hidden rounded-2xl border border-cocoa/[0.1] bg-cream">
-            <button
-                type="button"
-                onClick={() => setOpen(!open)}
-                aria-expanded={open}
-                className="flex w-full items-center justify-between gap-3 px-5 py-3.5 text-left md:px-6"
-            >
-                <span className="text-caption font-bold text-cocoa md:text-small">시술 가능 부위 안내</span>
-                <ChevronIcon open={open} />
-            </button>
-            {open && (
-                <div className="border-t border-cocoa/[0.08] px-5 pb-4 pt-1 md:px-6">
-                    {groups.map((group) => (
-                        <div key={group.label} className="flex flex-col gap-1 py-2.5 md:flex-row md:items-baseline md:gap-5">
-                            <p className="shrink-0 text-caption font-bold text-cocoa md:w-44">{group.label}</p>
-                            <AreaChips chips={group.chips} />
-                        </div>
-                    ))}
-                    <AreaFootnotes lines={footnotes} className="mt-1" />
-                </div>
-            )}
         </div>
     );
 }

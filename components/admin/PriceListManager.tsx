@@ -35,6 +35,13 @@ import {
 } from '@/components/lib/priceList';
 import { buildPriceBoard } from '@/components/lib/priceBoard';
 import {
+    AreaNoteBox,
+    AreaNoteRow,
+    noteFromLines,
+    parseNoteLines,
+    type NoteLine,
+} from '@/components/pricing/AreaNote';
+import {
     AddRowButton,
     AdminHeader,
     DragHandle,
@@ -68,6 +75,78 @@ function columnLabels(cardItems: PriceListItem[]): string[] {
         }
     }
     return labels.length > 0 ? labels : ['1회'];
+}
+
+/* 안내 문구를 홈페이지에 나가는 모양 그대로 고친다.
+   #ISSUE: 2026.09.17 병원 지적 — 예전에는 "이름 : 부위 · 부위" 라는 규칙을 외워 여러 줄 글로 적고
+           그 아래에서 결과를 확인해야 했다. 규칙을 알아야 하고, 적은 글과 나오는 모양이 따로였다.
+   → 왼쪽 칸에 시술 이름, 오른쪽 칸에 부위를 그대로 적는다. 오른쪽은 쓴 그대로 나가고,
+     저장할 때만 한 줄 글로 합쳐 넣는다(저장 형태는 그대로 두어 홈페이지·씨딩이 안 바뀐다). */
+function AreaNoteEditor({
+    note,
+    dirty,
+    disabled,
+    onChange,
+}: {
+    note: string;
+    dirty: boolean;
+    disabled: boolean;
+    onChange: (next: string) => void;
+}) {
+    const lines = parseNoteLines(note);
+    const write = (next: NoteLine[]) => onChange(noteFromLines(next));
+
+    return (
+        <div>
+            <AreaNoteBox>
+                {lines.map((line, index) => (
+                    <AreaNoteRow
+                        // 줄 순서가 곧 화면 순서다. 내용이 같은 줄이 있어도 섞이지 않게 자리로 센다.
+                        key={index}
+                        first={index === 0}
+                        label={
+                            <Field
+                                value={line.label}
+                                dirty={dirty}
+                                onChange={(value) =>
+                                    write(lines.map((row, at) => (at === index ? { ...row, label: value } : row)))
+                                }
+                                placeholder="시술 이름"
+                                className="text-caption font-bold text-cocoa md:text-small"
+                            />
+                        }
+                    >
+                        <div className="flex flex-1 items-center gap-1">
+                            <Field
+                                value={line.text}
+                                dirty={dirty}
+                                onChange={(value) =>
+                                    write(lines.map((row, at) => (at === index ? { ...row, text: value } : row)))
+                                }
+                                placeholder="이마 · 미간 · 눈가 (쓰는 그대로 나갑니다)"
+                                className="text-caption text-latte md:text-small"
+                            />
+                            <TextAction
+                                tone="danger"
+                                disabled={disabled || lines.length <= 1}
+                                onClick={() => write(lines.filter((_, at) => at !== index))}
+                            >
+                                줄 삭제
+                            </TextAction>
+                        </div>
+                    </AreaNoteRow>
+                ))}
+            </AreaNoteBox>
+            <div className="mt-2">
+                <AddRowButton disabled={disabled} onClick={() => write([...lines, { label: '', text: '' }])}>
+                    + 안내 줄 추가
+                </AddRowButton>
+            </div>
+            <p className="mt-2 text-caption-sm leading-5 text-latte">
+                두 칸을 모두 비우면 이 안내는 홈페이지에 안 나옵니다. 시술 이름만 비우면 아래쪽 작은 안내 줄이 됩니다.
+            </p>
+        </div>
+    );
 }
 
 /** 항목 저장용 형태. docId·sort 처럼 건드리면 안 되는 값이 섞여 들어가지 않게 한 곳에서 만든다. */
@@ -184,6 +263,10 @@ export default function PriceListManager() {
        어느 탭으로 가도 카드가 모두 열린 상태로 시작한다. */
     const openKeys = openCards ?? cards.map((card) => card.key);
     const activeCategory = activeGroup?.category;
+    /* 저장 전 편집본 기준으로 미리보기를 그린다 */
+    const noteDraft = activeCategory
+        ? shown(key('cat', activeCategory.docId, 'note'), activeCategory.note ?? '')
+        : '';
 
     /* ── 순서 바꾸기 ─────────────────────────────────────────────────
        끌어서 옮기거나 화살표로 한 칸씩 옮긴다. 옮긴 뒤 sort 를 0,1,2… 로 다시 매긴다.
@@ -386,14 +469,19 @@ export default function PriceListManager() {
                                 이 카테고리 삭제
                             </TextAction>
                         </div>
-                        <Field
-                            multiline
-                            value={shown(key('cat', activeCategory.docId, 'note'), activeCategory.note ?? '')}
-                            dirty={key('cat', activeCategory.docId, 'note') in edits}
-                            onChange={(value) => setEdit(key('cat', activeCategory.docId, 'note'), value, activeCategory.note ?? '')}
-                            placeholder="예: 주름 보톡스 : 이마 · 미간 · 눈가 중 선택 (비우면 안 나옴)"
-                            className="mt-2 text-caption text-latte"
-                        />
+                        <div className="mt-3">
+                            <p className="text-caption-sm font-semibold text-latte">홈페이지에 이렇게 나옵니다</p>
+                            <div className="mt-1.5">
+                                <AreaNoteEditor
+                                    note={noteDraft}
+                                    dirty={key('cat', activeCategory.docId, 'note') in edits}
+                                    disabled={busy}
+                                    onChange={(value) =>
+                                        setEdit(key('cat', activeCategory.docId, 'note'), value, activeCategory.note ?? '')
+                                    }
+                                />
+                            </div>
+                        </div>
                     </div>
                 )}
 

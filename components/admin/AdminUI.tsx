@@ -431,6 +431,14 @@ export function useDirtyEdits() {
     const shown = (key: string, original: string) => edits[key] ?? original;
     const dirtyCount = Object.keys(edits).length;
     const clearEdits = () => setEdits({});
+    /** 일부 칸만 저장한 뒤 그 칸의 노란색을 지운다 (예: 이벤트 한 장만 즉시 저장) */
+    const clearKeys = useCallback((keys: string[]) => {
+        setEdits((current) => {
+            const next = { ...current };
+            keys.forEach((key) => delete next[key]);
+            return next;
+        });
+    }, []);
 
     useEffect(() => {
         if (dirtyCount === 0) return;
@@ -439,7 +447,7 @@ export function useDirtyEdits() {
         return () => window.removeEventListener('beforeunload', warn);
     }, [dirtyCount]);
 
-    return { edits, setEdit, shown, dirtyCount, clearEdits };
+    return { edits, setEdit, shown, dirtyCount, clearEdits, clearKeys };
 }
 
 export function confirmDelete(name: string) {

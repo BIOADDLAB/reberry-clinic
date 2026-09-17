@@ -14,6 +14,7 @@ import {
     subscribeEvents,
     updateEvent,
     updateEventSorts,
+    type EventInput,
     type EventItem,
     type EventSettings,
 } from '@/components/lib/events';
@@ -35,11 +36,42 @@ import {
 
 const fieldKey = (id: string, field: string) => `${id}:${field}`;
 
+/* 카드 한 장에서 사람이 고칠 수 있는 칸. draft() 와 "고친 게 있나" 판단이 같은 목록을 본다. */
+const EDITABLE_FIELDS = ['title', 'description', 'category', 'originalPrice', 'salePrice', 'startDate', 'endDate'] as const;
+
+/* #ISSUE: 2026.09.17 점검 — Firestore 는 문서를 통째로 덮어쓰는데, [보임] 스위치와 [상시 → 기간]은
+   저장 안 한 수정(노란 칸)을 무시하고 화면에 처음 불러온 값으로 썼다. 이름과 가격을 고친 뒤 보임을
+   켜면 홈페이지에 옛 이름·옛 가격이 나가 버린다.
+   → 어느 경로로 쓰든 이 함수로 "지금 화면에 보이는 값" 을 만들어 보낸다. */
+function draft(event: EventItem, edits: Record<string, string>, next: Partial<EventInput> = {}): EventInput {
+    const pick = (field: string) => edits[fieldKey(event.docId, field)];
+    const price = (field: 'originalPrice' | 'salePrice') => {
+        const raw = pick(field);
+        if (raw === undefined) return event[field];
+        return raw ? Number(raw) : null;
+    };
+
+    return {
+        title: pick('title') ?? event.title,
+        category: (pick('category') ?? event.category) || '이벤트',
+        description: pick('description') ?? event.description,
+        originalPrice: price('originalPrice'),
+        salePrice: price('salePrice'),
+        alwaysOn: event.alwaysOn,
+        startDate: pick('startDate') ?? event.startDate,
+        endDate: pick('endDate') ?? event.endDate,
+        isPublished: event.isPublished,
+        imageUrl: event.imageUrl,
+        badge: event.badge,
+        ...next,
+    };
+}
+
 export default function EventManager() {
     const [events, setEvents] = useState<EventItem[]>([]);
     const [settings, setSettings] = useState<EventSettings>(DEFAULT_EVENT_SETTINGS);
     const [loading, setLoading] = useState(true);
-    const { edits, setEdit, shown, dirtyCount, clearEdits } = useDirtyEdits();
+    const { edits, setEdit, shown, dirtyCount, clearEdits, clearKeys } = useDirtyEdits();
     const { busy, error, toast, run, setError } = useAdminAction();
 
     useEffect(
@@ -77,27 +109,8 @@ export default function EventManager() {
                 if (Object.keys(nextSettings).length) await saveEventSettings(nextSettings);
 
                 for (const event of events) {
-                    const fields = ['title', 'description', 'category', 'originalPrice', 'salePrice', 'startDate', 'endDate'];
-                    if (!fields.some((field) => edits[fieldKey(event.docId, field)] !== undefined)) continue;
-                    const pick = (field: string) => edits[fieldKey(event.docId, field)];
-                    const price = (field: string, fallback: number | null) => {
-                        const raw = pick(field);
-                        if (raw === undefined) return fallback;
-                        return raw ? Number(raw) : null;
-                    };
-                    await updateEvent(event.docId, {
-                        title: pick('title') ?? event.title,
-                        category: (pick('category') ?? event.category) || '이벤트',
-                        description: pick('description') ?? event.description,
-                        originalPrice: price('originalPrice', event.originalPrice),
-                        salePrice: price('salePrice', event.salePrice),
-                        alwaysOn: event.alwaysOn,
-                        startDate: pick('startDate') ?? event.startDate,
-                        endDate: pick('endDate') ?? event.endDate,
-                        isPublished: event.isPublished,
-                        imageUrl: event.imageUrl,
-                        badge: event.badge,
-                    });
+                    if (!EDITABLE_FIELDS.some((field) => edits[fieldKey(event.docId, field)] !== undefined)) continue;
+                    await updateEvent(event.docId, draft(event, edits));
                 }
                 clearEdits();
             },
@@ -148,11 +161,11 @@ export default function EventManager() {
             <ErrorBanner message={error} />
             <HelpBanner>
                 <b className="text-cocoa">사용법</b> · 시술 이름, 설명, 가격을 마우스로 눌러 고칩니다. 고친 칸은{' '}
-                <span className="rounded bg-[#FFF6D6] px-1 py-0.5 text-cocoa">노란색</span>이 됩니다.
-                가운데 큰 글씨(분류 이름)도 눌러서 바꿀 수 있습니다.
+                <span className="rounded bg-[#FFF6D6] px-1 py-0.5 text-cocoa">노란색</span>이 되고, 아래 [저장하기]를
+                누르면 홈페이지에 나갑니다. 맨 위 큰 제목과 가운데 분류 이름도 눌러서 바꿉니다.
                 <br />
-                맨 위 큰 제목과 가운데 분류 이름도 눌러서 바꿉니다. 이벤트 오른쪽 <b className="text-cocoa">삭제</b>로
-                지울 수 있습니다. <b className="text-cocoa">보임/숨김</b>은 글자 한 줄입니다.
+                <b className="text-cocoa">보임 · 상시/기간 · 순서 · 삭제</b>는 누르는 즉시 저장됩니다. 이때 노란 칸도
+                함께 저장되니, 고치는 중에 눌러도 옛 내용이 나가지 않습니다.
             </HelpBanner>
 
             <div className="mx-auto mt-10 max-w-5xl">
@@ -204,6 +217,7 @@ export default function EventManager() {
                                         edits={edits}
                                         setEdit={setEdit}
                                         shown={shown}
+                                        clearKeys={clearKeys}
                                         run={run}
                                         isFirst={events[0]?.docId === event.docId}
                                         isLast={events[events.length - 1]?.docId === event.docId}
@@ -268,6 +282,7 @@ function EventCard({
     edits,
     setEdit,
     shown,
+    clearKeys,
     run,
     onMove,
     isFirst,
@@ -278,6 +293,7 @@ function EventCard({
     edits: Record<string, string>;
     setEdit: (key: string, value: string, original: string) => void;
     shown: (key: string, original: string) => string;
+    clearKeys: (keys: string[]) => void;
     run: (action: () => Promise<void>, fallback: string, done?: string) => Promise<void>;
     onMove: (dir: -1 | 1) => void;
     isFirst: boolean;
@@ -291,23 +307,14 @@ function EventCard({
     const discount = originalNumber > saleNumber && saleNumber > 0 ? Math.round((1 - saleNumber / originalNumber) * 100) : 0;
     const status = event.isPublished ? eventStatus({ ...event, isPublished: true }) : null;
 
-    const patch = (next: Partial<EventItem>, done?: string) =>
+    /* 노란 칸(저장 안 한 수정)까지 함께 보내고, 보낸 칸의 노란색은 지운다.
+       그래야 스위치 한 번이 "지금 화면 그대로 홈페이지에 반영" 이 된다. */
+    const patch = (next: Partial<EventInput>, done?: string) =>
         run(
-            () =>
-                updateEvent(id, {
-                    title: event.title,
-                    category: event.category,
-                    description: event.description,
-                    originalPrice: event.originalPrice,
-                    salePrice: event.salePrice,
-                    alwaysOn: event.alwaysOn,
-                    startDate: event.startDate,
-                    endDate: event.endDate,
-                    isPublished: event.isPublished,
-                    imageUrl: event.imageUrl,
-                    badge: event.badge,
-                    ...next,
-                }),
+            async () => {
+                await updateEvent(id, draft(event, edits, next));
+                clearKeys(EDITABLE_FIELDS.map((field) => fieldKey(id, field)));
+            },
             '저장 실패',
             done,
         );
@@ -428,7 +435,7 @@ function EventCard({
                         tone="danger"
                         disabled={busy}
                         onClick={() => {
-                            if (!confirmDelete(event.title)) return;
+                            if (!confirmDelete(shown(fieldKey(id, 'title'), event.title))) return;
                             void run(() => deleteEvent(id), '삭제 실패', '삭제했습니다');
                         }}
                     >

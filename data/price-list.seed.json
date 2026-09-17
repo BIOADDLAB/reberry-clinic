@@ -5,7 +5,7 @@
     {
       "docId": "toxin-contour",
       "label": "톡신·윤곽",
-      "note": "주름 보톡스 시술 부위 : 이마 · 미간 · 눈썹 위 · 눈가 · 자갈턱 · 콧등\n특수부위 보톡스 시술 부위 : 팔자 · 치마주름 · 입꼬리 · 콧볼 · 눈밑",
+      "note": "주름 보톡스 시술 부위 : 이마 · 미간 · 눈썹 위 · 눈가 · 자갈턱 · 콧등\n특수부위 보톡스 시술 부위 : 입꼬리 · 콧볼",
       "sort": 0,
       "isPublished": true,
       "seedVersion": "reberry-price-2026-09-16"
@@ -13,7 +13,7 @@
     {
       "docId": "filler-face-volume",
       "label": "필러·페이스볼륨",
-      "note": "특수부위 필러 시술 부위 : 이마 · 미간 · 눈가 · 마리오네트 · 목주름",
+      "note": "페이스 볼륨필러 시술 부위 : 이마 · 관자 · 턱끝 · 앞볼 · 옆볼 · 팔자\n특수부위 필러 시술 부위 : 주름필러 (이마 · 미간 · 눈가 · 마리오네트 · 목)",
       "sort": 1,
       "isPublished": true,
       "seedVersion": "reberry-price-2026-09-16"

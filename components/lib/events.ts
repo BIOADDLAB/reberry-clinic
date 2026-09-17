@@ -120,9 +120,16 @@ export function todayKey(date = new Date()): string {
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
+/* #ISSUE: 2026.09.17 점검 — 종료일이 시작일보다 이른 기간(예: 9.30 부터 9.01 까지)이 들어가면
+   "오늘이 9.01~9.30 사이" 라서 진행 중으로 판정돼 고객 화면에 그대로 나갔다.
+   저장할 때 막되(assertValidEvent), 이미 들어가 있는 옛 데이터도 노출되지 않게 여기서도 걸러 낸다. */
+const brokenPeriod = (event: Pick<EventItem, 'alwaysOn' | 'startDate' | 'endDate'>) =>
+    !event.alwaysOn && Boolean(event.startDate) && Boolean(event.endDate) && event.endDate < event.startDate;
+
 /** 지금 진행 중인가. 상시면 항상 true, 아니면 시작~종료 안에 있어야 한다 */
 export function isEventLive(event: Pick<EventItem, 'alwaysOn' | 'startDate' | 'endDate'>, today = todayKey()): boolean {
     if (event.alwaysOn) return true;
+    if (brokenPeriod(event)) return false;
     if (event.startDate && today < event.startDate) return false;
     if (event.endDate && today > event.endDate) return false;
     return true;
@@ -132,9 +139,10 @@ export function isEventLive(event: Pick<EventItem, 'alwaysOn' | 'startDate' | 'e
 export function eventStatus(
     event: Pick<EventItem, 'alwaysOn' | 'startDate' | 'endDate' | 'isPublished'>,
     today = todayKey(),
-): '진행 중' | '예정' | '종료' | '숨김' {
+): '진행 중' | '예정' | '종료' | '숨김' | '기간 확인 필요' {
     if (!event.isPublished) return '숨김';
     if (event.alwaysOn) return '진행 중';
+    if (brokenPeriod(event)) return '기간 확인 필요';
     if (event.startDate && today < event.startDate) return '예정';
     if (event.endDate && today > event.endDate) return '종료';
     return '진행 중';
@@ -178,7 +186,20 @@ export function subscribeEvents(
     );
 }
 
+/* 쓰기 직전 한 곳에서만 검사한다. 관리자 화면은 이 오류 문구를 그대로 띄우니
+   "무엇을 고쳐야 하는지" 가 그대로 읽히게 적는다. */
+function assertValidEvent(input: EventInput): void {
+    if (!input.title.trim()) throw new Error('이벤트 이름이 비어 있습니다. 이름을 적은 뒤 저장해 주세요.');
+    if (input.alwaysOn) return;
+    if (input.startDate && !isDate(input.startDate)) throw new Error('시작일이 올바르지 않습니다. 날짜를 다시 골라 주세요.');
+    if (input.endDate && !isDate(input.endDate)) throw new Error('종료일이 올바르지 않습니다. 날짜를 다시 골라 주세요.');
+    if (input.startDate && input.endDate && input.endDate < input.startDate) {
+        throw new Error('종료일이 시작일보다 빠릅니다. 기간을 다시 확인해 주세요.');
+    }
+}
+
 export async function createEvent(input: EventInput): Promise<string> {
+    assertValidEvent(input);
     const snapshot = await getDocs(eventsCollection);
     const latestSort = Math.max(
         -1,
@@ -190,6 +211,7 @@ export async function createEvent(input: EventInput): Promise<string> {
 }
 
 export async function updateEvent(docId: string, input: EventInput): Promise<void> {
+    assertValidEvent(input);
     await updateDoc(doc(db, COLLECTION_NAME, docId), { ...input, updatedAt: new Date().toISOString() });
 }
 
