@@ -1,11 +1,11 @@
-/* 이벤트(프로모션) 데이터
-   #ISSUE 1: "9월 프로모션" 같은 상단 제목·기간·부가세 문구를 이벤트마다 하나씩 적게 돼 있었다.
-             이벤트가 20개면 같은 문구를 20번 적어야 하고, 달이 바뀌면 20개를 다 고쳐야 했다.
-             → 화면 전체에 한 번만 들어가는 값이므로 전역 설정(settings/eventSettings)으로 뺀다.
-   #ISSUE 2: 기간이 그냥 문자열이라 "언제 끝나는지" 를 코드가 알 수 없었다.
-             끝난 이벤트도 계속 노출되고, 상시 이벤트를 표현할 방법도 없었다.
-             → startDate/endDate(YYYY-MM-DD) + alwaysOn(상시) 로 바꾸고,
-               끝난 이벤트는 고객 화면에서 자동으로 빠진다(관리자에는 '종료' 로 보임). */
+/* 이벤트(프로모션) 데이터 — 포스터 사진 한 장이 이벤트 하나다.
+   #ISSUE: 한동안 제목·설명·정상가·이벤트가·기간을 칸마다 적는 표 형태로 운영했는데,
+           병원에서 쓰는 방식은 디자인된 포스터를 그대로 올리는 것이었다. 가격을 두 군데
+           (포스터 그림 안 / 사이트 글자) 적게 되니 서로 어긋나기만 했다.
+           → 2026.09.17 부터 사진 + 관리용 이름 + 보임 세 가지만 남긴다.
+             가격·기간·분류 칸은 화면과 코드에서 뺐다 (옛 문서에 남은 값은 읽지 않고 버려 둔다).
+   #ISSUE: 사진이 없는 이벤트는 고객 화면에 걸 것이 없다 → 만들어만 두고 사진을 안 올린 것은
+           보임을 켜 놨어도 자동으로 빠진다. 관리자에는 '사진 필요' 로 보인다. */
 
 import {
     addDoc,
@@ -28,18 +28,12 @@ const SETTINGS_DOC = doc(db, 'settings', 'eventSettings');
 /* ── 전역 설정 : 화면 맨 위에 한 번만 나오는 값 ───────────────────────────── */
 
 export interface EventSettings {
-    /** 예: "9월 프로모션" */
+    /** 포스터 위에 한 번 나오는 큰 제목. 예: "9월 프로모션" */
     headline: string;
-    /** 예: "부가세 별도" */
-    vatNotice: string;
-    /** 화면 상단에 노출할 기간 문구. 비우면 이벤트들의 종료일 중 가장 늦은 날로 자동 표기 */
-    periodNotice: string;
 }
 
 export const DEFAULT_EVENT_SETTINGS: EventSettings = {
     headline: '이번 달 프로모션',
-    vatNotice: '부가세 별도',
-    periodNotice: '',
 };
 
 export function subscribeEventSettings(
@@ -51,10 +45,10 @@ export function subscribeEventSettings(
         (snapshot) => {
             const data = snapshot.data() ?? {};
             onSettings({
-                headline: typeof data.headline === 'string' && data.headline ? data.headline : DEFAULT_EVENT_SETTINGS.headline,
-                vatNotice:
-                    typeof data.vatNotice === 'string' && data.vatNotice ? data.vatNotice : DEFAULT_EVENT_SETTINGS.vatNotice,
-                periodNotice: typeof data.periodNotice === 'string' ? data.periodNotice : '',
+                headline:
+                    typeof data.headline === 'string' && data.headline
+                        ? data.headline
+                        : DEFAULT_EVENT_SETTINGS.headline,
             });
         },
         (error) => onError?.(error),
@@ -68,117 +62,78 @@ export async function saveEventSettings(settings: Partial<EventSettings>): Promi
 /* ── 이벤트 항목 ─────────────────────────────────────────────────────────── */
 
 export interface EventInput {
+    /** 이벤트 이름. 고객 화면에서 포스터 아래 작은 글씨로 나오고, 사진 대체글로도 쓰인다 */
     title: string;
-    category: string;
-    description: string;
-    originalPrice: number | null;
-    salePrice: number | null;
-    /** true 면 기간 없이 상시 진행 */
-    alwaysOn: boolean;
-    /** YYYY-MM-DD. alwaysOn 이면 비워 둔다 */
-    startDate: string;
-    endDate: string;
-    isPublished: boolean;
-    /** 예전 데이터 호환용 — 새로 쓰지 않는다 */
+    /** 포스터 사진 주소 (Firebase Storage). 비어 있으면 고객 화면에서 빠진다 */
     imageUrl: string;
-    badge: string;
+    isPublished: boolean;
+    /** 메인(첫 화면) "CURRENT EVENT" 칸에도 걸지. 최대 MAIN_MAX 장까지 */
+    showOnMain: boolean;
 }
+
+/** 메인에 걸 수 있는 최대 장수. 메인은 한 줄(3칸)이라 그 이상은 줄이 넘어가 보기 나쁘다 */
+export const MAIN_MAX = 3;
 
 export interface EventItem extends EventInput {
     docId: string;
+    /** 이벤트 페이지에서 넘어가는 순서 */
     sort: number;
+    /** 메인(첫 화면)에서 나오는 순서. sort 와 따로 둔다 (아래 mainEvents 설명 참고) */
+    mainSort: number;
     createdAt: string;
     updatedAt: string;
 }
 
 const str = (value: unknown, fallback = '') => (typeof value === 'string' ? value : fallback);
-const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : null);
-const isDate = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value);
 
-const normalizeEvent = (docId: string, data: Record<string, unknown>): EventItem => ({
-    docId,
-    title: str(data.title),
-    category: str(data.category, '이벤트') || '이벤트',
-    description: str(data.description),
-    originalPrice: num(data.originalPrice),
-    salePrice: num(data.salePrice),
-    // 기간 정보가 아예 없던 예전 데이터는 '상시' 로 읽어 화면에서 사라지지 않게 한다
-    alwaysOn: typeof data.alwaysOn === 'boolean' ? data.alwaysOn : !isDate(str(data.endDate)),
-    startDate: isDate(str(data.startDate)) ? str(data.startDate) : '',
-    endDate: isDate(str(data.endDate)) ? str(data.endDate) : '',
-    isPublished: data.isPublished !== false,
-    imageUrl: str(data.imageUrl),
-    badge: str(data.badge),
-    sort: typeof data.sort === 'number' ? data.sort : Number.MAX_SAFE_INTEGER,
-    createdAt: str(data.createdAt),
-    updatedAt: str(data.updatedAt),
-});
+const normalizeEvent = (docId: string, data: Record<string, unknown>): EventItem => {
+    const sort = typeof data.sort === 'number' ? data.sort : Number.MAX_SAFE_INTEGER;
+    return {
+        docId,
+        title: str(data.title),
+        imageUrl: str(data.imageUrl),
+        isPublished: data.isPublished !== false,
+        showOnMain: data.showOnMain === true,
+        sort,
+        /* 메인 순서를 한 번도 안 건드린 문서는 목록 순서를 그대로 쓴다 → 손대기 전까지는
+           예전과 똑같은 순서로 나오고, 옛 문서를 고쳐 쓰는 작업(마이그레이션)도 필요 없다 */
+        mainSort: typeof data.mainSort === 'number' ? data.mainSort : sort,
+        createdAt: str(data.createdAt),
+        updatedAt: str(data.updatedAt),
+    };
+};
 
-/** 오늘 날짜(YYYY-MM-DD). 시간대 변환 없이 로컬 기준 */
-export function todayKey(date = new Date()): string {
-    const pad = (n: number) => String(n).padStart(2, '0');
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-}
-
-/* #ISSUE: 2026.09.17 점검 — 종료일이 시작일보다 이른 기간(예: 9.30 부터 9.01 까지)이 들어가면
-   "오늘이 9.01~9.30 사이" 라서 진행 중으로 판정돼 고객 화면에 그대로 나갔다.
-   저장할 때 막되(assertValidEvent), 이미 들어가 있는 옛 데이터도 노출되지 않게 여기서도 걸러 낸다. */
-const brokenPeriod = (event: Pick<EventItem, 'alwaysOn' | 'startDate' | 'endDate'>) =>
-    !event.alwaysOn && Boolean(event.startDate) && Boolean(event.endDate) && event.endDate < event.startDate;
-
-/** 지금 진행 중인가. 상시면 항상 true, 아니면 시작~종료 안에 있어야 한다 */
-export function isEventLive(event: Pick<EventItem, 'alwaysOn' | 'startDate' | 'endDate'>, today = todayKey()): boolean {
-    if (event.alwaysOn) return true;
-    if (brokenPeriod(event)) return false;
-    if (event.startDate && today < event.startDate) return false;
-    if (event.endDate && today > event.endDate) return false;
-    return true;
+/** 메인에 걸 포스터. 체크한 것이 있으면 그것만, 하나도 없으면 앞에서부터 MAIN_MAX 장.
+    나오는 순서는 이벤트 페이지 순서(sort)가 아니라 mainSort 를 따른다.
+    #ISSUE: 체크가 하나도 없을 때 메인 "CURRENT EVENT" 칸이 통째로 비면 고장난 것처럼 보인다
+            → 예전처럼 앞에서부터 채운다. slice 는 데이터에 체크가 4개 이상 들어가도 메인이
+              깨지지 않게 막는 마지막 방어선이다.
+    #ISSUE: 메인 순서를 sort 로 같이 쓰다 보니, 메인에서 한 장을 앞으로 보내려고 카드를 옮기면
+            이벤트 페이지 순서까지 끌려 바뀌었다 → mainSort 로 갈라 놨다. 고르기(어느 3장)는
+            sort 순서로, 늘어놓기(그 3장의 순서)는 mainSort 로 한다. */
+export function mainEvents(items: EventItem[]): EventItem[] {
+    const picked = items.filter((item) => item.showOnMain);
+    return (picked.length ? picked : items).slice(0, MAIN_MAX).sort((a, b) => a.mainSort - b.mainSort);
 }
 
 /** 관리자 목록에 찍을 상태 */
-export function eventStatus(
-    event: Pick<EventItem, 'alwaysOn' | 'startDate' | 'endDate' | 'isPublished'>,
-    today = todayKey(),
-): '진행 중' | '예정' | '종료' | '숨김' | '기간 확인 필요' {
-    if (!event.isPublished) return '숨김';
-    if (event.alwaysOn) return '진행 중';
-    if (brokenPeriod(event)) return '기간 확인 필요';
-    if (event.startDate && today < event.startDate) return '예정';
-    if (event.endDate && today > event.endDate) return '종료';
-    return '진행 중';
-}
-
-const dots = (value: string) => value.replace(/-/g, '.');
-
-/** "2026.09.01 — 2026.09.30" / "상시 진행" */
-export function formatEventPeriod(event: Pick<EventItem, 'alwaysOn' | 'startDate' | 'endDate'>): string {
-    if (event.alwaysOn) return '상시 진행';
-    if (event.startDate && event.endDate) return `${dots(event.startDate)} — ${dots(event.endDate)}`;
-    if (event.endDate) return `~ ${dots(event.endDate)} 까지`;
-    if (event.startDate) return `${dots(event.startDate)} ~`;
-    return '상시 진행';
-}
-
-/** 정상가 대비 할인율(%). 할인이 아니면 0 */
-export function eventDiscountRate(event: Pick<EventItem, 'originalPrice' | 'salePrice'>): number {
-    const { originalPrice, salePrice } = event;
-    if (originalPrice === null || salePrice === null || originalPrice <= salePrice) return 0;
-    return Math.round((1 - salePrice / originalPrice) * 100);
+export function eventStatus(event: Pick<EventItem, 'imageUrl' | 'isPublished'>): '보임' | '숨김' | '사진 필요' {
+    if (!event.imageUrl) return '사진 필요';
+    return event.isPublished ? '보임' : '숨김';
 }
 
 export function subscribeEvents(
     onItems: (items: EventItem[]) => void,
     onError: (error: Error) => void,
-    /** true 면 고객 화면용 — 숨김 + 기간이 지난 이벤트를 빼고 내려 준다 */
+    /** true 면 고객 화면용 — 숨김 + 사진 없는 이벤트를 빼고 내려 준다 */
     publishedOnly = false,
 ): Unsubscribe {
     return onSnapshot(
         eventsCollection,
         (snapshot) => {
-            const today = todayKey();
             const items = snapshot.docs
                 .map((entry) => normalizeEvent(entry.id, entry.data()))
-                .filter((item) => !publishedOnly || (item.isPublished && isEventLive(item, today)))
+                .filter((item) => !publishedOnly || (item.isPublished && Boolean(item.imageUrl)))
                 .sort((a, b) => a.sort - b.sort);
             onItems(items);
         },
@@ -190,23 +145,18 @@ export function subscribeEvents(
    "무엇을 고쳐야 하는지" 가 그대로 읽히게 적는다. */
 function assertValidEvent(input: EventInput): void {
     if (!input.title.trim()) throw new Error('이벤트 이름이 비어 있습니다. 이름을 적은 뒤 저장해 주세요.');
-    if (input.alwaysOn) return;
-    if (input.startDate && !isDate(input.startDate)) throw new Error('시작일이 올바르지 않습니다. 날짜를 다시 골라 주세요.');
-    if (input.endDate && !isDate(input.endDate)) throw new Error('종료일이 올바르지 않습니다. 날짜를 다시 골라 주세요.');
-    if (input.startDate && input.endDate && input.endDate < input.startDate) {
-        throw new Error('종료일이 시작일보다 빠릅니다. 기간을 다시 확인해 주세요.');
-    }
 }
 
+/* 새 칸은 목록 맨 앞에 만든다. [+ 이벤트 칸 추가] 버튼이 목록 위에 있어서, 뒤에 붙이면
+   누른 자리에서는 아무 일도 안 일어난 것처럼 보이고 한참 내려가야 새 칸이 나온다.
+   새로 만드는 이벤트가 보통 최신 프로모션이라 앞자리가 맞기도 하다. */
 export async function createEvent(input: EventInput): Promise<string> {
     assertValidEvent(input);
     const snapshot = await getDocs(eventsCollection);
-    const latestSort = Math.max(
-        -1,
-        ...snapshot.docs.map((entry) => (typeof entry.data().sort === 'number' ? entry.data().sort : -1)),
-    );
+    const sorts = snapshot.docs.map((entry) => (typeof entry.data().sort === 'number' ? entry.data().sort : 0));
+    const sort = sorts.length ? Math.min(...sorts) - 1 : 0;
     const now = new Date().toISOString();
-    const created = await addDoc(eventsCollection, { ...input, sort: latestSort + 1, createdAt: now, updatedAt: now });
+    const created = await addDoc(eventsCollection, { ...input, sort, createdAt: now, updatedAt: now });
     return created.id;
 }
 
@@ -223,5 +173,13 @@ export async function updateEventSorts(items: Array<{ docId: string; sort: numbe
     const batch = writeBatch(db);
     const updatedAt = new Date().toISOString();
     items.forEach(({ docId, sort }) => batch.update(doc(db, COLLECTION_NAME, docId), { sort, updatedAt }));
+    await batch.commit();
+}
+
+/** 메인에서 나오는 순서만 저장한다. 이벤트 페이지 순서(sort)는 건드리지 않는다. */
+export async function updateEventMainSorts(items: Array<{ docId: string; mainSort: number }>): Promise<void> {
+    const batch = writeBatch(db);
+    const updatedAt = new Date().toISOString();
+    items.forEach(({ docId, mainSort }) => batch.update(doc(db, COLLECTION_NAME, docId), { mainSort, updatedAt }));
     await batch.commit();
 }

@@ -121,6 +121,40 @@ export function VisibilitySwitch({
     );
 }
 
+/** 켜고 끄는 체크칸. 글자까지 눌러도 켜지도록 label 로 감싼다.
+    reason 을 주면 못 켜는 까닭이 말풍선(title)으로 뜬다 — 왜 안 눌리는지 모르는 일이 없게. */
+export function CheckBox({
+    checked,
+    onChange,
+    disabled,
+    reason,
+    children,
+}: {
+    checked: boolean;
+    onChange: (checked: boolean) => void;
+    disabled?: boolean;
+    reason?: string;
+    children: React.ReactNode;
+}) {
+    return (
+        <label
+            title={reason}
+            className={`inline-flex items-center gap-1.5 text-caption-sm font-semibold ${
+                disabled ? 'cursor-not-allowed text-latte/45' : 'cursor-pointer text-cocoa'
+            }`}
+        >
+            <input
+                type="checkbox"
+                checked={checked}
+                disabled={disabled}
+                onChange={(event) => onChange(event.target.checked)}
+                className="h-4 w-4 shrink-0 cursor-pointer accent-[#C95813] disabled:cursor-not-allowed"
+            />
+            {children}
+        </label>
+    );
+}
+
 export function TextAction({
     children,
     onClick,

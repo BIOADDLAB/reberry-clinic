@@ -10,7 +10,7 @@ import WhySection from '@/components/home/WhySection';
 import Reveal from '@/components/motion/Reveal';
 import TourSwiper from '@/components/ui/TourSwioer';
 import PopupModal from '@/components/home/PopupModal';
-import ManagedEventList from '@/components/events/ManagedEventList';
+import ManagedEventPosters from '@/components/events/ManagedEventPosters';
 import HomeBASection from '@/components/home/HomeBASection';
 import TextureBackground from '@/components/ui/TextureBackground';
 
@@ -101,7 +101,7 @@ export default async function Home() {
                         <h2 className="font-display text-h2 tracking-[0.08em]">CURRENT EVENT</h2>
                         <p className="mt-3 text-lead font-semibold text-cocoa">{tEvents('currentTitle')}</p>
                     </Reveal>
-                    <ManagedEventList limit={3} showHeader={false} />
+                    <ManagedEventPosters main showHeader={false} />
                     <div className="mt-10 text-center">
                         <MoreView href="/events" dark />
                     </div>

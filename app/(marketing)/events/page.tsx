@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
-import ManagedEventList from '@/components/events/ManagedEventList';
+import ManagedEventPosters from '@/components/events/ManagedEventPosters';
 
 export async function generateMetadata() {
     const t = await getTranslations('events');
@@ -17,7 +17,7 @@ export default async function EventsPage() {
 
             <section className="overflow-x-clip bg-[#F5F1EA] py-16 lg:py-24">
                 <div className="container-site">
-                    <ManagedEventList />
+                    <ManagedEventPosters />
                 </div>
             </section>
 
