@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore, type PointerEvent as ReactPointerEvent } from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { nav } from '@/components/lib/site';
@@ -33,6 +33,23 @@ export default function Header() {
        시그니처 페이지에서는 글자가 배경에 묻혀 읽기 어려웠다.
        → 헤더 전체를 감지 범위로 둔다. 마우스가 헤더를 벗어나면 다시 투명으로 돌아간다. */
     const [hovered, setHovered] = useState(false);
+    /* #ISSUE: 새로고침·첫 진입 직후 맨 위에서 헤더에 마우스를 올려도 흰 배경이 안 들어왔다.
+       화면(서버 HTML)은 먼저 그려지고 React 는 그 뒤에 연결(하이드레이션)되는데, 그 사이에 커서가
+       이미 헤더 위에 있으면 브라우저가 보낸 mouseenter 를 React 가 놓친다. 그 뒤로는 헤더 안에서
+       아무리 움직여도 "들어왔다" 이벤트가 다시 오지 않아서, 헤더 밖으로 나갔다 들어와야만 켜졌다.
+       → ① React 연결 직후 실제 호버 상태(:hover)를 한 번 읽어 맞추고
+         ② enter 뿐 아니라 헤더 안에서 마우스가 움직이기만 해도 호버로 본다(놓친 enter 보정)
+         ③ 터치 탭은 호버로 치지 않는다(마우스일 때만) — 휴대폰은 지금처럼 스크롤·메뉴 열림만 배경을 정한다 */
+    const headerRef = useRef<HTMLElement>(null);
+    useEffect(() => {
+        if (window.matchMedia('(hover: hover)').matches && headerRef.current?.matches(':hover')) setHovered(true);
+    }, []);
+    const onHeaderPointer = (e: ReactPointerEvent) => {
+        if (e.pointerType === 'mouse' && !hovered) setHovered(true);
+    };
+    const onHeaderLeave = (e: ReactPointerEvent) => {
+        if (e.pointerType === 'mouse') setHovered(false);
+    };
     const close = () => setOpen(false);
     const lang = useLang();
     const t = useTranslations('common');
@@ -51,8 +68,10 @@ export default function Header() {
 
     return (
         <header
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
+            ref={headerRef}
+            onPointerEnter={onHeaderPointer}
+            onPointerMove={onHeaderPointer}
+            onPointerLeave={onHeaderLeave}
             className={cn(
                 'fixed inset-x-0 top-0 z-50 transition-colors duration-300',
                 solid

@@ -27,6 +27,13 @@ import SignatureSwipeRow from '@/components/signature/SignatureSwipeRow';
 
 const VISIBLE = SIGNATURE_BA_VISIBLE;
 
+/* 시안 줄 폭 1182 = 카드 369 × 3 + 간격 37.5 × 2. 줄 폭이 880 아래로 좁아지면 스와이프 */
+const ROW = {
+    maxWidth: 1182,
+    gapClassName: '[--gap:16px] md:[--gap:20px] xl:[--gap:37.5px]',
+    className: 'mt-10 lg:mt-[48px]',
+} as const;
+
 const CELL = 'relative';
 const SIZES = '(max-width: 768px) 78vw, (max-width: 1024px) 320px, 369px';
 const CARD =
@@ -50,23 +57,13 @@ export default function SignatureBASection({ slug, title, locale }: { slug: stri
                 </Reveal>
 
                 {loading ? (
-                    <SignatureSwipeRow
-                        count={VISIBLE}
-                        itemMin={280}
-                        fitGapClassName="gap-4 md:gap-5 xl:gap-[37.5px]"
-                        className="mt-10 lg:mt-[48px]"
-                    >
+                    <SignatureSwipeRow count={VISIBLE} {...ROW}>
                         {Array.from({ length: VISIBLE }).map((_, i) => (
                             <div key={i} className={cn(CELL, 'skeleton aspect-square rounded-[10px]')} aria-hidden />
                         ))}
                     </SignatureSwipeRow>
                 ) : (
-                    <SignatureSwipeRow
-                        count={photos.length}
-                        itemMin={280}
-                        fitGapClassName="gap-4 md:gap-5 xl:gap-[37.5px]"
-                        className="mt-10 lg:mt-[48px]"
-                    >
+                    <SignatureSwipeRow count={photos.length} {...ROW}>
                         {photos.map((photo) => (
                             <RevealItem key={photo.id} className={CELL}>
                                 <button

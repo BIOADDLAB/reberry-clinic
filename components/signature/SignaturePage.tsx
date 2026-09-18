@@ -95,10 +95,12 @@ export default function SignaturePage({ content: c }: { content: SignatureConten
                         <QuoteMark close className="mt-4 md:mt-[27px]" />
                     </Reveal>
 
+                    {/* 시안 줄 폭 1118 = 카드 350 × 3 + 간격 34 × 2. 넓은 화면에서는 이 폭으로 가운데,
+                        줄 폭이 880 아래로 좁아지면 스와이프 (자세한 규칙은 SignatureSwipeRow 머리말) */}
                     <SignatureSwipeRow
                         count={3}
-                        itemMin={280}
-                        fitGapClassName="gap-4 md:gap-5 xl:gap-[34px]"
+                        maxWidth={1118}
+                        gapClassName="[--gap:16px] md:[--gap:20px] xl:[--gap:34px]"
                         className="mt-10 lg:mt-[54px]"
                     >
                         {signaturePortraits(locale).map((src, i) => (
