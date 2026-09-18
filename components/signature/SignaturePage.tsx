@@ -11,6 +11,7 @@ import { SIGNATURE_IMAGES, signaturePortraits, type SignatureContent } from '@/c
 import Reveal from '@/components/motion/Reveal';
 import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup';
 import LocationSection from '@/components/ui/LocationSection';
+import SkeletonImage from '@/components/ui/SkeletonImage';
 import TextureBackground from '@/components/ui/TextureBackground';
 import SignatureBASection from '@/components/signature/SignatureBASection';
 import SignatureColumnSection from '@/components/signature/SignatureColumnSection';
@@ -105,10 +106,10 @@ export default function SignaturePage({ content: c }: { content: SignatureConten
                     >
                         {signaturePortraits(locale).map((src, i) => (
                             <RevealItem key={src} className="relative aspect-[350/412] overflow-hidden">
-                                <Image
+                                {/* 사진이 오기 전에는 은은하게 깜빡이는 자리(스켈레톤) — 도착하면 서서히 올라온다 */}
+                                <SkeletonImage
                                     src={src}
                                     alt={`${c.portraitAlt} ${i + 1}`}
-                                    fill
                                     quality={88}
                                     sizes="(max-width: 768px) 78vw, (max-width: 1024px) 320px, 350px"
                                     className="object-cover"

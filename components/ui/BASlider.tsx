@@ -9,6 +9,7 @@ import { useBAPhotos, useBAPhotosLoading, filterMainBAPhotos } from '@/component
 import Skeleton from '@/components/ui/Skeleton';
 import BAPhotoModal from '@/components/ui/BAPhotoModal';
 import BAPhotoCard, { BAPhotoCardSkeleton } from '@/components/ui/BAPhotoCard';
+import SwipeHint from '@/components/ui/SwipeHint';
 import type { BAPhoto } from '@/components/lib/ba';
 
 interface Props {
@@ -32,7 +33,7 @@ export default function BASlider({ light }: Props) {
     const photos = filterMainBAPhotos(allPhotos); // main 숫자 있는 것만, 순서대로
     const [selectedPhoto, setSelectedPhoto] = useState<BAPhoto | null>(null);
 
-    const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
+    const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll, hint } =
         useOverflowSlider<HTMLDivElement>(photos.length, 320, 20);
 
     // Firestore 응답 대기 중 — 카드 자리를 스켈레톤으로 잡아둔다 (레이아웃 점프 방지)
@@ -77,19 +78,28 @@ export default function BASlider({ light }: Props) {
                 />
             </button>
 
-            <div
-                ref={ref}
-                {...dragProps}
-                onScroll={onScroll}
-                className={cn(
-                    'no-scrollbar flex snap-x gap-4 overflow-x-auto scroll-smooth md:gap-5',
-                    over ? 'mr-[calc(50%-50vw-2px)] pr-[calc(50vw-50%+40px)] md:mr-0 md:pr-0' : 'justify-center',
-                    dragClass,
-                )}
-            >
-                {photos.map((p) => (
-                    <BAPhotoCard key={p.id} photo={p} sizes={CARD_SIZES} className={CARD} onSelect={setSelectedPhoto} />
-                ))}
+            {/* flow-root: 아래 스크롤 상자의 음수 마진이 이 상자 밖으로 새지 않게 → 힌트가 카드 정가운데에 뜬다 */}
+            <div className="relative flow-root">
+                <div
+                    ref={ref}
+                    {...(over ? dragProps : {})}
+                    onScroll={onScroll}
+                    className={cn(
+                        'no-scrollbar flex snap-x gap-4 overflow-x-auto scroll-smooth md:gap-5',
+                        /* #ISSUE: 메인 카드 아래가 살짝 잘려 보였다. 가로 스크롤 상자(overflow-x)는 세로로도 잘라내는데,
+                           상자 높이가 카드 높이와 똑같아서 카드 그림자(아래로 약 22px)와 테두리 선(ring)이 위아래로 잘렸다.
+                           → 안쪽에 위 12 · 아래 24px 여유를 주고, 같은 만큼 바깥 마진을 당겨 자리(간격)는 그대로 둔다 */
+                        '-mb-6 -mt-3 pb-6 pt-3',
+                        over ? 'mr-[calc(50%-50vw-2px)] pr-[calc(50vw-50%+40px)] md:mr-0 md:pr-0' : 'justify-center',
+                        over && dragClass,
+                    )}
+                >
+                    {photos.map((p) => (
+                        <BAPhotoCard key={p.id} photo={p} sizes={CARD_SIZES} className={CARD} onSelect={setSelectedPhoto} />
+                    ))}
+                </div>
+
+                <SwipeHint show={hint.show} touch={hint.touch} />
             </div>
 
             <button

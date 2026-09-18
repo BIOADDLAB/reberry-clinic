@@ -22,6 +22,7 @@ import { SIGNATURE_BA_MORE_HREF, SIGNATURE_BA_VISIBLE } from '@/components/lib/s
 import Reveal from '@/components/motion/Reveal';
 import { RevealItem } from '@/components/motion/RevealGroup';
 import BAPhotoModal from '@/components/ui/BAPhotoModal';
+import SkeletonImage from '@/components/ui/SkeletonImage';
 import { Rich, SIG_TYPE } from '@/components/signature/SignatureParts';
 import SignatureSwipeRow from '@/components/signature/SignatureSwipeRow';
 
@@ -59,7 +60,11 @@ export default function SignatureBASection({ slug, title, locale }: { slug: stri
                 {loading ? (
                     <SignatureSwipeRow count={VISIBLE} {...ROW}>
                         {Array.from({ length: VISIBLE }).map((_, i) => (
-                            <div key={i} className={cn(CELL, 'skeleton aspect-square rounded-[10px]')} aria-hidden />
+                            <div
+                                key={i}
+                                className={cn(CELL, 'aspect-square rounded-[10px] bg-sand/45 motion-safe:animate-pulse')}
+                                aria-hidden
+                            />
                         ))}
                     </SignatureSwipeRow>
                 ) : (
@@ -123,12 +128,12 @@ function SignatureBAPhoto({ photo }: { photo: BAPhoto }) {
     const t = useTranslations('common');
     const label = resolveBALabel(photo);
 
+    /* 사진이 오기 전에는 은은하게 깜빡이는 자리(스켈레톤)를 깔고, 도착하면 서서히 올린다 */
     if (isCombinedBAPhoto(photo)) {
         return (
-            <Image
+            <SkeletonImage
                 src={baPhotoUrl(photo)}
                 alt={`${label} ${t('beforeAfter')}`}
-                fill
                 quality={88}
                 sizes={SIZES}
                 className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
@@ -151,21 +156,19 @@ function SignatureBAPhoto({ photo }: { photo: BAPhoto }) {
                 />
             </span>
             <span className="relative flex h-[42%] border-y border-cocoa/10">
-                <span className="skeleton relative flex-1 overflow-hidden border-r border-white">
-                    <Image
+                <span className="relative flex-1 overflow-hidden border-r border-white">
+                    <SkeletonImage
                         src={photo.before}
                         alt={t('beforeAltWithLabel', { label })}
-                        fill
                         quality={85}
                         sizes="(max-width: 1280px) 180px, 185px"
                         className="object-cover"
                     />
                 </span>
-                <span className="skeleton relative flex-1 overflow-hidden">
-                    <Image
+                <span className="relative flex-1 overflow-hidden">
+                    <SkeletonImage
                         src={photo.after}
                         alt={t('afterAltWithLabel', { label })}
-                        fill
                         quality={85}
                         sizes="(max-width: 1280px) 180px, 185px"
                         className="object-cover"

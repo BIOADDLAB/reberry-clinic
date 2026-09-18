@@ -2,7 +2,13 @@
 // #ISSUE: 기존 좌/우 사이드 이미지 팝업(MainSidePopups)을 대체한다.
 //   · 왼쪽 = 팝업 이미지(4:5 통짜, 잘리지 않음) / 오른쪽 = 탭 목록 / 아래 = 오늘 하루 그만 보기 · 닫기
 //   · 탭이 둘 이상이면 5초마다 자동으로 넘어간다(탭을 직접 누르면 타이머 재시작)
-//   · 색상은 리베리 팔레트(cream / cocoa / sand), 로딩 자리표시자는 globals.css 의 .skeleton
+//   · 색상은 리베리 팔레트(cream / cocoa / sand)
+// #ISSUE: 휴대폰에서 팝업 사진이 5초마다 "사라졌다가 다시 생기는" 것처럼 깜빡여 고장처럼 보였다.
+//   탭이 넘어갈 때마다 사진 칸을 통째로 새로 만들어서(key 교체) 새 사진이 올 때까지 멈춘 회색 칸만 보였기 때문.
+//   (PC 는 오른쪽 탭 목록이 같이 바뀌어 넘어간 걸 알 수 있지만, 휴대폰은 작은 점뿐이라 깜빡임만 보였다)
+//   → ① 팝업은 첫 사진을 미리 받아 둔 뒤 연다(최대 1.5초 기다림, 그래도 늦으면 스켈레톤을 깔고 연다)
+//     ② 탭 사진을 전부 겹쳐 두고 미리 받아서, 넘어갈 때는 다음 사진이 준비된 뒤 부드럽게 겹쳐 바꾼다(크로스페이드)
+//     ③ 첫 사진이 오기 전에만 은은하게 깜빡이는 스켈레톤을 보여 준다. 자동 넘김 5초는 사진이 뜬 뒤부터 센다
 
 'use client';
 
@@ -41,32 +47,64 @@ export default function PopupModal() {
     const tCommon = useTranslations('common');
     const reduced = useReducedMotion();
     const [tabs, setTabs] = useState<PopupTab[]>([]);
+    /** 고른 탭 (점·목록 표시) */
     const [index, setIndex] = useState(0);
+    /** 받아 둔 사진 주소 */
+    const [loaded, setLoaded] = useState<Record<string, true>>({});
+    /** 탭을 바꾸기 직전까지 떠 있던 사진 — 새 사진이 다 받아질 때까지 이걸 그대로 보여 준다 */
+    const [previous, setPrevious] = useState(-1);
     const [open, setOpen] = useState(false);
+
+    /** 지금 화면에 띄울 사진: 고른 탭 사진이 준비됐으면 그것, 아니면 앞 사진(없으면 -1 = 스켈레톤) */
+    const shown = tabs[index] && loaded[tabs[index].imageUrl] ? index : previous;
+    const goTo = (next: number) => {
+        setPrevious(shown);
+        setIndex(next);
+    };
 
     useEffect(() => {
         if (hiddenToday()) return;
 
         let alive = true;
+        let waitTimer: ReturnType<typeof setTimeout> | undefined;
         getPopupSetting().then((setting) => {
             if (!alive || !setting?.enabled) return;
             const usable = setting.tabs.filter((tab) => tab.imageUrl);
             if (usable.length === 0) return;
             setTabs(usable);
-            setOpen(true);
+
+            // 첫 사진을 미리 받아 두고 연다 → 빈 칸이 먼저 뜨지 않는다. 늦으면 1.5초 뒤 스켈레톤을 깔고 연다
+            let opened = false;
+            const openNow = () => {
+                if (!alive || opened) return;
+                opened = true;
+                setOpen(true);
+            };
+            const first = new window.Image();
+            first.onload = openNow;
+            first.onerror = openNow;
+            first.src = usable[0].imageUrl;
+            waitTimer = setTimeout(openNow, 1500);
         });
 
         return () => {
             alive = false;
+            if (waitTimer) clearTimeout(waitTimer);
         };
     }, []);
 
-    // 배너처럼 5초마다 다음 탭으로. 탭을 직접 누르면 index 가 바뀌며 타이머도 다시 시작된다
+    // 배너처럼 5초마다 다음 탭으로. 사진이 실제로 뜬 뒤부터 센다.
+    // 탭을 직접 누르면 index 가 바뀌며 타이머도 다시 시작된다
     useEffect(() => {
-        if (!open || reduced || tabs.length < 2) return;
-        const timer = setTimeout(() => setIndex((i) => (i + 1) % tabs.length), AUTO_MS);
+        if (!open || reduced || tabs.length < 2 || shown !== index) return;
+        const timer = setTimeout(() => {
+            setPrevious(index);
+            setIndex((index + 1) % tabs.length);
+        }, AUTO_MS);
         return () => clearTimeout(timer);
-    }, [open, reduced, tabs.length, index]);
+    }, [open, reduced, tabs.length, index, shown]);
+
+    const markLoaded = (url: string) => setLoaded((map) => (map[url] ? map : { ...map, [url]: true }));
 
     // 팝업이 떠 있는 동안에는 뒤 배경이 스크롤되지 않게 (BAPhotoModal 과 같은 방식)
     useEffect(() => {
@@ -121,8 +159,31 @@ export default function PopupModal() {
                         <div className="grid min-h-0 grid-cols-1 items-stretch sm:grid-cols-[minmax(0,1.55fr)_minmax(7.5rem,0.7fr)]">
                             {/* 인스타 4:5. 비율은 어느 화면에서도 그대로 유지된다 */}
                             <div className="relative aspect-[4/5] overflow-hidden bg-cream">
-                                {/* key 를 주소로 잡아 탭이 바뀌면 스켈레톤부터 다시 시작한다 */}
-                                <PopupImage key={current.imageUrl} tab={current} onInternalNavigate={close} />
+                                {/* 첫 사진이 오기 전에만 — 은은하게 깜빡이는 스켈레톤 */}
+                                {shown === -1 && (
+                                    <span
+                                        aria-hidden
+                                        className="absolute inset-0 bg-sand/45 motion-safe:animate-pulse"
+                                    />
+                                )}
+                                {/* 탭 사진을 전부 겹쳐 두고(= 미리 받아 두고) 떠 있는 것만 보이게 한다.
+                                    바뀔 때는 서로 겹쳐 흐려졌다 나타난다(크로스페이드) */}
+                                {tabs.map((tab, i) => (
+                                    <div
+                                        key={`${tab.imageUrl}-${i}`}
+                                        inert={i !== shown}
+                                        className={cn(
+                                            'absolute inset-0 transition-opacity duration-500 ease-out',
+                                            i === shown ? 'z-10 opacity-100' : 'pointer-events-none opacity-0',
+                                        )}
+                                    >
+                                        <PopupImage
+                                            tab={tab}
+                                            onReady={() => markLoaded(tab.imageUrl)}
+                                            onInternalNavigate={close}
+                                        />
+                                    </div>
+                                ))}
                             </div>
 
                             {/* 모바일 전용 점 인디케이터 — 탭 개수만큼 찍히고 현재 탭에 불이 들어온다.
@@ -133,7 +194,7 @@ export default function PopupModal() {
                                         <button
                                             key={`dot-${tab.imageUrl}-${i}`}
                                             type="button"
-                                            onClick={() => setIndex(i)}
+                                            onClick={() => goTo(i)}
                                             aria-current={i === index ? 'true' : undefined}
                                             aria-label={tab.label || t('tab', { n: i + 1 })}
                                             // 점은 작아도 누르는 영역은 24px 확보
@@ -160,7 +221,7 @@ export default function PopupModal() {
                                     <button
                                         key={`${tab.imageUrl}-${i}`}
                                         type="button"
-                                        onClick={() => setIndex(i)}
+                                        onClick={() => goTo(i)}
                                         aria-current={i === index ? 'true' : undefined}
                                         className={cn(
                                             'w-full break-keep px-3 py-3.5 text-center text-caption leading-snug whitespace-pre-line transition-colors duration-300 sm:px-5',
@@ -201,10 +262,17 @@ export default function PopupModal() {
 
 /**
  * 4:5 박스 안에 통째로 넣는다. 비율이 달라도 자르지 않는다.
- * 받아오는 동안에는 스켈레톤을 덮어둔다. 다 받으면 스켈레톤은 아예 사라진다.
+ * 받는 중 표시(스켈레톤)와 언제 보일지는 바깥(PopupModal)이 정한다 — 여기서는 다 받았다고만 알린다.
  */
-function PopupImage({ tab, onInternalNavigate }: { tab: PopupTab; onInternalNavigate: () => void }) {
-    const [loaded, setLoaded] = useState(false);
+function PopupImage({
+    tab,
+    onReady,
+    onInternalNavigate,
+}: {
+    tab: PopupTab;
+    onReady: () => void;
+    onInternalNavigate: () => void;
+}) {
     const router = useRouter();
     const href = tab.linkUrl ? internalSiteHref(tab.linkUrl) : null;
 
@@ -215,8 +283,9 @@ function PopupImage({ tab, onInternalNavigate }: { tab: PopupTab; onInternalNavi
             width={POPUP_IMAGE_WIDTH}
             height={POPUP_IMAGE_HEIGHT}
             unoptimized
-            onLoad={() => setLoaded(true)}
-            onError={() => setLoaded(true)}
+            loading="eager"
+            onLoad={onReady}
+            onError={onReady}
             className="h-full w-full object-contain"
         />
     );
@@ -244,8 +313,6 @@ function PopupImage({ tab, onInternalNavigate }: { tab: PopupTab; onInternalNavi
             ) : (
                 img
             )}
-
-            {!loaded && <span aria-hidden className="skeleton absolute inset-0" />}
         </>
     );
 }

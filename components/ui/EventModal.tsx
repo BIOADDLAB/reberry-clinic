@@ -14,11 +14,13 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
 import { useTranslations } from 'next-intl';
+import SkeletonImage from '@/components/ui/SkeletonImage';
+import SwipeHint, { useSwipeHint } from '@/components/ui/SwipeHint';
 import 'swiper/css';
 
 export interface PosterItem {
@@ -35,6 +37,7 @@ export default function EventModal({ events }: { events: PosterItem[] }) {
     /* 슬라이드가 화면에 다 들어오면 Swiper 가 스스로 잠근다(isLocked) → 화살표·점을 감춘다 */
     const [locked, setLocked] = useState(true);
     const t = useTranslations('common');
+    const stageRef = useRef<HTMLDivElement>(null);
 
     // 모달이 떠 있는 동안 뒤 배경 스크롤 잠금 + ESC 로 닫기 (BAPhotoModal 과 같은 방식)
     useEffect(() => {
@@ -56,16 +59,21 @@ export default function EventModal({ events }: { events: PosterItem[] }) {
 
     /* rewind 라서 처음·끝에서도 막히지 않는다 → 화살표를 흐리게 만들 일이 없다 */
     const showNav = !locked && stops > 1;
+    /* 넘길 포스터가 있을 때만 스와이프 힌트 (한 화면에 다 들어오면 Swiper 가 잠겨 있다) */
+    const hint = useSwipeHint(stageRef, showNav);
 
     return (
         <>
-            <div className="relative mx-auto mt-12 max-w-5xl lg:mt-16">
+            <div ref={stageRef} className="relative mx-auto mt-12 max-w-5xl lg:mt-16">
                 <Swiper
                     onSwiper={(instance) => {
                         setSwiper(instance);
                         sync(instance);
                     }}
-                    onSlideChange={sync}
+                    onSlideChange={(instance) => {
+                        sync(instance);
+                        hint.dismiss();
+                    }}
                     onResize={sync}
                     /* 화면 폭이 바뀌면 한 번에 보이는 장수가 달라져 멈출 자리 수도 달라진다 */
                     onBreakpoint={sync}
@@ -92,12 +100,12 @@ export default function EventModal({ events }: { events: PosterItem[] }) {
                                     onClick={() => setActive(e)}
                                     className="group relative block aspect-[7/10] w-full overflow-hidden rounded-[4px] shadow-sm"
                                 >
-                                    <Image
+                                    {/* 포스터가 오기 전에는 은은하게 깜빡이는 자리(스켈레톤) — 도착하면 사라진다 */}
+                                    <SkeletonImage
                                         src={e.image}
                                         /* 캡션은 비워 둘 수 있다 → 대체글까지 비면 사진을 못 보는
                                            사람에게 아무 설명이 없다. 그럴 때만 일반 이름을 쓴다 */
                                         alt={e.title || t('eventPoster')}
-                                        fill
                                         quality={88}
                                         sizes="(max-width: 768px) 100vw, 360px"
                                         className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
@@ -127,6 +135,8 @@ export default function EventModal({ events }: { events: PosterItem[] }) {
                         <SideArrow dir="next" label={t('next')} onClick={() => swiper?.slideNext()} />
                     </>
                 )}
+
+                <SwipeHint show={hint.show} touch={hint.touch} />
             </div>
 
             {showNav && <Dots count={stops} current={at} onPick={(to) => swiper?.slideTo(to)} className="mt-8" />}

@@ -1,8 +1,10 @@
 // #COMPONENTS: 슬라이더 공통 로직 — 아이템 총폭을 계산해 "넘치면 슬라이더 / 안 넘치면 중앙 정렬" 판단
 // 컬럼 슬라이더 방식(useDragScroll)을 모든 카드 슬라이더가 공유. 화살표 활성 상태(canPrev/canNext)까지 제공
+// 2026.09 — 마우스 드래그 보강(useDragScroll)과 스와이프 힌트(hint)도 여기서 같이 내려준다
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSwipeHint } from '@/components/ui/SwipeHint';
 import { useDragScroll } from './useDragScroll';
 
 export function useOverflowSlider<T extends HTMLElement>(count: number, itemW: number, gap: number, allowWide = false) {
@@ -46,6 +48,9 @@ export function useOverflowSlider<T extends HTMLElement>(count: number, itemW: n
         setPage(Math.min(Math.max(1, Math.round(el.scrollLeft / step) + 1), Math.round(max / step) + 1));
     }, [count, itemW, gap, allowWide, ref]);
 
+    // 넘길 게 있을 때(over)만 스와이프 힌트 — 그리는 쪽은 <SwipeHint show={hint.show} touch={hint.touch} />
+    const hint = useSwipeHint(ref, over);
+
     useEffect(() => {
         const t = setTimeout(sync, 50);
         window.addEventListener('resize', sync);
@@ -57,5 +62,5 @@ export function useOverflowSlider<T extends HTMLElement>(count: number, itemW: n
 
     const move = (dir: -1 | 1) => ref.current?.scrollBy({ left: dir * stepRef.current, behavior: 'smooth' });
 
-    return { ref, dragProps, dragClass, over, wide, canPrev, canNext, page, total, move, onScroll: sync };
+    return { ref, dragProps, dragClass, over, wide, canPrev, canNext, page, total, move, onScroll: sync, hint };
 }

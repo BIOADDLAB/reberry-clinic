@@ -14,6 +14,7 @@ import { cn } from '@/components/lib/cn';
 import Skeleton from '@/components/ui/Skeleton';
 import BAPhotoModal from '@/components/ui/BAPhotoModal';
 import BAPhotoCard, { BAPhotoCardEmpty, BAPhotoCardSkeleton } from '@/components/ui/BAPhotoCard';
+import SwipeHint from '@/components/ui/SwipeHint';
 
 const CARD_W = 320;
 const GAP = 20;
@@ -44,7 +45,7 @@ export default function BACardSlider({
     const showEmpty = !loading && photos.length === 0 && emptyPlaceholder && Boolean(emptyLabel);
     const [selectedPhoto, setSelectedPhoto] = useState<BAPhoto | null>(null);
 
-    const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
+    const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll, hint } =
         useOverflowSlider<HTMLDivElement>(showEmpty ? 1 : photos.length, CARD_W, GAP);
 
     if (loading) {
@@ -70,7 +71,8 @@ export default function BACardSlider({
         <div className={cn('relative mx-auto w-full', TRACK)}>
             {/* #ISSUE: 화살표 위치가 옛 카드 높이(438px)의 절반인 top-[219px] 로 박혀 있어 카드 모양을 바꾸면 같이 틀어졌다.
                 → 화살표와 트랙을 한 상자로 묶고 세로 가운데(top-1/2)로 잡아 카드 높이와 무관하게 만든다 */}
-            <div className="relative">
+            {/* flow-root: 아래 스크롤 상자의 음수 마진이 이 상자 밖으로 새지 않게 → 화살표·힌트가 카드 정가운데 */}
+            <div className="relative flow-root">
                 {/* 메인 BASlider 화살표 그대로 — 배경 없음(border만), 넘길 방향이 있으면 진하게 */}
                 {over && (
                     <>
@@ -109,7 +111,9 @@ export default function BACardSlider({
                     onScroll={onScroll}
                     className={cn(
                         'flex gap-4 md:gap-5',
-                        over && 'no-scrollbar snap-x overflow-x-auto scroll-smooth pb-1',
+                        /* #ISSUE: 가로 스크롤 상자는 세로로도 잘라내서 카드 그림자·테두리 선의 아래쪽이 잘렸다(pb-1 로는 모자람)
+                           → 메인 BASlider 와 같이 안쪽 위 12 · 아래 24px 여유 + 같은 만큼 바깥 마진을 당겨 자리는 그대로 */
+                        over && 'no-scrollbar -mb-6 -mt-3 snap-x overflow-x-auto scroll-smooth pb-6 pt-3',
                         // 풀블리드는 창(1000)이 화면에 안 들어가는 반응형 구간에서만 — 1080 이상은 창 안 스크롤(3개 노출)
                         over && 'mr-[calc(50%-50vw-2px)] pr-[calc(50vw-50%+40px)] min-[1080px]:mr-0 min-[1080px]:pr-0',
                         over && dragClass,
@@ -130,6 +134,8 @@ export default function BACardSlider({
                         ))
                     )}
                 </div>
+
+                <SwipeHint show={hint.show} touch={hint.touch} />
             </div>
 
             {/* 메인 BASlider 도트 그대로 (다크 섹션 → 크림) */}

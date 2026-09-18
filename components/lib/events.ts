@@ -124,23 +124,33 @@ export function eventStatus(event: Pick<EventItem, 'imageUrl' | 'isPublished'>):
     return event.isPublished ? '보임' : '숨김';
 }
 
+const toItems = (docs: Array<{ id: string; data: () => Record<string, unknown> }>, publishedOnly: boolean) =>
+    docs
+        .map((entry) => normalizeEvent(entry.id, entry.data()))
+        .filter((item) => !publishedOnly || (item.isPublished && Boolean(item.imageUrl)))
+        .sort((a, b) => a.sort - b.sort);
+
 export function subscribeEvents(
-    onItems: (items: EventItem[]) => void,
+    /** meta.fromCache — 서버 응답이 아니라 기기에 남은 캐시로 먼저 온 목록인지.
+        #ISSUE: 연결이 늦거나 끊기면 Firestore 는 서버 대신 "빈 캐시"를 먼저 돌려준다. 이걸 그대로 믿으면
+                이벤트가 있는데도 고객 화면에 "진행 중인 이벤트가 없습니다" 가 떴다 → 받는 쪽에서 구분할 수 있게 넘긴다 */
+    onItems: (items: EventItem[], meta: { fromCache: boolean }) => void,
     onError: (error: Error) => void,
     /** true 면 고객 화면용 — 숨김 + 사진 없는 이벤트를 빼고 내려 준다 */
     publishedOnly = false,
 ): Unsubscribe {
     return onSnapshot(
         eventsCollection,
-        (snapshot) => {
-            const items = snapshot.docs
-                .map((entry) => normalizeEvent(entry.id, entry.data()))
-                .filter((item) => !publishedOnly || (item.isPublished && Boolean(item.imageUrl)))
-                .sort((a, b) => a.sort - b.sort);
-            onItems(items);
-        },
+        (snapshot) => onItems(toItems(snapshot.docs, publishedOnly), { fromCache: snapshot.metadata.fromCache }),
         onError,
     );
+}
+
+/** 실시간 연결(onSnapshot)이 실패했을 때 쓰는 한 번 읽기. 서버에 못 닿아 캐시만 비어 있으면 실패로 본다 */
+export async function fetchEvents(publishedOnly = false): Promise<EventItem[]> {
+    const snapshot = await getDocs(eventsCollection);
+    if (snapshot.metadata.fromCache && snapshot.empty) throw new Error('offline: 서버에 연결하지 못했습니다');
+    return toItems(snapshot.docs, publishedOnly);
 }
 
 /* 새 칸은 목록 맨 앞에 만든다. [+ 이벤트 칸 추가] 버튼이 목록 위에 있어서, 뒤에 붙이면

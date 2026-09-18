@@ -5,11 +5,11 @@
 
 'use client';
 
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import T from '@/components/lang/T';
 import { cn } from '@/components/lib/cn';
 import Skeleton from '@/components/ui/Skeleton';
+import SkeletonImage from '@/components/ui/SkeletonImage';
 import {
     baCategoryLabel,
     baPhotoUrl,
@@ -75,13 +75,13 @@ export default function BAPhotoCard({
             </div>
 
             {/* 합성본은 한 칸 그대로, 예전 두 장짜리는 같은 정사각을 위아래로 반씩 나눠 쓴다.
-                → 두 방식이 섞여 있어도 카드 높이가 같아 슬라이더에서 줄이 어긋나지 않는다. */}
+                → 두 방식이 섞여 있어도 카드 높이가 같아 슬라이더에서 줄이 어긋나지 않는다.
+                사진이 오기 전에는 SkeletonImage 가 은은하게 깜빡이는 자리를 깔아 둔다(도착하면 사라짐) */}
             {combined ? (
-                <div className="skeleton relative aspect-square overflow-hidden bg-white">
-                    <Image
+                <div className="relative aspect-square overflow-hidden bg-white">
+                    <SkeletonImage
                         src={baPhotoUrl(photo)}
                         alt={t('beforeAltWithLabel', { label })}
-                        fill
                         quality={85}
                         sizes={sizes}
                         className="object-contain transition-transform duration-500 group-hover:scale-[1.02]"
@@ -90,21 +90,19 @@ export default function BAPhotoCard({
                 </div>
             ) : (
                 <div className="relative flex aspect-square flex-col overflow-hidden bg-white">
-                    <div className="skeleton relative min-h-0 flex-1 overflow-hidden">
-                        <Image
+                    <div className="relative min-h-0 flex-1 overflow-hidden">
+                        <SkeletonImage
                             src={photo.before}
                             alt={t('beforeAltWithLabel', { label })}
-                            fill
                             quality={85}
                             sizes={sizes}
                             className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                         />
                     </div>
-                    <div className="skeleton relative min-h-0 flex-1 overflow-hidden">
-                        <Image
+                    <div className="relative min-h-0 flex-1 overflow-hidden">
+                        <SkeletonImage
                             src={photo.after}
                             alt={t('afterAlt')}
-                            fill
                             quality={85}
                             sizes={sizes}
                             className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"

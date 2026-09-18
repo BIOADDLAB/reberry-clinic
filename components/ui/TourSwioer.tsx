@@ -6,6 +6,8 @@ import { Navigation } from 'swiper/modules';
 import { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import type { Swiper as SwiperType } from 'swiper';
+import SkeletonImage from '@/components/ui/SkeletonImage';
+import SwipeHint, { useSwipeHint } from '@/components/ui/SwipeHint';
 import 'swiper/css';
 
 const tourImages = [
@@ -36,9 +38,13 @@ export default function TourSwiper() {
     const t = useTranslations('common');
     const swiperRef = useRef<SwiperType | null>(null);
     const [i, setI] = useState(0);
+    const sectionRef = useRef<HTMLElement>(null);
+    /* 무한 루프라 항상 넘길 게 있다 → 화면에 들어오면 한 번 스와이프 힌트.
+       (loop 는 시작할 때도 slideChange 가 한 번 나서 그걸로 끄면 안 뜬다 → 끄는 건 섹션을 누르는 순간으로만) */
+    const hint = useSwipeHint(sectionRef, true);
 
     return (
-        <section className="relative">
+        <section ref={sectionRef} className="relative">
             <Swiper
                 modules={[Navigation]}
                 loop
@@ -49,10 +55,10 @@ export default function TourSwiper() {
                 {tourImages.map((image, k) => (
                     <SwiperSlide key={image.src} className="h-full">
                         <div className="relative h-full w-full">
-                            <Image
+                            {/* 다음 장으로 넘겼는데 사진이 아직 안 왔으면 빈 칸 대신 은은한 스켈레톤 */}
+                            <SkeletonImage
                                 src={image.src}
                                 alt={image.alt}
-                                fill
                                 quality={85}
                                 sizes="100vw"
                                 className="pointer-events-none object-cover"
@@ -64,6 +70,8 @@ export default function TourSwiper() {
             </Swiper>
 
             <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-deep/40 via-transparent to-transparent md:from-deep/15" />
+
+            <SwipeHint show={hint.show} touch={hint.touch} />
 
             <div className="absolute inset-x-0 bottom-6 z-10 border-y border-cream/50 text-cream md:bottom-18">
                 <div className="container-site flex items-center justify-between py-3 px-5! md:py-4 md:px-10!">

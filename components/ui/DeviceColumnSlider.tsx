@@ -13,6 +13,7 @@ import type { Col, FirestoreCol } from '@/components/lib/columns';
 import { useColumnsBySlug } from '@/components/lib/useColumns';
 import { useLocalizedColumnText } from '@/components/lib/useColumnTextTranslation';
 import DoctorLabel from '@/components/ui/DoctorLabel';
+import SwipeHint from '@/components/ui/SwipeHint';
 
 function DeviceColumnCard({ c }: { c: FirestoreCol }) {
     const t = useTranslations('common');
@@ -74,7 +75,7 @@ export default function DeviceColumnSlider({
     const t = useTranslations('common');
     const resolvedItems = useColumnsBySlug(slug, items);
 
-    const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll } =
+    const { ref, dragProps, dragClass, over, canPrev, canNext, page, total, move, onScroll, hint } =
         useOverflowSlider<HTMLDivElement>(resolvedItems.length, 344, 24);
 
     // 정적/DB 어느 쪽에도 칼럼이 없으면 이 영역 전체를 숨김 (훅 호출 이후에 있어야 함)
@@ -106,20 +107,24 @@ export default function DeviceColumnSlider({
             <DoctorLabel />
 
             {/* 카드 — 좌측 정렬, 영역 안에서만 스크롤 */}
-            <div
-                role="group"
-                aria-label={t('deviceColumnListAria')}
-                ref={ref}
-                {...dragProps}
-                onScroll={onScroll}
-                className={cn(
-                    'no-scrollbar mt-3 flex snap-x justify-start gap-6 overflow-x-auto scroll-smooth pb-1',
-                    dragClass,
-                )}
-            >
-                {resolvedItems.map((c, i) => (
-                    <DeviceColumnCard key={`${c.docId}-${i}`} c={c} />
-                ))}
+            <div className="relative mt-3">
+                <div
+                    role="group"
+                    aria-label={t('deviceColumnListAria')}
+                    ref={ref}
+                    {...dragProps}
+                    onScroll={onScroll}
+                    className={cn(
+                        'no-scrollbar flex snap-x justify-start gap-6 overflow-x-auto scroll-smooth pb-1',
+                        over && dragClass,
+                    )}
+                >
+                    {resolvedItems.map((c, i) => (
+                        <DeviceColumnCard key={`${c.docId}-${i}`} c={c} />
+                    ))}
+                </div>
+
+                <SwipeHint show={hint.show} touch={hint.touch} />
             </div>
 
             {/* 페이저 — 카드 아래 우측 (넘칠 때만) */}
