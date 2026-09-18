@@ -157,8 +157,13 @@ export default function PopupModal() {
                             → 모바일(640px 미만)은 오른쪽 탭 목록을 감추고 이미지가 폭을 통째로 쓴다(4:5 비율 유지).
                               탭 이동은 이미지 아래쪽 점(●●●)으로 한다. 640px 이상은 기존 좌우 2단 그대로 */}
                         <div className="grid min-h-0 grid-cols-1 items-stretch sm:grid-cols-[minmax(0,1.55fr)_minmax(7.5rem,0.7fr)]">
-                            {/* 인스타 4:5. 비율은 어느 화면에서도 그대로 유지된다 */}
-                            <div className="relative aspect-[4/5] overflow-hidden bg-cream">
+                            {/* 인스타 4:5 — 화면 높이가 넉넉하면 4:5 그대로.
+                                #ISSUE: 아이폰 사파리처럼 보이는 높이가 짧으면, 4:5 를 지키려고 사진 칸 폭이 줄어들어
+                                        오른쪽에 뒤 배경이 비치는 빈틈이 생겼다(팝업 아래 점·버튼 줄보다 사진 칸이 좁아짐).
+                                → 폭은 항상 꽉 채우고(w-full), 높이만 화면 안에 들어오게 줄인다(max-h).
+                                  모바일 10.5rem = 바깥 위아래 여백 5rem + 점 줄 2rem + 버튼 줄 3rem + 여유 / PC 는 점 줄이 없다.
+                                  사진은 object-contain 이라 칸이 조금 납작해져도 비율 그대로 가운데에 선다 */}
+                            <div className="relative aspect-[4/5] max-h-[calc(100dvh-10.5rem)] w-full overflow-hidden bg-cream sm:max-h-[calc(100dvh-8.5rem)]">
                                 {/* #ISSUE: 탭 사진을 전부 absolute 로 겹친 뒤, 아이폰 사파리에서 이 칸 높이가 0 이 돼
                                     사진 칸이 통째로 사라지고 점·버튼만 남았다. 사파리는 안이 전부 absolute 인 칸을
                                     grid·flex 높이 계산에서 aspect-ratio 로 못 잡고 0 으로 계산하는 경우가 있다.
