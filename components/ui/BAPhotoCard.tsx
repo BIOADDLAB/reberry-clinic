@@ -40,7 +40,9 @@ export default function BAPhotoCard({
 
     /* 카드를 눌러야 사진이 크게 열리는데, 눌러도 된다는 표시가 없어 그냥 지나치기 쉬웠다.
        → 이벤트 포스터와 같은 방식으로, 마우스를 올리면 "크게 보기" 를 덮어 준다.
-         휴대폰에는 마우스가 없어서(md 미만) 띄우지 않는다. 사진 위 화살표 뱃지(z-10)보다 위에 놓는다. */
+         휴대폰에는 마우스가 없어서(md 미만) 띄우지 않는다. 사진 위 화살표 뱃지(z-10)보다 위에 놓는다.
+       #ISSUE: 덮개가 사진 칸 안에 들어 있어서 사진 영역만 어두워지고 위(분류 알약)·아래(시술명)는 하얗게 남았다.
+               → 카드(button) 바로 아래로 옮겨 카드 전체를 덮는다. 모서리는 카드의 overflow-hidden · rounded 가 잘라 준다 */
     const viewLargerHint = (
         <span className="pointer-events-none absolute inset-0 z-20 hidden items-center justify-center bg-deep/35 opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:flex">
             <span className="rounded-full border border-cream/70 px-4 py-2 text-caption font-semibold text-cream">
@@ -54,7 +56,7 @@ export default function BAPhotoCard({
             type="button"
             onClick={() => onSelect(photo)}
             aria-label={`${label} ${t('beforeAfter')}`}
-            className={cn('group block cursor-pointer text-left transition-transform duration-300', FRAME, className)}
+            className={cn('group relative block cursor-pointer text-left transition-transform duration-300', FRAME, className)}
         >
             {/* #ISSUE: 합성본에는 사진 안에 이미 RE:BERRY 가 찍혀 있어 머리말에도 넣으면 한 카드에 같은 글자가 두 번 나온다.
                 → 로고가 안 박힌 예전 두 장짜리에만 남긴다.
@@ -86,7 +88,6 @@ export default function BAPhotoCard({
                         sizes={sizes}
                         className="object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                     />
-                    {viewLargerHint}
                 </div>
             ) : (
                 <div className="relative flex aspect-square flex-col overflow-hidden bg-white">
@@ -112,7 +113,6 @@ export default function BAPhotoCard({
                     <span className="absolute left-1/2 top-1/2 z-10 flex h-[34px] w-[34px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-cocoa">
                         <span aria-hidden className="mt-[-3px] block h-2 w-2 rotate-45 border-b-2 border-r-2 border-cream" />
                     </span>
-                    {viewLargerHint}
                 </div>
             )}
 
@@ -121,6 +121,8 @@ export default function BAPhotoCard({
                     <T ko={label} />
                 </span>
             </div>
+
+            {viewLargerHint}
         </button>
     );
 }
