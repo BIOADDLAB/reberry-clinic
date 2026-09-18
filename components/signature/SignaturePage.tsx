@@ -61,7 +61,12 @@ export default function SignaturePage({ content: c }: { content: SignatureConten
                         <span className={cn('text-balance', keep)}>{c.heroTitle}</span>
                         <DotOrnament size="lg" />
                     </h1>
-                    <p className={cn('mt-2.5 text-[clamp(15px,1.4vw,22px)] font-medium leading-[1.45] tracking-normal md:mt-4 lg:mt-[22px]', keep)}>
+                    <p
+                        className={cn(
+                            'mt-2.5 text-[clamp(15px,1.4vw,22px)] font-medium leading-[1.45] tracking-normal md:mt-4 lg:mt-[22px]',
+                            keep,
+                        )}
+                    >
                         {c.heroSub}
                     </p>
                 </Reveal>
@@ -73,7 +78,12 @@ export default function SignaturePage({ content: c }: { content: SignatureConten
                 <TextureBackground src="/images/bg-texture-06.jpg" className="opacity-60" />
                 <div className="container-site relative text-center">
                     <Reveal>
-                        <p className={cn('notranslate font-title font-normal leading-[1.2] tracking-normal', SIG_TYPE.display)}>
+                        <p
+                            className={cn(
+                                'notranslate font-title font-normal leading-[1.2] tracking-normal',
+                                SIG_TYPE.display,
+                            )}
+                        >
                             Reberry Signature
                         </p>
                         <h2 className={cn(H2, 'mt-2 font-light md:mt-[19px]', keep)}>
@@ -83,14 +93,7 @@ export default function SignaturePage({ content: c }: { content: SignatureConten
 
                     <Reveal delay={0.1} className="mt-12 flex flex-col items-center lg:mt-[71px]">
                         <QuoteMark />
-                        <p
-                            className={cn(
-                                'mt-4 font-semibold leading-[1.67] md:mt-[27px]',
-                                SIG_TYPE.quote,
-                                t24,
-                                keep,
-                            )}
-                        >
+                        <p className={cn('mt-4 font-semibold leading-[1.67] md:mt-[27px]', SIG_TYPE.quote, t24, keep)}>
                             <Rich text={c.introQuote} locale={locale} />
                         </p>
                         <QuoteMark close className="mt-4 md:mt-[27px]" />
@@ -138,7 +141,6 @@ export default function SignaturePage({ content: c }: { content: SignatureConten
             <section className={cn('py-20 lg:pt-[182px] lg:pb-[141px]', BG.story)}>
                 <div className="container-site">
                     <div className="mx-auto grid max-w-[1190px] items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,428px)] lg:gap-12">
-                   
                         <Reveal className="order-2 lg:order-1 lg:-mb-6">
                             <p className="flex items-center gap-4 md:gap-[21px]">
                                 <DotOrnament />
@@ -171,7 +173,12 @@ export default function SignaturePage({ content: c }: { content: SignatureConten
                             >
                                 <Rich text={c.storySub} locale={locale} />
                             </p>
-                            <div className={cn('mt-8 font-medium leading-[1.95] tracking-tight text-latte lg:mt-[48px] lg:leading-[35px]', SIG_TYPE.body)}>
+                            <div
+                                className={cn(
+                                    'mt-8 font-medium leading-[1.95] tracking-tight text-latte lg:mt-[48px] lg:leading-[35px]',
+                                    SIG_TYPE.body,
+                                )}
+                            >
                                 <p className={keep}>
                                     <Rich text={c.storyBody[0]} breakFrom="xl" locale={locale} />
                                 </p>
@@ -198,11 +205,7 @@ export default function SignaturePage({ content: c }: { content: SignatureConten
                         </Reveal>
                     </div>
 
-                    <SignatureColumnSection
-                        slug={c.slug}
-                        title={fillName(c.columnTitle, c.name)}
-                        locale={locale}
-                    />
+                    <SignatureColumnSection slug={c.slug} title={fillName(c.columnTitle, c.name)} locale={locale} />
                 </div>
             </section>
 
@@ -226,7 +229,7 @@ export default function SignaturePage({ content: c }: { content: SignatureConten
                                 />
                                 <p
                                     className={cn(
-                                        'font-medium leading-[1.5] text-latte md:leading-[34px]',
+                                        'font-medium tracking-tight leading-[1.5] text-latte md:leading-[34px]',
                                         SIG_TYPE.h3,
                                         t24,
                                         keep,
@@ -254,13 +257,7 @@ export default function SignaturePage({ content: c }: { content: SignatureConten
                 <div className="container-site relative">
                     <Reveal className="text-center">
                         <p className={cn('notranslate font-display leading-[1.3]', SIG_TYPE.eyebrow)}>Recommendation</p>
-                        <h2
-                            className={cn(
-                                'mt-1 text-balance font-bold leading-[1.4] md:mt-0.5',
-                                SIG_TYPE.h2Sm,
-                                keep,
-                            )}
-                        >
+                        <h2 className={cn('mt-1 text-balance font-bold leading-[1.4] md:mt-0.5', SIG_TYPE.h2Sm, keep)}>
                             {c.recommendTitle}
                         </h2>
                     </Reveal>
@@ -281,7 +278,7 @@ export default function SignaturePage({ content: c }: { content: SignatureConten
                                     <CheckCircleIcon variant="recommend" className="size-5 shrink-0 md:size-[26px]" />
                                     <span
                                         className={cn(
-                                            'text-[15px] font-medium leading-[1.45] md:text-[clamp(17px,1.8vw,24px)]',
+                                            ' text-[15px]  tracking-tight font-medium leading-[1.45] md:text-[clamp(17px,1.8vw,24px)]',
                                             t24,
                                             keep,
                                         )}
