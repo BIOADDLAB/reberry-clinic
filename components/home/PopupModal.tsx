@@ -159,6 +159,12 @@ export default function PopupModal() {
                         <div className="grid min-h-0 grid-cols-1 items-stretch sm:grid-cols-[minmax(0,1.55fr)_minmax(7.5rem,0.7fr)]">
                             {/* 인스타 4:5. 비율은 어느 화면에서도 그대로 유지된다 */}
                             <div className="relative aspect-[4/5] overflow-hidden bg-cream">
+                                {/* #ISSUE: 탭 사진을 전부 absolute 로 겹친 뒤, 아이폰 사파리에서 이 칸 높이가 0 이 돼
+                                    사진 칸이 통째로 사라지고 점·버튼만 남았다. 사파리는 안이 전부 absolute 인 칸을
+                                    grid·flex 높이 계산에서 aspect-ratio 로 못 잡고 0 으로 계산하는 경우가 있다.
+                                    (예전에는 사진(img) 자체가 칸 안에 흐름대로 들어 있어서 그 높이로 버텼다)
+                                    → 예전 img 자리에 보이지 않는 4:5 받침을 하나 깔아 어느 브라우저에서도 높이를 잡는다 */}
+                                <svg aria-hidden viewBox="0 0 4 5" className="pointer-events-none block h-full w-full" />
                                 {/* 첫 사진이 오기 전에만 — 은은하게 깜빡이는 스켈레톤 */}
                                 {shown === -1 && (
                                     <span
