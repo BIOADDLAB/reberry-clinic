@@ -61,7 +61,7 @@ export default async function Home() {
                     </h1>
                     <div className="mt-11 flex justify-center">
                         <Link
-                            href="/treatments/signature/booster"
+                            href="/treatments/signature/volume-booster"
                             className="text-lead min-w-[150px] border border-cream/70 px-3.75 py-1.25  transition-colors hover:bg-cocoa/50 hover:text-white hover:shadow-sm"
                         >
                             SIGNATURE

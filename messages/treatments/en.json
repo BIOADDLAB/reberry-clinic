@@ -34,7 +34,7 @@
   },
   "ivItems": ["IV Therapy", "Vitamin IV", "White Glow IV", "Cinderella IV", "Vitamin C (High-Dose)", "Vitamin B IV", "Antioxidant IV", "Glycyrrhizin IV", "Garlic IV", "Vitamin D IV", "Placenta IV"],
   "signature": {
-    "booster": {
+    "volume-booster": {
       "heroDescription": "A RE:BERRY signature treatment for sagging and hollowing",
       "headline": { "light": "Standing at", "strong": "the peak of volume" },
       "definition": { "title": "What is the RE:BERRY Volume Booster?", "text": "A signature treatment that addresses both hollowing and sagging to design volume and firmness for each face." },
@@ -43,7 +43,7 @@
       "story": { "hook": ["Why does your face", "keep losing vitality and looking hollow?", "It's not just about getting older"], "body": "When even one layer loses elasticity,\nvolume hollows out and facial lines collapse.\nTrue anti-aging is not simply about filling.\nIt starts with finding the cause of lost volume\nand rebuilding the structure with balance." },
       "columnHeading": "Verified by research, clinically proven Volume Booster stories"
     },
-    "acne": {
+    "chin-filler": {
       "heroDescription": "Structural facial balance through non-surgical chin augmentation",
       "headline": { "light": "Awakening dimension", "strong": "with the volume you need" },
       "definition": { "title": "What is non-surgical chin augmentation filler?", "text": "Filler restores projection to a recessed or underdeveloped chin, balancing the facial profile and creating natural dimension." },
@@ -52,7 +52,7 @@
       "story": { "hook": ["Why does your face", "lack definition and dimension?", "It is not simply a lack of volume"], "body": "A recessed chin can disrupt facial balance\nand make the mouth and jawline look short or heavy.\nChin augmentation begins not with simply adding volume,\nbut with designing the profile from forehead to chin\naccording to your individual proportions." },
       "columnHeading": "Verified by research, clinically proven filler stories"
     },
-    "redness": {
+    "under-eye": {
       "heroDescription": "A combined approach to under-eye bulging and hollowing",
       "headline": { "light": "Clear and defined", "strong": "at the peak of brightening" },
       "definition": { "title": "What is non-surgical under-eye fat repositioning?", "text": "A combined treatment that addresses under-eye bulging, hollowing, and laxity without surgery to soften shadows and uneven contours." },

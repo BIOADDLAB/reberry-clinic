@@ -17,6 +17,7 @@ import { getSolutionBySlug, localizeSolution } from '@/components/lib/solutions'
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbJsonLd, medicalWebPageJsonLd } from '@/components/lib/jsonLd';
 import { AGING_LIFTING_PAGES, agingLiftingPageSlug } from '@/components/lib/adminConfig';
+import { signaturePath } from '@/components/lib/signaturePages';
 import TextureBackground from '@/components/ui/TextureBackground';
 
 interface Params {
@@ -79,7 +80,7 @@ export default async function SolutionDetailPage({ params }: Params) {
     const itemName = liftingPage ? (isKo ? liftingPage.label : `${s.engName} Lifting`) : isKo ? s.name : s.engName;
     const description = s.introDescription || s.desc.join(' ');
     const categoryHub: Record<string, string> = {
-        signature: '/treatments/signature/booster',
+        signature: signaturePath('booster'),
         skin: '/treatments/skin/pigment',
         aging: `/treatments/aging/laser-lifting/${AGING_LIFTING_PAGES[0].itemSlug}`,
     };

@@ -10,7 +10,15 @@ import { logoutAdmin } from '../actions';
 
 export default function AdminProtectedLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex min-h-screen flex-col bg-[#F5F2EC] md:flex-row">
+        /* #ISSUE: 관리자 글씨는 직원용 한국어인데, <html lang> 은 홈페이지 언어 토글(쿠키)을 따라간다.
+           일본어·중국어로 홈페이지를 보다가 관리자에 들어오면 크롬이 이 화면까지 번역해서
+           "전후사진" 이 "선후사진" 이 되고 안내문 절반이 일본어로 바뀌었다.
+           → 관리자 화면은 통째로 번역 제외(lang=ko + translate=no + notranslate). */
+        <div
+            lang="ko"
+            translate="no"
+            className="notranslate flex min-h-screen flex-col bg-[#F5F2EC] md:flex-row"
+        >
             <aside className="flex shrink-0 flex-col bg-cocoa text-cream md:sticky md:top-0 md:h-dvh md:w-64">
                 <div className="flex items-center justify-between px-4 py-4 md:px-5 md:py-7">
                     <div>

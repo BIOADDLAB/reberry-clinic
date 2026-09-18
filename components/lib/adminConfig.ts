@@ -3,14 +3,16 @@
     - 제한 숫자를 바꾸고 싶으면 여기만 고치면 관리자 화면 전체에 반영됨.
     - (글자수 기준은 실제 카드 크기에서 줄바꿈/말줄임 없이 들어가는 최대치를 재서 정한 값) */
 
+import { signaturePageName } from '@/components/lib/signaturePages';
+
 // ── 시그니처 시술 페이지 (전후사진·칼럼 공통)
-// slug 값은 components/lib/treatments.ts 의 시그니처 slug 와 반드시 같아야 함!!
+// slug 값은 Firestore 저장 키(booster/acne/redness). 공개 URL 은 signaturePages.ts 의 route.
 export const SIGNATURE_PAGES = [
     // 기존 slug는 Firestore 전후사진·칼럼 연결을 끊지 않기 위해 유지한다.
-    { slug: 'booster', label: '리베리 볼륨 부스터' },
-    { slug: 'acne', label: '비수술 앞턱전진 필러' },
-    { slug: 'redness', label: '비수술 눈밑 지방 재배치' },
-] as const;
+    { slug: 'booster' as const, label: signaturePageName('booster') },
+    { slug: 'acne' as const, label: signaturePageName('acne') },
+    { slug: 'redness' as const, label: signaturePageName('redness') },
+];
 
 // 피부교정 페이지는 시그니처와 route slug가 겹치므로 관리자 저장 키를 분리한다.
 export const SKIN_TREATMENT_PAGES = [
@@ -51,26 +53,13 @@ export const agingLiftingPageSlug = (itemSlug: string) =>
     AGING_LIFTING_PAGES.find((page) => page.itemSlug === itemSlug)?.slug;
 
 /* ── 글자수 제한
-   #ISSUE: 예전 값(제목 10자 + 영문 14자)은 카드에 물리적으로 안 들어갔다.
-   실제 폰트로 재보면 24px 기준 한글 10자 = 205px, 영문 14자 = 156px → 합계 361px.
-   쓸 수 있는 폭은 252px 뿐이라 100px 넘게 초과해서 제목이 2~3줄로 터졌다.
-
-   폭 계산 (칼럼 카드 기준)
-     카드 344 − 좌우 여백 30×2 = 284
-     헤더 안쪽 여백 10×2 = 264
-     제목과 영문 사이 간격 12 = 252  ← 제목 + 영문이 나눠 쓸 폭
-
-   실측(Asta Sans Bold / Belleza, 24px)
-     한글 1자 ≈ 20.5px,  영문 1자 ≈ 11.1px
-     → 영문 있을 때  : 한글 7자(144) + 영문 9자(100) = 244  ✓
-     → 영문 없을 때  : 264px 전부 사용 → 한글 12자(247)   ✓ */
+   #ISSUE: 예전 값(제목 10자)은 카드 폭에 물리적으로 안 들어가 제목이 2~3줄로 터졌다.
+   폭 계산 (칼럼 카드 기준): 카드 344 − 좌우 여백 30×2 − 헤더 안쪽 여백 10×2 = 264px
+   실측(Asta Sans Bold, 24px) 한글 1자 ≈ 20.5px → 12자(247px) 까지 한 줄에 들어간다.
+   #ISSUE: 이름표 옆에 있던 영문 칸을 없애면서(2026.09) 영문 유무로 갈렸던 두 값을 하나로 합쳤다. */
 export const LIMITS = {
-    // 칼럼 — 시술,기기 이름 (카드 왼쪽 위 큰 글씨). 오른쪽에 영문명이 같이 놓이는 경우
-    columnTitle: 7,
-    // 칼럼 — 영문 이름을 비웠을 때. 오른쪽 자리를 통째로 쓸 수 있어 더 길게 허용
-    columnTitleNoEn: 12,
-    // 칼럼 — 영문 이름 (카드 오른쪽 위). 영문은 글자 폭이 좁아 한글보다 여유 있음
-    columnEn: 9,
+    // 칼럼 — 시술·기기 이름표. 지금 목록 디자인에서는 관리자 안에서만 쓰는 메모다
+    columnTitle: 12,
     // 칼럼 — 제목(카드 본문). 2줄까지만 보이고 넘으면 말줄임(...) 처리됨
     columnText: 34,
     // 전후사진 — 새 시그니처 정식 명칭까지 입력할 수 있도록 20자로 확장
@@ -79,7 +68,10 @@ export const LIMITS = {
 
 // ── 개수 제한
 export const COUNT_LIMITS = {
-    columnPerPage: 12, // 제공받은 칼럼을 빠짐없이 넣기 위해 페이지당 최대 12개
+    /* 페이지당 칼럼 최대 10개.
+       #ISSUE: 12개까지 열어 뒀더니 목록이 화면을 넘겨 한 줄씩 보는 의미가 흐려졌다.
+               한 페이지에 10개면 관련 글을 담기에 충분하다는 병원 확인. */
+    columnPerPage: 10,
     baPerPage: 14, // 시그니처 페이지 1개당 전후사진 최대
     baMain: 10, // 메인페이지에 노출할 전후사진 최대
 } as const;

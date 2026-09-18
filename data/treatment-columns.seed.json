@@ -51,9 +51,9 @@
 
     { "docId": "booster--223984837413", "title": "볼륨부스터", "en": "", "text": "광범위한 꺼짐·처짐, 볼륨부스터란?", "link": "https://blog.naver.com/drpyton/223984837413", "slugs": ["booster"], "order": 1 },
     { "docId": "booster--223977526634", "title": "볼륨부스터", "en": "", "text": "앞볼·팔자 볼륨 시술의 최적 주입층", "link": "https://blog.naver.com/drpyton/223977526634", "slugs": ["booster"], "order": 2 },
-    { "docId": "acne--224366512727", "title": "앞턱전진필러", "en": "", "text": "곡선형 얼굴과 턱끝의 중요성", "link": "https://blog.naver.com/drpyton/224366512727", "slugs": ["acne"], "order": 1 },
-    { "docId": "acne--224054575406", "title": "앞턱전진필러", "en": "", "text": "턱끝 전방 경사와 필러 효과·용량", "link": "https://blog.naver.com/drpyton/224054575406", "slugs": ["acne"], "order": 2 },
-    { "docId": "acne--224052037469", "title": "앞턱전진필러", "en": "", "text": "턱끝 필러로 입체적인 얼굴 만들기", "link": "https://blog.naver.com/drpyton/224052037469", "slugs": ["acne"], "order": 3 },
+    { "docId": "acne--224366512727", "title": "턱끝전진필러", "en": "", "text": "곡선형 얼굴과 턱끝의 중요성", "link": "https://blog.naver.com/drpyton/224366512727", "slugs": ["acne"], "order": 1 },
+    { "docId": "acne--224054575406", "title": "턱끝전진필러", "en": "", "text": "턱끝 전방 경사와 필러 효과·용량", "link": "https://blog.naver.com/drpyton/224054575406", "slugs": ["acne"], "order": 2 },
+    { "docId": "acne--224052037469", "title": "턱끝전진필러", "en": "", "text": "턱끝 필러로 입체적인 얼굴 만들기", "link": "https://blog.naver.com/drpyton/224052037469", "slugs": ["acne"], "order": 3 },
     { "docId": "redness--223713346855", "title": "눈밑지방재배치", "en": "", "text": "눈밑지방, 수술 대신 HIFU로 개선하기", "link": "https://blog.naver.com/drpyton/223713346855", "slugs": ["redness"], "order": 1 },
     { "docId": "redness--224171201975", "title": "눈밑지방재배치", "en": "", "text": "수술 없이 눈밑지방 줄이는 복합 시술", "link": "https://blog.naver.com/drpyton/224171201975", "slugs": ["redness"], "order": 2 },
     { "docId": "redness--224378467116", "title": "눈밑지방재배치", "en": "", "text": "하안검 후 눈밑 꺼짐·울퉁불퉁 개선", "link": "https://blog.naver.com/drpyton/224378467116", "slugs": ["redness"], "order": 3 },

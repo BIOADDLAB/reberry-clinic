@@ -1,3 +1,11 @@
+import { signaturePageName, signaturePath, type SignatureSlug } from '@/components/lib/signaturePages';
+
+const signatureNav = (slug: SignatureSlug) => ({
+    label: signaturePageName(slug, 'ko'),
+    en: signaturePageName(slug, 'en'),
+    href: signaturePath(slug),
+});
+
 export const site = {
     url: 'https://www.reberryclinicmapo.com',
     name: '리베리의원',
@@ -44,16 +52,8 @@ export const nav = [
     {
         label: '시그니처시술',
         en: 'SIGNATURE',
-        href: '/treatments/signature/booster',
-        children: [
-            { label: '리베리 볼륨 부스터', en: 'Volume Booster', href: '/treatments/signature/booster' },
-            { label: '비수술 앞턱전진 필러', en: 'Chin Filler', href: '/treatments/signature/acne' },
-            {
-                label: '비수술 눈밑 지방 재배치',
-                en: 'Under-Eye Repositioning',
-                href: '/treatments/signature/redness',
-            },
-        ],
+        href: signaturePath('booster'),
+        children: [signatureNav('booster'), signatureNav('acne'), signatureNav('redness')],
     },
     { label: '전후사진', en: 'BEFORE & AFTER', href: '/reviews' },
     {

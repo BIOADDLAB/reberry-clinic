@@ -126,18 +126,18 @@ const underEyeFaq = [
 export const treatments: Treatment[] = [
     /* ─────────── 시그니처 ─────────── */
     {
-        slug: 'booster',
+        slug: 'volume-booster',
         category: 'signature',
         visual: 15,
         visualW: 843,
         visualH: 591,
-        name: '리베리 볼륨 부스터',
-        en: 'Volume Booster',
+        name: '리베리 볼륨부스터',
+        en: 'RE:BERRY Volume Booster',
         heroEn: 'RE:BERRY Volume Booster',
         heroDescription: '쥬베룩 볼륨 기반 복합 볼륨 시술',
         headline: { light: '볼륨의', strong: '정점에 서다' },
         definition: {
-            title: '리베리 볼륨 부스터란?',
+            title: '리베리 볼륨부스터란?',
             text: '꺼짐과 처짐의 원인을 함께 살펴 얼굴 비율에 맞는 탄력과 볼륨을 설계하는 리베리 시그니처 시술입니다.',
         },
         hashtags: [
@@ -162,18 +162,18 @@ export const treatments: Treatment[] = [
         },
     },
     {
-        slug: 'acne',
+        slug: 'chin-filler',
         category: 'signature',
         visual: 2,
         visualW: 949,
         visualH: 592,
-        name: '비수술 앞턱전진 필러',
-        en: 'Filler',
+        name: '비수술 턱끝전진 필러',
+        en: 'Non-Surgical Chin Augmentation Filler',
         heroEn: 'Non-Surgical Chin Augmentation Filler',
         heroDescription: '무턱을 입체적으로 개선하는 구조적 필러 시술',
         headline: { light: '부족한 볼륨으로', strong: '입체감을 깨우다' },
         definition: {
-            title: '비수술 앞턱전진 필러란?',
+            title: '비수술 턱끝전진 필러란?',
             text: '뒤로 들어가거나 부족한 앞턱의 볼륨을 보완해 얼굴의 전후 균형과 자연스러운 입체감을 완성하는 시술입니다.',
         },
         hashtags: [
@@ -202,14 +202,14 @@ export const treatments: Treatment[] = [
         },
     },
     {
-        slug: 'redness',
+        slug: 'under-eye',
         category: 'signature',
         visual: 3,
         visualW: 808,
         visualH: 591,
         name: '비수술 눈밑 지방 재배치',
-        en: 'Brightening',
-        heroEn: 'Non-Surgical Under-Eye Brightening & Filling',
+        en: 'Non-Surgical Under-Eye Fat Repositioning',
+        heroEn: 'Non-Surgical Under-Eye Fat Repositioning',
         heroDescription: '눈밑 돌출과 꺼짐을 함께 개선하는 복합 시술',
         headline: { light: '어떤 순간에도 평온한 ', strong: '밝음의 정점에 서다' },
         definition: {

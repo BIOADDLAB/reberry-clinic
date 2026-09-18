@@ -45,8 +45,8 @@ export function medicalClinicNode() {
         availableLanguage: ['ko', 'en', 'ja', 'zh'],
         knowsAbout: [
             '피부과',
-            '리베리 볼륨 부스터',
-            '비수술 앞턱전진 필러',
+            '리베리 볼륨부스터',
+            '비수술 턱끝전진 필러',
             '비수술 눈밑 지방 재배치',
             '색소치료',
             '리프팅',

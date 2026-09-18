@@ -5,43 +5,43 @@ import SubHero from '@/components/ui/SubHero';
 import LocationSection from '@/components/ui/LocationSection';
 import { treatments, findTreatment, categoryLabel, localizeTreatment, type Category } from '@/components/lib/treatments';
 import JsonLd from '@/components/seo/JsonLd';
-import { breadcrumbJsonLd, faqPageJsonLd, medicalWebPageJsonLd } from '@/components/lib/jsonLd';
-import Image from 'next/image';
+import { breadcrumbJsonLd, medicalWebPageJsonLd } from '@/components/lib/jsonLd';
 import Reveal from '@/components/motion/Reveal';
 import { cn } from '@/components/lib/cn';
-import { SpinEmblem, FloatingCream } from '@/components/ui/DecoItem';
-import SectionDivider from '@/components/ui/SectionDivider';
-import Eyebrow from '@/components/ui/Eyebrow';
 import HashtagChips from '@/components/ui/HashtagChips';
 import SolutionSlider from '@/components/ui/SolutionSlider';
 import IvTagBox from '@/components/ui/IvTagBox';
 import { TwoDots } from '@/components/ui/DecoItem';
 import StepPlan from '@/components/ui/StepPlan';
-import FAQAccordion from '@/components/ui/FAQAccordion';
 import TreatmentIntroSection from '@/components/ui/TreatmentIntroSection';
 import TreatmentColumnSection from '@/components/ui/TreatmentColumnSection';
 import TreatmentBASection from '@/components/ui/TreatmentBASection';
 import { AGING_LIFTING_PAGES, skinTreatmentPageSlug } from '@/components/lib/adminConfig';
-import TextureBackground from '@/components/ui/TextureBackground';
+import {
+    getSignatureContent,
+    signaturePath,
+    signatureSlugFromRoute,
+} from '@/components/lib/signaturePages';
+import SignaturePage from '@/components/signature/SignaturePage';
 
 /* ════════════════════════════════════════════════════════════════════
    #ISSUE: 섹션 노출 순서는 아래 배열 하나로만 정한다. 순서를 바꾸고 싶으면
            JSX 를 옮기지 말고 이 배열의 문자열 순서만 바꾸면 된다.
 
-   intro     시술 소개 ("결점 없이 빛나는 미백의 정점에 서다" 헤드라인 + 인물/정의 카드) — 피부교정·안티에이징
-   story     시그니처 스토리 카드 ("…의 정점에 서다" 헤드라인 + 다크 카드)              — 시그니처
-   ba        전후사진 슬라이더 (Your Beauty Physician)                                  — 시그니처
-   solution  시술·기기 슬라이더 (해시태그 + RE:BERRY SOLUTION)                          — 공통
-   step      시술 STEP (StepPlan)                                                       — 피부교정·안티에이징
-   column    칼럼 슬라이더                                                              — 시그니처
-   faq       FAQ 아코디언                                                               — 시그니처
+   intro     시술 소개 ("결점 없이 빛나는 미백의 정점에 서다" 헤드라인 + 인물/정의 카드)
+   ba        전후사진 슬라이더                                                           — 피부교정
+   solution  시술·기기 슬라이더 (해시태그 + PERSONALIZED SOLUTION)
+   step      시술 STEP (StepPlan)
+   column    칼럼                                                                        — 피부교정
+
+   #2026.09 시그니처 3개 페이지(volume-booster / chin-filler / under-eye)는 새 시안으로 전면 교체되어
+            이 배열을 쓰지 않는다 → components/signature/SignaturePage.tsx
+            (섹션 순서: 히어로 → Reberry Signature → 스토리+칼럼 → 전후사진 → Why → Recommendation → 마무리 → 오시는 길)
 
    맨 위 SubHero(서브 히어로)와 맨 아래 LocationSection(오시는 길)은 항상 고정이라
    배열에 넣지 않는다. 목록에 없는 키는 그냥 안 그려진다.
    ════════════════════════════════════════════════════════════════════ */
 const SECTION_ORDER = {
-    // 시그니처: 서브히어로 → 스토리(정점에 서다) → 전후사진 → 시술/기기 → 칼럼 → FAQ → 오시는 길  (원래 순서)
-    signature: ['story', 'ba', 'solution', 'column', 'faq'],
     /* 피부교정: 전후사진 → STEP → 칼럼 → 시술·기기 → 시술 소개
        #ISSUE: intro(“Pigmentation — 결점 없이 빛나는 미백의 정점에 서다”)가 맨 위로 올라가 있었는데,
                원래 페이지에서는 오시는 길 바로 위 마지막 섹션이었다. 원래 자리로 되돌린다.
@@ -60,24 +60,6 @@ export function generateStaticParams() {
     return treatments.map((t) => ({ category: t.category, slug: t.slug }));
 }
 
-// 번역 파일의 FAQ 묶음을 페이지별 구성에 맞게 조립한다.
-type FaqItem = { q: string; a: string };
-function buildFaq(
-    faqRaw: {
-        common: FaqItem[];
-        sharedSignatureExtra: FaqItem[];
-        boosterExtra: FaqItem[];
-        underEyeExtra: FaqItem[];
-    },
-    kind: 'shared' | 'booster' | 'underEye',
-) {
-    if (kind === 'shared') {
-        const [first, last] = faqRaw.sharedSignatureExtra;
-        return [first, ...faqRaw.common, last];
-    }
-    return kind === 'booster' ? faqRaw.boosterExtra : faqRaw.underEyeExtra;
-}
-
 export async function generateMetadata({ params }: Params) {
     const { category, slug } = await params;
     const rawTreatment = findTreatment(category, slug);
@@ -87,6 +69,17 @@ export async function generateMetadata({ params }: Params) {
     const tTreatments = await getTranslations('treatments');
     const localizedCategoryLabel: Record<Category, string> =
         locale === 'ko' ? categoryLabel : (tTreatments.raw('categoryLabel') as Record<Category, string>);
+
+    // 시그니처는 화면에 보이는 새 문구로 제목·설명을 만든다
+    const signatureSlug = rawTreatment.category === 'signature' ? signatureSlugFromRoute(rawTreatment.slug) : undefined;
+    if (signatureSlug) {
+        const c = getSignatureContent(signatureSlug, locale);
+        return {
+            title: `${c.heroTitle} | ${localizedCategoryLabel.signature}`,
+            description: signatureDescription(c.heroSub, c.storySub),
+        };
+    }
+
     const t = localizeTreatment(
         rawTreatment,
         locale === 'ko' ? undefined : tTreatments.raw(`${rawTreatment.category}.${rawTreatment.slug}`),
@@ -98,25 +91,18 @@ export async function generateMetadata({ params }: Params) {
     };
 }
 
+const signatureDescription = (heroSub: string, storySub: string) =>
+    `${heroSub} — ${storySub.replace(/\s*\n\s*/g, ' ')}`;
+
 // 서브 히어로 배경: 카테고리별 (bg-sub-)
 const heroImage: Record<string, string> = {
-    signature: '/images/bg-sub-02.jpg',
     skin: '/images/bg-sub-03.jpg',
     aging: '/images/bg-sub-04.jpg',
 };
 
-const sigCard: Record<string, string> = {
-    redness: '03',
-    acne: '04',
-    booster: '05',
-};
-
 export default async function TreatmentPage({ params }: Params) {
     const { category, slug } = await params;
-    // 삭제된 예전 시그니처 주소로 들어와도 404 대신 새 대표 페이지로 보낸다.
-    if (category === 'signature' && (slug === 'pigment' || slug === 'lifting')) {
-        redirect('/treatments/signature/booster');
-    }
+    // 삭제된 예전 시그니처 주소는 next.config 301 이 새 주소로 보낸다.
     const rawTreatment = findTreatment(category, slug);
     if (!rawTreatment) notFound();
     if (category === 'aging' && slug === 'laser-lifting') {
@@ -130,104 +116,67 @@ export default async function TreatmentPage({ params }: Params) {
         rawTreatment,
         isKo ? undefined : tTreatments.raw(`${rawTreatment.category}.${rawTreatment.slug}`),
     );
+    const path = `/treatments/${t.category}/${t.slug}`;
+    const localizedCategory =
+        isKo ? categoryLabel[t.category] : (tTreatments.raw('categoryLabel') as Record<Category, string>)[t.category];
+    const categoryHub: Record<string, string> = {
+        signature: signaturePath('booster'),
+        skin: '/treatments/skin/pigment',
+        aging: `/treatments/aging/laser-lifting/${AGING_LIFTING_PAGES[0].itemSlug}`,
+    };
+    const breadcrumbsFor = (name: string) => {
+        const breadcrumbs = [{ name: '홈', path: '/' }];
+        if (categoryHub[t.category] && categoryHub[t.category] !== path) {
+            breadcrumbs.push({ name: localizedCategory, path: categoryHub[t.category] });
+        }
+        breadcrumbs.push({ name, path });
+        return breadcrumbs;
+    };
+
+    /* ── 시그니처 3개 페이지 — 2026.09 리뉴얼 시안 ── */
+    if (t.category === 'signature') {
+        const signatureSlug = signatureSlugFromRoute(t.slug);
+        if (signatureSlug) {
+            const content = getSignatureContent(signatureSlug, locale);
+            return (
+                <>
+                    <JsonLd data={breadcrumbJsonLd(breadcrumbsFor(content.heroTitle))} />
+                    <JsonLd
+                        data={medicalWebPageJsonLd({
+                            name: content.heroTitle,
+                            description: signatureDescription(content.heroSub, content.storySub),
+                            path,
+                        })}
+                    />
+                    <SignaturePage content={content} />
+                </>
+            );
+        }
+    }
+
+    /* ── 피부교정 · 안티에이징 ── */
     const name = isKo ? t.name : t.en;
     const ivItems = isKo ? t.ivItems : t.ivItems?.length ? (tTreatments.raw('ivItems') as string[]) : undefined;
-
-    // 시그니처 여부
-    const sig = t.signature;
-    const rawFaq = sig && !sig.hideFaq ? (!isKo ? buildFaq(tTreatments.raw('faq'), sig.faqSet) : sig.faq) : undefined;
-    // 의료진 확정 답변이 아직 없는 #TODO 항목은 공개 화면과 구조화 데이터에서 숨긴다.
-    const faq = rawFaq?.filter((item) => !item.a.startsWith('#TODO'));
     const pageContentSlug = t.category === 'skin' ? (skinTreatmentPageSlug(t.slug) ?? t.slug) : t.slug;
 
     // 섹션 본문. 여기서는 "무엇을 그릴지"만 만들고, "어떤 순서로 그릴지"는 SECTION_ORDER 가 정한다
     const sections: Record<string, ReactNode> = {
-        intro: sig ? null : (
-            <TreatmentIntroSection
-                treatment={t}
-                name={name}
-            />
-        ),
+        intro: <TreatmentIntroSection treatment={t} name={name} />,
 
-        /* 시그니처 — 스토리 카드 */
-        /* #TODO: 반응형 작업 조금 더 들어가야함 크림이 어색하게 떠있는 부분들이 있음 */
-        story: sig ? (
-            <section className="relative texture-paper py-20 lg:pt-35 lg:pb-42.5">
-                <TextureBackground src="/images/bg-texture-06.jpg" />
-                <div className="container-site relative">
-                    <Reveal className="text-center">
-                        <p className="font-display text-h2 tracking-tight">{t.en}</p>
-                        {t.headline && (
-                            <h2 className="text-h2 font-light">
-                                {t.headline.light}
-                                <br className="bolck md:hidden" />
-                                <strong className="font-bold">{t.headline.strong}</strong>
-                            </h2>
-                        )}
-                    </Reveal>
+        /* 전후사진 — 피부교정 */
+        ba: t.category === 'skin' ? <TreatmentBASection slug={pageContentSlug} /> : null,
 
-                    <Reveal className="relative mx-auto mt-12 max-w-257 lg:mt-16">
-                        <div className="grid min-[1100px]:grid-cols-2">
-                            <div className="-tracking-[5%] texture-dark flex flex-col items-center justify-center px-8 py-12 lg:py-[120px] bg-cocoa text-center text-cream md:px-2">
-                                <p className="text-h3 leading-[35px] tracking-tighter">
-                                    {sig.story.hook[0]}
-                                    <br />
-                                    <strong className="mt-1 inline-block bg-cream px-2 py-0.5 font-bold text-cocoa">
-                                        {sig.story.hook[1]}
-                                    </strong>
-                                    <br />
-                                    {sig.story.hook[2]}
-                                </p>
-                                {/* 라인 + 점 하강 커넥터 */}
-                                <SectionDivider light className="my-4" />
-                                <p className="whitespace-pre-line text-lead  text-cream">{sig.story.body}</p>
-                            </div>
-                            <div className="relative order-first aspect-[4/3] w-full min-[1100px]:order-none min-[1100px]:aspect-auto min-[1100px]:min-h-[340px]">
-                                <Image
-                                    src={`/images/img-card-${sigCard[t.slug]}.jpg`}
-                                    alt=""
-                                    fill
-                                    quality={88}
-                                    sizes="(max-width: 768px) 100vw, 480px"
-                                    className="object-cover"
-                                />
-                            </div>
-                        </div>
-                        <SpinEmblem />
-                        <FloatingCream />
-                    </Reveal>
-                </div>
-            </section>
-        ) : null,
-
-        /* 전후사진 — 시그니처 기존 구성 + 피부교정 신규 구성 */
-        ba: sig || t.category === 'skin' ? <TreatmentBASection slug={pageContentSlug} /> : null,
-
-        /* 솔루션 영역 - 시그니처, 안티에이징, 피부교정 공통 */
+        /* 솔루션 영역 - 안티에이징, 피부교정 공통 */
         /* #FIX: 반응형 좀 더 다듬기 */
         solution: (
             <section
                 className={cn(
                     'relative overflow-hidden py-20 lg:pt-[180px] lg:pb-[170px]',
-                    t.category === 'signature' && 'bg-[#e8e2d6]',
                     t.category === 'skin' && 'bg-sand',
                     t.category === 'aging' && 'bg-cocoa text-cream',
                 )}
             >
-                {t.category === 'signature' && (
-                    <TextureBackground src="/images/bg-texture-06.jpg" />
-                )}
                 <div className="container-site relative">
-                    {sig && (
-                        <Reveal className="text-center">
-                            <Eyebrow light={t.category === 'aging'}>RE:BERRY</Eyebrow>
-                            <h2 className="mt-5 text-h2">
-                                {tTreatments.rich('chrome.sameConcernHeading', {
-                                    hl: (chunks) => <strong className="font-bold">{chunks}</strong>,
-                                })}
-                            </h2>
-                        </Reveal>
-                    )}
                     <div className="mt-10 lg:mt-12">
                         <HashtagChips
                             items={t.hashtags}
@@ -239,9 +188,7 @@ export default async function TreatmentPage({ params }: Params) {
                         <TwoDots light={t.category === 'aging'} />
                     </div>
                     <Reveal className="mt-[100px] text-center">
-                        <h2 className="font-display text-h2 tracking-[0.08em]">
-                            {sig ? 'RE:BERRY SOLUTION' : 'PERSONALIZED SOLUTION'}
-                        </h2>
+                        <h2 className="font-display text-h2 tracking-[0.08em]">PERSONALIZED SOLUTION</h2>
                         <p className="mt-4 text-h2 font-light">
                             {t.solution.light} <strong className="font-bold">{t.solution.strong}</strong>
                         </p>
@@ -263,64 +210,25 @@ export default async function TreatmentPage({ params }: Params) {
             </section>
         ),
 
-        step: sig ? null : <StepPlan />,
+        step: <StepPlan />,
 
-        /* 시그니처 기존 칼럼 + 피부교정 관리자 연결 칼럼 */
-        column: sig ? (
-                <TreatmentColumnSection slug={t.slug} name={name} heading={sig.columnHeading} variant="card" />
-            ) : t.category === 'skin' ? (
-                <TreatmentColumnSection slug={pageContentSlug} name={name} />
-            ) : null,
-
-        /* 시그니처 전용 — FAQ */
-        faq: faq ? (
-            <section className="texture-dark relative py-20 text-cream lg:pt-30 lg:pb-25">
-                <TextureBackground src="/images/bg-texture-09.jpg" />
-                <div className="container-site relative">
-                    <Reveal className="text-center">
-                        <h2 className="font-display text-h2 tracking-[0.7em] leading-12 md:text-h2">RE:BERRY FAQ</h2>
-                        <p className="text-h2  font-bold leading-12.5">{tTreatments('chrome.faqHeading')}</p>
-                    </Reveal>
-                    <Reveal className="mt-17">
-                        <FAQAccordion items={faq} />
-                    </Reveal>
-                </div>
-            </section>
-        ) : null,
+        /* 피부교정 관리자 연결 칼럼 */
+        column: t.category === 'skin' ? <TreatmentColumnSection slug={pageContentSlug} name={name} /> : null,
     };
 
-    const order = sig
-        ? SECTION_ORDER.signature
-        : t.category === 'skin'
-          ? SECTION_ORDER.skin
-          : SECTION_ORDER.other;
-    const path = `/treatments/${t.category}/${t.slug}`;
+    const order = t.category === 'skin' ? SECTION_ORDER.skin : SECTION_ORDER.other;
     const description = `${t.definition.title} — ${t.definition.text}`;
-    const localizedCategory =
-        isKo ? categoryLabel[t.category] : (tTreatments.raw('categoryLabel') as Record<Category, string>)[t.category];
-    const categoryHub: Record<string, string> = {
-        signature: '/treatments/signature/booster',
-        skin: '/treatments/skin/pigment',
-        aging: `/treatments/aging/laser-lifting/${AGING_LIFTING_PAGES[0].itemSlug}`,
-    };
-    const breadcrumbs = [{ name: '홈', path: '/' }];
-    if (categoryHub[t.category] && categoryHub[t.category] !== path) {
-        breadcrumbs.push({ name: localizedCategory, path: categoryHub[t.category] });
-    }
-    breadcrumbs.push({ name, path });
 
     return (
         <>
-            <JsonLd data={breadcrumbJsonLd(breadcrumbs)} />
+            <JsonLd data={breadcrumbJsonLd(breadcrumbsFor(name))} />
             <JsonLd data={medicalWebPageJsonLd({ name, description, path })} />
-            <JsonLd data={faq ? faqPageJsonLd(faq) : null} />
 
             <SubHero
                 en={t.heroEn ?? t.en}
                 title={isKo ? t.name : undefined}
                 description={t.heroDescription}
                 image={heroImage[t.category]}
-                preserveHeight={Boolean(sig)}
             />
 
             {order.map((key) => (

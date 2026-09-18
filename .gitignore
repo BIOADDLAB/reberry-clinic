@@ -40,6 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# 이미지 압축 스크립트(scripts/optimize-images.mjs)가 만드는 원본 백업.
+# public 안이라 그냥 두면 92MB 가 배포에도 그대로 실려 나간다 → 내 컴퓨터에만 남긴다
+/public/images_original
+
 # editor/tooling local state
 .idea
 .claude

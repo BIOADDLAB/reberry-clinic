@@ -2,11 +2,12 @@
 
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
-import { addDoc, collection, deleteDoc, doc, onSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, serverTimestamp, updateDoc, writeBatch } from 'firebase/firestore';
 import { db } from '@/components/lib/firebase';
 import { deleteStoredImage, uploadImage } from '@/components/lib/storageUpload';
+import { SIGNATURE_BA_VISIBLE, isSignatureSlug } from '@/components/lib/signaturePages';
 import {
     BA_IMAGE_GUIDE,
     COUNT_LIMITS,
@@ -28,14 +29,17 @@ import {
 import {
     AddRowButton,
     AdminHeader,
+    DragHandle,
     ErrorBanner,
     Field,
     HelpBanner,
+    MoveButton,
     TextAction,
     Toast,
     VisibilitySwitch,
     confirmDelete,
     useAdminAction,
+    useDragReorder,
 } from '@/components/admin/AdminUI';
 
 interface BAPhotoDoc {
@@ -77,11 +81,18 @@ const emptyForm = () => ({
 export default function BAPhotoManager() {
     const [items, setItems] = useState<BAPhotoDoc[]>([]);
     const [filter, setFilter] = useState('all');
+    /* 시술 페이지별 보기는 탭(filter)과 반드시 다른 상태로 둔다.
+       #ISSUE: 처음에는 filter 하나에 탭 값과 페이지 slug 를 같이 담았는데, 전후사진 탭의
+               카테고리 키와 시그니처 페이지 slug 가 글자가 같다(acne = 여드름 / 비수술 턱끝전진 필러,
+               redness = 홍조 / 비수술 눈밑 지방 재배치). 그래서 홍조 탭을 누르면 화면은 홍조 사진인데
+               "비수술 눈밑 지방 재배치 페이지 순서" 라고 뜨고, 순서 화살표까지 나왔다. */
+    const [orderPage, setOrderPage] = useState('');
     const [editingId, setEditingId] = useState<string | null>(null);
     const [adding, setAdding] = useState(false);
     const [form, setForm] = useState(emptyForm());
     const [loading, setLoading] = useState(true);
     const { busy, error, toast, run, setError } = useAdminAction();
+    const formSection = useRef<HTMLElement>(null);
 
     useEffect(
         () =>
@@ -113,14 +124,58 @@ export default function BAPhotoManager() {
     const usesReviews = form.place !== 'treatment';
     const pageName = (slug: string) => TREATMENT_PAGES.find((page) => page.slug === slug)?.label ?? slug;
 
+    /* 시술 페이지 하나를 고른 상태. 이때만 순서를 바꿀 수 있다.
+       #ISSUE: order 는 "그 시술 페이지 안에서 몇 번째" 라는 뜻인데, 지금까지는 등록할 때
+               자동으로 붙기만 하고 고칠 방법이 없었다. 전체 목록에서는 사진마다 속한 페이지가
+               달라 순서를 논할 수 없으므로, 페이지를 하나 고른 화면에서만 순서를 바꾼다. */
+    const orderingSlug = TREATMENT_PAGES.some((page) => page.slug === orderPage) ? orderPage : null;
+
     const visibleItems = useMemo(() => {
-        if (filter === 'all') return items;
+        if (orderingSlug) {
+            return items
+                .filter((item) => showsOnTreatment(item) && resolveBASlugs(item).includes(orderingSlug))
+                // 홈페이지(filterBAPhotosBySlug)와 같은 기준으로 줄 세운다 → 여기 보이는 순서가 그 페이지 순서다
+                .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+        }
         if (filter === 'main') return items.filter((item) => typeof item.main === 'number');
         if (BA_CATEGORIES.some((category) => category.key === filter)) {
             return items.filter((item) => showsOnReviews(item) && resolveBACategory(item) === filter);
         }
-        return items.filter((item) => showsOnTreatment(item) && resolveBASlugs(item).includes(filter));
-    }, [items, filter]);
+        return items;
+    }, [items, filter, orderingSlug]);
+
+    /* 옮긴 뒤 1,2,3… 으로 다시 매긴다. 두 개만 맞바꾸면 번호가 겹쳐 순서가 튄다.
+       #NOTE: 한 사진을 여러 시술 페이지에 걸어 둔 경우 order 는 하나뿐이라, 여기서 옮기면
+              그 사진이 걸린 다른 페이지에서도 같은 순서로 움직인다. */
+    const saveOrder = (orderedIds: string[]) =>
+        void run(
+            async () => {
+                const batch = writeBatch(db);
+                orderedIds.forEach((id, index) => batch.update(doc(db, 'baPhotos', id), { order: index + 1 }));
+                await batch.commit();
+            },
+            '순서 변경 실패',
+            '순서를 바꿨습니다',
+        );
+
+    const drag = useDragReorder(saveOrder);
+    const orderedIds = visibleItems.map((item) => item.id);
+
+    const nudge = (index: number, step: -1 | 1) => {
+        const swap = index + step;
+        if (swap < 0 || swap >= orderedIds.length) return;
+        const next = [...orderedIds];
+        [next[index], next[swap]] = [next[swap], next[index]];
+        saveOrder(next);
+    };
+
+    /* 폼은 목록 위에 있어도 화면 밖일 수 있다 → 열릴 때 스스로 화면으로 온다.
+       #ISSUE: 예전에는 startEdit 에서 window.scrollTo(0) 을 불렀다. 화면 맨 위(제목·사용법)로만
+               올라가서 정작 폼은 안 보였고, [고치기]·[+ 사진 올리기] 를 눌러도 아무 일도
+               안 일어난 것처럼 보였다. */
+    useEffect(() => {
+        if (adding || editingId) formSection.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, [adding, editingId]);
 
     const startAdd = () => {
         setEditingId(null);
@@ -143,7 +198,6 @@ export default function BAPhotoManager() {
             imageFile: null,
             previewUrl: baPhotoUrl(item),
         });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const cancel = () => {
@@ -167,7 +221,16 @@ export default function BAPhotoManager() {
     const submit = () =>
         run(
             async () => {
-                if (usesTreatment && form.slugs.length === 0) throw new Error('사진을 보여줄 시술 페이지를 골라 주세요.');
+                /* 시술 페이지 칩을 다 끄면 "이 사진은 시술 페이지에 안 보이게" 라는 뜻으로 받아들인다.
+                   #ISSUE: 예전에는 여기서 저장을 막고 "시술 페이지를 골라 주세요" 를 화면 맨 위 띠에 띄웠다.
+                           한 페이지에만 걸린 사진을 화면에서 빼려고 칩을 끈 사람에게는, 이유가 저 위에 있어
+                           보이지 않으니 "저장 버튼이 안 먹는다" 로만 느껴졌다.
+                           → 칩을 다 끄면 전후사진 페이지 노출만 남긴다(place='reviews'). 그래야 시술 페이지에서
+                             사진이 빠지면서도 전후사진 페이지에는 그대로 남는다. */
+                const place = usesTreatment && form.slugs.length === 0 ? 'reviews' : form.place;
+                if (place === 'reviews' && !usesReviews) {
+                    throw new Error('이대로 저장하면 사진이 어디에도 안 보입니다. 시술 페이지를 고르거나 [전후사진 페이지]를 켜 주세요.');
+                }
                 if (!form.label.trim()) throw new Error('사진 아래 이름을 적어 주세요.');
                 if (!form.treatmentDate) throw new Error('시술일을 골라 주세요.');
                 if (!editingId && !form.imageFile) throw new Error('사진을 올려 주세요.');
@@ -183,7 +246,7 @@ export default function BAPhotoManager() {
                 const usedMain = items.filter((item) => item.id !== editingId && typeof item.main === 'number').map((item) => item.main as number);
 
                 const payload = {
-                    place: form.place,
+                    place,
                     slug: form.slugs[0] ?? existing?.slug ?? TREATMENT_PAGES[0].slug,
                     slugs: form.slugs,
                     category: form.category,
@@ -250,6 +313,9 @@ export default function BAPhotoManager() {
             <HelpBanner>
                 <b className="text-cocoa">사용법</b> · 사진을 누르면 그 자리에서 이름·시술일·어디에 보일지를 고칩니다.
                 새 사진은 맨 아래 <b className="text-cocoa">[+ 사진 올리기]</b>를 누르세요.
+                <br />
+                <b className="text-cocoa">순서</b>를 바꾸려면 아래 [시술 페이지별로 보기]에서 페이지를 고르세요. 순서는
+                그 페이지에서 사진이 나오는 차례입니다.
             </HelpBanner>
 
             <div className="mt-8 flex flex-wrap justify-center gap-2">
@@ -261,9 +327,15 @@ export default function BAPhotoManager() {
                     <button
                         key={tab.key}
                         type="button"
-                        onClick={() => setFilter(tab.key)}
+                        // 탭을 누르면 아래 시술 페이지 선택은 풀린다 (두 개가 동시에 켜져 보이지 않게)
+                        onClick={() => {
+                            setFilter(tab.key);
+                            setOrderPage('');
+                        }}
                         className={`rounded-full border px-4 py-2 text-small font-semibold ${
-                            filter === tab.key ? 'border-cocoa bg-cocoa text-cream' : 'border-cocoa/15 bg-cream text-latte'
+                            filter === tab.key && !orderingSlug
+                                ? 'border-cocoa bg-cocoa text-cream'
+                                : 'border-cocoa/15 bg-cream text-latte'
                         }`}
                     >
                         {tab.label}
@@ -271,8 +343,58 @@ export default function BAPhotoManager() {
                 ))}
             </div>
 
+            {/* 시술 페이지 하나만 보는 칸. 페이지가 16개라 위 탭에 다 늘어놓으면 탭이 두 줄을 넘는다 */}
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+                <span className="text-caption text-latte">시술 페이지별로 보기 · 순서 정하기</span>
+                <select
+                    value={orderingSlug ?? ''}
+                    onChange={(event) => setOrderPage(event.target.value)}
+                    className="min-h-11 rounded-full border border-cocoa/15 bg-white px-4 text-small font-semibold text-cocoa"
+                >
+                    <option value="">페이지 고르기</option>
+                    {TREATMENT_PAGE_GROUPS.map((group) => (
+                        <optgroup key={group.key} label={group.label}>
+                            {group.pages.map((page) => (
+                                <option key={page.slug} value={page.slug}>
+                                    {page.label}
+                                </option>
+                            ))}
+                        </optgroup>
+                    ))}
+                </select>
+            </div>
+
+            {orderingSlug && (
+                <p className="mt-3 text-center text-caption leading-6 text-latte">
+                    <b className="text-cocoa">{pageName(orderingSlug)}</b> 페이지에 걸어 둔 사진{' '}
+                    <b className="text-cocoa">{visibleItems.length}장</b>입니다. 여기 놓인 순서 그대로 홈페이지에 나옵니다.
+                    카드 아래 <b className="text-cocoa">화살표</b>나 점 여섯 개(⠿)를 끌어서 옮기세요.
+                    {/* 시그니처 페이지는 시안대로 3칸이라 앞 3장만 나간다 → 관리자에서 장수가 더 많아 보여도
+                        오류가 아니라는 걸 이 자리에서 알려 준다 (뒤 사진은 More View → 전후사진 페이지에서 본다) */}
+                    {isSignatureSlug(orderingSlug) && visibleItems.length > SIGNATURE_BA_VISIBLE && (
+                        <>
+                            <br />
+                            시그니처 페이지는 <b className="text-cocoa">앞 {SIGNATURE_BA_VISIBLE}장</b>만 나옵니다. 뒤에
+                            놓인 {visibleItems.length - SIGNATURE_BA_VISIBLE}장은 전후사진 페이지에서 보입니다. 보여줄
+                            사진을 바꾸려면 순서를 앞으로 옮기세요.
+                        </>
+                    )}
+                </p>
+            )}
+
+            {/* 사진 올리기는 목록 위에 둔다 — 사진이 100장을 넘으면 아래쪽 버튼은 한참 스크롤해야 나온다.
+                누르면 바로 아래 폼이 열리므로 누른 자리에서 그대로 이어 쓸 수 있다. */}
+            <div className="mt-8">
+                <AddRowButton disabled={busy} onClick={startAdd}>
+                    + 사진 올리기
+                </AddRowButton>
+            </div>
+
             {(adding || editingId) && (
-                <section className="mt-8 rounded-2xl bg-white p-5 shadow-[0_8px_24px_rgba(69,54,45,0.06)] md:p-7">
+                <section
+                    ref={formSection}
+                    className="mt-6 scroll-mt-4 rounded-2xl bg-white p-5 shadow-[0_8px_24px_rgba(69,54,45,0.06)] md:p-7"
+                >
                     <div className="flex flex-wrap items-center justify-between gap-3">
                         <h2 className="text-lead font-bold text-cocoa">{editingId ? '이 사진 고치기' : '새 사진 올리기'}</h2>
                         <TextAction onClick={cancel}>취소</TextAction>
@@ -303,7 +425,7 @@ export default function BAPhotoManager() {
                             <Field
                                 value={form.label}
                                 onChange={(label) => setForm((current) => ({ ...current, label }))}
-                                placeholder="예: 리베리 볼륨 부스터"
+                                placeholder="예: 리베리 볼륨부스터"
                                 className="border-cocoa/15 bg-white text-small font-bold text-cocoa"
                             />
 
@@ -366,6 +488,13 @@ export default function BAPhotoManager() {
                                             </div>
                                         </div>
                                     ))}
+                                    {/* 칩을 다 끈 상태에서 저장을 눌러도 되는 걸 미리 알려 준다 (예전에는 여기서 저장이 막혔다) */}
+                                    {form.slugs.length === 0 && (
+                                        <p className="text-caption text-latte">
+                                            켜진 페이지가 없습니다. 이대로 저장하면 시술 페이지에서는 빠지고{' '}
+                                            {usesReviews ? '전후사진 페이지에만 남습니다.' : '어디에도 안 보이니 [전후사진 페이지]를 켜 주세요.'}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -413,17 +542,34 @@ export default function BAPhotoManager() {
                             >
                                 {busy ? '저장 중…' : editingId ? '이 사진 저장하기' : '사진 올리기'}
                             </button>
+                            {/* #ISSUE: 저장이 막힌 이유(빈 칸·글자수 등)를 화면 맨 위 띠에만 띄웠더니, 버튼까지
+                                내려온 사람에게는 아무 반응 없이 안 되는 것처럼 보였다 → 버튼 바로 옆에도 같이 띄운다 */}
+                            {error && <p className="mt-3 text-caption text-red-600">{error}</p>}
                         </div>
                     </div>
                 </section>
             )}
 
             <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-                {visibleItems.map((item) => (
-                    <article key={item.id} className="overflow-hidden rounded-[6px] bg-white shadow-[0_4px_18px_rgba(69,54,45,0.06)] ring-1 ring-cocoa/[0.06]">
+                {visibleItems.map((item, index) => (
+                    <article
+                        key={item.id}
+                        {...(orderingSlug && !busy ? drag.rowProps(item.id, orderedIds) : {})}
+                        className={`overflow-hidden rounded-[6px] bg-white shadow-[0_4px_18px_rgba(69,54,45,0.06)] ring-1 ${
+                            drag.isTarget(item.id) ? 'ring-2 ring-[#C95813]' : 'ring-cocoa/[0.06]'
+                        } ${drag.isMoving(item.id) ? 'opacity-40' : ''}`}
+                    >
                         <div className="flex items-center justify-between gap-2 px-3.5 pb-2 pt-3.5">
-                            <span className="rounded-full bg-sand/70 px-2.5 py-1 text-caption-sm font-semibold text-cocoa/70">
-                                {item.label || baCategoryLabel(resolveBACategory(item) ?? '')}
+                            <span className="flex min-w-0 items-center gap-1.5">
+                                {/* 순서를 정하는 화면에서는 몇 번째인지 숫자로 보여 준다 */}
+                                {orderingSlug && (
+                                    <span className="font-display shrink-0 text-caption-sm font-bold text-[#C95813]">
+                                        {index + 1}
+                                    </span>
+                                )}
+                                <span className="truncate rounded-full bg-sand/70 px-2.5 py-1 text-caption-sm font-semibold text-cocoa/70">
+                                    {item.label || baCategoryLabel(resolveBACategory(item) ?? '')}
+                                </span>
                             </span>
                             <span className="font-display text-caption-sm tracking-[0.2em] text-cocoa/30">RE:BERRY</span>
                         </div>
@@ -440,11 +586,28 @@ export default function BAPhotoManager() {
                                 {typeof item.main === 'number' && ' · 메인'}
                                 {item.treatmentDate && ` · ${formatTreatmentDate(item.treatmentDate)}`}
                             </p>
-                            <div className="flex gap-2">
+                            <div className="flex items-center gap-2">
                                 <TextAction onClick={() => startEdit(item)}>고치기</TextAction>
                                 <TextAction tone="danger" disabled={busy} onClick={() => remove(item)}>
                                     삭제
                                 </TextAction>
+                                {orderingSlug && (
+                                    <span className="ml-auto flex items-center gap-1">
+                                        <span className="text-caption-sm text-latte">순서</span>
+                                        <MoveButton
+                                            dir="left"
+                                            disabled={busy || index === 0}
+                                            onClick={() => nudge(index, -1)}
+                                        />
+                                        <MoveButton
+                                            dir="right"
+                                            disabled={busy || index === visibleItems.length - 1}
+                                            onClick={() => nudge(index, 1)}
+                                        />
+                                        {/* 손잡이만 끌리게 둔다 → 사진을 눌러 고치는 동작을 방해하지 않는다 */}
+                                        <DragHandle disabled={busy} {...(busy ? {} : drag.handleProps(item.id))} />
+                                    </span>
+                                )}
                             </div>
                         </div>
                     </article>
@@ -455,11 +618,6 @@ export default function BAPhotoManager() {
                 <p className="mt-10 rounded-2xl bg-white py-16 text-center text-small text-latte">이 칸에 사진이 없습니다.</p>
             )}
 
-            <div className="mt-8">
-                <AddRowButton disabled={busy} onClick={startAdd}>
-                    + 사진 올리기
-                </AddRowButton>
-            </div>
             <Toast message={toast} />
         </div>
     );

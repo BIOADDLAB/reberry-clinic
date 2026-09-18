@@ -13,6 +13,7 @@ import {
 import { resolveBASlugs, showsOnReviews, showsOnTreatment } from '../components/lib/ba';
 import { solutions } from '../components/lib/solutions';
 import { treatments } from '../components/lib/treatments';
+import { signaturePath } from '../components/lib/signaturePages';
 
 interface BlogSeed {
     version: string;
@@ -60,8 +61,15 @@ async function main() {
 
     assert.deepEqual(
         SIGNATURE_PAGES.map((page) => page.label),
-        ['리베리 볼륨 부스터', '비수술 앞턱전진 필러', '비수술 눈밑 지방 재배치'],
+        ['리베리 볼륨부스터', '비수술 턱끝전진 필러', '비수술 눈밑 지방 재배치'],
     );
+    assert.deepEqual(
+        treatments.filter((treatment) => treatment.category === 'signature').map((treatment) => treatment.slug),
+        ['volume-booster', 'chin-filler', 'under-eye'],
+    );
+    assert.equal(signaturePath('booster'), '/treatments/signature/volume-booster');
+    assert.equal(signaturePath('acne'), '/treatments/signature/chin-filler');
+    assert.equal(signaturePath('redness'), '/treatments/signature/under-eye');
     assert.equal(SKIN_TREATMENT_PAGES.find((page) => page.routeSlug === 'redness')?.label, '홍조/주사피부염');
     SKIN_TREATMENT_PAGES.forEach((page) => assert.equal(skinTreatmentPageSlug(page.routeSlug), page.slug));
     AGING_LIFTING_PAGES.forEach((page) => assert.equal(agingLiftingPageSlug(page.itemSlug), page.slug));

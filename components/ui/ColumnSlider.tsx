@@ -29,11 +29,12 @@ import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup';
 
 const COLUMN_LAYOUT: 'A' | 'B' | 'C' | 'D' = 'D';
 
-/** 모든 시술 페이지의 칼럼 목록이 이 한 곳을 지난다. */
-export function ColumnListContent({ items }: { items: FirestoreCol[] }) {
+/** 모든 시술 페이지의 칼럼 목록이 이 한 곳을 지난다.
+    wide = 감싼 컨테이너 폭을 그대로 쓴다 (시그니처 페이지처럼 콘텐츠가 넓은 곳) */
+export function ColumnListContent({ items, wide }: { items: FirestoreCol[]; wide?: boolean }) {
     if (COLUMN_LAYOUT === 'B') return <ColumnLayoutB items={items} />;
     if (COLUMN_LAYOUT === 'C') return <ColumnLayoutC items={items} />;
-    if (COLUMN_LAYOUT === 'D') return <ColumnLayoutD items={items} />;
+    if (COLUMN_LAYOUT === 'D') return <ColumnLayoutD items={items} wide={wide} />;
     return <ColumnLayoutA items={items} />;
 }
 
@@ -237,11 +238,18 @@ function ColumnListItem({ item, moreLabel }: { item: FirestoreCol; moreLabel: st
              (행 하나하나를 카드로 만드는 건 아님 — 그건 A안 몫)
    #ISSUE 2: 번호가 크고 세로 패딩이 넉넉해서 한 줄 높이가 너무 컸다.
              → 패딩을 줄이고 제목을 1줄로 고정(말줄임)해서 목록을 더 촘촘하게 뺐다. */
-function ColumnLayoutD({ items }: { items: FirestoreCol[] }) {
+function ColumnLayoutD({ items, wide }: { items: FirestoreCol[]; wide?: boolean }) {
     const t = useTranslations('common');
 
     return (
-        <div className="mx-auto max-w-4xl overflow-hidden rounded-[24px] border border-cocoa/[0.1] bg-cream px-5 shadow-[0_10px_34px_rgba(69,54,45,0.06)] md:px-8">
+        <div
+            className={cn(
+                'mx-auto overflow-hidden rounded-[24px] border border-cocoa/[0.1] bg-cream px-5 shadow-[0_10px_34px_rgba(69,54,45,0.06)] md:px-8',
+                /* 시그니처는 위 스토리 단(1190)에 맞춰 컨테이너를 꽉 쓰고,
+                   나머지 시술 페이지는 한 줄이 너무 길어지지 않게 지금 폭을 유지한다 */
+                wide ? 'w-full' : 'max-w-4xl',
+            )}
+        >
             <RevealGroup>
                 {items.map((item, index) => (
                     <ColumnIndexRow
@@ -275,9 +283,11 @@ function ColumnIndexRow({
                 href={item.link ?? site.blog}
                 target="_blank"
                 rel="noreferrer"
-                className="group flex items-center gap-4 border-t border-cocoa/[0.08] py-5 first:border-t-0 md:gap-6 md:py-5.5"
+                className="group flex items-center gap-3 border-t border-cocoa/[0.08] py-5 first:border-t-0 md:gap-4 md:py-5.5"
             >
-                <span className="notranslate font-display w-8 shrink-0 text-lead text-cocoa/25 transition-colors duration-300 group-hover:text-cocoa/60 md:w-10 md:text-h3">
+                {/* 번호는 두 자리("01")에 딱 맞는 폭만 준다. 예전에는 남는 폭 + 넓은 간격이 겹쳐
+                    번호와 제목이 서로 다른 덩어리처럼 떨어져 보였다 */}
+                <span className="notranslate font-display shrink-0 text-lead text-cocoa/25 transition-colors duration-300 group-hover:text-cocoa/60 md:text-h3">
                     {String(index + 1).padStart(2, '0')}
                 </span>
                 <span className="hidden h-8 w-px shrink-0 bg-cocoa/15 md:block" aria-hidden />

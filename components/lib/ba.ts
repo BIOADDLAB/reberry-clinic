@@ -1,5 +1,7 @@
 // #COMPONENTS: 전후 사진 공용 데이터 — 메인 / 시그니처 / 시술결과가 같은 배열에서 꺼내 씀
 // 카드 UI 는 곳마다 다르니 컴포넌트는 각자, 데이터만 여기서 공유
+import { signaturePageName } from '@/components/lib/signaturePages';
+
 export interface BAPhoto {
     id: string;
     slug: string; // 기존 단일 페이지 데이터 및 대표 페이지(하위 호환)
@@ -106,9 +108,15 @@ export function resolveBASlugs(photo: Pick<BAPhoto, 'slug' | 'slugs'>): string[]
 }
 
 const RENAMED_SIGNATURE_BA_LABELS: Record<string, { label: string; legacy: string[] }> = {
-    booster: { label: '리베리 볼륨 부스터', legacy: ['부스터', '볼륨부스터', '볼륨 부스터'] },
-    acne: { label: '비수술 앞턱전진 필러', legacy: ['여드름', '여드름치료', '여드름 치료'] },
-    redness: { label: '비수술 눈밑 지방 재배치', legacy: ['홍조', '홍조치료', '홍조 치료'] },
+    booster: {
+        label: signaturePageName('booster'),
+        legacy: ['부스터', '볼륨부스터', '볼륨 부스터', '리베리 볼륨 부스터'],
+    },
+    acne: { label: signaturePageName('acne'), legacy: ['여드름', '여드름치료', '여드름 치료'] },
+    redness: {
+        label: signaturePageName('redness'),
+        legacy: ['홍조', '홍조치료', '홍조 치료', '비수술 눈밑지방재배치'],
+    },
 };
 
 /** 기존 시그니처 사진은 DB를 다시 올리지 않아도 예전 라벨만 새 명칭으로 표시한다. */
@@ -193,9 +201,9 @@ const code: Record<string, string> = {
 const ba = (slug: string, n: number, type: 'b' | 'a') => `/images/ba/${code[slug]}-${n}-${type}.jpg`;
 
 const CATEGORIES: { slug: string; label: string; count: number; mainOrder: number }[] = [
-    { slug: 'booster', label: '리베리 볼륨 부스터', count: 14, mainOrder: 1 },
-    { slug: 'acne', label: '비수술 앞턱전진 필러', count: 8, mainOrder: 2 },
-    { slug: 'redness', label: '비수술 눈밑 지방 재배치', count: 3, mainOrder: 3 },
+    { slug: 'booster', label: signaturePageName('booster'), count: 14, mainOrder: 1 },
+    { slug: 'acne', label: signaturePageName('acne'), count: 8, mainOrder: 2 },
+    { slug: 'redness', label: signaturePageName('redness'), count: 3, mainOrder: 3 },
 ];
 
 const genCategory = ({ slug, label, count, mainOrder }: (typeof CATEGORIES)[number]): BAPhoto[] =>

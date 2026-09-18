@@ -38,6 +38,17 @@ export default function BAPhotoCard({
     const categoryKey = resolveBACategory(photo);
     const combined = isCombinedBAPhoto(photo);
 
+    /* 카드를 눌러야 사진이 크게 열리는데, 눌러도 된다는 표시가 없어 그냥 지나치기 쉬웠다.
+       → 이벤트 포스터와 같은 방식으로, 마우스를 올리면 "크게 보기" 를 덮어 준다.
+         휴대폰에는 마우스가 없어서(md 미만) 띄우지 않는다. 사진 위 화살표 뱃지(z-10)보다 위에 놓는다. */
+    const viewLargerHint = (
+        <span className="pointer-events-none absolute inset-0 z-20 hidden items-center justify-center bg-deep/35 opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:flex">
+            <span className="rounded-full border border-cream/70 px-4 py-2 text-caption font-semibold text-cream">
+                {t('viewLarger')}
+            </span>
+        </span>
+    );
+
     return (
         <button
             type="button"
@@ -75,6 +86,7 @@ export default function BAPhotoCard({
                         sizes={sizes}
                         className="object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                     />
+                    {viewLargerHint}
                 </div>
             ) : (
                 <div className="relative flex aspect-square flex-col overflow-hidden bg-white">
@@ -102,6 +114,7 @@ export default function BAPhotoCard({
                     <span className="absolute left-1/2 top-1/2 z-10 flex h-[34px] w-[34px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-cocoa">
                         <span aria-hidden className="mt-[-3px] block h-2 w-2 rotate-45 border-b-2 border-r-2 border-cream" />
                     </span>
+                    {viewLargerHint}
                 </div>
             )}
 

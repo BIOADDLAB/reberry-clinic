@@ -7,8 +7,14 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { nav } from '@/components/lib/site';
 import { cn } from '@/components/lib/cn';
+import { getSignatureContent, signatureSlugFromRoute } from '@/components/lib/signaturePages';
 import LanguageToggle from '@/components/lang/LanguageToggle';
 import { useLang } from '@/components/lib/useLang';
+
+/* #ISSUE: 시그니처 시술 페이지(2026.09 리뉴얼)는 히어로 배경이 밝아서 크림색 글자·로고가 묻힌다.
+   → 이 주소에서는 스크롤 전(투명) 상태에서도 글자·로고·언어 버튼을 코코아색으로 둔다. 배경은 그대로 투명.
+   /treatments/signature/{slug} 만 해당 — 그 아래 기기 상세(/{slug}/{item})는 어두운 히어로라 제외 */
+const LIGHT_HERO_PATH = /^\/treatments\/signature\/[^/]+\/?$/;
 
 const subscribeScroll = (cb: () => void) => {
     window.addEventListener('scroll', cb, { passive: true });
@@ -22,23 +28,36 @@ export default function Header() {
         () => false,
     );
     const [open, setOpen] = useState(false);
-    const [navHovered, setNavHovered] = useState(false);
+    /* #ISSUE: 호버 감지를 가운데 메뉴(nav)에만 걸어 놨더니, 헤더 줄 위에 마우스를 올려도
+       가운데 좁은 메뉴 박스를 정확히 지나지 않으면 배경이 안 들어왔다. 히어로가 밝은
+       시그니처 페이지에서는 글자가 배경에 묻혀 읽기 어려웠다.
+       → 헤더 전체를 감지 범위로 둔다. 마우스가 헤더를 벗어나면 다시 투명으로 돌아간다. */
+    const [hovered, setHovered] = useState(false);
     const close = () => setOpen(false);
     const lang = useLang();
     const t = useTranslations('common');
+    const navText = (label: string, en: string, href: string) => {
+        const route = href.match(/^\/treatments\/signature\/([^/]+)$/)?.[1];
+        const slug = route ? signatureSlugFromRoute(route) : undefined;
+        return slug ? getSignatureContent(slug, lang).heroTitle : lang === 'ko' ? label : en;
+    };
     const reservationT = useTranslations('reservation');
     const pathname = usePathname();
 
-    // #STYLE: 스크롤되었거나, 모바일 메뉴가 열렸거나, PC 메뉴에 호버했을 때 solid 상태(배경색 활성화)로 변경
-    const solid = scrolled || open || navHovered;
+    // #STYLE: 스크롤되었거나, 모바일 메뉴가 열렸거나, 헤더에 마우스를 올렸을 때 solid 상태(배경색 활성화)로 변경
+    const solid = scrolled || open || hovered;
+    const lightHero = LIGHT_HERO_PATH.test(pathname ?? '');
+    const dark = solid || lightHero;
 
     return (
         <header
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
             className={cn(
                 'fixed inset-x-0 top-0 z-50 transition-colors duration-300',
                 solid
                     ? 'bg-cream text-cocoa shadow-[0_1px_0_rgba(69,54,45,0.08)] backdrop-blur'
-                    : 'bg-transparent text-cream',
+                    : cn('bg-transparent', lightHero ? 'text-cocoa' : 'text-cream'),
             )}
         >
             <div className="container-site relative flex h-16 items-center justify-between lg:h-25">
@@ -49,16 +68,12 @@ export default function Header() {
                         width={132}
                         height={24}
                         priority
-                        className={cn('h-3.75 w-auto transition lg:h-4', solid && 'to-cocoa')}
+                        className={cn('h-3.75 w-auto transition lg:h-4', dark && 'to-cocoa')}
                     />
                 </Link>
 
                 {/* GNB — 시안: 화면 정중앙 정렬, 항목 간 넉넉한 간격 */}
-                <nav
-                    onMouseEnter={() => setNavHovered(true)}
-                    onMouseLeave={() => setNavHovered(false)}
-                    className="notranslate absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 xl:flex 2xl:gap-8"
-                >
+                <nav className="notranslate absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 xl:flex 2xl:gap-8">
                     {nav.map((item) => (
                         <div key={item.label} className="group relative">
                             <Link
@@ -84,7 +99,7 @@ export default function Header() {
                                                             isActive && 'bg-sand/50 font-semibold text-cocoa',
                                                         )}
                                                     >
-                                                        {lang === 'ko' ? c.label : c.en}
+                                                        {navText(c.label, c.en, c.href)}
                                                     </Link>
                                                 </li>
                                             );
@@ -98,7 +113,7 @@ export default function Header() {
 
                 <div className="relative z-10 flex shrink-0 items-center gap-2">
                     <div className="relative">
-                        <LanguageToggle solid={solid} />
+                        <LanguageToggle solid={dark} />
                         <Link
                             href="/reservation"
                             onClick={close}
@@ -160,7 +175,7 @@ export default function Header() {
                                                     onClick={close}
                                                     className="notranslate font-medium text-caption text-latte"
                                                 >
-                                                    {lang === 'ko' ? c.label : c.en}
+                                                    {navText(c.label, c.en, c.href)}
                                                 </Link>
                                             </li>
                                         ))}

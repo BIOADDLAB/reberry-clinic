@@ -7,12 +7,14 @@
 
 'use client';
 
+import { useLocale } from 'next-intl';
 import Reveal from '@/components/motion/Reveal';
 import { cn } from '@/components/lib/cn';
 import { useColumnsBySlug } from '@/components/lib/useColumns';
 import { useTreatmentColumnHeading } from '@/components/lib/useTreatmentColumnHeading';
 import { ColumnListContent } from '@/components/ui/ColumnSlider';
 import TextureBackground from '@/components/ui/TextureBackground';
+import { Rich } from '@/components/signature/SignatureParts';
 
 interface Props {
     slug: string;
@@ -28,16 +30,30 @@ interface Props {
 }
 
 /** 관리자에 저장된 값이 없을 때 쓰는 기본 제목 */
-export const defaultColumnHeading = (name: string) => `논문으로 검증하고, 임상으로 증명한 ${name} 이야기`;
+export const defaultColumnHeading = (name: string) => `논문으로 검증하고, 임상으로 증명한 **${name}** 이야기`;
+
+/** 시그니처와 같이 **굵게** 를 해석한다. 별표가 없으면 예전 쉼표 표기를 유지한다. */
+export function ColumnHeadingText({ text }: { text: string }) {
+    const locale = useLocale();
+    if (text.includes('**')) {
+        return <Rich text={text} strongClassName="font-bold" locale={locale} />;
+    }
+    const parts = text.match(/^(.+?[,、，])\s*(.+)$/);
+    if (parts) {
+        return (
+            <>
+                {parts[1]} <strong className="font-bold">{parts[2]}</strong>
+            </>
+        );
+    }
+    return <strong className="font-bold">{text}</strong>;
+}
 
 export default function TreatmentColumnSection({ slug, name, heading, tone = 'default' }: Props) {
     const items = useColumnsBySlug(slug, []);
     const managedHeading = useTreatmentColumnHeading(slug, heading || defaultColumnHeading(name));
 
     if (items.length === 0) return null;
-
-    // "앞부분, 뒷부분" 형태면 뒤쪽을 굵게 (기존 표기 유지)
-    const parts = managedHeading.match(/^(.+?[,、，])\s*(.+)$/);
 
     return (
         <section
@@ -50,14 +66,8 @@ export default function TreatmentColumnSection({ slug, name, heading, tone = 'de
             <div className="container-site relative">
                 <Reveal className="text-center">
                     <p className="notranslate font-display text-h2">Column</p>
-                    <h2 className="mx-auto mt-6 max-w-3xl text-h2 leading-9 tracking-tighter">
-                        {parts ? (
-                            <>
-                                {parts[1]} <strong className="font-bold">{parts[2]}</strong>
-                            </>
-                        ) : (
-                            <strong className="font-bold">{managedHeading}</strong>
-                        )}
+                    <h2 className="mx-auto mt-6 max-w-3xl text-h2 font-normal leading-9 tracking-tighter">
+                        <ColumnHeadingText text={managedHeading} />
                     </h2>
                 </Reveal>
                 <Reveal className="mt-12 lg:mt-16">

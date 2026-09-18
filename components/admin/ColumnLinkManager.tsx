@@ -21,6 +21,8 @@ import {
     type TreatmentColumnHeadings,
 } from '@/components/lib/treatmentColumnHeadings';
 import { defaultColumnHeading } from '@/components/ui/TreatmentColumnSection';
+import { isSignatureSlug, signatureColumnTitle, signaturePath } from '@/components/lib/signaturePages';
+import { Rich } from '@/components/signature/SignatureParts';
 import {
     AddRowButton,
     AdminHeader,
@@ -66,6 +68,11 @@ const ALL_PAGES = [
 ];
 
 const fieldKey = (id: string, field: string) => `${id}:${field}`;
+
+/** 제목 칸을 비워 두고 저장했을 때 돌아갈 기본 문구.
+    시그니처는 시안 문구("**{시술명}** 이야기"), 나머지 시술 페이지는 공통 문구를 쓴다. */
+const fallbackHeading = (slug: string, label: string) =>
+    isSignatureSlug(slug) ? signatureColumnTitle(slug) : defaultColumnHeading(label);
 
 export default function ColumnLinkManager() {
     const [items, setItems] = useState<ColDoc[]>([]);
@@ -124,7 +131,7 @@ export default function ColumnLinkManager() {
         () => items.filter((item) => item.slugs.includes(currentPage.slug)),
         [items, currentPage.slug],
     );
-    const headingFallback = defaultColumnHeading(currentPage.label);
+    const headingFallback = fallbackHeading(currentPage.slug, currentPage.label);
     const headingOriginal = headings[currentPage.slug] || headingFallback;
 
     const saveAll = () =>
@@ -134,7 +141,8 @@ export default function ColumnLinkManager() {
                     if (!editKey.startsWith('heading:')) continue;
                     const slug = editKey.slice('heading:'.length);
                     const page = ALL_PAGES.find((entry) => entry.slug === slug);
-                    await saveTreatmentColumnHeading(slug, heading.trim() || defaultColumnHeading(page?.label.split(' · ').at(-1) ?? currentPage.label));
+                    const label = page?.label.split(' · ').at(-1) ?? currentPage.label;
+                    await saveTreatmentColumnHeading(slug, heading.trim() || fallbackHeading(slug, label));
                 }
                 for (const item of items) {
                     const fields = ['title', 'en', 'text', 'link'] as const;
@@ -210,7 +218,7 @@ export default function ColumnLinkManager() {
             <AdminHeader
                 title="블로그 연결 관리"
                 description="시술 페이지에 나오는 칼럼 카드와 똑같습니다. 글자를 눌러 고친 뒤 [저장하기]를 누르세요."
-                previewHref="/treatments/signature/booster"
+                previewHref={signaturePath('booster')}
             />
             <ErrorBanner message={error} />
             <HelpBanner>
@@ -250,6 +258,9 @@ export default function ColumnLinkManager() {
                 ))}
             </div>
 
+            {/* 칼럼 섹션 제목 — 시그니처도 포함해 모든 페이지를 여기서 고친다.
+                #ISSUE: 시그니처만 시안 문구("{시술명} 이야기")를 코드에 박아 두고 읽기 전용으로 뒀더니,
+                        병원에서 고칠 수 있는 페이지와 못 고치는 페이지가 갈렸다 → 전부 여기서 고친다. */}
             <section className="mx-auto mt-12 max-w-5xl text-center">
                 <p className="font-display text-h2">Column</p>
                 <Field
@@ -258,11 +269,21 @@ export default function ColumnLinkManager() {
                     onChange={(value) => setEdit(`heading:${currentPage.slug}`, value, headingOriginal)}
                     className="mx-auto mt-4 max-w-3xl text-center text-h2 font-bold text-cocoa"
                 />
+                {/* 홈페이지에 나갈 모양 그대로 미리 보여 준다 (**굵게** 가 실제로 굵어지는지 확인용) */}
+                <p className="mt-3 text-caption text-latte">
+                    홈페이지 모양 ·{' '}
+                    <span className="font-semibold text-cocoa">
+                        <Rich text={shown(`heading:${currentPage.slug}`, headingOriginal)} strongClassName="font-bold" />
+                    </span>
+                </p>
+                <p className="mt-1 text-caption-sm text-latte">
+                    <b className="text-cocoa">**별표 두 개**</b>로 감싼 글자는 굵게 나옵니다. 칸을 비우고 저장하면 기본
+                    문구로 돌아갑니다.
+                </p>
             </section>
 
             <div className="mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {pageItems.map((item, index) => {
-                    const titleLimit = shown(fieldKey(item.id, 'en'), item.en).trim() ? LIMITS.columnTitle : LIMITS.columnTitleNoEn;
                     return (
                         <article
                             key={item.id}
@@ -288,24 +309,19 @@ export default function ColumnLinkManager() {
                                 </span>
                             </div>
 
+                            {/* 이름표 옆에 있던 영문 칸은 지웠다. 지금 목록 디자인에서는 이름표도 영문도
+                                고객 화면에 안 나오는데, 칸이 둘이나 있어서 무엇을 적어야 하는지만 헷갈렸다. */}
                             <div className="mt-3 flex items-center gap-2 rounded-lg bg-cocoa/[0.03] px-2.5 py-2">
                                 <span className="shrink-0 text-caption-sm text-cocoa/40">이름표(선택)</span>
                                 <Field
                                     value={shown(fieldKey(item.id, 'title'), item.title)}
                                     dirty={fieldKey(item.id, 'title') in edits}
-                                    onChange={(value) => setEdit(fieldKey(item.id, 'title'), value.slice(0, titleLimit), item.title)}
+                                    onChange={(value) =>
+                                        setEdit(fieldKey(item.id, 'title'), value.slice(0, LIMITS.columnTitle), item.title)
+                                    }
                                     placeholder="시술·기기 이름"
                                     className="min-w-0 flex-1 text-caption text-latte"
                                 />
-                                {scope !== 'device' && (
-                                    <Field
-                                        value={shown(fieldKey(item.id, 'en'), item.en)}
-                                        dirty={fieldKey(item.id, 'en') in edits}
-                                        onChange={(value) => setEdit(fieldKey(item.id, 'en'), value.slice(0, LIMITS.columnEn), item.en)}
-                                        placeholder="영문(선택)"
-                                        className="w-24 shrink-0 text-caption text-latte"
-                                    />
-                                )}
                             </div>
                             <Field
                                 value={shown(fieldKey(item.id, 'link'), item.link)}
