@@ -57,8 +57,13 @@ export default function SignatureBASection({ slug, title, locale }: { slug: stri
                     </h2>
                 </Reveal>
 
+                {/* #ISSUE: 언어를 바꾸면(= 같은 자리에서 새로고침) 전후사진 카드가 안 보였다.
+                    새로고침하면 브라우저가 스크롤 위치를 되살려서 이 섹션이 화면에 떠 있는 채로 사진을 기다리게 된다.
+                    그때 스켈레톤 줄에서 등장 모션(whileInView)이 이미 한 번 끝나 버려서, 뒤늦게 들어온 카드들은
+                    "숨김(opacity 0)" 상태 그대로 멈춰 있었다. (한국어로 새로고침해도, 느린 망에서 먼저 스크롤해도 같았다)
+                    → 스켈레톤 줄과 사진 줄에 key 를 따로 줘서, 사진이 오면 줄을 새로 만들고 등장 모션을 처음부터 다시 돌린다 */}
                 {loading ? (
-                    <SignatureSwipeRow count={VISIBLE} {...ROW}>
+                    <SignatureSwipeRow key="loading" count={VISIBLE} {...ROW}>
                         {Array.from({ length: VISIBLE }).map((_, i) => (
                             <div
                                 key={i}
@@ -68,7 +73,7 @@ export default function SignatureBASection({ slug, title, locale }: { slug: stri
                         ))}
                     </SignatureSwipeRow>
                 ) : (
-                    <SignatureSwipeRow count={photos.length} {...ROW}>
+                    <SignatureSwipeRow key="loaded" count={photos.length} {...ROW}>
                         {photos.map((photo) => (
                             <RevealItem key={photo.id} className={CELL}>
                                 <button
