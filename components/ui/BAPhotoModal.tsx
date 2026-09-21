@@ -55,11 +55,14 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
             <div
                 /* #ISSUE: max-h 만 주면 flex 컨테이너에 확정 높이가 없어서
                    가운데 사진 영역(flex-1 + min-h-0)이 0px 로 접혀 사진이 아예 안 보였다.
-                   → 높이를 확정값으로 준다. 화면이 크면 690px, 작으면 화면 높이에 맞춘다.
+                   → 높이를 확정값으로 준다. 화면이 크면 928px, 작으면 화면 높이에 맞춘다.
                    #ISSUE: 폭이 640px 이던 때는 정사각 사진이 높이에 맞춰 줄어들면서 좌우로 77px 씩 남았다.
-                   → 폭을 480px 로 줄여 [높이 690 − 머리말·안내문] ≒ 사진 폭이 되게 맞췄다.
-                     정사각 사진이 팝업 폭을 꽉 채워서 기존 홈페이지 팝업처럼 보인다. */
-                className="flex h-[min(calc(100dvh-2rem),690px)] w-full max-w-[480px] flex-col overflow-hidden rounded-[10px] bg-white shadow-[0_24px_60px_rgba(28,20,16,0.35)]"
+                   → 사진(정사각)이 팝업 폭을 꽉 채우도록, 폭을 "화면 높이 − 머리말·안내문(13rem)" 으로도 묶는다.
+                   #ISSUE: PC 에서 크게 보기가 카드(320~369px)와 크게 차이 나지 않아 커진 느낌이 없었다.
+                           → 최대 폭 480 → 720px. 1920 화면에서 사진이 720px(카드의 2배 이상)로 뜬다.
+                             화면이 낮으면 위 계산식이 알아서 줄여 주므로 세로로 넘치지 않는다.
+                   (모바일은 예전처럼 화면 폭을 꽉 채운다 — w-full + 바깥 여백 p-4) */
+                className="flex h-[min(calc(100dvh-2rem),928px)] w-full max-w-[min(720px,calc(100dvh-13rem))] flex-col overflow-hidden rounded-[10px] bg-white shadow-[0_24px_60px_rgba(28,20,16,0.35)]"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 헤더 — 고정 */}
@@ -97,7 +100,7 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
                             alt={t('beforeAltWithLabel', { label })}
                             fill
                             quality={90}
-                            sizes="(max-width: 480px) 92vw, 480px"
+                            sizes="(max-width: 768px) 92vw, 720px"
                             className="object-contain"
                         />
                     </div>
@@ -113,7 +116,7 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
                                     alt={shot.alt}
                                     fill
                                     quality={90}
-                                    sizes="(max-width: 480px) 92vw, 480px"
+                                    sizes="(max-width: 768px) 92vw, 720px"
                                     className="object-contain p-2"
                                 />
                                 <span className="notranslate font-display pointer-events-none absolute left-4 top-2.5 text-caption-sm tracking-[0.15em] text-cocoa/40">
