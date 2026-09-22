@@ -10,7 +10,7 @@ export default async function AdminLoginPage({ searchParams }: { searchParams: P
     const cookieStore = await cookies();
     const isAuthed = cookieStore.get(ADMIN_COOKIE_NAME)?.value === getAdminAuthToken();
 
-    if (isAuthed) redirect('/admin/ba');
+    if (isAuthed) redirect('/admin/price-list');
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-[#F5F2EC] px-6">
