@@ -18,8 +18,10 @@ import {
 import {
     BA_CATEGORIES,
     baCategoryLabel,
+    baCreatedAtMillis,
     baPhotoUrl,
     formatTreatmentDate,
+    sortBAPhotos,
     resolveBACategory,
     resolveBAPlace,
     resolveBASlugs,
@@ -50,7 +52,11 @@ interface BAPhotoDoc {
     before: string;
     after: string;
     main?: number;
+    mainManual?: boolean;
     order?: number;
+    orderManual?: boolean;
+    reviewsOrder?: number;
+    reviewsManual?: boolean;
     category?: string;
     place?: string;
     treatmentDate?: string;
@@ -59,13 +65,6 @@ interface BAPhotoDoc {
 
 const VALID_SLUGS = new Set(TREATMENT_PAGES.map((page) => page.slug));
 
-const createdAtMillis = (value: unknown) => {
-    if (typeof value === 'string') return Date.parse(value) || 0;
-    if (!value || typeof value !== 'object') return 0;
-    const timestamp = value as { toMillis?: () => number; seconds?: number };
-    if (typeof timestamp.toMillis === 'function') return timestamp.toMillis();
-    return typeof timestamp.seconds === 'number' ? timestamp.seconds * 1000 : 0;
-};
 
 const emptyForm = () => ({
     place: 'treatment' as string,
@@ -80,7 +79,7 @@ const emptyForm = () => ({
 
 export default function BAPhotoManager() {
     const [items, setItems] = useState<BAPhotoDoc[]>([]);
-    const [filter, setFilter] = useState('all');
+    const [filter, setFilter] = useState<string>(BA_CATEGORIES[0].key);
     /* 시술 페이지별 보기는 탭(filter)과 반드시 다른 상태로 둔다.
        #ISSUE: 처음에는 filter 하나에 탭 값과 페이지 slug 를 같이 담았는데, 전후사진 탭의
                카테고리 키와 시그니처 페이지 slug 가 글자가 같다(acne = 여드름 / 비수술 턱끝전진 필러,
@@ -102,7 +101,7 @@ export default function BAPhotoManager() {
                     setItems(
                         snapshot.docs
                             .map((entry) => ({ id: entry.id, ...entry.data() }) as BAPhotoDoc)
-                            .sort((a, b) => createdAtMillis(b.createdAt) - createdAtMillis(a.createdAt)),
+                            .sort((a, b) => baCreatedAtMillis(b.createdAt) - baCreatedAtMillis(a.createdAt)),
                     );
                     setLoading(false);
                     setError(null);
@@ -129,29 +128,48 @@ export default function BAPhotoManager() {
                자동으로 붙기만 하고 고칠 방법이 없었다. 전체 목록에서는 사진마다 속한 페이지가
                달라 순서를 논할 수 없으므로, 페이지를 하나 고른 화면에서만 순서를 바꾼다. */
     const orderingSlug = TREATMENT_PAGES.some((page) => page.slug === orderPage) ? orderPage : null;
+    /* 전후사진 페이지 탭을 고른 상태. 시술 페이지 순서(order)와 섞이지 않게 reviewsOrder 만 고친다. */
+    const orderingCategory =
+        !orderingSlug && BA_CATEGORIES.some((category) => category.key === filter) ? filter : null;
+    /* 메인에 보이는 사진 탭. 여기서 옮기면 main 번호만 바뀌고, 시술·전후사진 페이지 순서는 그대로다. */
+    const orderingMain = !orderingSlug && filter === 'main';
+    const canReorder = Boolean(orderingSlug || orderingCategory || orderingMain);
 
     const visibleItems = useMemo(() => {
         if (orderingSlug) {
-            return items
-                .filter((item) => showsOnTreatment(item) && resolveBASlugs(item).includes(orderingSlug))
-                // 홈페이지(filterBAPhotosBySlug)와 같은 기준으로 줄 세운다 → 여기 보이는 순서가 그 페이지 순서다
-                .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+            return sortBAPhotos(
+                items.filter((item) => showsOnTreatment(item) && resolveBASlugs(item).includes(orderingSlug)),
+                { rank: (item) => item.order, pinned: (item) => item.orderManual === true },
+            );
         }
-        if (filter === 'main') return items.filter((item) => typeof item.main === 'number');
-        if (BA_CATEGORIES.some((category) => category.key === filter)) {
-            return items.filter((item) => showsOnReviews(item) && resolveBACategory(item) === filter);
+        if (orderingMain) {
+            return sortBAPhotos(
+                items.filter((item) => typeof item.main === 'number'),
+                { rank: (item) => item.main, pinned: (item) => item.mainManual === true },
+            );
+        }
+        if (orderingCategory) {
+            return sortBAPhotos(
+                items.filter((item) => showsOnReviews(item) && resolveBACategory(item) === orderingCategory),
+                { rank: (item) => item.reviewsOrder, pinned: (item) => item.reviewsManual === true },
+            );
         }
         return items;
-    }, [items, filter, orderingSlug]);
+    }, [items, filter, orderingSlug, orderingCategory, orderingMain]);
 
     /* 옮긴 뒤 1,2,3… 으로 다시 매긴다. 두 개만 맞바꾸면 번호가 겹쳐 순서가 튄다.
-       #NOTE: 한 사진을 여러 시술 페이지에 걸어 둔 경우 order 는 하나뿐이라, 여기서 옮기면
-              그 사진이 걸린 다른 페이지에서도 같은 순서로 움직인다. */
+       메인 탭은 main, 시술 페이지는 order, 전후사진 탭은 reviewsOrder.
+       #NOTE: 한 사진을 여러 시술 페이지에 걸어 둔 경우 order 는 하나뿐이라, 시술 페이지에서 옮기면
+              그 사진이 걸린 다른 시술 페이지에서도 같은 순서로 움직인다. 전후사진 페이지·메인 순서는 건드리지 않는다. */
     const saveOrder = (orderedIds: string[]) =>
         void run(
             async () => {
+                const field = orderingMain ? 'main' : orderingCategory ? 'reviewsOrder' : 'order';
+                const manualField = orderingMain ? 'mainManual' : orderingCategory ? 'reviewsManual' : 'orderManual';
                 const batch = writeBatch(db);
-                orderedIds.forEach((id, index) => batch.update(doc(db, 'baPhotos', id), { order: index + 1 }));
+                orderedIds.forEach((id, index) =>
+                    batch.update(doc(db, 'baPhotos', id), { [field]: index + 1, [manualField]: true }),
+                );
                 await batch.commit();
             },
             '순서 변경 실패',
@@ -243,7 +261,16 @@ export default function BAPhotoManager() {
                     .filter((item) => item.id !== editingId && showsOnTreatment(item) && resolveBASlugs(item).some((slug) => form.slugs.includes(slug)))
                     .map((item) => item.order ?? 0)
                     .filter(Boolean);
+                const usedReviewsOrders = items
+                    .filter((item) => item.id !== editingId && showsOnReviews(item) && resolveBACategory(item) === form.category)
+                    .map((item) => item.reviewsOrder ?? 0)
+                    .filter(Boolean);
                 const usedMain = items.filter((item) => item.id !== editingId && typeof item.main === 'number').map((item) => item.main as number);
+                const keepsReviewsOrder =
+                    existing?.reviewsOrder &&
+                    resolveBACategory(existing) === form.category &&
+                    !usedReviewsOrders.includes(existing.reviewsOrder);
+                const dateChanged = Boolean(existing && existing.treatmentDate !== form.treatmentDate);
 
                 const payload = {
                     place,
@@ -255,11 +282,15 @@ export default function BAPhotoManager() {
                     before: imageUrl,
                     after: imageUrl,
                     order: existing?.order && !usedOrders.includes(existing.order) ? existing.order : nextFreeOrder(usedOrders),
+                    ...(place !== 'treatment'
+                        ? { reviewsOrder: keepsReviewsOrder ? existing.reviewsOrder : nextFreeOrder(usedReviewsOrders) }
+                        : {}),
                     main: form.showMain
                         ? existing?.main && !usedMain.includes(existing.main)
                             ? existing.main
                             : nextFreeOrder(usedMain)
                         : null,
+                    ...(dateChanged ? { orderManual: false, reviewsManual: false, mainManual: false } : {}),
                 };
 
                 if (editingId) await updateDoc(doc(db, 'baPhotos', editingId), payload);
@@ -314,13 +345,17 @@ export default function BAPhotoManager() {
                 <b className="text-cocoa">사용법</b> · 사진을 누르면 그 자리에서 이름·시술일·어디에 보일지를 고칩니다.
                 새 사진은 맨 아래 <b className="text-cocoa">[+ 사진 올리기]</b>를 누르세요.
                 <br />
-                <b className="text-cocoa">순서</b>를 바꾸려면 아래 [시술 페이지별로 보기]에서 페이지를 고르세요. 순서는
-                그 페이지에서 사진이 나오는 차례입니다.
+                처음 순서는 <b className="text-cocoa">시술일이 최근인 사진</b>이 앞이고, 오래된 시술일은 뒤입니다. 같은
+                날이면 나중에 올린 사진이 앞입니다. 방금 올린 사진은 시술일이 가장 최근일 때 맨 앞에 옵니다.
+                <br />
+                <b className="text-cocoa">메인 순서</b>는 [메인에 보이는 사진] 탭에서,{' '}
+                <b className="text-cocoa">전후사진 페이지 순서</b>는 카테고리 탭에서,{' '}
+                <b className="text-cocoa">시술 페이지 순서</b>는 아래 [시술 페이지별로 보기]에서 바꿉니다. 카드의
+                화살표나 점 여섯 개(⠿)로 옮기면 그 화면 순서가 고정됩니다.
             </HelpBanner>
 
             <div className="mt-8 flex flex-wrap justify-center gap-2">
                 {[
-                    { key: 'all', label: '전체' },
                     { key: 'main', label: '메인에 보이는 사진' },
                     ...BA_CATEGORIES.map((category) => ({ key: category.key, label: category.label })),
                 ].map((tab) => (
@@ -364,11 +399,29 @@ export default function BAPhotoManager() {
                 </select>
             </div>
 
+            {orderingMain && (
+                <p className="mt-3 text-center text-caption leading-6 text-latte">
+                    메인 첫 화면에 나오는 사진 <b className="text-cocoa">{visibleItems.length}장</b>입니다. 여기 놓인 순서
+                    그대로 메인에 나옵니다. 카드 아래 <b className="text-cocoa">화살표</b>나 점 여섯 개(⠿)를 끌어서
+                    옮기세요. 전후사진 페이지·시술 페이지 순서는 바뀌지 않습니다.
+                </p>
+            )}
+
+            {orderingCategory && (
+                <p className="mt-3 text-center text-caption leading-6 text-latte">
+                    전후사진 페이지의 <b className="text-cocoa">{baCategoryLabel(orderingCategory)}</b> 탭에 나오는 사진{' '}
+                    <b className="text-cocoa">{visibleItems.length}장</b>입니다. 여기 놓인 순서 그대로 홈페이지에 나옵니다.
+                    카드 아래 <b className="text-cocoa">화살표</b>나 점 여섯 개(⠿)를 끌어서 옮기세요. 시술 페이지 순서는
+                    바뀌지 않습니다.
+                </p>
+            )}
+
             {orderingSlug && (
                 <p className="mt-3 text-center text-caption leading-6 text-latte">
                     <b className="text-cocoa">{pageName(orderingSlug)}</b> 페이지에 걸어 둔 사진{' '}
                     <b className="text-cocoa">{visibleItems.length}장</b>입니다. 여기 놓인 순서 그대로 홈페이지에 나옵니다.
-                    카드 아래 <b className="text-cocoa">화살표</b>나 점 여섯 개(⠿)를 끌어서 옮기세요.
+                    카드 아래 <b className="text-cocoa">화살표</b>나 점 여섯 개(⠿)를 끌어서 옮기세요. 전후사진 페이지 순서는
+                    바뀌지 않습니다.
                     {/* 시그니처 페이지는 시안대로 3칸이라 앞 3장만 나간다 → 관리자에서 장수가 더 많아 보여도
                         오류가 아니라는 걸 이 자리에서 알려 준다 (뒤 사진은 More View → 전후사진 페이지에서 본다) */}
                     {isSignatureSlug(orderingSlug) && visibleItems.length > SIGNATURE_BA_VISIBLE && (
@@ -517,6 +570,7 @@ export default function BAPhotoManager() {
 
                             <div className="mt-5">
                                 <VisibilitySwitch
+                                    prominent
                                     visible={form.showMain}
                                     disabled={busy || overMain}
                                     onLabel="메인에도 보임"
@@ -524,7 +578,7 @@ export default function BAPhotoManager() {
                                     onChange={(showMain) => setForm((current) => ({ ...current, showMain }))}
                                 />
                                 <p className="mt-2 text-caption text-latte">
-                                    초록이면 메인 첫 화면에도 나갑니다. 지금 {mainCount}/{COUNT_LIMITS.baMain}장
+                                    버튼이 초록색이면 메인 첫 화면에도 나갑니다. 지금 {mainCount}/{COUNT_LIMITS.baMain}장
                                 </p>
                                 {overMain && <p className="mt-1 text-caption text-red-600">메인 사진은 더 넣을 수 없습니다.</p>}
                                 {overPage && (
@@ -554,7 +608,7 @@ export default function BAPhotoManager() {
                 {visibleItems.map((item, index) => (
                     <article
                         key={item.id}
-                        {...(orderingSlug && !busy ? drag.rowProps(item.id, orderedIds) : {})}
+                        {...(canReorder && !busy ? drag.rowProps(item.id, orderedIds) : {})}
                         className={`overflow-hidden rounded-[6px] bg-white shadow-[0_4px_18px_rgba(69,54,45,0.06)] ring-1 ${
                             drag.isTarget(item.id) ? 'ring-2 ring-[#C95813]' : 'ring-cocoa/[0.06]'
                         } ${drag.isMoving(item.id) ? 'opacity-40' : ''}`}
@@ -562,7 +616,7 @@ export default function BAPhotoManager() {
                         <div className="flex items-center justify-between gap-2 px-3.5 pb-2 pt-3.5">
                             <span className="flex min-w-0 items-center gap-1.5">
                                 {/* 순서를 정하는 화면에서는 몇 번째인지 숫자로 보여 준다 */}
-                                {orderingSlug && (
+                                {canReorder && (
                                     <span className="font-display shrink-0 text-caption-sm font-bold text-[#C95813]">
                                         {index + 1}
                                     </span>
@@ -591,7 +645,7 @@ export default function BAPhotoManager() {
                                 <TextAction tone="danger" disabled={busy} onClick={() => remove(item)}>
                                     삭제
                                 </TextAction>
-                                {orderingSlug && (
+                                {canReorder && (
                                     <span className="ml-auto flex items-center gap-1">
                                         <span className="text-caption-sm text-latte">순서</span>
                                         <MoveButton

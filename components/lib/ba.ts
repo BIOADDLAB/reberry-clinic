@@ -9,11 +9,60 @@ export interface BAPhoto {
     label: string;
     before: string;
     after: string;
-    order?: number; // 시그니처 페이지 안에서의 노출 순서 (관리자에서 지정, 없으면 등록순)
-    main?: number; // 메인페이지(BASlider) 노출 순서. 1,2,3... 숫자 있으면 노출 + 그 순서로 정렬, 없으면(undefined) 메인에 미노출
+    order?: number; // 시술 페이지에서 끌어 바꾼 순서. orderManual 이 있을 때만 이 숫자를 따른다
+    orderManual?: boolean;
+    reviewsOrder?: number; // 전후사진 페이지에서 끌어 바꾼 순서. reviewsManual 이 있을 때만 이 숫자를 따른다
+    reviewsManual?: boolean;
+    main?: number; // 메인페이지(BASlider) 노출. 숫자면 메인에 나오고, mainManual 이면 그 숫자가 순서다
+    mainManual?: boolean;
     category?: string; // 전후사진 페이지(/reviews) 카테고리 탭. 비어 있으면 slug 로 자동 배정 (BA_CATEGORY_BY_SLUG)
     place?: string; // 어디에 노출할지. 'treatment' | 'reviews' | 'both'. 값이 없는 기존 사진은 'both' 로 읽는다
     treatmentDate?: string; // 시술일. 관리자 date input에서 저장하는 YYYY-MM-DD 형식
+    createdAt?: number; // 올린 시각(ms). 같은 시술일이면 나중에 올린 사진이 앞이다
+}
+
+/** Firestore Timestamp · 숫자 · 문자열을 밀리초로 읽는다. */
+export function baCreatedAtMillis(value: unknown): number {
+    if (typeof value === 'number' && Number.isFinite(value)) return value;
+    if (typeof value === 'string') return Date.parse(value) || 0;
+    if (!value || typeof value !== 'object') return 0;
+    const timestamp = value as { toMillis?: () => number; seconds?: number };
+    if (typeof timestamp.toMillis === 'function') return timestamp.toMillis();
+    return typeof timestamp.seconds === 'number' ? timestamp.seconds * 1000 : 0;
+}
+
+type RecencyPhoto = { id: string; treatmentDate?: string; createdAt?: unknown };
+
+/** 시술일이 최근인 사진이 앞, 오래된 시술일이 뒤. 같은 날이면 나중에 올린 사진이 앞. */
+export function compareBAByRecency(a: RecencyPhoto, b: RecencyPhoto): number {
+    const ad = a.treatmentDate ?? '';
+    const bd = b.treatmentDate ?? '';
+    if (ad !== bd) {
+        if (!ad) return 1;
+        if (!bd) return -1;
+        return bd.localeCompare(ad);
+    }
+    return baCreatedAtMillis(b.createdAt) - baCreatedAtMillis(a.createdAt) || a.id.localeCompare(b.id);
+}
+
+/** 끌어 순서를 고정한 목록은 그 순서를 따른다. 아직 안 바꾼 사진은 시술일·올린 시각 순으로 끼워 넣는다. */
+export function sortBAPhotos<T extends RecencyPhoto>(
+    photos: T[],
+    manual?: { rank: (photo: T) => number | undefined; pinned: (photo: T) => boolean },
+): T[] {
+    if (!manual) return [...photos].sort(compareBAByRecency);
+    const pinned = photos.filter((photo) => manual.pinned(photo));
+    const fresh = photos.filter((photo) => !manual.pinned(photo));
+    if (pinned.length === 0) return [...photos].sort(compareBAByRecency);
+    const byRank = (a: T, b: T) => (manual.rank(a) ?? 9999) - (manual.rank(b) ?? 9999) || compareBAByRecency(a, b);
+    if (fresh.length === 0) return [...pinned].sort(byRank);
+    const sorted = [...pinned].sort(byRank);
+    for (const photo of [...fresh].sort(compareBAByRecency)) {
+        const index = sorted.findIndex((item) => compareBAByRecency(photo, item) < 0);
+        if (index < 0) sorted.push(photo);
+        else sorted.splice(index, 0, photo);
+    }
+    return sorted;
 }
 
 /** 시술일을 시간대 변환 없이 YYYY.MM.DD 형식으로 표시한다. */

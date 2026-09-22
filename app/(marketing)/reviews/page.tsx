@@ -9,40 +9,22 @@ import BAPhotoCard, { BAPhotoCardSkeleton } from '@/components/ui/BAPhotoCard';
 import Pagination from '@/components/ui/Pagination';
 import T from '@/components/lang/T';
 import { cn } from '@/components/lib/cn';
-import { BA_CATEGORIES, resolveBACategory, type BAPhoto } from '@/components/lib/ba';
-import { filterReviewBAPhotos, useBAPhotos, useBAPhotosLoading } from '@/components/lib/useBAPhotos';
+import { BA_CATEGORIES, resolveBACategory } from '@/components/lib/ba';
+import { filterReviewBAPhotos, sortReviewBAPhotos, useBAPhotos, useBAPhotosLoading } from '@/components/lib/useBAPhotos';
 import TextureBackground from '@/components/ui/TextureBackground';
 
 const PER_PAGE = 8;
 
-/** 카테고리 탭의 '전체' 자리. BA_CATEGORIES 에 넣지 않는 이유는 실제 분류값이 아니기 때문 */
-const ALL = 'all';
-
-const shuffle = (arr: BAPhoto[]) => {
-    const copy = [...arr];
-    for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
-    }
-    return copy;
-};
-
 export default function ReviewsPage() {
     const tReviews = useTranslations('reviews');
     const [page, setPage] = useState(1);
-    const [category, setCategory] = useState<string>(ALL);
+    const [category, setCategory] = useState<string>(BA_CATEGORIES[0].key);
     const allPhotos = useBAPhotos();
     const loading = useBAPhotosLoading();
     // 관리자에서 '시술 페이지만' 으로 등록한 사진은 이 페이지에 안 나온다
     const photos = useMemo(() => filterReviewBAPhotos(allPhotos), [allPhotos]);
-    const [shuffled, setShuffled] = useState<BAPhoto[]>([]);
-    const [selectedPhoto, setSelectedPhoto] = useState<BAPhoto | null>(null);
+    const [selectedPhoto, setSelectedPhoto] = useState<(typeof photos)[number] | null>(null);
     const topRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setShuffled(shuffle(photos));
-    }, [photos]);
 
     const isFirstRender = useRef(true);
     useEffect(() => {
@@ -57,21 +39,29 @@ export default function ReviewsPage() {
     // 카테고리별 장수 — 0장인 탭은 아예 안 그린다(빈 탭을 눌러 빈 화면을 보게 두지 않음)
     const counts = useMemo(() => {
         const map = new Map<string, number>();
-        for (const p of shuffled) {
+        for (const p of photos) {
             const key = resolveBACategory(p);
             if (key) map.set(key, (map.get(key) ?? 0) + 1);
         }
         return map;
-    }, [shuffled]);
+    }, [photos]);
 
     const visibleTabs = useMemo(
-        () => [{ key: ALL, label: '전체' }, ...BA_CATEGORIES.filter((c) => (counts.get(c.key) ?? 0) > 0)],
+        () => BA_CATEGORIES.filter((c) => (counts.get(c.key) ?? 0) > 0),
         [counts],
     );
 
+    useEffect(() => {
+        if (loading || visibleTabs.length === 0) return;
+        if (!visibleTabs.some((tab) => tab.key === category)) {
+            setCategory(visibleTabs[0].key);
+            setPage(1);
+        }
+    }, [loading, visibleTabs, category]);
+
     const filtered = useMemo(
-        () => (category === ALL ? shuffled : shuffled.filter((p) => resolveBACategory(p) === category)),
-        [shuffled, category],
+        () => sortReviewBAPhotos(photos.filter((p) => resolveBACategory(p) === category)),
+        [photos, category],
     );
 
     const totalPages = Math.ceil(filtered.length / PER_PAGE);

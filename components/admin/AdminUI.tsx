@@ -99,12 +99,15 @@ export function VisibilitySwitch({
     disabled,
     onLabel = '보임',
     offLabel = '숨김',
+    prominent = false,
 }: {
     visible: boolean;
     onChange: (visible: boolean) => void;
     disabled?: boolean;
     onLabel?: string;
     offLabel?: string;
+    /** 폼 안에서 놓치기 쉬운 자리만 알약 버튼으로 키운다. 목록 줄의 작은 스위치는 그대로 둔다. */
+    prominent?: boolean;
 }) {
     return (
         <button
@@ -112,9 +115,17 @@ export function VisibilitySwitch({
             disabled={disabled}
             onClick={() => onChange(!visible)}
             title={visible ? `${onLabel}. 누르면 바뀝니다.` : `${offLabel}`}
-            className={`inline-flex items-center rounded px-1.5 py-0.5 text-caption-sm font-semibold transition-colors disabled:opacity-40 ${
-                visible ? 'text-[#2E7D4F] hover:bg-[#2E7D4F]/10' : 'text-[#C95813] hover:bg-[#C95813]/10'
-            }`}
+            className={
+                prominent
+                    ? `inline-flex min-h-11 items-center rounded-full border px-5 text-small font-bold transition-colors disabled:opacity-40 ${
+                          visible
+                              ? 'border-[#2E7D4F] bg-[#2E7D4F] text-white hover:bg-[#266844]'
+                              : 'border-[#C95813] bg-[#C95813] text-white hover:bg-[#B04C10]'
+                      }`
+                    : `inline-flex items-center rounded px-1.5 py-0.5 text-caption-sm font-semibold transition-colors disabled:opacity-40 ${
+                          visible ? 'text-[#2E7D4F] hover:bg-[#2E7D4F]/10' : 'text-[#C95813] hover:bg-[#C95813]/10'
+                      }`
+            }
         >
             {visible ? onLabel : offLabel}
         </button>

@@ -4,7 +4,15 @@
 import { useSyncExternalStore } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
-import { isPlaceholderBAPhoto, resolveBASlugs, showsOnReviews, showsOnTreatment, type BAPhoto } from './ba';
+import {
+    baCreatedAtMillis,
+    isPlaceholderBAPhoto,
+    resolveBASlugs,
+    showsOnReviews,
+    showsOnTreatment,
+    sortBAPhotos,
+    type BAPhoto,
+} from './ba';
 
 // Firestore 문서 원본 모양 — 관리자 화면(app/admin/(protected)/ba/page.tsx)이 저장하는 필드와 반드시 일치해야 함
 interface BAPhotoDoc {
@@ -13,11 +21,16 @@ interface BAPhotoDoc {
     slugs?: string[]; // 노출할 시술 페이지들
     before: string;
     after: string;
-    order?: number; // 해당 시그니처 페이지 안에서의 순서 (관리자에서 지정)
+    order?: number; // 해당 시술 페이지 안에서의 순서 (관리자에서 지정)
+    orderManual?: boolean;
+    reviewsOrder?: number; // 전후사진 페이지 카테고리 안에서의 순서
+    reviewsManual?: boolean;
     main?: number;
+    mainManual?: boolean;
     category?: string; // 전후사진 페이지 카테고리 탭 (없으면 slug 로 자동 배정)
     place?: string; // 노출 위치 treatment/reviews/both (없으면 both = 기존처럼 양쪽)
     treatmentDate?: string; // 시술일 YYYY-MM-DD
+    createdAt?: unknown;
 }
 
 /* #ISSUE: 전에는 컴포넌트마다 useEffect 로 각자 조회해서, 한 페이지에
@@ -47,6 +60,7 @@ function load() {
                     ? data.slugs.filter((slug): slug is string => typeof slug === 'string' && slug.length > 0)
                     : [];
                 const slug = typeof data.slug === 'string' ? data.slug : (slugs[0] ?? '');
+                const createdAt = baCreatedAtMillis(data.createdAt);
                 return {
                     id: docSnap.id,
                     slug,
@@ -55,10 +69,15 @@ function load() {
                     before: data.before,
                     after: data.after,
                     ...(typeof data.main === 'number' ? { main: data.main } : {}),
+                    ...(data.mainManual === true ? { mainManual: true } : {}),
                     ...(typeof data.order === 'number' ? { order: data.order } : {}),
+                    ...(data.orderManual === true ? { orderManual: true } : {}),
+                    ...(typeof data.reviewsOrder === 'number' ? { reviewsOrder: data.reviewsOrder } : {}),
+                    ...(data.reviewsManual === true ? { reviewsManual: true } : {}),
                     ...(typeof data.category === 'string' ? { category: data.category } : {}),
                     ...(typeof data.place === 'string' ? { place: data.place } : {}),
                     ...(typeof data.treatmentDate === 'string' ? { treatmentDate: data.treatmentDate } : {}),
+                    ...(createdAt ? { createdAt } : {}),
                 } satisfies BAPhoto;
             });
         })
@@ -100,13 +119,21 @@ export function useBAPhotosLoading(): boolean {
 }
 
 export const filterMainBAPhotos = (photos: BAPhoto[]) =>
-    photos.filter((b): b is BAPhoto & { main: number } => typeof b.main === 'number').sort((a, b) => a.main - b.main);
+    sortBAPhotos(
+        photos.filter((b): b is BAPhoto & { main: number } => typeof b.main === 'number'),
+        { rank: (photo) => photo.main, pinned: (photo) => photo.mainManual === true },
+    );
 
 /* 시술 페이지(BACardSlider)용. 시술 페이지 노출을 끈 사진은 여기서 빠진다. */
 export const filterBAPhotosBySlug = (photos: BAPhoto[], slug: string) =>
-    photos
-        .filter((b) => resolveBASlugs(b).includes(slug) && showsOnTreatment(b) && !isPlaceholderBAPhoto(b))
-        .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+    sortBAPhotos(
+        photos.filter((b) => resolveBASlugs(b).includes(slug) && showsOnTreatment(b) && !isPlaceholderBAPhoto(b)),
+        { rank: (photo) => photo.order, pinned: (photo) => photo.orderManual === true },
+    );
 
 /* 전후사진 페이지(/reviews)용. 전후사진 페이지 노출을 끈 사진은 여기서 빠진다. */
 export const filterReviewBAPhotos = (photos: BAPhoto[]) => photos.filter(showsOnReviews);
+
+/** 전후사진 페이지의 한 카테고리 순서. 끌어 고정하기 전에는 시술일 최신순이다. */
+export const sortReviewBAPhotos = (photos: BAPhoto[]) =>
+    sortBAPhotos(photos, { rank: (photo) => photo.reviewsOrder, pinned: (photo) => photo.reviewsManual === true });
