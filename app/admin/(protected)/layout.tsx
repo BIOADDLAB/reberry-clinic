@@ -20,13 +20,16 @@ export default function AdminProtectedLayout({ children }: { children: React.Rea
             className="notranslate flex min-h-screen flex-col bg-[#F5F2EC] md:flex-row"
         >
             <aside className="flex shrink-0 flex-col bg-cocoa text-cream md:sticky md:top-0 md:h-dvh md:w-64">
-                <div className="flex items-center justify-between px-4 py-4 md:px-5 md:py-7">
+                <div className="flex items-start justify-between gap-2 px-4 py-4 md:px-5 md:pt-6 md:pb-4">
                     <div>
                         <p className="notranslate font-display text-caption tracking-[0.2em] text-cream/55">RE:BERRY</p>
                         <p className="mt-0.5 text-lead font-bold md:mt-1">관리자</p>
                     </div>
-                    <form action={logoutAdmin} className="md:hidden">
-                        <button type="submit" className="rounded-full bg-cream/10 px-3 py-1.5 text-caption text-cream/80">
+                    <form action={logoutAdmin}>
+                        <button
+                            type="submit"
+                            className="rounded-full px-2 py-1 text-caption text-cream/55 transition-colors hover:bg-cream/10 hover:text-cream"
+                        >
                             로그아웃
                         </button>
                     </form>
@@ -49,14 +52,6 @@ export default function AdminProtectedLayout({ children }: { children: React.Rea
                     >
                         홈페이지 열기 ↗
                     </a>
-                    <form action={logoutAdmin}>
-                        <button
-                            type="submit"
-                            className="w-full rounded-xl px-3 py-2.5 text-left text-small text-cream/60 transition-colors hover:bg-cream/10 hover:text-cream"
-                        >
-                            로그아웃
-                        </button>
-                    </form>
                 </div>
             </aside>
 

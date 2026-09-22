@@ -384,7 +384,7 @@ export function SaveBar({
     onRevert: () => void;
 }) {
     return (
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-cocoa/10 bg-white/95 backdrop-blur">
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-cocoa/10 bg-white/95 backdrop-blur md:left-64">
             <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-10">
                 <p className="text-small text-latte">
                     {dirtyCount > 0 ? (
