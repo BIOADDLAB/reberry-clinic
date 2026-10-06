@@ -4,6 +4,14 @@ import { useEffect, useState } from 'react';
 import { syncBlogSkinColumnsAction } from '@/app/admin/(protected)/skin-columns/actions';
 import { fetchBlogImportSettings, type BlogImportResult } from '@/components/lib/skinColumnBlogImport';
 
+const SYNC_FAILED = '블로그 글을 가져오지 못했습니다. 관리자에게 문의하세요.';
+
+/** 배포판이 지워 버린 영어 렌더 오류는 화면에 올리지 않고 콘솔에만 남긴다. */
+function reportSyncFailure(error: unknown, onError: (message: string | null) => void) {
+    console.error('[블로그에서 가져오기]', error);
+    onError(SYNC_FAILED);
+}
+
 export default function SkinColumnBlogImportPanel({ onError }: { onError: (message: string | null) => void }) {
     const [lastSyncedAt, setLastSyncedAt] = useState('');
     const [syncing, setSyncing] = useState(false);
@@ -16,7 +24,7 @@ export default function SkinColumnBlogImportPanel({ onError }: { onError: (messa
                 if (active) setLastSyncedAt(settings.lastSyncedAt);
             })
             .catch((error) => {
-                if (active) onError(error instanceof Error ? error.message : '수집 기록을 불러오지 못했습니다.');
+                if (active) reportSyncFailure(error, onError);
             });
         return () => {
             active = false;
@@ -25,12 +33,18 @@ export default function SkinColumnBlogImportPanel({ onError }: { onError: (messa
 
     const handleSync = async () => {
         setSyncing(true);
+        setResult(null);
         onError(null);
         try {
-            setResult(await syncBlogSkinColumnsAction());
+            const response = await syncBlogSkinColumnsAction();
+            if (!response?.ok) {
+                reportSyncFailure(response && 'message' in response ? response.message : response, onError);
+                return;
+            }
+            setResult(response.result);
             setLastSyncedAt((await fetchBlogImportSettings()).lastSyncedAt);
         } catch (error) {
-            onError(error instanceof Error ? error.message : '블로그 글을 가져오지 못했습니다.');
+            reportSyncFailure(error, onError);
         } finally {
             setSyncing(false);
         }
@@ -83,10 +97,8 @@ export default function SkinColumnBlogImportPanel({ onError }: { onError: (messa
             {/* 블로그 카테고리 ↔ 사이트 분류 매핑표가 있던 자리.
                 분류를 없앴으므로 연결할 것이 없다. */}
             {result && !result.skipped ? (
-                <p className="mt-2 text-caption text-cocoa">
-                    가져온 글 {result.fetched}개 · 신규 {result.created}개 · 갱신 {result.updated}개
-                    {result.thumbnailsStored > 0 ? ` · 썸네일 저장 ${result.thumbnailsStored}개` : ''}
-                    {result.thumbnailsMissing > 0 ? ` · 썸네일 없음 ${result.thumbnailsMissing}개` : ''}
+                <p className="mt-3 text-small font-semibold text-cocoa">
+                    {result.created > 0 ? `새 글 ${result.created}개를 가져왔습니다.` : '최신글입니다.'}
                 </p>
             ) : null}
         </section>

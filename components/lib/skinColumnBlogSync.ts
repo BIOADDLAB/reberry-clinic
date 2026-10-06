@@ -8,7 +8,6 @@ import {
     toBlogExcerpt,
     toBlogPublishedAt,
 } from './naverBlog';
-import { storeNaverBlogThumbnail } from './naverBlogThumbnailStorage';
 import {
     fetchBlogImportSettings,
     resolveBlogCategorySlug,
@@ -49,31 +48,12 @@ export async function syncNaverBlogSkinColumns(): Promise<BlogImportResult> {
         copiesByLogNo.set(post.blogLogNo, copies);
     });
 
-    const thumbnailLogNos = [...new Set([
-        ...feed.map((item) => item.id),
-        ...existingPosts
-            .filter((post) => post.source === 'naver-blog' && post.blogLogNo)
-            .map((post) => post.blogLogNo as string),
-    ])].filter((logNo) => {
-        if (!/^\d+$/.test(logNo)) return false;
-        return !copiesByLogNo.get(logNo)?.some((post) => isHostedColumnThumbnail(post.thumbnailUrl));
-    });
-    const sourceThumbnails = await fetchNaverBlogThumbnails(thumbnailLogNos);
-    const storedThumbnails = new Map<string, string>();
-
-    for (let index = 0; index < thumbnailLogNos.length; index += 4) {
-        const chunk = thumbnailLogNos.slice(index, index + 4);
-        const stored = await Promise.all(
-            chunk.map(async (logNo) => {
-                const sourceUrl = sourceThumbnails.get(logNo);
-                if (!sourceUrl) return [logNo, null] as const;
-                return [logNo, await storeNaverBlogThumbnail(logNo, sourceUrl)] as const;
-            }),
-        );
-        stored.forEach(([logNo, thumbnailUrl]) => {
-            if (thumbnailUrl) storedThumbnails.set(logNo, thumbnailUrl);
-        });
-    }
+    /* 이번 RSS 에 있고 아직 우리 저장소 썸네일이 없는 글만. 예전 글 전체의 그림을 다시 받으면
+       함수 제한 시간에 걸려 새 글 저장까지 같이 죽는다. */
+    const thumbnailLogNos = feed
+        .map((item) => item.id)
+        .filter((logNo) => /^\d+$/.test(logNo))
+        .filter((logNo) => !copiesByLogNo.get(logNo)?.some((post) => isHostedColumnThumbnail(post.thumbnailUrl)));
 
     const now = new Date().toISOString();
     const batch = writeBatch(db);
@@ -97,8 +77,7 @@ export async function syncNaverBlogSkinColumns(): Promise<BlogImportResult> {
         const publishedAt = toBlogPublishedAt(item.publishedAt);
         const canonical = pickCanonical(item.id);
         const copies = copiesByLogNo.get(item.id) ?? [];
-        const existingHostedThumbnail = copies.find((post) => isHostedColumnThumbnail(post.thumbnailUrl))?.thumbnailUrl;
-        const thumbnailUrl = existingHostedThumbnail || storedThumbnails.get(item.id) || '';
+        const thumbnailUrl = copies.find((post) => isHostedColumnThumbnail(post.thumbnailUrl))?.thumbnailUrl || '';
         const resolvedSlug = resolveBlogCategorySlug(item.category, settings.maps);
         const categorySlug = canonical?.categorySlug || resolvedSlug;
         /* #ISSUE: 예전에는 "블로그 카테고리가 사이트 분류로 매핑되면 공개, 아니면 비공개" 였다.
@@ -144,13 +123,6 @@ export async function syncNaverBlogSkinColumns(): Promise<BlogImportResult> {
     copiesByLogNo.forEach((copies, logNo) => {
         if (handledLogNos.has(logNo)) return;
         const keep = pickCanonical(logNo);
-        const storedThumbnailUrl = storedThumbnails.get(logNo);
-        if (keep && storedThumbnailUrl) {
-            batch.update(doc(db, POSTS_COLLECTION, keep.docId), {
-                thumbnailUrl: storedThumbnailUrl,
-                updatedAt: now,
-            });
-        }
         copies.forEach((post) => {
             if (keep && post.docId !== keep.docId) batch.delete(doc(db, POSTS_COLLECTION, post.docId));
         });
@@ -166,6 +138,32 @@ export async function syncNaverBlogSkinColumns(): Promise<BlogImportResult> {
         },
         { merge: true },
     );
+
+    /* 글은 이미 저장됐다. 썸네일 모듈(sharp)이나 이미지 받기가 실패해도 수집 전체를 실패로 치지 않는다. */
+    const storedThumbnails = new Map<string, string>();
+    try {
+        if (thumbnailLogNos.length > 0) {
+            const { storeNaverBlogThumbnail } = await import('./naverBlogThumbnailStorage');
+            const sourceThumbnails = await fetchNaverBlogThumbnails(thumbnailLogNos);
+            const thumbBatch = writeBatch(db);
+            let thumbWrites = 0;
+            for (const logNo of thumbnailLogNos) {
+                const sourceUrl = sourceThumbnails.get(logNo);
+                if (!sourceUrl) continue;
+                const storedUrl = await storeNaverBlogThumbnail(logNo, sourceUrl);
+                if (!storedUrl) continue;
+                storedThumbnails.set(logNo, storedUrl);
+                thumbBatch.update(doc(db, POSTS_COLLECTION, naverBlogColumnDocId(logNo)), {
+                    thumbnailUrl: storedUrl,
+                    updatedAt: now,
+                });
+                thumbWrites += 1;
+            }
+            if (thumbWrites > 0) await thumbBatch.commit();
+        }
+    } catch (error) {
+        console.error('[skin-columns/sync] thumbnail step failed', error);
+    }
 
     return {
         fetched: feed.length,

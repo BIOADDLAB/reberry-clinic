@@ -11,6 +11,15 @@ export interface NaverBlogPost {
 const RSS_URL = 'https://rss.blog.naver.com/drpyton.xml';
 const BLOG_ID = 'drpyton';
 
+/* 데이터센터 IP 는 짧은 User-Agent 만 보내면 네이버가 막거나 응답을 붙잡는 일이 있다. */
+const NAVER_HEADERS = {
+    'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    Accept: 'application/rss+xml, application/xml, text/xml, application/json, text/html, */*',
+    'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.8',
+    Referer: 'https://blog.naver.com/drpyton',
+};
+
 const decodeXml = (value: string) =>
     value
         .replace(/^<!\[CDATA\[|\]\]>$/g, '')
@@ -74,8 +83,9 @@ export const parseKoreanDateTime = (value: string) => {
 export async function fetchNaverBlogPostDetail(logNo: string): Promise<NaverBlogPostDetail | null> {
     try {
         const response = await fetch(postViewUrl(logNo), {
-            headers: { 'User-Agent': 'Mozilla/5.0' },
-            next: { revalidate: 60 * 60 * 24 },
+            headers: NAVER_HEADERS,
+            cache: 'no-store',
+            signal: AbortSignal.timeout(8_000),
         });
         if (!response.ok) return null;
 
@@ -117,7 +127,8 @@ const parseRssItem = (item: string): Omit<NaverBlogPost, 'thumbnailUrl'> => {
 
 async function fetchRssXml(fresh: boolean) {
     const response = await fetch(RSS_URL, {
-        headers: { 'User-Agent': 'Mozilla/5.0' },
+        headers: NAVER_HEADERS,
+        signal: AbortSignal.timeout(12_000),
         ...(fresh ? { cache: 'no-store' as const } : { next: { revalidate: 60 * 60 } }),
     });
     if (!response.ok) throw new Error(`네이버 블로그 RSS를 불러오지 못했습니다. (${response.status})`);
@@ -125,8 +136,24 @@ async function fetchRssXml(fresh: boolean) {
 }
 
 export async function fetchNaverBlogFeed(options?: { fresh?: boolean }): Promise<Omit<NaverBlogPost, 'thumbnailUrl'>[]> {
-    const xml = await fetchRssXml(options?.fresh === true);
-    return (xml.match(/<item>[\s\S]*?<\/item>/gi) ?? []).map(parseRssItem);
+    try {
+        const xml = await fetchRssXml(options?.fresh === true);
+        const items = (xml.match(/<item>[\s\S]*?<\/item>/gi) ?? []).map(parseRssItem).filter((item) => /^\d+$/.test(item.id));
+        if (items.length > 0) return items;
+    } catch (error) {
+        console.error('[naver-blog] RSS failed, falling back to post list', error);
+    }
+
+    /* RSS 가 막히거나 비어 있으면 블로그 글목록 최근 2페이지로 잇는다. 제목·날짜만 있어도 카드는 만들 수 있다. */
+    const list = await fetchNaverBlogPostList(30, 2);
+    return list.slice(0, 60).map((item) => ({
+        id: item.id,
+        title: item.title,
+        url: item.url,
+        description: '',
+        publishedAt: parseKoreanDateTime(item.addDate),
+        category: '',
+    }));
 }
 
 /* ── 전체 글 목록 ───────────────────────────────────────────────────────
@@ -163,12 +190,16 @@ const decodeListTitle = (value: string) => {
     }
 };
 
-export async function fetchNaverBlogPostList(countPerPage = 30): Promise<NaverBlogListItem[]> {
+export async function fetchNaverBlogPostList(countPerPage = 30, maxPages = Number.POSITIVE_INFINITY): Promise<NaverBlogListItem[]> {
     const loadPage = async (page: number) => {
         const url =
             `${POST_LIST_URL}?blogId=${BLOG_ID}&viewdate=&currentPage=${page}` +
             `&categoryNo=&parentCategoryNo=&countPerPage=${countPerPage}`;
-        const response = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' }, cache: 'no-store' });
+        const response = await fetch(url, {
+            headers: NAVER_HEADERS,
+            cache: 'no-store',
+            signal: AbortSignal.timeout(12_000),
+        });
         if (!response.ok) throw new Error(`네이버 블로그 글목록을 불러오지 못했습니다. (${response.status})`);
         return parseNaverJson(await response.text()) as {
             totalCount?: string;
@@ -179,7 +210,7 @@ export async function fetchNaverBlogPostList(countPerPage = 30): Promise<NaverBl
 
     const first = await loadPage(1);
     const total = Number(first.totalCount ?? 0);
-    const lastPage = Math.max(1, Math.ceil(total / countPerPage));
+    const lastPage = Math.min(Math.max(1, Math.ceil(total / countPerPage)), maxPages);
 
     const pages = [first];
     for (let page = 2; page <= lastPage; page += 1) pages.push(await loadPage(page));
