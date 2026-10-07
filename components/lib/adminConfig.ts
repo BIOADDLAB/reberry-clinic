@@ -6,12 +6,13 @@
 import { SIGNATURE_COLUMN_MAX, isSignatureSlug, signaturePageName } from '@/components/lib/signaturePages';
 
 // ── 시그니처 시술 페이지 (전후사진·칼럼 공통)
-// slug 값은 Firestore 저장 키(booster/acne/redness). 공개 URL 은 signaturePages.ts 의 route.
+// slug 값은 Firestore 저장 키(booster/acne/redness/acne-root). 공개 URL 은 signaturePages.ts 의 route.
 export const SIGNATURE_PAGES = [
     // 기존 slug는 Firestore 전후사진·칼럼 연결을 끊지 않기 위해 유지한다.
     { slug: 'booster' as const, label: signaturePageName('booster') },
     { slug: 'acne' as const, label: signaturePageName('acne') },
     { slug: 'redness' as const, label: signaturePageName('redness') },
+    { slug: 'acne-root' as const, label: signaturePageName('acne-root') },
 ];
 
 // 피부교정 페이지는 시그니처와 route slug가 겹치므로 관리자 저장 키를 분리한다.
@@ -68,7 +69,7 @@ export const LIMITS = {
 
 // ── 개수 제한
 export const COUNT_LIMITS = {
-    /* 페이지당 칼럼 최대 10개. 시그니처 3개 페이지는 9개 (columnLimit).
+    /* 페이지당 칼럼 최대 10개. 시그니처 페이지는 9개 (columnLimit).
        #ISSUE: 12개까지 열어 뒀더니 목록이 화면을 넘겨 한 줄씩 보는 의미가 흐려졌다.
                한 페이지에 10개면 관련 글을 담기에 충분하다는 병원 확인. */
     columnPerPage: 10,

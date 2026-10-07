@@ -53,19 +53,19 @@ async function main() {
     ]);
 
     // 관리자에서 선택 가능한 현재 페이지 구조
-    assert.equal(SIGNATURE_PAGES.length, 3);
+    assert.equal(SIGNATURE_PAGES.length, 4);
     assert.equal(SKIN_TREATMENT_PAGES.length, 8);
     assert.equal(AGING_LIFTING_PAGES.length, 5);
-    assert.equal(TREATMENT_PAGES.length, 16);
+    assert.equal(TREATMENT_PAGES.length, 17);
     assertUnique(TREATMENT_PAGES.map((page) => page.slug), '관리자 시술 페이지 키');
 
     assert.deepEqual(
         SIGNATURE_PAGES.map((page) => page.label),
-        ['리베리 볼륨부스터', '비수술 턱끝전진 필러', '비수술 눈밑 지방 재배치'],
+        ['리베리 볼륨부스터', '비수술 턱끝전진 필러', '비수술 눈밑 지방 재배치', '여드름 뿌리 치료'],
     );
     assert.deepEqual(
         treatments.filter((treatment) => treatment.category === 'signature').map((treatment) => treatment.slug),
-        ['volume-booster', 'chin-filler', 'under-eye'],
+        ['volume-booster', 'chin-filler', 'under-eye', 'acne-root'],
     );
     assert.equal(signaturePath('booster'), '/treatments/signature/volume-booster');
     assert.equal(signaturePath('acne'), '/treatments/signature/chin-filler');
@@ -75,7 +75,7 @@ async function main() {
     AGING_LIFTING_PAGES.forEach((page) => assert.equal(agingLiftingPageSlug(page.itemSlug), page.slug));
 
     // 공개 시술·상세 주소 조합
-    assert.equal(treatments.length, 17);
+    assert.equal(treatments.length, 18);
     assertUnique(treatments.map((treatment) => `${treatment.category}/${treatment.slug}`), '공개 시술 주소');
     const solutionSlugs = new Set(solutions.map((solution) => solution.slug));
     treatments.forEach((treatment) => {

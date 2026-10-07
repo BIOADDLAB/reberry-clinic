@@ -26,16 +26,22 @@ export const TRACK_24 = 'tracking-[-0.0625em]';
 /* ───────── 문구 렌더러 ─────────
    "**굵게**" → <strong>, "\n" → <br />
    breakFrom 을 주면 그 폭 이상에서만 줄을 바꾸고, 그보다 좁은 화면에서는 문장이 자연스럽게 이어진다.
+   이때도 빈 줄("\n\n")은 문단 구분이라 모바일(md 미만)에서는 한 줄 띄운다.
+   lineBlocks 를 주면 모바일에서는 줄마다 블록이 된다 — breakFrom 이 있어도 모바일에서는 줄을 바꾸고,
+   text-balance 가 줄마다 따로 걸린다(강제 줄바꿈이 섞이면 balance 가 첫 줄 폭에 맞춰져 뒷줄이 고르지 않다).
+   이때 띄어 쓴 가운뎃점("A · B")은 앞말에 붙여서 모바일에서 줄이 점으로 시작하지 않게 한다.
    중국어·일본어는 띄어쓰기가 없으므로 줄을 이을 때 공백을 넣지 않는다. */
 export function Rich({
     text,
     strongClassName = 'font-semibold',
     breakFrom,
+    lineBlocks = false,
     locale = 'ko',
 }: {
     text: string;
     strongClassName?: string;
     breakFrom?: 'md' | 'lg' | 'xl';
+    lineBlocks?: boolean;
     locale?: string;
 }) {
     const joiner = locale === 'ja' || locale === 'zh' ? '' : ' ';
@@ -43,28 +49,108 @@ export function Rich({
 
     return (
         <>
-            {lines.map((line, lineIndex) => (
-                <Fragment key={lineIndex}>
-                    {line.split('**').map((part, partIndex) =>
-                        partIndex % 2 === 1 ? (
-                            <strong key={partIndex} className={strongClassName}>
-                                {part}
-                            </strong>
+            {lines.map((line, lineIndex) => {
+                const content = line.split('**').map((part, partIndex) => {
+                    const piece = lineBlocks ? <KeepDots text={part} /> : part;
+                    return partIndex % 2 === 1 ? (
+                        <strong key={partIndex} className={strongClassName}>
+                            {piece}
+                        </strong>
+                    ) : (
+                        <Fragment key={partIndex}>{piece}</Fragment>
+                    );
+                });
+                const isLast = lineIndex === lines.length - 1;
+                const nearBlank = line === '' || lines[lineIndex + 1] === '';
+
+                return (
+                    <Fragment key={lineIndex}>
+                        {!lineBlocks ? (
+                            content
+                        ) : line ? (
+                            <span className="max-md:block">{content}</span>
                         ) : (
-                            <Fragment key={partIndex}>{part}</Fragment>
-                        ),
-                    )}
-                    {lineIndex < lines.length - 1 &&
-                        (breakFrom ? (
-                            <>
-                                {joiner}
-                                <br className={BREAK_CLASS[breakFrom]} />
-                            </>
-                        ) : (
-                            <br />
-                        ))}
+                            <br className="md:hidden" />
+                        )}
+                        {!isLast &&
+                            (breakFrom ? (
+                                <>
+                                    {joiner}
+                                    <br className={BREAK_CLASS[breakFrom]} />
+                                    {!lineBlocks && nearBlank && <br className="md:hidden" />}
+                                </>
+                            ) : (
+                                <br className={lineBlocks ? 'max-md:hidden' : undefined} />
+                            ))}
+                    </Fragment>
+                );
+            })}
+        </>
+    );
+}
+
+/* ───────── 모바일에서 붙여 둘 말 ─────────
+   md 미만에서만 inline-block 으로 묶는다 — 태블릿·PC 줄바꿈은 그대로다.
+   한 줄에 들어가면 통째로 넘어가고, 폭이 모자라면 그 안에서만 줄을 바꾼다(넘치지 않는다). */
+const MOBILE_KEEP = 'max-md:inline-block';
+
+/** 띄어 쓴 가운뎃점("Potenza · Exosomes")을 바로 앞 단어와 묶는다 */
+function KeepDots({ text }: { text: string }) {
+    const items = text.split(' · ');
+    if (items.length === 1) return text;
+    return (
+        <>
+            {items.map((item, i) => {
+                if (i === items.length - 1) return <Fragment key={i}>{item}</Fragment>;
+                const at = item.lastIndexOf(' ') + 1;
+                return (
+                    <Fragment key={i}>
+                        {item.slice(0, at)}
+                        <span className={MOBILE_KEEP}>{item.slice(at)} ·</span>{' '}
+                    </Fragment>
+                );
+            })}
+        </>
+    );
+}
+
+/** 줄이 갈리면 어색한 어절을 붙인다 — 띄어쓰기 단위로 묶으므로 한국어 문장에만 쓴다
+    - 가운뎃점으로 이은 말("자국·흉터") — 크롬은 break-keep 이어도 점 뒤에서 줄을 바꾼다
+    - '-지 않/못' 부정("보이지 않는"), '등'과 그 앞말("스트레스 등")
+    - 쉼표나 '등' 뒤 첫 어절과 그다음 어절("아닌, 피부만을 고려한") — 첫 어절만 윗줄 끝에 남지 않게 */
+export function KeepWords({ text }: { text: string }) {
+    const words = text.split(' ');
+    const closesPhrase = (word: string) => word.endsWith(',') || word === '등';
+    const joinsNext = (i: number) =>
+        (words[i].endsWith('지') && /^[않못]/.test(words[i + 1])) ||
+        words[i + 1] === '등' ||
+        (i > 0 && closesPhrase(words[i - 1]) && !closesPhrase(words[i]));
+    const groups: string[] = [];
+    words.forEach((word, i) => {
+        if (i > 0 && joinsNext(i - 1)) groups[groups.length - 1] += ` ${word}`;
+        else groups.push(word);
+    });
+
+    return (
+        <>
+            {groups.map((group, i) => (
+                <Fragment key={i}>
+                    {i > 0 && ' '}
+                    {/[ ·]/.test(group) ? <span className={MOBILE_KEEP}>{group}</span> : group}
                 </Fragment>
             ))}
+        </>
+    );
+}
+
+/** 문장 속 phrase(시술명 등)부터 끝까지를 한 덩어리로 — 문장에 없으면 그대로 */
+export function KeepFrom({ text, phrase }: { text: string; phrase: string }) {
+    const at = phrase ? text.indexOf(phrase) : -1;
+    if (at < 0) return text;
+    return (
+        <>
+            {text.slice(0, at)}
+            <span className={MOBILE_KEEP}>{text.slice(at)}</span>
         </>
     );
 }

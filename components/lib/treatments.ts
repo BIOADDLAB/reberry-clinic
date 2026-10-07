@@ -238,6 +238,24 @@ export const treatments: Treatment[] = [
         },
     },
 
+    {
+        slug: 'acne-root',
+        category: 'signature',
+        name: '여드름 뿌리 치료',
+        en: 'Root-Cause Acne Treatment',
+        heroDescription: '반복되는 여드름의 원인부터 피부 환경까지 개선하는 근본 치료',
+        definition: {
+            title: '여드름 뿌리 치료란?',
+            text: '올라온 염증을 가라앉히는 것과 함께, 여드름이 계속 생기는 피부 환경 자체를 개선하는 치료입니다.',
+        },
+        hashtags: [],
+        solution: { light: '염증을 가라앉히고,', strong: '여드름이 반복되는 뿌리까지 다룹니다' },
+        items: [],
+        visual: 4,
+        visualW: 856,
+        visualH: 954,
+    },
+
     /* ─────────── 피부교정 ─────────── */
     {
         slug: 'pigment',

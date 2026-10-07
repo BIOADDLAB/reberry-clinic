@@ -112,9 +112,10 @@ export default async function TreatmentPage({ params }: Params) {
     const locale = await getLocale();
     const tTreatments = await getTranslations('treatments');
     const isKo = locale === 'ko';
+    const signatureSlug = rawTreatment.category === 'signature' ? signatureSlugFromRoute(rawTreatment.slug) : undefined;
     const t = localizeTreatment(
         rawTreatment,
-        isKo ? undefined : tTreatments.raw(`${rawTreatment.category}.${rawTreatment.slug}`),
+        isKo || signatureSlug ? undefined : tTreatments.raw(`${rawTreatment.category}.${rawTreatment.slug}`),
     );
     const path = `/treatments/${t.category}/${t.slug}`;
     const localizedCategory =
@@ -133,9 +134,8 @@ export default async function TreatmentPage({ params }: Params) {
         return breadcrumbs;
     };
 
-    /* ── 시그니처 3개 페이지 — 2026.09 리뉴얼 시안 ── */
+    /* ── 시그니처 페이지 ── */
     if (t.category === 'signature') {
-        const signatureSlug = signatureSlugFromRoute(t.slug);
         if (signatureSlug) {
             const content = getSignatureContent(signatureSlug, locale);
             return (

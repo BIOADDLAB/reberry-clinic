@@ -53,7 +53,7 @@ export const nav = [
         label: '시그니처시술',
         en: 'SIGNATURE',
         href: signaturePath('booster'),
-        children: [signatureNav('booster'), signatureNav('acne'), signatureNav('redness')],
+        children: [signatureNav('booster'), signatureNav('acne'), signatureNav('redness'), signatureNav('acne-root')],
     },
     { label: '전후사진', en: 'BEFORE & AFTER', href: '/reviews' },
     {

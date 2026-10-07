@@ -207,6 +207,7 @@ const BA_CATEGORY_BY_SLUG: Record<string, BACategoryKey> = {
     booster: 'petit',
     'skin-pigment': 'pigment',
     'skin-acne': 'acne',
+    'acne-root': 'acne',
     'skin-redness': 'redness',
     'skin-skinbooster': 'petit',
     'skin-tattoo-removal': 'pigment',

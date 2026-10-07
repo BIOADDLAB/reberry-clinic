@@ -1,19 +1,22 @@
-/* #COMPONENTS: 시그니처 시술 3개 페이지 문구 (2026.09 리뉴얼 시안 기준)
+/* #COMPONENTS: 시그니처 시술 페이지 문구
    - 페이지 구성은 components/signature/SignaturePage.tsx 하나를 같이 쓰고, 달라지는 문구·이미지만 여기 둔다.
    - slug 는 관리자(전후사진·칼럼) Firestore 저장 키. 예전 값(booster / acne / redness)을 그대로 둔다.
    - 공개 URL 은 route (volume-booster / chin-filler / under-eye). 옛 주소는 next.config 에서 301.
    - 문법: "**굵게**" / "\n" 줄바꿈. 긴 본문의 \n 은 태블릿(md) 이상에서만 줄을 바꾼다.
+     "\u00A0"(줄바꿈 없는 공백)은 모바일에서 두 어절이 갈리지 않게 붙여 둔 자리다.
    - 번역은 이 파일 안에서 끝낸다(messages/*.json 을 건드리지 않도록 분리). 서버에서만 읽으므로 번들에 안 실린다. */
 
 import type { AppLocale } from '@/i18n/locales';
+import { ACNE_ROOT_COPY } from './signatureAcneRoot';
 
-export const SIGNATURE_SLUGS = ['booster', 'acne', 'redness'] as const;
+export const SIGNATURE_SLUGS = ['booster', 'acne', 'redness', 'acne-root'] as const;
 export type SignatureSlug = (typeof SIGNATURE_SLUGS)[number];
 
 export const SIGNATURE_ROUTES = {
     booster: 'volume-booster',
     acne: 'chin-filler',
     redness: 'under-eye',
+    'acne-root': 'acne-root',
 } as const satisfies Record<SignatureSlug, string>;
 
 export type SignatureRoute = (typeof SIGNATURE_ROUTES)[SignatureSlug];
@@ -71,9 +74,10 @@ const STORY_IMAGE: Record<SignatureSlug, { src: string; width: number; height: n
     booster: { src: '/images/img-sig-story-volume.jpg', width: 852, height: 972 },
     acne: { src: '/images/img-sig-story-chin.jpg', width: 852, height: 930 },
     redness: { src: '/images/img-sig-story-eye.jpg', width: 852, height: 950 },
+    'acne-root': { src: '/images/img-sig-story-acne-root.jpg', width: 856, height: 954 },
 };
 
-interface PageCopy {
+export interface SignaturePageCopy {
     heroTitle: string;
     heroSub: string;
     /** 스토리 제목 · 칼럼/전후사진 제목에 들어가는 시술명 */
@@ -85,6 +89,8 @@ interface PageCopy {
     recommend: string[];
     closingLead: string;
     closingStatement: string;
+    intro?: { quote: string; causesTitle: string; causes: string[]; note: string };
+    treatmentCards?: string[];
 }
 
 interface CommonCopy {
@@ -99,7 +105,7 @@ interface CommonCopy {
     closingEnd: string;
 }
 
-export type SignatureContent = PageCopy &
+export type SignatureContent = SignaturePageCopy &
     CommonCopy & {
         slug: SignatureSlug;
         locale: AppLocale;
@@ -113,7 +119,7 @@ const COMMON: Record<AppLocale, CommonCopy> = {
         introHeadline: '얼굴의 한 부분이 아닌, **전체적인 균형을 봅니다**',
         introQuote: '고전미인 · AI상 미인 · 현대미인은\n윤곽선의 일정한 규칙을 따르고 있습니다',
         introBody: [
-            '부족한 턱끝, 꺼진 얼굴의 굴곡, 눈밑의 돌출과 고랑 같은 작은 불균형은 얼굴 전체의 인상을 좌우합니다.\n이러한 부분을 섬세하게 교정하면 이상적인 윤곽에 한층 가까워질 수 있습니다.',
+            '부족한 턱끝, 꺼진 얼굴의 굴곡, 눈밑의 돌출과 고랑 같은 작은 불균형은 얼굴 전체의 인상을 좌우합니다.\n이러한 부분을 섬세하게 교정하면 이상적인 윤곽에 한층 가까워질\u00A0수 있습니다.',
             '리베리의 시그니처 시술은 획일적인 방식이 아닌,\n얼굴의 골격과 지방 분포, 피부 상태와 비율을 분석해 필요한 부분만 정교하게 교정합니다.',
         ],
         portraitAlt: '앞볼 평면선과 외안면 S곡선을 표시한 모델 사진',
@@ -170,7 +176,8 @@ const COMMON: Record<AppLocale, CommonCopy> = {
 
 /* ───────────────────────────── 페이지별 문구 ───────────────────────────── */
 
-const PAGES: Record<SignatureSlug, Record<AppLocale, PageCopy>> = {
+const PAGES: Record<SignatureSlug, Record<AppLocale, SignaturePageCopy>> = {
+    'acne-root': ACNE_ROOT_COPY,
     /* 리베리 볼륨부스터 */
     booster: {
         ko: {
@@ -179,14 +186,14 @@ const PAGES: Record<SignatureSlug, Record<AppLocale, PageCopy>> = {
             name: '리베리 볼륨부스터',
             storySub: '채우기만 하는 볼륨이 아닌,\n얼굴의 선과 흐름을 되살리는 볼륨',
             storyBody: [
-                '얼굴의 볼륨은 많고 적음보다 필요한 곳에 적절하게 위치하는 것이 중요합니다.\n앞볼과 옆볼이 꺼지면 얼굴의 굴곡이 끊어지고,\n피부 처짐과 팔자·눈밑 고랑이 더욱 도드라져 보일 수 있습니다.',
+                '얼굴의 볼륨은 많고 적음보다 필요한 곳에 적절하게 위치하는 것이 중요합니다.\n앞볼과 옆볼이 꺼지면 얼굴의 굴곡이 끊어지고,\n피부 처짐과 팔자·눈밑 고랑이 더욱 도드라져 보일\u00A0수 있습니다.',
                 '리베리 볼륨부스터는 쥬베룩 볼륨을 기반으로 자가 콜라겐 생착률을 높인 시그니처 시술입니다.\n단순히 꺼진 부위를 채우는 것이 아니라, 얼굴의 굴곡과 빛의 흐름을 분석해\n필요한 곳에 자연스러운 볼륨과 선을 연결합니다.',
             ],
             whyTitle: '리베리 볼륨부스터는 다릅니다',
             why: [
                 '얼굴 전체의 꺼짐과 비율을 고려한 맞춤 디자인',
                 '쥬베룩 볼륨과 히알루론산의 장점을 활용한 복합 시술',
-                '물성 개선을 통한 자가 콜라겐 생착률을 높인 시술',
+                '물성 개선을 통한 자가\u00A0콜라겐 생착률을 높인 시술',
                 '특정 부위만 불룩해 보이지 않는 자연스러운 볼륨 연결',
                 '앞볼·옆볼·관자·팔자 등 개인별로 다른 노화 지점에 맞춘 설계',
                 '피부결과 탄력, 입체감을 함께 고려한 접근',
@@ -302,7 +309,7 @@ const PAGES: Record<SignatureSlug, Record<AppLocale, PageCopy>> = {
                 '정면과 측면을 함께 고려한 입체적인 디자인',
                 '얼굴 길이와 하관의 폭에 맞춘 자연스러운 비율',
                 '턱끝만 튀어나오거나 지나치게 뾰족해 보이지 않는 결과',
-                '필요에 따라 턱끝 근육과 주변 윤곽까지 함께 고려한 복합 설계',
+                '필요에 따라 턱끝 근육과 주변\u00A0윤곽까지 함께 고려한 복합 설계',
             ],
             recommend: [
                 '턱끝이 짧거나 뒤로 들어가 보이는 분',
@@ -402,7 +409,7 @@ const PAGES: Record<SignatureSlug, Record<AppLocale, PageCopy>> = {
             name: '비수술 눈밑 지방 재배치',
             storySub: '돌출을 줄이고,\n꺼진 고랑은 자연스럽게 채웁니다',
             storyBody: [
-                '눈밑이 피곤해 보이는 이유는 단순히 지방의 돌출 때문만은 아닙니다.\n눈밑 지방 아래 눈물고랑이 함께 꺼지면 돌출과 그림자의 대비가 커져\n눈밑이 더욱 도드라져 보일 수 있습니다.',
+                '눈밑이 피곤해 보이는 이유는 단순히 지방의 돌출 때문만은 아닙니다.\n눈밑 지방 아래 눈물고랑이 함께 꺼지면 돌출과 그림자의 대비가 커져\n눈밑이 더욱 도드라져 보일\u00A0수 있습니다.',
                 '리베리의 비수술 눈밑지방재배치는 눈밑의 돌출과 꺼짐을 함께 개선하는 복합 시술입니다.\n돌출 부위는 개인의 눈밑 구조와 피부 상태에 맞춰 정돈하고, 꺼진 고랑은\n쥬베룩 볼륨으로 섬세하게 보완해 눈밑 전체가 한결 평평하고 부드럽게 이어지도록 합니다.',
             ],
             whyTitle: '리베리의 비수술 눈밑지방재배치는 다릅니다',
@@ -411,7 +418,7 @@ const PAGES: Record<SignatureSlug, Record<AppLocale, PageCopy>> = {
                 '돌출 부위와 꺼진 부위에 서로 다른 방식으로 접근',
                 '눈밑이 불룩하거나 무거워 보이지 않도록 최소한의 볼륨 사용',
                 '피부 두께와 지방의 형태에 맞춘 세밀한 시술',
-                '인위적으로 채운 느낌보다 경계와 그림자를 완화하는 데 집중',
+                '인위적으로 채운 느낌보다 경계와\u00A0그림자를 완화하는 데 집중',
             ],
             recommend: [
                 '눈밑 지방 돌출과 눈물고랑이 함께 있는 분',
