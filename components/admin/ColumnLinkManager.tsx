@@ -13,6 +13,7 @@ import {
     SIGNATURE_PAGES,
     SKIN_TREATMENT_PAGES,
     TREATMENT_PAGES,
+    columnLimit,
 } from '@/components/lib/adminConfig';
 import { site } from '@/components/lib/site';
 import {
@@ -21,7 +22,12 @@ import {
     type TreatmentColumnHeadings,
 } from '@/components/lib/treatmentColumnHeadings';
 import { defaultColumnHeading } from '@/components/ui/TreatmentColumnSection';
-import { isSignatureSlug, signatureColumnTitle, signaturePath } from '@/components/lib/signaturePages';
+import {
+    SIGNATURE_COLUMN_MAX,
+    isSignatureSlug,
+    signatureColumnTitle,
+    signaturePath,
+} from '@/components/lib/signaturePages';
 import { Rich } from '@/components/signature/SignatureParts';
 import {
     AddRowButton,
@@ -131,6 +137,14 @@ export default function ColumnLinkManager() {
         () => items.filter((item) => item.slugs.includes(currentPage.slug)),
         [items, currentPage.slug],
     );
+    const countBySlug = useMemo(() => {
+        const counts = new Map<string, number>();
+        items.forEach((item) => item.slugs.forEach((slug) => counts.set(slug, (counts.get(slug) ?? 0) + 1)));
+        return counts;
+    }, [items]);
+    const isPageFull = (slug: string) => (countBySlug.get(slug) ?? 0) >= columnLimit(slug);
+    const pageLimit = columnLimit(currentPage.slug);
+    const currentFull = pageItems.length >= pageLimit;
     const headingFallback = fallbackHeading(currentPage.slug, currentPage.label);
     const headingOriginal = headings[currentPage.slug] || headingFallback;
 
@@ -166,8 +180,8 @@ export default function ColumnLinkManager() {
     const addCard = () =>
         run(
             async () => {
-                if (pageItems.length >= COUNT_LIMITS.columnPerPage) {
-                    throw new Error(`이 페이지에는 칼럼을 ${COUNT_LIMITS.columnPerPage}개까지만 넣을 수 있습니다.`);
+                if (currentFull) {
+                    throw new Error(`이 페이지에는 칼럼을 ${pageLimit}개까지만 넣을 수 있습니다.`);
                 }
                 const used = pageItems.map((item) => item.order ?? 0);
                 let order = 1;
@@ -200,10 +214,16 @@ export default function ColumnLinkManager() {
     };
 
     const togglePage = (item: ColDoc, slug: string) => {
-        const slugs = item.slugs.includes(slug) ? item.slugs.filter((value) => value !== slug) : [...item.slugs, slug];
+        const adding = !item.slugs.includes(slug);
+        const slugs = adding ? [...item.slugs, slug] : item.slugs.filter((value) => value !== slug);
         if (slugs.length === 0) return;
         void run(
-            () => updateDoc(doc(db, 'columns', item.id), { slugs }),
+            async () => {
+                if (adding && isPageFull(slug)) {
+                    throw new Error(`그 페이지에는 칼럼이 이미 ${columnLimit(slug)}개라 더 넣을 수 없습니다.`);
+                }
+                await updateDoc(doc(db, 'columns', item.id), { slugs });
+            },
             '저장 실패',
             '보이는 페이지를 바꿨습니다',
         );
@@ -224,6 +244,10 @@ export default function ColumnLinkManager() {
             <HelpBanner>
                 <b className="text-cocoa">사용법</b> · 먼저 위 탭에서 페이지를 고릅니다. 카드의 이름·제목·주소를 눌러
                 고친 뒤 아래 <b className="text-cocoa">[저장하기]</b>를 누릅니다.
+                <br />
+                <b className="text-cocoa">개수</b> · 시그니처 페이지는 페이지마다 칼럼을{' '}
+                <b className="text-cocoa">최대 {SIGNATURE_COLUMN_MAX}개</b>까지 넣을 수 있습니다. 나머지 페이지는{' '}
+                {COUNT_LIMITS.columnPerPage}개까지입니다. [다른 페이지에도 보이기]로 걸어 둔 칼럼도 개수에 들어갑니다.
             </HelpBanner>
 
             <div className="mt-8 flex flex-wrap justify-center gap-2">
@@ -333,21 +357,24 @@ export default function ColumnLinkManager() {
                             <details className="mt-3 text-left">
                                 <summary className="cursor-pointer text-caption font-semibold text-latte">다른 페이지에도 보이기</summary>
                                 <div className="mt-2 flex max-h-40 flex-wrap gap-1.5 overflow-y-auto">
-                                    {ALL_PAGES.map((page) => (
-                                        <button
-                                            key={page.slug}
-                                            type="button"
-                                            disabled={busy}
-                                            onClick={() => togglePage(item, page.slug)}
-                                            className={`rounded-full border px-2.5 py-1 text-caption-sm ${
-                                                item.slugs.includes(page.slug)
-                                                    ? 'border-cocoa bg-cocoa text-cream'
-                                                    : 'border-cocoa/15 text-latte'
-                                            }`}
-                                        >
-                                            {page.label}
-                                        </button>
-                                    ))}
+                                    {ALL_PAGES.map((page) => {
+                                        const selected = item.slugs.includes(page.slug);
+                                        const full = !selected && isPageFull(page.slug);
+                                        return (
+                                            <button
+                                                key={page.slug}
+                                                type="button"
+                                                disabled={busy || full}
+                                                onClick={() => togglePage(item, page.slug)}
+                                                className={`rounded-full border px-2.5 py-1 text-caption-sm ${
+                                                    selected ? 'border-cocoa bg-cocoa text-cream' : 'border-cocoa/15 text-latte'
+                                                } ${full ? 'cursor-not-allowed opacity-40' : ''}`}
+                                            >
+                                                {page.label}
+                                                {full ? ` · ${columnLimit(page.slug)}개 꽉 참` : ''}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </details>
                             <div className="mt-auto flex flex-wrap gap-2 pt-4">
@@ -374,9 +401,24 @@ export default function ColumnLinkManager() {
             </div>
 
             <div className="mx-auto mt-6 max-w-5xl">
-                <AddRowButton disabled={busy} onClick={() => void addCard()}>
-                    + {currentPage.label}에 칼럼 추가
+                <AddRowButton disabled={busy || currentFull} onClick={() => void addCard()}>
+                    {currentFull ? `칼럼 ${pageLimit}개가 다 찼습니다` : `+ ${currentPage.label}에 칼럼 추가`}
                 </AddRowButton>
+                <p className="mt-2 text-center text-caption text-latte">
+                    이 페이지 칼럼{' '}
+                    <b className="text-cocoa">
+                        {pageItems.length}/{pageLimit}개
+                    </b>
+                    {currentFull
+                        ? ' · 새로 넣으려면 카드 하나를 먼저 지워 주세요.'
+                        : ` · ${pageLimit - pageItems.length}개 더 넣을 수 있습니다.`}
+                </p>
+                {isSignatureSlug(currentPage.slug) && pageItems.length > pageLimit && (
+                    <p className="mt-1 text-center text-caption font-semibold text-red-700">
+                        홈페이지에는 앞 {pageLimit}개만 나옵니다. 뒤에 놓인 {pageItems.length - pageLimit}개는 지우거나,
+                        보여줄 칼럼을 앞으로 옮겨 주세요.
+                    </p>
+                )}
             </div>
 
             <SaveBar

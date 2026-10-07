@@ -1,6 +1,7 @@
 /* #COMPONENTS: 시그니처 칼럼 — "{시술명} 이야기"
    - 목록은 관리자 → 블로그 연결 관리 → 시그니처 탭에서 이 페이지(slug)에 등록한 칼럼이 그대로 나온다.
    - 목록 모양은 다른 시술 페이지와 같은 ColumnListContent 를 그대로 쓴다(디자인 통일).
+   - 페이지마다 앞에서부터 최대 9개(SIGNATURE_COLUMN_MAX)만 나온다. 관리자도 9개까지만 넣게 막는다.
    - 등록된 칼럼이 없으면 제목까지 통째로 숨긴다.
    #ISSUE: 제목이 시안 문구("{시술명} 이야기")로 코드에 박혀 있어 병원에서 못 고쳤다.
            다른 시술 페이지는 관리자에서 고칠 수 있는데 시그니처만 예외였다.
@@ -12,12 +13,13 @@
 import { cn } from '@/components/lib/cn';
 import { useColumnsBySlug } from '@/components/lib/useColumns';
 import { useTreatmentColumnHeading } from '@/components/lib/useTreatmentColumnHeading';
+import { SIGNATURE_COLUMN_MAX } from '@/components/lib/signaturePages';
 import Reveal from '@/components/motion/Reveal';
 import { ColumnListContent } from '@/components/ui/ColumnSlider';
 import { Rich, SIG_TYPE } from '@/components/signature/SignatureParts';
 
 export default function SignatureColumnSection({ slug, title, locale }: { slug: string; title: string; locale: string }) {
-    const items = useColumnsBySlug(slug, []);
+    const items = useColumnsBySlug(slug, []).slice(0, SIGNATURE_COLUMN_MAX);
     const heading = useTreatmentColumnHeading(slug, title);
 
     if (items.length === 0) return null;

@@ -3,7 +3,7 @@
     - 제한 숫자를 바꾸고 싶으면 여기만 고치면 관리자 화면 전체에 반영됨.
     - (글자수 기준은 실제 카드 크기에서 줄바꿈/말줄임 없이 들어가는 최대치를 재서 정한 값) */
 
-import { signaturePageName } from '@/components/lib/signaturePages';
+import { SIGNATURE_COLUMN_MAX, isSignatureSlug, signaturePageName } from '@/components/lib/signaturePages';
 
 // ── 시그니처 시술 페이지 (전후사진·칼럼 공통)
 // slug 값은 Firestore 저장 키(booster/acne/redness). 공개 URL 은 signaturePages.ts 의 route.
@@ -68,13 +68,16 @@ export const LIMITS = {
 
 // ── 개수 제한
 export const COUNT_LIMITS = {
-    /* 페이지당 칼럼 최대 10개.
+    /* 페이지당 칼럼 최대 10개. 시그니처 3개 페이지는 9개 (columnLimit).
        #ISSUE: 12개까지 열어 뒀더니 목록이 화면을 넘겨 한 줄씩 보는 의미가 흐려졌다.
                한 페이지에 10개면 관련 글을 담기에 충분하다는 병원 확인. */
     columnPerPage: 10,
     baPerPage: 14, // 시그니처 페이지 1개당 전후사진 최대
     baMain: 10, // 메인페이지에 노출할 전후사진 최대
 } as const;
+
+/** 이 페이지에 넣을 수 있는 칼럼 수. "다른 페이지에도 보이기"로 건 칼럼도 같이 센다. */
+export const columnLimit = (slug: string) => (isSignatureSlug(slug) ? SIGNATURE_COLUMN_MAX : COUNT_LIMITS.columnPerPage);
 
 // ── 전후사진 권장 이미지 규격
 // 전후사진 페이지 카드는 한 장을 정사각으로 보여 준다.

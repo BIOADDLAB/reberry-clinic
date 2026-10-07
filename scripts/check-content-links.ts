@@ -3,11 +3,11 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import {
     AGING_LIFTING_PAGES,
-    COUNT_LIMITS,
     SIGNATURE_PAGES,
     SKIN_TREATMENT_PAGES,
     TREATMENT_PAGES,
     agingLiftingPageSlug,
+    columnLimit,
     skinTreatmentPageSlug,
 } from '../components/lib/adminConfig';
 import { resolveBASlugs, showsOnReviews, showsOnTreatment } from '../components/lib/ba';
@@ -102,7 +102,7 @@ async function main() {
     });
     assertUnique(blogOrderKeys, '페이지별 블로그 순서');
     blogCountByTarget.forEach((count, slug) => {
-        assert(count <= COUNT_LIMITS.columnPerPage, `${slug} 블로그 ${count}개: 최대 개수 초과`);
+        assert(count <= columnLimit(slug), `${slug} 블로그 ${count}개: 최대 ${columnLimit(slug)}개 초과`);
     });
 
     // 전후사진 한 건을 여러 시술 페이지와 전후사진 탭에서 함께 쓰는 규칙

@@ -60,6 +60,9 @@ export const SIGNATURE_BA_MORE_HREF = '/reviews';
 /** 시그니처 페이지 전후사진은 시안대로 3칸 — 관리자 안내문도 이 값을 같이 쓴다 */
 export const SIGNATURE_BA_VISIBLE = 3;
 
+/** 시그니처 페이지 칼럼은 페이지마다 최대 9개 — 관리자 개수 제한·안내문도 이 값을 같이 쓴다 */
+export const SIGNATURE_COLUMN_MAX = 9;
+
 /** 스토리 이미지 — 파일 크기(2배수)를 그대로 적어 두면 페이지마다 높이가 시안처럼 달라진다.
     #ISSUE: 이미지는 테두리 없는 원본이고, 시안의 3px 크림 테두리는 SignaturePage 에서 CSS 로 준다.
             같은 파일명으로 이미지를 바꾸면 Next 이미지 최적화 캐시(4시간)와 브라우저 캐시가 옛 이미지를 계속 보여 준다.

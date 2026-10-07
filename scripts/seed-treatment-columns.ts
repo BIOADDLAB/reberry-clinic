@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { collection, doc, getDocs, terminate, writeBatch } from 'firebase/firestore';
 import { db } from '../components/lib/firebase';
-import { COUNT_LIMITS, TREATMENT_PAGES } from '../components/lib/adminConfig';
+import { TREATMENT_PAGES, columnLimit } from '../components/lib/adminConfig';
 import { solutions } from '../components/lib/solutions';
 
 interface ColumnSeedItem {
@@ -53,8 +53,8 @@ function validate(payload: ColumnSeedPayload) {
         }
     }
 
-    const overLimit = [...perPage].find(([, count]) => count > COUNT_LIMITS.columnPerPage);
-    if (overLimit) throw new Error(`${overLimit[0]} has ${overLimit[1]} columns (max ${COUNT_LIMITS.columnPerPage})`);
+    const overLimit = [...perPage].find(([slug, count]) => count > columnLimit(slug));
+    if (overLimit) throw new Error(`${overLimit[0]} has ${overLimit[1]} columns (max ${columnLimit(overLimit[0])})`);
 }
 
 async function main() {
