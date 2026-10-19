@@ -101,6 +101,13 @@ export default function SkinColumnBlogImportPanel({ onError }: { onError: (messa
                     {result.created > 0 ? `새 글 ${result.created}개를 가져왔습니다.` : '최신글입니다.'}
                 </p>
             ) : null}
+            {/* 썸네일 실패는 수집을 막지 않고 서버 로그에만 남는다. 관리자가 알아챌 수 있는 곳은 여기뿐이다. */}
+            {result && result.thumbnailsMissing > 0 ? (
+                <p className="mt-2 rounded-xl bg-[#FFF6D6] px-3 py-2 text-caption text-[#8A5A12]">
+                    대표 이미지 {result.thumbnailsMissing}개를 저장하지 못해 사이트 카드에 글자만 나옵니다. 다시 눌러도
+                    그대로면 알려 주세요.
+                </p>
+            ) : null}
         </section>
     );
 }
