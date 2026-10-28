@@ -75,7 +75,7 @@ interface BAPhotoDoc {
 const VALID_SLUGS = new Set(TREATMENT_PAGES.map((page) => page.slug));
 
 
-const emptyForm = (category = BA_CATEGORIES[0].key) => ({
+const emptyForm = (category: string = BA_CATEGORIES[0].key) => ({
     place: 'treatment' as string,
     slugs: [] as string[],
     category,

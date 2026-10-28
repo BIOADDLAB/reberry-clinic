@@ -149,7 +149,7 @@ export const baPlaceLabel = (place?: string) =>
     BA_PLACES.find((p) => p.key === resolveBAPlace({ place }))!.label;
 
 /** 새 다중 선택 데이터와 기존 단일 slug 데이터를 같은 방식으로 읽는다. */
-export function resolveBASlugs(photo: Pick<BAPhoto, 'slug' | 'slugs'>): string[] {
+export function resolveBASlugs(photo: { slug?: string; slugs?: string[] }): string[] {
     const selected = Array.isArray(photo.slugs)
         ? photo.slugs.filter((slug): slug is string => typeof slug === 'string' && slug.length > 0)
         : [];
@@ -183,14 +183,14 @@ export function resolveBALabel(photo: Pick<BAPhoto, 'slug' | 'slugs' | 'label'>)
    실제 탭 목록은 Firestore baCategories 에서 읽는다(수가표 대분류와 같은 방식).
    아래 배열은 컬렉션이 비었을 때 넣는 기본값이자, 옛 사진 키를 새 탭으로 옮기는 기준이다.
    ───────────────────────────────────────────────────────────── */
-export const BA_CATEGORIES = [
+export const BA_CATEGORIES: Array<{ key: string; label: string }> = [
     { key: 'pigment', label: '색소' },
     { key: 'acne', label: '여드름' },
     { key: 'redness', label: '홍조/주사피부염' },
     { key: 'pore-scar', label: '모공/흉터' },
     { key: 'contour', label: '윤곽/쁘띠/리프팅' },
     { key: 'undereye', label: '비수술눈밑지방재배치' },
-] as const;
+];
 
 export type BACategoryKey = string;
 
@@ -229,7 +229,7 @@ export function remapStoredBACategory(category?: string): string | undefined {
 }
 
 /** 이 사진이 속한 카테고리 키. 눈밑 시그니처 → 지정값 → slug 자동배정 → null */
-export function resolveBACategory(photo: Pick<BAPhoto, 'slug' | 'slugs' | 'category'>): string | null {
+export function resolveBACategory(photo: { slug?: string; slugs?: string[]; category?: string }): string | null {
     const slugs = resolveBASlugs(photo);
     if (slugs.includes('redness')) return 'undereye';
     if (photo.category) return remapStoredBACategory(photo.category) ?? null;
