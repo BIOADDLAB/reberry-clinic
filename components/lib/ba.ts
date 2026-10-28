@@ -104,7 +104,7 @@ const combinedLiftingPhoto = (
         after: src,
         order,
         place: 'treatment',
-        category: 'lifting',
+        category: 'contour',
     };
 };
 
@@ -180,56 +180,67 @@ export function resolveBALabel(photo: Pick<BAPhoto, 'slug' | 'slugs' | 'label'>)
 
 /* ─────────────────────────────────────────────────────────────
    전후사진 페이지(/reviews) 카테고리 탭
-   #ISSUE: slug 는 "어느 시그니처 페이지에 뜰지"를 정하는 값이라 축이 다르다.
-           탭 분류는 category 필드로 따로 관리한다(관리자에서 선택).
-   탭을 늘리거나 이름을 바꾸려면 아래 배열만 고치면 화면·관리자 양쪽에 반영된다.
+   실제 탭 목록은 Firestore baCategories 에서 읽는다(수가표 대분류와 같은 방식).
+   아래 배열은 컬렉션이 비었을 때 넣는 기본값이자, 옛 사진 키를 새 탭으로 옮기는 기준이다.
    ───────────────────────────────────────────────────────────── */
 export const BA_CATEGORIES = [
     { key: 'pigment', label: '색소' },
     { key: 'acne', label: '여드름' },
     { key: 'redness', label: '홍조/주사피부염' },
     { key: 'pore-scar', label: '모공/흉터' },
-    { key: 'wrinkle', label: '주름' },
-    { key: 'lifting', label: '리프팅/탄력' },
-    { key: 'petit', label: '쁘띠성형' },
-    { key: 'hair-removal', label: '제모' },
+    { key: 'contour', label: '윤곽/쁘띠/리프팅' },
+    { key: 'undereye', label: '비수술눈밑지방재배치' },
 ] as const;
 
-export type BACategoryKey = (typeof BA_CATEGORIES)[number]['key'];
+export type BACategoryKey = string;
 
-/** 카테고리 값이 없는 기존 사진을 기존 slug 로 자동 배정한다 (데이터 마이그레이션 없이 바로 분류됨) */
-const BA_CATEGORY_BY_SLUG: Record<string, BACategoryKey> = {
+/** 예전 탭 키 → 지금 탭 키. Firestore 값을 아직 안 갈아탄 사진도 새 탭에 들어가게 한다. */
+export const LEGACY_BA_CATEGORY: Record<string, string> = {
+    wrinkle: 'contour',
+    lifting: 'contour',
+    petit: 'contour',
+};
+
+/** 카테고리 값이 없는 기존 사진을 기존 slug 로 자동 배정한다 */
+const BA_CATEGORY_BY_SLUG: Record<string, string> = {
     pigment: 'pigment',
-    // 시그니처의 acne/redness route key는 새 시술로 재사용한다.
-    acne: 'petit',
-    redness: 'petit',
-    lifting: 'lifting',
-    booster: 'petit',
+    acne: 'contour',
+    redness: 'undereye',
+    lifting: 'contour',
+    booster: 'contour',
     'skin-pigment': 'pigment',
     'skin-acne': 'acne',
     'acne-root': 'acne',
     'skin-redness': 'redness',
-    'skin-skinbooster': 'petit',
+    'skin-skinbooster': 'contour',
     'skin-tattoo-removal': 'pigment',
     'skin-scar-pore': 'pore-scar',
-    'skin-hair-removal': 'hair-removal',
     'skin-care': 'redness',
-    'aging-ulthera': 'lifting',
-    'aging-onda': 'lifting',
-    'aging-vro': 'lifting',
-    'aging-revinas': 'lifting',
-    'aging-shrink': 'lifting',
+    'aging-ulthera': 'contour',
+    'aging-onda': 'contour',
+    'aging-vro': 'contour',
+    'aging-revinas': 'contour',
+    'aging-shrink': 'contour',
 };
 
-/** 이 사진이 속한 카테고리 키. 지정값 → slug 자동배정 → null(어느 탭에도 안 걸림) */
-export function resolveBACategory(photo: Pick<BAPhoto, 'slug' | 'slugs' | 'category'>): BACategoryKey | null {
-    const picked = BA_CATEGORIES.find((c) => c.key === photo.category);
-    if (picked) return picked.key;
-    const matchingSlug = resolveBASlugs(photo).find((slug) => BA_CATEGORY_BY_SLUG[slug]);
+export function remapStoredBACategory(category?: string): string | undefined {
+    if (!category) return category;
+    return LEGACY_BA_CATEGORY[category] ?? category;
+}
+
+/** 이 사진이 속한 카테고리 키. 눈밑 시그니처 → 지정값 → slug 자동배정 → null */
+export function resolveBACategory(photo: Pick<BAPhoto, 'slug' | 'slugs' | 'category'>): string | null {
+    const slugs = resolveBASlugs(photo);
+    if (slugs.includes('redness')) return 'undereye';
+    if (photo.category) return remapStoredBACategory(photo.category) ?? null;
+    const matchingSlug = slugs.find((slug) => BA_CATEGORY_BY_SLUG[slug]);
     return matchingSlug ? BA_CATEGORY_BY_SLUG[matchingSlug] : null;
 }
 
-export const baCategoryLabel = (key: string) => BA_CATEGORIES.find((c) => c.key === key)?.label ?? key;
+export const baCategoryLabel = (key: string, categories?: Array<{ key: string; label: string }>) =>
+    categories?.find((category) => category.key === key)?.label ??
+    BA_CATEGORIES.find((category) => category.key === key)?.label ??
+    key;
 
 /*
 저장 위치: /public/images/ba/

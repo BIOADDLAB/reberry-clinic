@@ -17,6 +17,7 @@ import {
     resolveBALabel,
     type BAPhoto,
 } from '@/components/lib/ba';
+import { useBACategories } from '@/components/lib/useBACategories';
 import T from '@/components/lang/T';
 
 interface Props {
@@ -27,6 +28,7 @@ interface Props {
 export default function BAPhotoModal({ photo, onClose }: Props) {
     const t = useTranslations('common');
     const tReviews = useTranslations('reviews');
+    const categories = useBACategories();
 
     useEffect(() => {
         if (!photo) return;
@@ -70,7 +72,7 @@ export default function BAPhotoModal({ photo, onClose }: Props) {
                     <div className="min-w-0">
                         {categoryKey && (
                             <span className="inline-block rounded-full bg-sand/70 px-2.5 py-1 text-caption-sm font-semibold text-cocoa/70">
-                                <T ko={baCategoryLabel(categoryKey)} />
+                                <T ko={baCategoryLabel(categoryKey, categories)} />
                             </span>
                         )}
                         <h3 className="mt-1.5 truncate text-lead font-bold text-cocoa">

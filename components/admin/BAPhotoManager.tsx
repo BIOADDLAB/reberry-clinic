@@ -29,6 +29,15 @@ import {
     showsOnTreatment,
 } from '@/components/lib/ba';
 import {
+    createBACategory,
+    deleteBACategory,
+    ensureDefaultBACategories,
+    subscribeBACategories,
+    updateBACategory,
+    updateBACategorySorts,
+    type BACategory,
+} from '@/components/lib/baCategories';
+import {
     AddRowButton,
     AdminHeader,
     DragHandle,
@@ -66,10 +75,10 @@ interface BAPhotoDoc {
 const VALID_SLUGS = new Set(TREATMENT_PAGES.map((page) => page.slug));
 
 
-const emptyForm = () => ({
+const emptyForm = (category = BA_CATEGORIES[0].key) => ({
     place: 'treatment' as string,
     slugs: [] as string[],
-    category: BA_CATEGORIES[0].key as string,
+    category,
     label: '',
     treatmentDate: '',
     showMain: false,
@@ -79,6 +88,16 @@ const emptyForm = () => ({
 
 export default function BAPhotoManager() {
     const [items, setItems] = useState<BAPhotoDoc[]>([]);
+    const [categories, setCategories] = useState<BACategory[]>(
+        BA_CATEGORIES.map((category, sort) => ({
+            key: category.key,
+            label: category.label,
+            isPublished: true,
+            sort,
+            createdAt: '',
+            updatedAt: '',
+        })),
+    );
     const [filter, setFilter] = useState<string>(BA_CATEGORIES[0].key);
     /* 시술 페이지별 보기는 탭(filter)과 반드시 다른 상태로 둔다.
        #ISSUE: 처음에는 filter 하나에 탭 값과 페이지 slug 를 같이 담았는데, 전후사진 탭의
@@ -89,6 +108,7 @@ export default function BAPhotoManager() {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [adding, setAdding] = useState(false);
     const [form, setForm] = useState(emptyForm());
+    const [categoryLabel, setCategoryLabel] = useState(BA_CATEGORIES[0].label);
     const [loading, setLoading] = useState(true);
     const { busy, error, toast, run, setError } = useAdminAction();
     const formSection = useRef<HTMLElement>(null);
@@ -114,6 +134,15 @@ export default function BAPhotoManager() {
         [setError],
     );
 
+    useEffect(() => {
+        void ensureDefaultBACategories().catch((seedError: Error) => {
+            setError(seedError.message || '전후사진 카테고리를 준비하지 못했습니다.');
+        });
+        return subscribeBACategories(setCategories, (snapshotError) => {
+            setError(snapshotError.message || '전후사진 카테고리를 불러오지 못했습니다.');
+        });
+    }, [setError]);
+
     const nextFreeOrder = (taken: number[]) => {
         for (let number = 1; number <= taken.length + 1; number += 1) if (!taken.includes(number)) return number;
         return taken.length + 1;
@@ -129,8 +158,10 @@ export default function BAPhotoManager() {
                달라 순서를 논할 수 없으므로, 페이지를 하나 고른 화면에서만 순서를 바꾼다. */
     const orderingSlug = TREATMENT_PAGES.some((page) => page.slug === orderPage) ? orderPage : null;
     /* 전후사진 페이지 탭을 고른 상태. 시술 페이지 순서(order)와 섞이지 않게 reviewsOrder 만 고친다. */
-    const orderingCategory =
-        !orderingSlug && BA_CATEGORIES.some((category) => category.key === filter) ? filter : null;
+    const activeCategory = categories.find((category) => category.key === filter) ?? null;
+    const orderingCategory = !orderingSlug && activeCategory ? filter : null;
+    const categoryKeys = categories.map((category) => category.key);
+    const activeCategoryIndex = activeCategory ? categoryKeys.indexOf(activeCategory.key) : -1;
     /* 메인에 보이는 사진 탭. 여기서 옮기면 main 번호만 바뀌고, 시술·전후사진 페이지 순서는 그대로다. */
     const orderingMain = !orderingSlug && filter === 'main';
     const canReorder = Boolean(orderingSlug || orderingCategory || orderingMain);
@@ -187,6 +218,34 @@ export default function BAPhotoManager() {
         saveOrder(next);
     };
 
+    const saveCategoryOrder = (orderedKeys: string[]) =>
+        void run(
+            () => updateBACategorySorts(orderedKeys.map((key, sort) => ({ key, sort }))),
+            '카테고리 순서 변경 실패',
+            '카테고리 순서를 바꿨습니다',
+        );
+
+    const categoryDrag = useDragReorder(saveCategoryOrder);
+
+    const nudgeCategory = (step: -1 | 1) => {
+        const swap = activeCategoryIndex + step;
+        if (activeCategoryIndex < 0 || swap < 0 || swap >= categoryKeys.length) return;
+        const next = [...categoryKeys];
+        [next[activeCategoryIndex], next[swap]] = [next[swap], next[activeCategoryIndex]];
+        saveCategoryOrder(next);
+    };
+
+    const saveCategoryName = () => {
+        if (!activeCategory) return;
+        const label = categoryLabel.trim();
+        if (!label || label === activeCategory.label) return;
+        void run(
+            () => updateBACategory(activeCategory.key, { label, isPublished: activeCategory.isPublished }),
+            '카테고리 저장 실패',
+            '카테고리 이름을 저장했습니다',
+        );
+    };
+
     /* 폼은 목록 위에 있어도 화면 밖일 수 있다 → 열릴 때 스스로 화면으로 온다.
        #ISSUE: 예전에는 startEdit 에서 window.scrollTo(0) 을 불렀다. 화면 맨 위(제목·사용법)로만
                올라가서 정작 폼은 안 보였고, [고치기]·[+ 사진 올리기] 를 눌러도 아무 일도
@@ -195,10 +254,21 @@ export default function BAPhotoManager() {
         if (adding || editingId) formSection.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, [adding, editingId]);
 
+    useEffect(() => {
+        if (!activeCategory) return;
+        setCategoryLabel(activeCategory.label);
+    }, [activeCategory]);
+
+    useEffect(() => {
+        if (categories.length === 0) return;
+        if (filter === 'main' || categories.some((category) => category.key === filter)) return;
+        setFilter(categories[0].key);
+    }, [categories, filter]);
+
     const startAdd = () => {
         setEditingId(null);
         setAdding(true);
-        setForm(emptyForm());
+        setForm(emptyForm(orderingCategory ?? categories[0]?.key ?? BA_CATEGORIES[0].key));
     };
 
     const startEdit = (item: BAPhotoDoc) => {
@@ -209,7 +279,7 @@ export default function BAPhotoManager() {
         setForm({
             place,
             slugs,
-            category: resolveBACategory(item) ?? BA_CATEGORIES[0].key,
+            category: resolveBACategory(item) ?? categories[0]?.key ?? BA_CATEGORIES[0].key,
             label: item.label,
             treatmentDate: item.treatmentDate ?? '',
             showMain: typeof item.main === 'number',
@@ -352,31 +422,128 @@ export default function BAPhotoManager() {
                 <b className="text-cocoa">전후사진 페이지 순서</b>는 카테고리 탭에서,{' '}
                 <b className="text-cocoa">시술 페이지 순서</b>는 아래 [시술 페이지별로 보기]에서 바꿉니다. 카드의
                 화살표나 점 여섯 개(⠿)로 옮기면 그 화면 순서가 고정됩니다.
+                <br />
+                전후사진 탭은 수가표처럼 <b className="text-cocoa">[+ 카테고리 추가]</b>로 늘리고, 이름을 눌러 고치고,
+                숨기거나 순서를 바꿀 수 있습니다.
             </HelpBanner>
 
-            <div className="mt-8 flex flex-wrap justify-center gap-2">
-                {[
-                    { key: 'main', label: '메인에 보이는 사진' },
-                    ...BA_CATEGORIES.map((category) => ({ key: category.key, label: category.label })),
-                ].map((tab) => (
-                    <button
-                        key={tab.key}
-                        type="button"
-                        // 탭을 누르면 아래 시술 페이지 선택은 풀린다 (두 개가 동시에 켜져 보이지 않게)
-                        onClick={() => {
-                            setFilter(tab.key);
-                            setOrderPage('');
-                        }}
-                        className={`rounded-full border px-4 py-2 text-small font-semibold ${
-                            filter === tab.key && !orderingSlug
-                                ? 'border-cocoa bg-cocoa text-cream'
-                                : 'border-cocoa/15 bg-cream text-latte'
-                        }`}
-                    >
-                        {tab.label}
-                    </button>
-                ))}
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+                <button
+                    type="button"
+                    onClick={() => {
+                        setFilter('main');
+                        setOrderPage('');
+                    }}
+                    className={`rounded-full border px-4 py-2 text-small font-semibold ${
+                        filter === 'main' && !orderingSlug
+                            ? 'border-cocoa bg-cocoa text-cream'
+                            : 'border-cocoa/15 bg-cream text-latte'
+                    }`}
+                >
+                    메인에 보이는 사진
+                </button>
+                {categories.map((category) => {
+                    const active = filter === category.key && !orderingSlug;
+                    const drag = busy
+                        ? {}
+                        : { ...categoryDrag.rowProps(category.key, categoryKeys), ...categoryDrag.handleProps(category.key) };
+                    return (
+                        <button
+                            key={category.key}
+                            type="button"
+                            {...drag}
+                            onClick={() => {
+                                setFilter(category.key);
+                                setOrderPage('');
+                            }}
+                            className={`rounded-full border px-4 py-2 text-small font-semibold ${
+                                busy ? '' : 'cursor-grab active:cursor-grabbing'
+                            } ${categoryDrag.isTarget(category.key) ? 'ring-2 ring-[#C95813] ring-offset-1' : ''} ${
+                                categoryDrag.isMoving(category.key) ? 'opacity-40' : ''
+                            } ${
+                                active
+                                    ? 'border-cocoa bg-cocoa text-cream'
+                                    : 'border-cocoa/15 bg-cream text-latte'
+                            } ${category.isPublished ? '' : 'opacity-50'}`}
+                        >
+                            {category.label}
+                            {category.isPublished ? '' : ' · 숨김'}
+                        </button>
+                    );
+                })}
+                <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() =>
+                        void run(
+                            async () => {
+                                const key = await createBACategory({ label: '새 카테고리', isPublished: true });
+                                setFilter(key);
+                                setOrderPage('');
+                            },
+                            '추가 실패',
+                            '카테고리를 추가했습니다',
+                        )
+                    }
+                    className="rounded-full border border-dashed border-cocoa/25 px-4 py-2 text-small font-semibold text-latte transition-colors hover:border-cocoa/50 hover:text-cocoa disabled:opacity-40"
+                >
+                    + 카테고리 추가
+                </button>
             </div>
+
+            {activeCategory && !orderingSlug && (
+                <div className="mx-auto mt-4 max-w-3xl rounded-2xl border border-cocoa/10 bg-white px-5 py-4">
+                    <p className="text-caption font-semibold text-latte">이 카테고리 이름</p>
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                        <Field
+                            value={categoryLabel}
+                            dirty={categoryLabel.trim() !== activeCategory.label}
+                            onChange={setCategoryLabel}
+                            onBlur={saveCategoryName}
+                            className="max-w-xs text-small font-bold text-cocoa"
+                        />
+                        <VisibilitySwitch
+                            visible={activeCategory.isPublished}
+                            disabled={busy}
+                            onChange={(isPublished) =>
+                                void run(
+                                    () =>
+                                        updateBACategory(activeCategory.key, {
+                                            label: activeCategory.label,
+                                            isPublished,
+                                        }),
+                                    '저장 실패',
+                                    isPublished ? '이 카테고리를 보이게 했습니다' : '이 카테고리를 숨겼습니다',
+                                )
+                            }
+                        />
+                        <MoveButton
+                            dir="left"
+                            disabled={busy || activeCategoryIndex <= 0}
+                            onClick={() => nudgeCategory(-1)}
+                        />
+                        <MoveButton
+                            dir="right"
+                            disabled={busy || activeCategoryIndex < 0 || activeCategoryIndex === categoryKeys.length - 1}
+                            onClick={() => nudgeCategory(1)}
+                        />
+                        <TextAction
+                            tone="danger"
+                            disabled={busy}
+                            onClick={() => {
+                                if (!confirmDelete(activeCategory.label)) return;
+                                void run(async () => {
+                                    await deleteBACategory(activeCategory.key);
+                                    const remaining = categories.filter((category) => category.key !== activeCategory.key);
+                                    setFilter(remaining[0]?.key ?? 'main');
+                                }, '삭제 실패', '카테고리를 삭제했습니다');
+                            }}
+                        >
+                            이 카테고리 삭제
+                        </TextAction>
+                    </div>
+                </div>
+            )}
 
             {/* 시술 페이지 하나만 보는 칸. 페이지가 16개라 위 탭에 다 늘어놓으면 탭이 두 줄을 넘는다 */}
             <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
@@ -409,7 +576,7 @@ export default function BAPhotoManager() {
 
             {orderingCategory && (
                 <p className="mt-3 text-center text-caption leading-6 text-latte">
-                    전후사진 페이지의 <b className="text-cocoa">{baCategoryLabel(orderingCategory)}</b> 탭에 나오는 사진{' '}
+                    전후사진 페이지의 <b className="text-cocoa">{baCategoryLabel(orderingCategory, categories)}</b> 탭에 나오는 사진{' '}
                     <b className="text-cocoa">{visibleItems.length}장</b>입니다. 여기 놓인 순서 그대로 홈페이지에 나옵니다.
                     카드 아래 <b className="text-cocoa">화살표</b>나 점 여섯 개(⠿)를 끌어서 옮기세요. 시술 페이지 순서는
                     바뀌지 않습니다.
@@ -555,7 +722,7 @@ export default function BAPhotoManager() {
                                 <div className="mt-4">
                                     <p className="text-caption font-semibold text-latte">전후사진 페이지 탭</p>
                                     <div className="mt-2 flex flex-wrap gap-2">
-                                        {BA_CATEGORIES.map((category) => (
+                                        {categories.map((category) => (
                                             <Chip
                                                 key={category.key}
                                                 active={form.category === category.key}
@@ -622,7 +789,7 @@ export default function BAPhotoManager() {
                                     </span>
                                 )}
                                 <span className="truncate rounded-full bg-sand/70 px-2.5 py-1 text-caption-sm font-semibold text-cocoa/70">
-                                    {item.label || baCategoryLabel(resolveBACategory(item) ?? '')}
+                                    {item.label || baCategoryLabel(resolveBACategory(item) ?? '', categories)}
                                 </span>
                             </span>
                             <span className="font-display text-caption-sm tracking-[0.2em] text-cocoa/30">RE:BERRY</span>
@@ -636,7 +803,7 @@ export default function BAPhotoManager() {
                             <p className="text-caption text-latte">
                                 {showsOnTreatment(item) && resolveBASlugs(item).map(pageName).join(', ')}
                                 {showsOnTreatment(item) && showsOnReviews(item) && ' · '}
-                                {showsOnReviews(item) && `전후사진 · ${baCategoryLabel(resolveBACategory(item) ?? '')}`}
+                                {showsOnReviews(item) && `전후사진 · ${baCategoryLabel(resolveBACategory(item) ?? '', categories)}`}
                                 {typeof item.main === 'number' && ' · 메인'}
                                 {item.treatmentDate && ` · ${formatTreatmentDate(item.treatmentDate)}`}
                             </p>

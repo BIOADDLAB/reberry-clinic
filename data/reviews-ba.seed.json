@@ -29,7 +29,7 @@
     {
       "docId": "reviews-excel-03",
       "label": "브이로 하이푸 리프팅 진행",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2026-09-01",
       "image": "/images/ba/reviews/03.jpg",
       "slugs": [
@@ -42,7 +42,7 @@
     {
       "docId": "reviews-excel-04",
       "label": "온다+브이로 리프팅 + 턱끝필러 진행",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2026-08-25",
       "image": "/images/ba/reviews/04.jpg",
       "slugs": [
@@ -56,7 +56,7 @@
     {
       "docId": "reviews-excel-05",
       "label": "눈밑 브이로 진행",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2026-08-21",
       "image": "/images/ba/reviews/05.jpg",
       "slugs": [
@@ -68,7 +68,7 @@
     {
       "docId": "reviews-excel-06",
       "label": "온다리프팅 + 턱끝필러",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2026-08-21",
       "image": "/images/ba/reviews/06.jpg",
       "slugs": [
@@ -118,7 +118,7 @@
     {
       "docId": "reviews-excel-10",
       "label": "온다+브이로 리프팅 + 턱끝필러 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2026-08-21",
       "image": "/images/ba/reviews/10.jpg",
       "slugs": [
@@ -133,7 +133,7 @@
     {
       "docId": "reviews-excel-11",
       "label": "눈밑 볼륨부스터 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2026-07-30",
       "image": "/images/ba/reviews/11.jpg",
       "slugs": [
@@ -170,7 +170,7 @@
     {
       "docId": "reviews-excel-14",
       "label": "눈밑 브이로 진행",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2026-07-06",
       "image": "/images/ba/reviews/14.jpg",
       "slugs": [
@@ -231,7 +231,7 @@
     {
       "docId": "reviews-excel-19",
       "label": "온다리프팅 + 관자, 턱끝필러",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2026-06-15",
       "image": "/images/ba/reviews/19.jpg",
       "slugs": [
@@ -256,7 +256,7 @@
     {
       "docId": "reviews-excel-21",
       "label": "브이로+온다 리프팅",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2026-05-21",
       "image": "/images/ba/reviews/21.jpg",
       "slugs": [
@@ -293,7 +293,7 @@
     {
       "docId": "reviews-excel-24",
       "label": "풀페이스 필러",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2026-04-29",
       "image": "/images/ba/reviews/24.jpg",
       "slugs": [],
@@ -303,7 +303,7 @@
     {
       "docId": "reviews-excel-25",
       "label": "턱끝필러",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2026-04-22",
       "image": "/images/ba/reviews/25.jpg",
       "slugs": [
@@ -315,7 +315,7 @@
     {
       "docId": "reviews-excel-26",
       "label": "울쎄라피프라임+풀페이스 필러",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2026-04-22",
       "image": "/images/ba/reviews/26.jpg",
       "slugs": [
@@ -327,7 +327,7 @@
     {
       "docId": "reviews-excel-27",
       "label": "비수술 눈밑지방재배치",
-      "category": "lifting",
+      "category": "undereye",
       "treatmentDate": "2026-04-22",
       "image": "/images/ba/reviews/27.jpg",
       "slugs": [
@@ -351,7 +351,7 @@
     {
       "docId": "reviews-excel-29",
       "label": "옆볼 볼륨부스터 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2026-04-22",
       "image": "/images/ba/reviews/29.jpg",
       "slugs": [
@@ -423,7 +423,7 @@
     {
       "docId": "reviews-excel-35",
       "label": "울쎄라피프라임+볼륨부스터",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2026-03-03",
       "image": "/images/ba/reviews/35.jpg",
       "slugs": [
@@ -530,7 +530,7 @@
     {
       "docId": "reviews-excel-44",
       "label": "코 실리프팅, 울쎄라피프라임 진행",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2026-01-13",
       "image": "/images/ba/reviews/44.jpg",
       "slugs": [
@@ -542,7 +542,7 @@
     {
       "docId": "reviews-excel-45",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/45.jpg",
       "slugs": [
@@ -554,7 +554,7 @@
     {
       "docId": "reviews-excel-46",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/46.jpg",
       "slugs": [
@@ -566,7 +566,7 @@
     {
       "docId": "reviews-excel-47",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/47.jpg",
       "slugs": [
@@ -578,7 +578,7 @@
     {
       "docId": "reviews-excel-48",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/48.jpg",
       "slugs": [
@@ -590,7 +590,7 @@
     {
       "docId": "reviews-excel-49",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/49.jpg",
       "slugs": [
@@ -602,7 +602,7 @@
     {
       "docId": "reviews-excel-50",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/50.jpg",
       "slugs": [
@@ -614,7 +614,7 @@
     {
       "docId": "reviews-excel-51",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/51.jpg",
       "slugs": [
@@ -626,7 +626,7 @@
     {
       "docId": "reviews-excel-52",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/52.jpg",
       "slugs": [
@@ -638,7 +638,7 @@
     {
       "docId": "reviews-excel-53",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/53.jpg",
       "slugs": [
@@ -650,7 +650,7 @@
     {
       "docId": "reviews-excel-54",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/54.jpg",
       "slugs": [
@@ -662,7 +662,7 @@
     {
       "docId": "reviews-excel-55",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/55.jpg",
       "slugs": [
@@ -674,7 +674,7 @@
     {
       "docId": "reviews-excel-56",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/56.jpg",
       "slugs": [],
@@ -684,7 +684,7 @@
     {
       "docId": "reviews-excel-57",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/57.jpg",
       "slugs": [],
@@ -694,7 +694,7 @@
     {
       "docId": "reviews-excel-58",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/58.jpg",
       "slugs": [],
@@ -704,7 +704,7 @@
     {
       "docId": "reviews-excel-59",
       "label": "볼륨부스터 풀페이스 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/59.jpg",
       "slugs": [],
@@ -714,7 +714,7 @@
     {
       "docId": "reviews-excel-60",
       "label": "눈밑필러 진행",
-      "category": "wrinkle",
+      "category": "undereye",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/60.jpg",
       "slugs": [
@@ -727,7 +727,7 @@
     {
       "docId": "reviews-excel-61",
       "label": "관자필러 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/61.jpg",
       "slugs": [],
@@ -737,7 +737,7 @@
     {
       "docId": "reviews-excel-62",
       "label": "턱끝필러 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/62.jpg",
       "slugs": [
@@ -749,7 +749,7 @@
     {
       "docId": "reviews-excel-63",
       "label": "턱끝필러 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/63.jpg",
       "slugs": [
@@ -761,7 +761,7 @@
     {
       "docId": "reviews-excel-64",
       "label": "코필러 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/64.jpg",
       "slugs": [],
@@ -771,7 +771,7 @@
     {
       "docId": "reviews-excel-65",
       "label": "코필러 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/65.jpg",
       "slugs": [],
@@ -781,7 +781,7 @@
     {
       "docId": "reviews-excel-66",
       "label": "코필러 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/66.jpg",
       "slugs": [],
@@ -791,7 +791,7 @@
     {
       "docId": "reviews-excel-67",
       "label": "입술필러 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/67.jpg",
       "slugs": [],
@@ -801,7 +801,7 @@
     {
       "docId": "reviews-excel-68",
       "label": "입술필러 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/68.jpg",
       "slugs": [],
@@ -811,7 +811,7 @@
     {
       "docId": "reviews-excel-69",
       "label": "입술필러 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/69.jpg",
       "slugs": [],
@@ -821,7 +821,7 @@
     {
       "docId": "reviews-excel-70",
       "label": "입술필러 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/70.jpg",
       "slugs": [],
@@ -831,7 +831,7 @@
     {
       "docId": "reviews-excel-71",
       "label": "이마주름필러 진행",
-      "category": "wrinkle",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/71.jpg",
       "slugs": [],
@@ -841,7 +841,7 @@
     {
       "docId": "reviews-excel-72",
       "label": "이마주름필러 진행",
-      "category": "wrinkle",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/72.jpg",
       "slugs": [],
@@ -851,7 +851,7 @@
     {
       "docId": "reviews-excel-73",
       "label": "이마주름필러 진행",
-      "category": "wrinkle",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/73.jpg",
       "slugs": [],
@@ -861,7 +861,7 @@
     {
       "docId": "reviews-excel-74",
       "label": "이마주름필러 진행",
-      "category": "wrinkle",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/74.jpg",
       "slugs": [],
@@ -871,7 +871,7 @@
     {
       "docId": "reviews-excel-75",
       "label": "온다 시술 진행",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2025-11-05",
       "image": "/images/ba/reviews/75.jpg",
       "slugs": [
@@ -883,7 +883,7 @@
     {
       "docId": "reviews-excel-76",
       "label": "실리프팅 시술 진행",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2025-10-31",
       "image": "/images/ba/reviews/76.jpg",
       "slugs": [],
@@ -893,7 +893,7 @@
     {
       "docId": "reviews-excel-77",
       "label": "실리프팅 시술 진행",
-      "category": "lifting",
+      "category": "contour",
       "treatmentDate": "2025-10-31",
       "image": "/images/ba/reviews/77.jpg",
       "slugs": [],
@@ -903,7 +903,7 @@
     {
       "docId": "reviews-excel-78",
       "label": "옆볼 볼륨부스터 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-10-31",
       "image": "/images/ba/reviews/78.jpg",
       "slugs": [],
@@ -913,7 +913,7 @@
     {
       "docId": "reviews-excel-79",
       "label": "옆볼 볼륨부스터 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-10-31",
       "image": "/images/ba/reviews/79.jpg",
       "slugs": [],
@@ -923,7 +923,7 @@
     {
       "docId": "reviews-excel-80",
       "label": "옆볼 볼륨부스터 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-10-31",
       "image": "/images/ba/reviews/80.jpg",
       "slugs": [],
@@ -933,7 +933,7 @@
     {
       "docId": "reviews-excel-81",
       "label": "옆볼 볼륨부스터 시술 진행",
-      "category": "petit",
+      "category": "contour",
       "treatmentDate": "2025-10-31",
       "image": "/images/ba/reviews/81.jpg",
       "slugs": [],

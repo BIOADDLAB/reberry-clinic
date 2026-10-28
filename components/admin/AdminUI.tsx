@@ -14,6 +14,7 @@ import { useCallback, useEffect, useState } from 'react';
 export function Field({
     value,
     onChange,
+    onBlur,
     dirty,
     className = '',
     placeholder,
@@ -24,6 +25,7 @@ export function Field({
 }: {
     value: string;
     onChange: (value: string) => void;
+    onBlur?: () => void;
     dirty?: boolean;
     className?: string;
     placeholder?: string;
@@ -41,6 +43,10 @@ export function Field({
             ? 'border-[#E0B84A] bg-[#FFF6D6]'
             : 'border-transparent bg-transparent hover:border-cocoa/15 hover:bg-white focus:border-cocoa/35 focus:bg-white'
     } ${className}`;
+    const leave = () => {
+        setFocused(false);
+        onBlur?.();
+    };
 
     if (multiline) {
         return (
@@ -49,6 +55,7 @@ export function Field({
                 value={value}
                 placeholder={placeholder}
                 onChange={(event) => onChange(event.target.value)}
+                onBlur={leave}
                 className={`${box} resize-y`}
             />
         );
@@ -59,7 +66,7 @@ export function Field({
             value={shown}
             placeholder={placeholder}
             onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
+            onBlur={leave}
             onChange={(event) => onChange(event.target.value)}
             className={box}
         />

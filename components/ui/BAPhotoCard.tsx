@@ -18,6 +18,7 @@ import {
     resolveBALabel,
     type BAPhoto,
 } from '@/components/lib/ba';
+import { useBACategories } from '@/components/lib/useBACategories';
 
 const FRAME = 'overflow-hidden rounded-[6px] bg-white shadow-[0_4px_18px_rgba(69,54,45,0.06)] ring-1 ring-cocoa/[0.06]';
 const PILL = 'line-clamp-1 max-w-full rounded-full bg-cocoa px-4 py-1 text-center text-caption-sm font-bold leading-snug text-cream';
@@ -34,6 +35,7 @@ export default function BAPhotoCard({
     onSelect: (photo: BAPhoto) => void;
 }) {
     const t = useTranslations('common');
+    const categories = useBACategories();
     const label = resolveBALabel(photo);
     const categoryKey = resolveBACategory(photo);
     const combined = isCombinedBAPhoto(photo);
@@ -64,7 +66,7 @@ export default function BAPhotoCard({
             <div className="flex min-h-[29px] items-center justify-between gap-2 px-3.5 pb-2 pt-3.5">
                 {categoryKey ? (
                     <span className="rounded-full bg-sand/70 px-2.5 py-1 text-caption-sm font-semibold text-cocoa/70">
-                        <T ko={baCategoryLabel(categoryKey)} />
+                        <T ko={baCategoryLabel(categoryKey, categories)} />
                     </span>
                 ) : (
                     <span aria-hidden />

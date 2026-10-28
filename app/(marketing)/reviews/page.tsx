@@ -10,6 +10,7 @@ import Pagination from '@/components/ui/Pagination';
 import T from '@/components/lang/T';
 import { cn } from '@/components/lib/cn';
 import { BA_CATEGORIES, resolveBACategory } from '@/components/lib/ba';
+import { useBACategories } from '@/components/lib/useBACategories';
 import { filterReviewBAPhotos, sortReviewBAPhotos, useBAPhotos, useBAPhotosLoading } from '@/components/lib/useBAPhotos';
 import TextureBackground from '@/components/ui/TextureBackground';
 
@@ -18,6 +19,7 @@ const PER_PAGE = 8;
 export default function ReviewsPage() {
     const tReviews = useTranslations('reviews');
     const [page, setPage] = useState(1);
+    const tabs = useBACategories(true);
     const [category, setCategory] = useState<string>(BA_CATEGORIES[0].key);
     const allPhotos = useBAPhotos();
     const loading = useBAPhotosLoading();
@@ -36,28 +38,14 @@ export default function ReviewsPage() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [page]);
 
-    // 카테고리별 장수 — 0장인 탭은 아예 안 그린다(빈 탭을 눌러 빈 화면을 보게 두지 않음)
-    const counts = useMemo(() => {
-        const map = new Map<string, number>();
-        for (const p of photos) {
-            const key = resolveBACategory(p);
-            if (key) map.set(key, (map.get(key) ?? 0) + 1);
-        }
-        return map;
-    }, [photos]);
-
-    const visibleTabs = useMemo(
-        () => BA_CATEGORIES.filter((c) => (counts.get(c.key) ?? 0) > 0),
-        [counts],
-    );
-
+    /* 수가표와 같이, 관리자가 만든 탭은 사진이 아직 없어도 홈페이지에 그대로 나온다. */
     useEffect(() => {
-        if (loading || visibleTabs.length === 0) return;
-        if (!visibleTabs.some((tab) => tab.key === category)) {
-            setCategory(visibleTabs[0].key);
+        if (loading || tabs.length === 0) return;
+        if (!tabs.some((tab) => tab.key === category)) {
+            setCategory(tabs[0].key);
             setPage(1);
         }
-    }, [loading, visibleTabs, category]);
+    }, [loading, tabs, category]);
 
     const filtered = useMemo(
         () => sortReviewBAPhotos(photos.filter((p) => resolveBACategory(p) === category)),
@@ -87,18 +75,18 @@ export default function ReviewsPage() {
                         <h2 className="notranslate font-display text-h2 tracking-[0.06em]">Before &amp; After</h2>
                     </div>
 
-                    {/* 카테고리 탭 — 탭 목록은 ba.ts 의 BA_CATEGORIES 에서 온다.
+                    {/* 카테고리 탭 — 탭 목록은 Firestore baCategories (관리자에서 추가·이름 변경).
                         #ISSUE: 가로 스크롤로 두니 모바일에서 뒤쪽 탭이 잘린 것처럼 보였다.
                         → 좁은 화면에서는 알약 하나하나가 여러 줄로 자동 줄바꿈(flex-wrap)되고,
                           한 줄에 다 들어가는 lg(1024px) 이상에서만 시안대로 알약 바로 묶인다 */}
-                    {!loading && visibleTabs.length > 1 && (
+                    {!loading && tabs.length > 1 && (
                         <div className="mt-10 flex justify-center lg:mt-14">
                             <div
                                 role="group"
                                 aria-label={tReviews('categoryLabel')}
                                 className="flex max-w-full flex-wrap justify-center gap-2 lg:gap-1 lg:rounded-full lg:border lg:border-cocoa/15 lg:bg-cream/70 lg:p-1.5"
                             >
-                                {visibleTabs.map((tab) => (
+                                {tabs.map((tab) => (
                                     <button
                                         key={tab.key}
                                         type="button"
