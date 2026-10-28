@@ -228,11 +228,13 @@ export function remapStoredBACategory(category?: string): string | undefined {
     return LEGACY_BA_CATEGORY[category] ?? category;
 }
 
-/** 이 사진이 속한 카테고리 키. 눈밑 시그니처 → 지정값 → slug 자동배정 → null */
+/** 이 사진이 속한 카테고리 키. 관리자가 고른 탭이 우선이고, 값이 없을 때만 시술 페이지로 추정한다.
+   #ISSUE: 눈밑 시술 페이지(slug=redness)에 걸린 사진을 무조건 눈밑 탭으로 보내서,
+           윤곽/쁘띠/리프팅으로 옮겨도 눈밑 탭에 그대로 남았다. */
 export function resolveBACategory(photo: { slug?: string; slugs?: string[]; category?: string }): string | null {
+    if (photo.category) return remapStoredBACategory(photo.category) ?? null;
     const slugs = resolveBASlugs(photo);
     if (slugs.includes('redness')) return 'undereye';
-    if (photo.category) return remapStoredBACategory(photo.category) ?? null;
     const matchingSlug = slugs.find((slug) => BA_CATEGORY_BY_SLUG[slug]);
     return matchingSlug ? BA_CATEGORY_BY_SLUG[matchingSlug] : null;
 }
