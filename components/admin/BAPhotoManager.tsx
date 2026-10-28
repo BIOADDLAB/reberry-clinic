@@ -108,7 +108,7 @@ export default function BAPhotoManager() {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [adding, setAdding] = useState(false);
     const [form, setForm] = useState(emptyForm());
-    const [categoryLabel, setCategoryLabel] = useState(BA_CATEGORIES[0].label);
+    const [categoryLabel, setCategoryLabel] = useState<string>(BA_CATEGORIES[0].label);
     const [loading, setLoading] = useState(true);
     const { busy, error, toast, run, setError } = useAdminAction();
     const formSection = useRef<HTMLElement>(null);
